@@ -3,15 +3,21 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'IBMPlexSansThaiLooped';
-  src: url('../fonts/IBMPlexSansThaiLooped-Regular.ttf');
+  font-family: 'DB Helvethaica X';
+  src: url('../fonts/DB Helvethaica X.ttf');
   font-weight: 400;
 }
 
 @font-face {
-  font-family: 'IBMPlexSansThaiLooped';
-  src: url('../fonts/IBMPlexSansThaiLooped-Bold.ttf');
+  font-family: 'DB Helvethaica X';
+  src: url('../fonts/DB Helvethaica X Bd v3.2.ttf');
   font-weight: 700;
+}
+
+@font-face {
+  font-family: 'DB Helvethaica X';
+  src: url('../fonts/DB Helvethaica X Blk v3.2.ttf');
+  font-weight: 900;
 }
 
 html {
@@ -21,8 +27,8 @@ html {
 body {
   box-sizing: border-box;
   color: #000000;
-  font-family: 'IBMPlexSansThaiLooped';
-  line-height: 0.5 !important;
+  font-family: 'DB Helvethaica X';
+  // line-height: 110%;
 }
 
 *,

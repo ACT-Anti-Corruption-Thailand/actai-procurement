@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Home na ja</h1>
+    <h1 class="font-black">จับโกงงบจัดซื้อจัดจ้างภาครัฐ</h1>
   </div>
 </template>
 
