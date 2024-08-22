@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'IBMPlexSansThaiLooped';
+  src: url('../fonts/IBMPlexSansThaiLooped-Regular.ttf');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'IBMPlexSansThaiLooped';
+  src: url('../fonts/IBMPlexSansThaiLooped-Bold.ttf');
+  font-weight: 700;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  box-sizing: border-box;
+  color: #000000;
+  font-family: 'IBMPlexSansThaiLooped';
+  line-height: 0.5 !important;
+}
+
+*,
+*:before,
+*:after {
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background: #ededed;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b4b4b4;
+  border-radius: 8px;
+}
+
+h1 {
+  @apply text-[46px] sm:text-[72px];
+}
+
+h2 {
+  @apply text-[40px] sm:text-[60px];
+}
+
+h3 {
+  @apply text-[36px] sm:text-[42px];
+}
+
+h4 {
+  @apply text-[32px] sm:text-[36px];
+}
+
+h5 {
+  @apply text-[28px] sm:text-[32px];
+}
+
+.b1 {
+  @apply text-[22px];
+}
+
+.b2 {
+  @apply text-[20px];
+}
+
+.b3 {
+  @apply text-[18px];
+}
+
+.b4 {
+  @apply text-[16px];
+}
+
+.b5 {
+  @apply text-[14px];
+}
+
+hr {
+  @apply my-3;
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
