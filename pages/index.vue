@@ -116,31 +116,125 @@
             ซึ่งไม่ได้หมายความว่ามีการทุจริตเกิดขึ้นแล้ว
           </p>
         </div>
-        <div class="w-full sm:w-3/5 text-left">
-          <p class="b2">
-            ตัวอย่างคำที่พบบ่อยในชื่อโครงการปีงบประมาณ*ล่าสุด (2568)
-          </p>
-          <p class="b4">
-            *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
-            ต.ค. 67 - ก.ย. 68
-          </p>
-          <div class="overflow-auto">
-            <div class="flex gap-3 gap-3">
-              <div v-for="item in 3">
-                <div
-                  class="bg-white p-5 rounded-xl bg-black w-[220px] text-black text-left"
-                >
-                  <p class="b1 font-bold mb-3">
-                    บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด
-                    (มหาชน)
-                  </p>
-                  <p class="b1">งบประมาณรวม 190,000,000,000 บาท</p>
-                </div>
-              </div>
+        <div class="w-full sm:w-3/5 text-left flex flex-col sm:flex-row">
+          <div v-for="(item, i) in 2" :key="i">
+            <p class="b1 font-bold mb-2">โครงการฯ ที่พบความเสี่ยงทุจริต</p>
+            <p class="b2">เกณฑ์ที่ใช้</p>
+            <ul class="list-disc ml-5 b2">
+              <li v-for="(item, i) in 4" :key="i">
+                xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+              </li>
+            </ul>
+            <a href="#">เกณฑ์แบบละเอียด</a>
+
+            <p class="b2">ตัวอย่างจากปีงบประมาณล่าสุด* (2568)</p>
+            <p class="b4">
+              *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
+              ต.ค. 67 - ก.ย. 68
+            </p>
+
+            <div
+              class="bg-white p-5 rounded-xl bg-black w-[220px] text-black text-left"
+            >
+              <p class="b1 font-bold mb-3">
+                บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
+              </p>
+              <p class="b1">งบประมาณรวม 190,000,000,000 บาท</p>
             </div>
+
+            <p class="b2">สุ่มใหม่</p>
           </div>
         </div>
       </div>
+
+      <div class="mx-auto max-w-6xl rounded-md bg-[#EC1C24] p-5 mt-5 text-left">
+        <div class="flex justify-between">
+          <div class="flex gap-2">
+            <div><img src="/src/images/report.svg" alt="" /></div>
+            <div>
+              <p class="b1 font-bold">
+                หากมีข้อสงสัย มีข้อมูลหรือเบาะแสอื่น ๆ สามารถแจ้งได้ที่นี่
+              </p>
+              <p class="b3">
+                เพราะความเสี่ยงทุจริตมีปัจจัยอีกมากมายที่ระบบ AI Detected
+                ไม่สามารถระบุได้
+              </p>
+            </div>
+          </div>
+          <div><arrow color="#FFFFFF" class="-rotate-45" /></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white text-black py-10 px-3">
+    <div class="text-center">
+      <div
+        class="flex flex-col sm:flex-row justify-center max-w-5xl mx-auto gap-3"
+      >
+        <div class="w-full sm:w-2/5 text-left">
+          <div
+            class="rounded-full b2 p-2 border w-[30px] h-[30px] flex justify-center items-center"
+          >
+            3
+          </div>
+          <h4 class="font-bold">เข้าใจการจัดซื้อจัดจ้างภาครัฐ</h4>
+
+          <p class="b1">
+            เราเข้าใจดีว่าข้อมูลเกี่ยวกับการจัดซื้อจัดจ้างภาครัฐนั้นเป็นเรื่องซับซ้อนและเต็มไปด้วยคำศัพท์เฉพาะ
+            เราจึงเตรียมเนื้อหาที่เข้าใจง่ายไว้ปูพื้นฐานให้ทุกคน
+            เพื่อนำไปสู่การตรวจสอบที่มีประสิทธิภาพยิ่งขึ้น
+          </p>
+        </div>
+        <div class="w-full sm:w-3/5 text-left">
+          <p class="b4">ตัวอย่างเนื้อหา</p>
+
+          <div
+            class="bg-[#F5F5F5] p-3 flex rounded-md b2 font-bold justify-between text-black items-center mt-3"
+          >
+            <p>โครงการจัดซื้อจัดจ้างภาครัฐคืออะไร เกี่ยวข้องกับใครบ้าง</p>
+            <arrow color="#000000" />
+          </div>
+
+          <div
+            class="bg-[#F5F5F5] p-3 flex rounded-md b2 font-bold justify-between text-black items-center mt-3"
+          >
+            <p>โครงการจัดซื้อจัดจ้างภาครัฐคืออะไร เกี่ยวข้องกับใครบ้าง</p>
+            <arrow color="#000000" />
+          </div>
+
+          <div
+            class="bg-[#F5F5F5] p-3 flex rounded-md b2 font-bold justify-between text-black items-center mt-3"
+          >
+            <p>โครงการจัดซื้อจัดจ้างภาครัฐคืออะไร เกี่ยวข้องกับใครบ้าง</p>
+            <arrow color="#000000" />
+          </div>
+
+          <p class="b4">ดูเนื้อหาทั้งหมด</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bg-black py-10 px-3">
+    <div class="text-center text-white">
+      <h3 class="font-bold mb-10">
+        เกี่ยวกับ ACT Ai จับโกงงบจัดซื้อจัดจ้างภาครัฐ
+      </h3>
+      <p class="b1">
+        ACT Ai เป็นฐานข้อมูลเปิดขนาดใหญ่
+        ที่รวบรวมข้อมูลจัดซื้อจัดจ้างภาครัฐและและข้อมูลผู้รับจ้างที่สำคัญต่อการต่อต้านทุจริตคอร์รัปชันตามมาตรฐานการเปิดเผยข้อมูลระดับสากล
+        เพื่อสร้างความโปร่งใส
+        สร้างการมีส่วนร่วมให้ทุกภาคส่วนของสังคมได้มีส่วนร่วมใช้ข้อมูลในการติดตามตรวจสอบ
+        ซึ่งทําให้เกิดกลไกความรับผิดชอบในสังคม
+        ถึงแม้ว่าที่ผ่านมาองค์กรและภาคส่วนต่าง ๆ
+        ในประเทศไทยมีความพยายามในการต่อต้านและกำจัดการคอร์รัปชันอยู่ตลอด
+        แต่ก็ยังมีปัญหาในการเข้าถึงข้อมูลที่ถูกต้อง เชื่อถือได้ และสะดวก
+        รวมถึงขาดเครื่องมือที่ช่วยเอาข้อมูลที่เกี่ยวข้องมาเชื่อมโยงและวิเคราะห์
+        เพื่อให้เกิดประโยชน์ในการต่อต้านคอร์รัปชัน ACT Ai
+        จึงถูกพัฒนาให้เป็นเครื่องมือในการเปิดเผย เชื่อมโยง จัดการ
+        และวิเคราะห์ชุดข้อมูลที่มีความสำคัญต่อการต่อต้านคอร์รัปชัน
+        เพื่อสนับสนุนนักข่าว สื่อ ภาคประชาสังคม
+        และประชาชนที่ต้องการเข้าถึงข้อมูลเพื่อตรวจสอบและติดตามการทำงานของภาครัฐโดยไม่มีค่าใช้จ่าย
+      </p>
     </div>
   </div>
 </template>
