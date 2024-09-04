@@ -97,3 +97,19 @@ hr {
 .hide-scroll::-webkit-scrollbar {
   display: none;
 }
+
+.menu-btn {
+  @apply border border-white rounded-full p-1 text-center w-40 text-white cursor-pointer hover:bg-white hover:text-black hover:font-bold duration-500;
+}
+
+.tab-menu {
+  @apply border-b-2 border-[#DADADA] w-32 text-center outline-none font-bold;
+}
+
+.tab-menu[aria-selected='true'] {
+  @apply border-b-2 border-[#EC1C24];
+}
+
+.flex-col-mb {
+  @apply flex-col sm:flex-row;
+}

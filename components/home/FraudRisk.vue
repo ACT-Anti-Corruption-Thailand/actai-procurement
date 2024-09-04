@@ -3,9 +3,7 @@
 <template>
   <div class="bg-[#510003] py-10 px-3">
     <div class="text-center text-white">
-      <div
-        class="flex flex-col sm:flex-row justify-center max-w-5xl mx-auto gap-3"
-      >
+      <div class="flex flex-col-mb justify-center max-w-5xl mx-auto gap-3">
         <div class="w-full sm:w-2/5 text-left">
           <div
             class="rounded-full b2 p-2 border w-[30px] h-[30px] flex justify-center items-center"
@@ -21,7 +19,7 @@
             ซึ่งไม่ได้หมายความว่ามีการทุจริตเกิดขึ้นแล้ว
           </p>
         </div>
-        <div class="w-full sm:w-3/5 text-left flex flex-col sm:flex-row">
+        <div class="w-full sm:w-3/5 text-left flex flex-col-mb">
           <div v-for="(item, i) in 2" :key="i">
             <p class="b1 font-bold mb-2">โครงการฯ ที่พบความเสี่ยงทุจริต</p>
             <p class="b2">เกณฑ์ที่ใช้</p>

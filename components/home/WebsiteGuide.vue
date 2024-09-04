@@ -4,9 +4,7 @@
   <div class="bg-black py-10 px-3">
     <div class="text-center text-white">
       <h3 class="font-bold mb-10">เว็บไซต์นี้ทำอะไรได้บ้าง</h3>
-      <div
-        class="flex flex-col sm:flex-row justify-center max-w-5xl mx-auto gap-3"
-      >
+      <div class="flex flex-col-mb justify-center max-w-5xl mx-auto gap-3">
         <div class="w-full sm:w-2/5 text-left">
           <div
             class="rounded-full b2 p-2 border w-[30px] h-[30px] flex justify-center items-center"
