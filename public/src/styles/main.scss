@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'DB Helvethaica X';
-  src: url('../fonts/DB Helvethaica X.ttf');
+  font-family: 'DB_Helvethaica_X';
+  src: url('../fonts/DB_Helvethaica_X.ttf');
   font-weight: 400;
 }
 
 @font-face {
-  font-family: 'DB Helvethaica X';
-  src: url('../fonts/DB Helvethaica X Bd v3.2.ttf');
+  font-family: 'DB_Helvethaica_X';
+  src: url('../fonts/DB_Helvethaica_X_Bd_v3.2.ttf');
   font-weight: 700;
 }
 
 @font-face {
-  font-family: 'DB Helvethaica X';
-  src: url('../fonts/DB Helvethaica X Blk v3.2.ttf');
+  font-family: 'DB_Helvethaica_X';
+  src: url('../fonts/DB_Helvethaica_X_Blk_v3.2.ttf');
   font-weight: 900;
 }
 
@@ -27,7 +27,7 @@ html {
 body {
   box-sizing: border-box;
   color: #000000;
-  font-family: 'DB Helvethaica X';
+  font-family: 'DB_Helvethaica_X';
   line-height: normal;
 }
 
