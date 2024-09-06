@@ -113,3 +113,12 @@ hr {
 .flex-col-mb {
   @apply flex-col sm:flex-row;
 }
+
+table tr,
+table th {
+  @apply p-1;
+}
+
+table tr {
+  @apply border-b;
+}
