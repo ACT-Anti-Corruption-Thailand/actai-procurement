@@ -46,10 +46,8 @@
           <div class="overflow-auto hide-scroll mt-3">
             <div class="flex gap-3">
               <div v-for="(item, i) in 3" :key="i">
-                <div
-                  class="bg-white p-5 rounded-xl w-[288px] text-black text-left"
-                >
-                  <p class="b1 font-bold mb-3">
+                <div class="bg-white p-5 rounded-xl w-[288px] text-left">
+                  <p class="b1 font-bold mb-3 text-black">
                     โครงการฯ ที่มีคำว่า
                     <span v-if="i == 0" class="text-[#74060A]">“ก่อสร้าง”</span>
                     <span v-else-if="i == 1" class="text-[#74060A]"
@@ -65,7 +63,7 @@
                   <GoToText
                     color="#0B5C90"
                     text="ดูทั้งหมด"
-                    class="mt-20 mb-0"
+                    class="mt-20 mb-0 text-[#0B5C90]"
                   />
                 </div>
               </div>

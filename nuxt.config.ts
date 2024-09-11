@@ -35,12 +35,12 @@ export default defineNuxtConfig({
         {
           hid: 'og-image',
           property: 'og:image',
-          content: BASE_URL + 'og_image.png',
+          content: BASE_URL + 'ogimage.png',
         },
         {
           hid: 'twitter:image',
           name: 'twitter:image:src',
-          content: BASE_URL + 'og_image.png',
+          content: BASE_URL + 'ogimage.png',
         },
         {
           hid: 'twitter:title',

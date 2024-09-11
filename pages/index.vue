@@ -29,7 +29,9 @@
           ค้นหาโครงการจัดซื้อจัดจ้างภาครัฐ / หน่วยงานรัฐ / ผู้รับจ้าง
         </p>
 
-        <Search class="my-3" />
+        <div class="my-3">
+          <Search />
+        </div>
 
         <p class="b3 text-[#BCBCBC]">
           <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ.
@@ -91,7 +93,11 @@
             <arrow color="#000000" />
           </div>
 
-          <GoToText color="#0B5C90" text="ดูเนื้อหาทั้งหมด" class="mt-5 mb-0" />
+          <GoToText
+            color="#0B5C90"
+            text="ดูเนื้อหาทั้งหมด"
+            class="mt-5 mb-0 text-[#0B5C90]"
+          />
         </div>
       </div>
     </div>

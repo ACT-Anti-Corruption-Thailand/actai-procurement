@@ -128,11 +128,11 @@ table tr {
 }
 
 .disclosure-btn {
-  @apply flex items-center gap-2;
+  @apply flex  gap-2 text-left;
 }
 
 .disclosure-btn svg {
-  @apply duration-300;
+  @apply duration-300 mt-1;
 }
 
 .disclosure-btn[aria-expanded='false'] svg {
