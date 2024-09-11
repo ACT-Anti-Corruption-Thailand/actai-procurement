@@ -4,8 +4,10 @@
   <div class="bg-black py-10 px-3">
     <div class="text-center text-white">
       <h3 class="font-bold mb-10">เว็บไซต์นี้ทำอะไรได้บ้าง</h3>
-      <div class="flex flex-col-mb justify-center max-w-5xl mx-auto gap-3">
-        <div class="w-full sm:w-2/5 text-left">
+      <div
+        class="flex flex-col lg:flex-row justify-center max-w-5xl mx-auto gap-5"
+      >
+        <div class="w-full lg:w-2/5 text-left">
           <div
             class="rounded-full b2 p-2 border w-[30px] h-[30px] flex justify-center items-center"
           >
@@ -15,33 +17,56 @@
             ค้นหาโครงการจัดซื้อจัดจ้างภาครัฐ/หน่วยงานรัฐ/ผู้รับจ้างที่สนใจ
           </h4>
 
-          <p class="b1">สามารถค้นได้จากคำหลายประเภท เช่น</p>
-          <ul class="b1 list-disc ml-5">
-            <li>ชื่อ หรือ คำในชื่อโครงการ/หน่วยงานรัฐ/ผู้รับจ้าง</li>
-            <li>เลขที่โครงการ</li>
-            <li>จังหวัดที่ตั้งของโครงการ</li>
-            <li>เลขทะเบียนนิติบุคคลของผู้รับจ้าง</li>
-          </ul>
-        </div>
-        <div class="w-full sm:w-3/5 text-left">
-          <p class="b2">
-            ตัวอย่างคำที่พบบ่อยในชื่อโครงการปีงบประมาณ*ล่าสุด (2568)
+          <p class="b1 my-3">
+            ช่องค้นหาของ ACT Ai <br />
+            ช่วยให้คุณค้นหาข้อมูลเกี่ยวกับโครงการจัดซื้อจัดจ้าง หน่วยงานภาครัฐ
+            และผู้รับจ้างที่เกี่ยวข้องได้ง่าย ๆ
+            เพียงแค่พิมพ์คีย์เวิร์ดที่ต้องการ เช่น
+            ชื่อหรือคีย์เวิร์ดในชื่อโครงการ ชื่อจังหวัดที่ตั้งของโครงการ
+            เลขที่โครงการ ชื่อหน่วยงานรัฐ ชื่อผู้รับจ้าง
+            เลขทะเบียนนิติบุคคลของผู้รับจ้าง
           </p>
-          <p class="b4">
+
+          <div class="rounded-md p-3 bg-[#1F1F1F]">
+            <p class="b1">
+              <b>เคล็ดลับ:</b> คุณสามารถใช้เครื่องหมาย " "
+              ครอบคำที่ต้องการค้นหาเพื่อให้การสืบค้นแม่นยำมากยิ่งขึ้น
+            </p>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-3/5 text-left">
+          <p class="b2 text-[#DADADA]">
+            ตัวอย่างคำที่พบบ่อยในชื่อโครงการปีงบประมาณล่าสุด (2568)
+          </p>
+          <p class="b4 text-[#A6A6A6]">
             *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
             ต.ค. 67 - ก.ย. 68
           </p>
-          <div class="overflow-auto">
-            <div class="flex gap-3 gap-3">
-              <div v-for="item in 3">
+          <div class="overflow-auto hide-scroll mt-3">
+            <div class="flex gap-3">
+              <div v-for="(item, i) in 3" :key="i">
                 <div
-                  class="bg-white p-5 rounded-xl bg-black w-[220px] text-black text-left"
+                  class="bg-white p-5 rounded-xl w-[288px] text-black text-left"
                 >
                   <p class="b1 font-bold mb-3">
-                    บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด
-                    (มหาชน)
+                    โครงการฯ ที่มีคำว่า
+                    <span v-if="i == 0" class="text-[#74060A]">“ก่อสร้าง”</span>
+                    <span v-else-if="i == 1" class="text-[#74060A]"
+                      >“เฉลิมพระเกียรติ”</span
+                    >
+                    <span v-else class="text-[#74060A]">“ถนน”</span>
                   </p>
-                  <p class="b1">งบประมาณรวม 190,000,000,000 บาท</p>
+                  <p class="b4 text-[#5E5E5E]">รวม xxx,xxxx,xxx,xxx โครงการ</p>
+                  <p class="b4 text-[#5E5E5E]">
+                    ใช้งบประมาณรวม xx,xxx,xxx,xxx,xxx,xxx.xx บาท
+                  </p>
+
+                  <GoToText
+                    color="#0B5C90"
+                    text="ดูทั้งหมด"
+                    class="mt-20 mb-0"
+                  />
                 </div>
               </div>
             </div>

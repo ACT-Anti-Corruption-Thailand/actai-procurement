@@ -1,25 +1,48 @@
-<script setup></script>
+<script setup>
+const mockdata = ref([
+  {
+    name: 'สอบราคาซื้อชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง(60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ) (เลขที่โครงการ : 59046019435) เลขที่โครงการ: 59046019435',
+    province: 'แพร่',
+    year: '2568',
+    owner: 'สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน',
+    no: '56015020021',
+  },
+  {
+    name: 'การไฟฟ้านครหลวง ฝ่ายก่อสร้าง',
+    province: 'กรุงเทพมหานคร',
+    year: '',
+    owner: '',
+    no: '',
+  },
+  {
+    name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
+    province: 'กรุงเทพมหานคร',
+    year: '',
+    owner: '',
+    no: '56015020021',
+  },
+]);
+</script>
 
 <template>
   <div class="bg-[#1F1F1F] py-10 px-3">
     <div class="text-center text-white">
       <h5 class="font-bold">ข้อมูลน่าสนใจประจำเดือนกรกฎาคม 2568</h5>
-      <p class="b1">
+      <p class="b1 text-[#A6A6A6]">
         มีโครงการฯ ใหม่ xx,xxx โครงการ โดย x,xxx หน่วยงานรัฐ และ x,xxx
         ผู้รับจ้าง
       </p>
-      <div class="overflow-auto">
-        <div class="flex gap-3 lg:justify-center">
-          <div v-for="item in 3">
-            <p class="b1 font-bold mb-5">โครงการฯ ที่งบประมาณสูงที่สุด</p>
-            <div
-              class="bg-white p-5 rounded-xl bg-black w-[370px] text-black text-left"
-            >
-              <p class="b1 font-bold mb-3">
-                บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
-              </p>
-              <p class="b1">งบประมาณรวม 190,000,000,000 บาท</p>
-            </div>
+      <div class="overflow-auto mt-3 hide-scroll">
+        <div class="flex gap-3 lg:justify-center max-w-6xl mx-auto">
+          <div v-for="(item, i) in mockdata" :key="i">
+            <p class="b1 font-bold mb-5">
+              <template v-if="i == 0">โครงการฯ ที่งบประมาณสูงที่สุด</template>
+              <template v-else-if="i == 1"
+                >หน่วยงานรัฐที่ของบประมาณมากที่สุด</template
+              >
+              <template v-else>ผู้รับจ้างที่มีมูลค่าสัญญารวมมากที่สุด</template>
+            </p>
+            <ProjectData :data="item" :index="i" />
           </div>
         </div>
       </div>

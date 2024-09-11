@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const BASE_URL = 'https://www.google.com/';
+const BASE_URL = 'https://actai-redesign.pages.dev/';
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
@@ -7,23 +7,25 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
   app: {
     head: {
-      title: 'จับโกงงบจัดซื้อจัดจ้างภาครัฐ',
+      title: 'ACT Ai จับโกงงบจัดซื้อจัดจ้างภาครัฐ',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
           name: 'description',
-          content: 'ร่วมตรวจสอบความโปร่งใสของภาครัฐด้วยการมีส่วนร่วมของประชาชน',
+          content:
+            'ค้นหาโครงการจัดซื้อจัดจ้างภาครัฐ และวิเคราะห์ความเสี่ยงไปกับ AI',
         },
         {
           hid: 'og:title',
           property: 'og:title',
-          content: 'จับโกงงบจัดซื้อจัดจ้างภาครัฐ',
+          content: 'ACT Ai จับโกงงบจัดซื้อจัดจ้างภาครัฐ',
         },
         {
           hid: 'og:description',
           property: 'og:description',
-          content: 'ร่วมตรวจสอบความโปร่งใสของภาครัฐด้วยการมีส่วนร่วมของประชาชน',
+          content:
+            'ค้นหาโครงการจัดซื้อจัดจ้างภาครัฐ และวิเคราะห์ความเสี่ยงไปกับ AI',
         },
         {
           hid: 'og:type',
@@ -33,22 +35,23 @@ export default defineNuxtConfig({
         {
           hid: 'og-image',
           property: 'og:image',
-          content: BASE_URL + 'og_' + process.env.NUXT_LOGO + '.png',
+          content: BASE_URL + 'og_image.png',
         },
         {
           hid: 'twitter:image',
           name: 'twitter:image:src',
-          content: BASE_URL + 'og_' + process.env.NUXT_LOGO + '.png',
+          content: BASE_URL + 'og_image.png',
         },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
-          content: 'จับโกงงบจัดซื้อจัดจ้างภาครัฐ',
+          content: 'ACT Ai จับโกงงบจัดซื้อจัดจ้างภาครัฐ',
         },
         {
           hid: 'twitter:description',
           property: 'twitter:description',
-          content: 'ร่วมตรวจสอบความโปร่งใสของภาครัฐด้วยการมีส่วนร่วมของประชาชน',
+          content:
+            'ค้นหาโครงการจัดซื้อจัดจ้างภาครัฐ และวิเคราะห์ความเสี่ยงไปกับ AI',
         },
         {
           hid: 'twitter:card',

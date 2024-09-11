@@ -122,3 +122,23 @@ table th {
 table tr {
   @apply border-b;
 }
+
+.info-btn {
+  @apply bg-[#F5F5F5] p-3 flex rounded-md b2 font-bold justify-between text-black items-center mt-3 hover:bg-[#DADADA] duration-500 cursor-pointer;
+}
+
+.disclosure-btn {
+  @apply flex items-center gap-2;
+}
+
+.disclosure-btn svg {
+  @apply duration-300;
+}
+
+.disclosure-btn[aria-expanded='false'] svg {
+  @apply -rotate-90;
+}
+
+.disclosure-panel {
+  @apply pl-8;
+}

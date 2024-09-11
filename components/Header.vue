@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center bg-black p-3">
+  <div class="flex flex-wrap justify-between items-center bg-black p-3">
     <div>
       <NuxtLink to="/">
         <img
@@ -8,11 +8,16 @@
           class="mx-auto w-14"
       /></NuxtLink>
     </div>
-    <div class="flex items-center gap-2">
-      <p class="b1 text-[#D9D9D9]">เข้าใจการจัดซื้อจัดจ้าง</p>
+    <div class="order-1 lg:order-0 w-full mt-3 lg:mt-0 max-w-xl">
+      <Search class="m-0" />
+    </div>
+    <div class="flex items-center gap-2 order-0 lg:order-1">
+      <NuxtLink to="/learn">
+        <p class="b1 text-[#D9D9D9]">เข้าใจการจัดซื้อจัดจ้าง</p>
+      </NuxtLink>
       <div class="flex bg-[#5B0000] p-3 rounded-md gap-2 text-white">
         <img src="/src/images/report.svg" alt="" class="w-5" />
-        <p class="b1">เข้าใจการจัดซื้อจัดจ้าง</p>
+        <p class="b1 hidden sm:block">แจ้งเหตุสงสัยทุจริต</p>
       </div>
     </div>
   </div>

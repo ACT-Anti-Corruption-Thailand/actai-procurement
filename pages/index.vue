@@ -1,6 +1,7 @@
 <template>
   <div class="relative">
     <video
+      class="pointer-events-none"
       id="background-video"
       autoplay
       loop
@@ -12,7 +13,9 @@
         type="video/mp4"
       />
     </video>
-    <div class="text-white min-h-[90vh] flex justify-center items-center">
+    <div
+      class="text-white min-h-[90vh] flex justify-center items-center relative z-10"
+    >
       <div class="text-center max-w-screen-sm mx-auto px-3">
         <img
           src="../public/src/images/act-logo.svg"
@@ -20,19 +23,33 @@
           class="mx-auto mb-5"
         />
         <h1 class="font-bold">จับโกงงบจัดซื้อจัดจ้างภาครัฐ</h1>
-        <h5>ร่วมตรวจสอบความโปร่งใสของภาครัฐด้วยการมีส่วนร่วมของประชาชน</h5>
+        <h5 class="text-[#BCBCBC] mb-3">
+          ร่วมตรวจสอบความโปร่งใสของภาครัฐด้วยการมีส่วนร่วมของประชาชน
+        </h5>
         <p class="b1 font-bold">
           ค้นหาโครงการจัดซื้อจัดจ้างภาครัฐ / หน่วยงานรัฐ / ผู้รับจ้าง
         </p>
-        <p class="b3">
-          ขอบเขตข้อมูลในเว็บไซต์: เก็บข้อมูลตั้งแต่ปี พ.ศ. 2562 - ปัจจุบัน
-          โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด xx,xxx,xxx,xxx โครงการ หน่วยงานรัฐ
-          x,xxx หน่วยงาน และ ผู้รับจ้าง xx,xxx ราย
+
+        <Search class="my-3" />
+
+        <p class="b3 text-[#BCBCBC]">
+          <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ.
+          2562 - ปัจจุบัน โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด xx,xxx,xxx,xxx
+          โครงการ หน่วยงานรัฐ x,xxx หน่วยงาน และ ผู้รับจ้าง xx,xxx ราย
         </p>
-        <p class="b4">อ่านคำแนะนำและข้อจำกัดของเครื่องมือค้นหา</p>
+        <p
+          class="b4 flex gap-1 items-center text-[#8DCCF0] justify-center cursor-pointer"
+          @click="isOpen = true"
+        >
+          <img src="../public/src/images/info.svg" alt="ACT Logo" />
+          <span>อ่านคำแนะนำและข้อจำกัดของเครื่องมือค้นหา</span>
+        </p>
+        <Share class="mt-1" />
       </div>
     </div>
   </div>
+
+  <Modal v-if="isOpen" @close="isOpen = false" />
 
   <InfoOfTheMonth />
 
@@ -45,7 +62,7 @@
       <div class="flex flex-col-mb justify-center max-w-5xl mx-auto gap-3">
         <div class="w-full sm:w-2/5 text-left">
           <div
-            class="rounded-full b2 p-2 border w-[30px] h-[30px] flex justify-center items-center"
+            class="rounded-full b2 p-2 border border-black w-[30px] h-[30px] flex justify-center items-center"
           >
             3
           </div>
@@ -60,28 +77,22 @@
         <div class="w-full sm:w-3/5 text-left">
           <p class="b4">ตัวอย่างเนื้อหา</p>
 
-          <div
-            class="bg-[#F5F5F5] p-3 flex rounded-md b2 font-bold justify-between text-black items-center mt-3"
-          >
-            <p>โครงการจัดซื้อจัดจ้างภาครัฐคืออะไร เกี่ยวข้องกับใครบ้าง</p>
+          <div class="info-btn">
+            <p>การจัดซื้อจัดจ้างภาครัฐ คืออะไร ?</p>
             <arrow color="#000000" />
           </div>
 
-          <div
-            class="bg-[#F5F5F5] p-3 flex rounded-md b2 font-bold justify-between text-black items-center mt-3"
-          >
-            <p>โครงการจัดซื้อจัดจ้างภาครัฐคืออะไร เกี่ยวข้องกับใครบ้าง</p>
+          <div class="info-btn">
+            <p>เกี่ยวข้องกับใครบ้าง ?</p>
             <arrow color="#000000" />
           </div>
 
-          <div
-            class="bg-[#F5F5F5] p-3 flex rounded-md b2 font-bold justify-between text-black items-center mt-3"
-          >
-            <p>โครงการจัดซื้อจัดจ้างภาครัฐคืออะไร เกี่ยวข้องกับใครบ้าง</p>
+          <div class="info-btn">
+            <p>มีกระบวนการอะไรบ้าง ?</p>
             <arrow color="#000000" />
           </div>
 
-          <p class="b4">ดูเนื้อหาทั้งหมด</p>
+          <GoToText color="#0B5C90" text="ดูเนื้อหาทั้งหมด" class="mt-5 mb-0" />
         </div>
       </div>
     </div>
@@ -113,31 +124,37 @@
     <div class="flex justify-center gap-2 my-3 items-center">
       <p class="b1 text-[#BCBCBC]">พัฒนาโดย</p>
       <div>
-        <img src="../public/src/images/act-logo-2.svg" alt="" />
+        <a
+          href="http://www.anticorruption.in.th/2016/th/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="../public/src/images/act-logo-2.svg" alt="" />
+        </a>
       </div>
     </div>
 
     <div class="flex justify-center gap-4 my-3 items-center flex-wrap">
       <p class="b1 text-[#BCBCBC]">ร่วมกับ</p>
       <a href="https://hand.co.th/" target="_blank" rel="noopener noreferrer">
-        <img src="../public/src/images/hand_logo.svg" alt="" />
+        <img src="../public/src/images/hand-logo.svg" alt="" />
       </a>
       <a
         href="https://punchup.world/"
-        target="_blank"
+        target="-blank"
         rel="noopener noreferrer"
       >
-        <img src="../public/src/images/pu_logo.svg" alt="" />
+        <img src="../public/src/images/pu-logo.svg" alt="" />
       </a>
       <a
         href="https://www.boonmeelab.com/"
-        target="_blank"
+        target="-blank"
         rel="noopener noreferrer"
       >
-        <img src="../public/src/images/bml_logo.svg" alt="" />
+        <img src="../public/src/images/bml-logo.svg" alt="" />
       </a>
-      <a href="https://iapp.co.th/" target="_blank" rel="noopener noreferrer">
-        <img src="../public/src/images/iapp_logo.svg" alt="" />
+      <a href="https://iapp.co.th/" target="-blank" rel="noopener noreferrer">
+        <img src="../public/src/images/iapp-logo.svg" alt="" />
       </a>
     </div>
   </div>
@@ -149,13 +166,13 @@
       </h5>
 
       <div class="overflow-auto">
-        <div class="flex gap-3 lg:justify-center flex-col-mb">
+        <div class="flex gap-3 lg:justify-between flex-col-mb">
           <div
             v-for="(item, i) in 3"
             :key="i"
             class="border border-white rounded-md w-full sm:w-[370px]"
           >
-            <div class="aspect-video mock-og rounded-t-md"></div>
+            <div class="mock-og rounded-t-md"></div>
 
             <div class="bg-white rounded-b-md p-3">
               <p class="b1 font-bold">Build Better Lives by CoST</p>
@@ -167,14 +184,24 @@
           </div>
         </div>
       </div>
+
+      <div
+        class="p-3 border border-white gap-2 justify-center b2 flex rounded-lg mt-5 text-white items-center"
+      >
+        ดูทั้งหมด<arrow color="#FFFFFF" class="-rotate-45" />
+      </div>
     </div>
   </div>
 
   <Footer />
 </template>
 
-<script>
-export default {};
+<script setup>
+const isOpen = ref(false);
+
+function closeModal() {
+  isOpen.value = false;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -194,5 +221,6 @@ export default {};
   background: url('../public/src/images/mock_og.png');
   background-position: center;
   background-size: cover;
+  aspect-ratio: 16/7;
 }
 </style>

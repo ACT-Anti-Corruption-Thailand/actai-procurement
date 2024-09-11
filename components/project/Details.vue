@@ -7,7 +7,7 @@
     <div class="p-5 rounded-b-md w-full flex gap-2">
       <div
         class="p-5 bg-[#F5F5F5] rounded-md w-full text-center"
-        v-for="item in 4"
+        v-for="(item, i) in 4"
       >
         <p class="b1">ซื้อซอง</p>
         <h3 class="font-bold">55</h3>
