@@ -6,7 +6,6 @@
       autoplay
       loop
       muted
-      poster="../public/src/images/bg-intro.svg"
     >
       <source
         src="../public/src/images/landing_illustration.mp4"
