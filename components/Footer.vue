@@ -13,7 +13,7 @@
               href="/term-and-conditions"
               target="_blank"
               rel="noopener noreferrer"
-              >Term & condition</a
+              >Term & conditions</a
             >
           </div>
         </div>

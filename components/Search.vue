@@ -65,13 +65,14 @@
           </TransitionRoot>
         </div>
       </Combobox>
-      <div class="h-11 w-11">
-        <img
-          src="/public/src/images/search.svg"
-          alt=""
-          class="bg-[#C2141B] p-3 rounded-r-lg cursor-pointer"
-        />
-      </div>
+      <NuxtLink to="/result">
+        <div class="h-11 w-11">
+          <img
+            src="/public/src/images/search.svg"
+            alt=""
+            class="bg-[#C2141B] p-3 rounded-r-lg cursor-pointer"
+          /></div
+      ></NuxtLink>
     </div>
   </ClientOnly>
 </template>

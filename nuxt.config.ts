@@ -71,6 +71,7 @@ export default defineNuxtConfig({
   },
   css: [
     '~/public/src/styles/main.scss', // you should add main.scss somewhere in your app
+    '@wevisdemo/ui/styles/index.css',
   ],
   vite: {
     css: {

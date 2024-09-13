@@ -142,3 +142,49 @@ table tr {
 .disclosure-panel {
   @apply pl-8;
 }
+
+.wv_cookie-consent__lang {
+  display: none !important;
+}
+
+.wv_cookie-consent__body {
+  // margin: 0 !important;
+  font-size: 20px !important;
+  line-height: normal !important;
+
+  a {
+    color: #8dccf0 !important;
+  }
+}
+
+.wv_cookie-consent__options {
+  margin: 0 !important;
+}
+
+.wv_cookie-consent__container,
+.wv_cookie-consent__actions button {
+  font-family: 'DB_Helvethaica_X' !important;
+  font-size: 20px !important;
+}
+
+.wv_cookie-consent__container {
+  padding: 25px 50px !important;
+
+  @include mobile {
+    padding: 20px !important;
+  }
+}
+
+.wv_cookie-consent__actions button {
+  border-radius: 10px !important;
+}
+
+.wv_cookie-consent--banner,
+.wv_cookie-consent__container {
+  background: #333333 !important;
+}
+
+.wv_cookie-consent__actions > button:first-child {
+  border-color: #8dccf0 !important;
+  color: #8dccf0 !important;
+}

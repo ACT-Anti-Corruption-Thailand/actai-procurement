@@ -137,7 +137,7 @@
             หรือเพื่อวัตถุประสงค์ชี้นำทางการเมือง โดยดำเนินการภายใต้กลไก ดังนี้
           </p>
 
-          <ul class="list-decimal ml-5">
+          <ul class="list-decimal ml-5 mb-3">
             <li>
               <b> การรวบรวมข้อมูลจากแหล่งข้อมูล</b> องค์กรต่อต้านคอร์รัปชัน
               (ประเทศไทย)
@@ -146,6 +146,27 @@
               (Machine-readable Format)
               และดำเนินการปรับปรุงอย่างสม่ำเสมอเพื่อให้ข้อมูลเป็นปัจจุบันมากที่สุด
               โดยผู้ใช้งานสามารถตรวจสอบความถูกต้องของข้อมูล ได้ดังนี้
+
+              <ul class="list-disc ml-7 mb-3">
+                <li v-for="(item, i) in mockdata">
+                  <b>{{ item.name }}</b>
+                  <ul class="list-disc ml-7">
+                    <li v-for="(item2, j) in item.list">
+                      {{ item2.name }}
+                      <span v-if="item2.link != ''">
+                        (<a
+                          class="text-[#0B5C90] cursor-pointer"
+                          :href="item.link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {{ item2.link }}</a
+                        >)</span
+                      >
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </li>
             <li>
               <b> การนำเสนอข้อมูลเพื่อประโยชน์สาธารณะ</b>
@@ -490,4 +511,92 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+
+const mockdata = ref([
+  {
+    name: 'ข้อมูลโครงการจัดซื้อจัดจ้างภาครัฐ',
+    list: [
+      {
+        name: 'เข้าถึงจาก ระบบการจัดซื้อจัดจ้างภาครัฐ',
+        link: 'http://www.gprocurement.go.th',
+      },
+      {
+        name: 'เข้าถึงจาก ระบบข้อมูลการใช้จ่ายภาครัฐ “ภาษีไปไหน?” ',
+        link: 'http://www.govspending.data.go.th',
+      },
+    ],
+  },
+  {
+    name: 'ข้อมูลนิติบุคคล',
+    list: [
+      {
+        name: 'เข้าถึงจาก DBD DataWarehouse+',
+        link: 'https://datawarehouse.dbd.go.th',
+      },
+    ],
+  },
+  {
+    name: 'ข้อมูลบัญชีทรัพย์สินและหนี้สินของผู้ดำรงตำแหน่งทางการเมืองและข้าราชการระดับสูง',
+    list: [
+      {
+        name: 'เข้าถึงได้จาก ระบบการยื่นบัญชีแสดงรายการทรัพย์สินและหนี้สิน',
+        link: 'https://asset.nacc.go.th/dcs-app',
+      },
+    ],
+  },
+  {
+    name: 'ข้อมูลเงินบริจาคพรรคการเมือง',
+    list: [
+      {
+        name: 'เข้าถึงได้จาก',
+        link: 'https://www.ect.go.th/ect_th/th/db_119_ect_th_download_22',
+      },
+    ],
+  },
+  {
+    name: 'ข้อมูลดิจิทัลคำชี้มูลความผิดของ สำนักงานคณะกรรมการป้องกันและปราบปรามการทุจริตแห่งชาติ',
+    list: [
+      {
+        name: 'เข้าถึงได้จาก',
+        link: 'https://www.nacc.go.th/naccCulIncul/naccCulpability.php',
+      },
+    ],
+  },
+  {
+    name: 'ข้อมูลคำพิพากษาศาลฎีกาแผนกคดีอาญาของผู้ดำรงตำแหน่งทางการเมือง',
+    list: [
+      {
+        name: 'เข้าถึงได้จาก',
+        link: 'http://www.supremecourt.or.th/division/แผนกคดีอาญาของผู้ดำรงตำแหน่งทางการเมือง/คำพิพากษาคดี',
+      },
+    ],
+  },
+  {
+    name: 'ข้อมูลการบังคับใช้กฎหมายของ สำนักงานคณะกรรมการกำกับหลักทรัพย์และตลาดหลักทรัพย์',
+    list: [
+      {
+        name: 'เข้าถึงได้จาก',
+        link: 'https://market.sec.or.th/public/idisc/th/Enforce',
+      },
+    ],
+  },
+  {
+    name: 'ข้อมูลรายชื่อผู้บริหารกระทรวงและข้าราชการระดับสูง',
+    list: [
+      {
+        name: 'เข้าถึงได้จาก ราชกิจจานุเบกษา',
+        link: 'https://ratchakitcha.soc.go.th/',
+      },
+    ],
+  },
+  {
+    name: 'ข้อบัญญัติงบประมาณรายจ่ายประจำปีขององค์การบริหารส่วนจังหวัด',
+    list: [
+      {
+        name: 'เข้าถึงได้จาก เว็บไซต์ขององค์การบริหารส่วนจังหวัด 76 แห่ง',
+        link: '',
+      },
+    ],
+  },
+]);
 </script>
