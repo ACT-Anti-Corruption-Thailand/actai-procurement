@@ -1,10 +1,30 @@
-<script setup></script>
+<script setup>
+const config = useRuntimeConfig();
+
+function copyURL() {
+  let url = config.public.baseUrl;
+
+  navigator.clipboard.writeText(url).then(
+    function () {
+      console.log('Copied!');
+    },
+    function () {
+      console.log('Copy error');
+    }
+  );
+}
+</script>
 
 <template>
   <div class="flex justify-center items-center">
     <p class="b4 mr-2">แชร์</p>
     <div class="flex gap-[5px] justify-center">
-      <img src="../public/src/images/copy-share.svg" alt="copy" />
+      <img
+        class="cursor-pointer"
+        src="../public/src/images/copy-share.svg"
+        alt="copy"
+        @click="copyURL()"
+      />
 
       <ShareNetwork
         network="facebook"

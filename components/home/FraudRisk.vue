@@ -10,15 +10,10 @@ const mockdata = ref([
   {
     name: 'การไฟฟ้านครหลวง ฝ่ายก่อสร้าง',
     province: 'กรุงเทพมหานคร',
-    year: '',
-    owner: '',
-    no: '',
   },
   {
     name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
     province: 'กรุงเทพมหานคร',
-    year: '',
-    owner: '',
     no: '56015020021',
   },
 ]);
@@ -81,7 +76,9 @@ const mockdata = ref([
               </li>
             </ul>
 
-            <GoToText color="#8DCCF0" text="อ่านเกณฑ์แบบละเอียด" />
+            <NuxtLink to="/learn#อยากร่วมจับโกงต้องสังเกตจากอะไร">
+              <GoToText color="#8DCCF0" text="อ่านเกณฑ์แบบละเอียด" />
+            </NuxtLink>
 
             <p class="b2">ตัวอย่างจากปีงบประมาณล่าสุด* (2568)</p>
             <p class="b4 text-[#A6A6A6]">
@@ -117,7 +114,9 @@ const mockdata = ref([
               </li>
             </ul>
 
-            <GoToText color="#8DCCF0" text="อ่านเกณฑ์แบบละเอียด" />
+            <NuxtLink to="/learn#อยากร่วมจับโกงต้องสังเกตจากอะไร">
+              <GoToText color="#8DCCF0" text="อ่านเกณฑ์แบบละเอียด" />
+            </NuxtLink>
 
             <p class="b2">ตัวอย่างจากปีงบประมาณล่าสุด* (2568)</p>
             <p class="b4 text-[#A6A6A6]">

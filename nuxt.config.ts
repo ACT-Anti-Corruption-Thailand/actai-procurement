@@ -5,6 +5,11 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
+  runtimeConfig: {
+    public: {
+      baseUrl: BASE_URL,
+    },
+  },
   app: {
     head: {
       title: 'ACT Ai จับโกงงบจัดซื้อจัดจ้างภาครัฐ',

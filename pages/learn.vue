@@ -6,7 +6,7 @@
   <div class="max-w-6xl mx-auto p-5 sm:p-10 b1">
     <ClientOnly fallback-tag="span" fallback="Loading...">
       <Disclosure>
-        <DisclosureButton class="disclosure-btn">
+        <DisclosureButton class="disclosure-btn" id="การจัดซื้อจัดจ้างภาครัฐ">
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">การจัดซื้อจัดจ้างภาครัฐ คืออะไร ?</h5>
         </DisclosureButton>
@@ -31,7 +31,7 @@
       <hr class="my-5" />
 
       <Disclosure>
-        <DisclosureButton class="disclosure-btn">
+        <DisclosureButton class="disclosure-btn" id="เกี่ยวข้องกับใครบ้าง">
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">เกี่ยวข้องกับใครบ้าง ?</h5>
         </DisclosureButton>
@@ -63,7 +63,7 @@
       <hr class="my-5" />
 
       <Disclosure>
-        <DisclosureButton class="disclosure-btn">
+        <DisclosureButton class="disclosure-btn" id="มีกระบวนการอะไรบ้าง">
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">มีกระบวนการอะไรบ้าง</h5>
         </DisclosureButton>
@@ -338,7 +338,10 @@
       <hr class="my-5" />
 
       <Disclosure>
-        <DisclosureButton class="disclosure-btn">
+        <DisclosureButton
+          class="disclosure-btn"
+          id="อยากร่วมจับโกงต้องสังเกตจากอะไร"
+        >
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">อยากร่วมจับโกง ต้องสังเกตจากอะไร?</h5>
         </DisclosureButton>

@@ -78,26 +78,33 @@
         <div class="w-full sm:w-3/5 text-left">
           <p class="b4">ตัวอย่างเนื้อหา</p>
 
-          <div class="info-btn">
-            <p>การจัดซื้อจัดจ้างภาครัฐ คืออะไร ?</p>
-            <arrow color="#000000" />
-          </div>
+          <NuxtLink to="/learn#การจัดซื้อจัดจ้างภาครัฐ">
+            <div class="info-btn">
+              <p>การจัดซื้อจัดจ้างภาครัฐ คืออะไร ?</p>
+              <arrow color="#000000" />
+            </div>
+          </NuxtLink>
 
-          <div class="info-btn">
-            <p>เกี่ยวข้องกับใครบ้าง ?</p>
-            <arrow color="#000000" />
-          </div>
+          <NuxtLink to="/learn#เกี่ยวข้องกับใครบ้าง">
+            <div class="info-btn">
+              <p>เกี่ยวข้องกับใครบ้าง ?</p>
+              <arrow color="#000000" />
+            </div>
+          </NuxtLink>
 
-          <div class="info-btn">
-            <p>มีกระบวนการอะไรบ้าง ?</p>
-            <arrow color="#000000" />
-          </div>
+          <NuxtLink to="/learn#มีกระบวนการอะไรบ้าง">
+            <div class="info-btn">
+              <p>มีกระบวนการอะไรบ้าง ?</p>
+              <arrow color="#000000" />
+            </div>
+          </NuxtLink>
 
-          <GoToText
-            color="#0B5C90"
-            text="ดูเนื้อหาทั้งหมด"
-            class="mt-5 mb-0 text-[#0B5C90]"
-          />
+          <NuxtLink to="/learn">
+            <GoToText
+              color="#0B5C90"
+              text="ดูเนื้อหาทั้งหมด"
+              class="mt-5 mb-0 text-[#0B5C90]"
+          /></NuxtLink>
         </div>
       </div>
     </div>

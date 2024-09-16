@@ -28,19 +28,21 @@ function highlight(title: string, text: string) {
 
       <div v-for="(item, i) in 3" :key="i" class="py-5">
         <div class="flex justify-between flex-col-mb">
-          <div>
-            <p
-              class="b1 font-bold"
-              v-html="
-                highlight('สอบราคาซื้อชุดก่อสร้าง (60.14.13)', 'ก่อสร้าง')
-              "
-            ></p>
-            <ProjectIconGuide :data="mockDataGuide" class="text-[#8E8E8E]" />
-            <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
-              <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-              <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
-            </div>
-          </div>
+          <NuxtLink to="/project">
+            <div>
+              <p
+                class="b1 font-bold"
+                v-html="
+                  highlight('สอบราคาซื้อชุดก่อสร้าง (60.14.13)', 'ก่อสร้าง')
+                "
+              ></p>
+              <ProjectIconGuide :data="mockDataGuide" class="text-[#8E8E8E]" />
+              <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
+                <img src="../../public/src/images/risk-flag.svg" alt="risk" />
+                <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
+              </div>
+            </div></NuxtLink
+          >
           <div
             class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
           >
@@ -68,18 +70,19 @@ function highlight(title: string, text: string) {
       />
 
       <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
-        <div>
-          <p
-            class="b1 font-bold"
-            v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
-          ></p>
-          <ProjectIconGuide
-            :data="{
-              province: 'กรุงเทพมหานคร',
-            }"
-            class="text-[#8E8E8E]"
-          />
-        </div>
+        <NuxtLink to="/government">
+          <div>
+            <p
+              class="b1 font-bold"
+              v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
+            ></p>
+            <ProjectIconGuide
+              :data="{
+                province: 'กรุงเทพมหานคร',
+              }"
+              class="text-[#8E8E8E]"
+            /></div
+        ></NuxtLink>
         <div class="flex sm:gap-10 text-right flex-col-mb">
           <div>
             <p class="b4">โครงการทั้งหมด</p>
@@ -114,18 +117,20 @@ function highlight(title: string, text: string) {
       />
 
       <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
-        <div>
-          <p
-            class="b1 font-bold"
-            v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
-          ></p>
-          <ProjectIconGuide
-            :data="{
-              province: 'กรุงเทพมหานคร',
-            }"
-            class="text-[#8E8E8E]"
-          />
-        </div>
+        <NuxtLink to="/contracter">
+          <div>
+            <p
+              class="b1 font-bold"
+              v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
+            ></p>
+            <ProjectIconGuide
+              :data="{
+                province: 'กรุงเทพมหานคร',
+              }"
+              class="text-[#8E8E8E]"
+            />
+          </div>
+        </NuxtLink>
         <div class="flex sm:gap-10 text-right flex-col-mb">
           <div>
             <p class="b4">โครงการทั้งหมด</p>

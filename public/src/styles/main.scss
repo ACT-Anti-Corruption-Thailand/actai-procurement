@@ -94,6 +94,10 @@ hr {
   @apply my-3;
 }
 
+a {
+  @apply break-words;
+}
+
 .hide-scroll::-webkit-scrollbar {
   display: none;
 }
@@ -117,6 +121,8 @@ hr {
 .flex-col-mb {
   @apply flex-col sm:flex-row;
 }
+
+// table
 
 table tr,
 table th {
