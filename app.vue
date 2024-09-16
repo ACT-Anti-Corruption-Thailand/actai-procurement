@@ -5,7 +5,7 @@
     <WvCookieConsent
       policyUrl="/cookie-policy"
       :cookieOptions="cookieOptions"
-    />;
+    />
   </div>
 </template>
 

@@ -4,7 +4,7 @@
   <div class="flex justify-center items-center">
     <p class="b4 mr-2">แชร์</p>
     <div class="flex gap-[5px] justify-center">
-      <img src="../public/src/images/copy.svg" alt="copy" />
+      <img src="../public/src/images/copy-share.svg" alt="copy" />
 
       <ShareNetwork
         network="facebook"

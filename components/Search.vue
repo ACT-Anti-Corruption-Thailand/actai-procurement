@@ -4,14 +4,13 @@
       <Combobox v-model="selected" class="">
         <div class="w-full">
           <div
-            class="relative w-full cursor-default overflow-hidden rounded-l-lg bg-white text-left focus:outline-none b2 focus-visible:ring-[#C2141B]"
+            class="relative w-full cursor-default overflow-hidden rounded-l-lg bg-white text-left b2 ring-[#C2141B]"
           >
             <ComboboxInput
               placeholder="ค้นด้วยคำในชื่อโครงการ/เลขที่โครงการ/ชื่อหน่วยงาน/ชื่อผู้รับจ้าง/เลขทะเบียนนิติบุคคล"
-              class="w-full border-none py-2 px-3 text-black focus-visible:ring-[#C2141B]"
+              class="w-full border-none py-2 px-3 text-black focus:ring-[#C2141B]"
               :displayValue="(person) => person.name"
               @change="query = $event.target.value"
-              aria-placeholder="dddd"
             />
           </div>
           <TransitionRoot

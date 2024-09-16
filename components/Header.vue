@@ -15,10 +15,16 @@
       <NuxtLink to="/learn">
         <p class="b1 text-[#D9D9D9]">เข้าใจการจัดซื้อจัดจ้าง</p>
       </NuxtLink>
-      <div class="flex bg-[#5B0000] p-3 rounded-md gap-2 text-white">
-        <img src="/src/images/report.svg" alt="" class="w-5" />
-        <p class="b1 hidden sm:block">แจ้งเหตุสงสัยทุจริต</p>
-      </div>
+      <a
+        href="https://line.me/R/ti/p/@206vpscc"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="flex bg-[#5B0000] p-3 rounded-md gap-2 text-white">
+          <img src="/src/images/report.svg" alt="" class="w-5" />
+          <p class="b1 hidden sm:block">แจ้งเหตุสงสัยทุจริต</p>
+        </div></a
+      >
     </div>
   </div>
 </template>

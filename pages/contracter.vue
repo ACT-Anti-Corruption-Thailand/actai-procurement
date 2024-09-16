@@ -52,30 +52,7 @@ const menu = ref('ทั้งหมด');
       <div class="sm:w-3/4"><AbandonmentHistory /></div>
     </div>
 
-    <div class="mx-auto max-w-6xl text-white">
-      <div class="rounded-md bg-[#EC1C24] p-5 mt-5 text-left">
-        <div class="flex justify-between">
-          <div class="flex gap-2">
-            <div><img src="/src/images/report.svg" alt="" /></div>
-            <div>
-              <p class="b1 font-bold">
-                หากมีข้อสงสัย มีข้อมูลหรือเบาะแสอื่น ๆ สามารถแจ้งได้ที่นี่
-              </p>
-              <p class="b3">
-                เพราะความเสี่ยงทุจริตมีปัจจัยอีกมากมายที่ระบบ AI Detected
-                ไม่สามารถระบุได้
-              </p>
-            </div>
-          </div>
-          <div><arrow color="#FFFFFF" class="-rotate-45" /></div>
-        </div>
-      </div>
-
-      <p class="b1 mt-5">
-        ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่ http://www.gprocurement.go.th/ แจ้งข้อมูลเพิ่มเติมที่
-        FB : องค์กรต่อต้านคอร์รัปชัน
-      </p>
-    </div>
+    <ACTLineButton />
   </div>
   <Footer />
 </template>

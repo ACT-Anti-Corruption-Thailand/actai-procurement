@@ -1,13 +1,37 @@
 <script setup lang="ts">
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+
+const selectedTab = ref(0);
+
+function changeTab(index) {
+  selectedTab.value = index;
+}
+
+function highlight(title: string, text: string) {
+  var innerHTML = title;
+  var index = innerHTML.indexOf(text);
+  if (index >= 0) {
+    innerHTML =
+      innerHTML.substring(0, index) +
+      "<span class='text-[#74060A]'>" +
+      innerHTML.substring(index, index + text.length) +
+      '</span>' +
+      innerHTML.substring(index + text.length);
+    return innerHTML;
+  }
+}
 </script>
 
 <template>
-  <TabGroup>
-    <TabList>
-      <Tab class="tab-menu b1">รายชื่อ</Tab>
-      <Tab class="tab-menu b1">ภาพรวม</Tab>
-    </TabList>
+  <TabGroup :selectedIndex="selectedTab" @change="changeTab" as="Component">
+    <div class="flex flex-col-mb justify-between">
+      <TabList>
+        <Tab class="tab-menu b1">รายชื่อ</Tab>
+        <Tab class="tab-menu b1">ภาพรวม</Tab>
+      </TabList>
+      <div><FilterPopup /></div>
+    </div>
+
     <TabPanels>
       <TabPanel>
         <div class="flex gap-2 py-5 flex-col-mb">
@@ -15,18 +39,25 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
             <p class="b1 font-bold">
               จำนวนโครงการจัดซื้อจัดจ้างตามเงื่อนไขที่ค้นหา
             </p>
-            <h2 class="font-bold">x,xxx,xxx,xxx โครงการ</h2>
+            <h2 class="font-bold">2,000 โครงการ</h2>
             <hr />
             <div class="flex">
               <div class="flex-1">
                 <p class="b2">งบประมาณรวม (บาท)</p>
-                <h5 class="font-bold">xx,xxx,xxx,xxx,xxx.xx</h5>
+                <h5 class="font-bold">47,540,648</h5>
               </div>
               <div class="flex-1 text-[#EC1C24]">
                 <p class="b2">เป็นโครงการเสี่ยงทุจริต</p>
-                <h5 class="font-bold">xx.xx%</h5>
+                <h5 class="font-bold">50.00%</h5>
               </div>
             </div>
+
+            <GoToText
+              color="#8DCCF0"
+              text="ดูภาพรวมเพิ่มเติม"
+              class="cursor-pointer mb-0"
+              @click="selectedTab = 1"
+            />
           </div>
 
           <div class="sm:w-2/5">
@@ -47,13 +78,12 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
           :key="i"
         >
           <div>
-            <p class="b1 font-bold">
-              สอบราคาซื้อชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02
-              ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02
-              ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02
-              ),ชุดก่อสร้าง(60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02
-              ) (เลขที่โครงการ : 59046019435) เลขที่โครงการ: 59046019435
-            </p>
+            <p
+              class="b1 font-bold"
+              v-html="
+                highlight('สอบราคาซื้อชุดก่อสร้าง (60.14.13)', 'ก่อสร้าง')
+              "
+            ></p>
           </div>
           <div>
             <p class="b4">งบประมาณรวม (บาท)</p>

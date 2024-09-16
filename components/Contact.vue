@@ -13,7 +13,7 @@
       </a>
 
       <a
-        href="http://www.anticorruption.in.th/2016/th/"
+        href="https://x.com/ACT_Thailand"
         target="_blank"
         rel="noopener noreferrer"
       >

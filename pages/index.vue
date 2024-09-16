@@ -39,10 +39,10 @@
           โครงการ หน่วยงานรัฐ x,xxx หน่วยงาน และ ผู้รับจ้าง xx,xxx ราย
         </p>
         <p
-          class="b4 flex gap-1 items-center text-[#8DCCF0] justify-center cursor-pointer"
+          class="b4 flex gap-1 items-center text-[#8DCCF0] hover:text-[#0B5C90] duration-300 justify-center cursor-pointer"
           @click="isOpen = true"
         >
-          <img src="../public/src/images/info.svg" alt="ACT Logo" />
+          <info color="#8DCCF0" />
           <span>อ่านคำแนะนำและข้อจำกัดของเครื่องมือค้นหา</span>
         </p>
         <Share class="mt-1" />

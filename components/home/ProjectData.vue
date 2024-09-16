@@ -5,7 +5,8 @@
     <p class="b1 font-bold mb-3 text-ellipsis line-clamp-2">
       {{ props.data.name }}
     </p>
-    <div class="flex flex-wrap gap-1 b4">
+    <ProjectIconGuide :data="data" />
+    <!-- <div class="flex flex-wrap gap-1 b4">
       <div class="flex gap-1 items-center" v-if="props.data.province != ''">
         <div class="flex-1">
           <img src="../../public/src/images/pin.svg" alt="pin" />
@@ -26,7 +27,7 @@
         <img src="../../public/src/images/no.svg" alt="no" />
         <p>{{ props.data.no }}</p>
       </div>
-    </div>
+    </div> -->
 
     <template v-if="index == 0">
       <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 my-3">
