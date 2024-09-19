@@ -72,7 +72,7 @@ const isShowTab = ref(true);
         <img
           src="../public/src/images/showtab-btn.svg"
           alt="showtab button"
-          class="cursor-pointer absolute bottom-20 left-5"
+          class="cursor-pointer fixed bottom-5 left-5"
           @click="isShowTab = true"
           v-if="!isShowTab"
         />
