@@ -1,5 +1,6 @@
 <script setup>
 const menu = ref('ภาพรวม');
+const isShowTab = ref(true);
 </script>
 
 <template>
@@ -16,10 +17,15 @@ const menu = ref('ภาพรวม');
   </div>
   <div class="bg-[#1F1F1F] p-5">
     <div class="flex flex-col-mb gap-5 max-w-6xl mx-auto">
-      <div class="sm:w-1/4">
+      <div :class="[isShowTab ? 'sm:w-1/4' : 'hidden']">
         <div class="flex justify-between w-full py-3">
           <p class="b4 font-bold text-[#8E8E8E]">รายการข้อมูล</p>
-          <img src="../public/src/images/minimize.svg" alt="minimize" />
+          <img
+            src="../public/src/images/minimize.svg"
+            alt="minimize"
+            @click="isShowTab = false"
+            class="cursor-pointer"
+          />
         </div>
 
         <div class="text-white b1 cursor-pointer">
@@ -58,10 +64,18 @@ const menu = ref('ภาพรวม');
           </div>
         </div>
       </div>
-      <div class="sm:w-3/4">
+      <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
         <OverallProject v-if="menu == 'ภาพรวม'" />
         <Details v-else-if="menu == 'ข้อมูลเจาะลึก'" />
         <ProjectDocument v-else />
+
+        <img
+          src="../public/src/images/showtab-btn.svg"
+          alt="showtab button"
+          class="cursor-pointer absolute bottom-20 left-5"
+          @click="isShowTab = true"
+          v-if="!isShowTab"
+        />
       </div>
     </div>
 

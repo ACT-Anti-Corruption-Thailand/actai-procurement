@@ -74,7 +74,7 @@
           <p class="b3">ที่ตั้ง : กรุงเทพมหานคร</p>
           <hr class="my-5" />
 
-          <div class="flex">
+          <div class="flex flex-col-mb">
             <div class="flex-1">
               <p class="b2 flex">
                 วิธีการจัดหา

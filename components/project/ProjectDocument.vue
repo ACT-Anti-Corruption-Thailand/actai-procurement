@@ -1,5 +1,5 @@
 <template>
-  <h4 class="font-bold text-white mb-5">ภาพรวม</h4>
+  <h4 class="font-bold text-white mb-5">เอกสารที่เกี่ยวข้อง</h4>
   <div class="bg-white rounded-md p-2 flex gap-2 mb-3">
     <img src="../../public/src/images/document.svg" alt="" />
     <p class="b2">ประกาศเชิญชวน</p>
