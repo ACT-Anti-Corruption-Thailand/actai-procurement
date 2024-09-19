@@ -19,7 +19,8 @@ onMounted(() => {
   setTimeout(() => {
     const link_text_div = document.querySelector('.wv_cookie-consent__body a');
 
-    link_text_div.innerHTML = 'นโยบายข้อมูลส่วนบุคคลสำหรับการใช้คุกกี้';
+    if (link_text_div != null)
+      link_text_div.innerHTML = 'นโยบายข้อมูลส่วนบุคคลสำหรับการใช้คุกกี้';
   }, 50);
 });
 

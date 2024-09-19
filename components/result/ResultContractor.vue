@@ -46,17 +46,19 @@
     />
 
     <div class="flex justify-between py-5">
-      <div>
-        <p class="b1 font-bold">
-          บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
-        </p>
-        <ProjectIconGuide
-          :data="{
-            province: 'กรุงเทพมหานคร',
-          }"
-          class="text-[#8E8E8E]"
-        />
-      </div>
+      <NuxtLink to="/contracter">
+        <div>
+          <p class="b1 font-bold">
+            บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
+          </p>
+          <ProjectIconGuide
+            :data="{
+              province: 'กรุงเทพมหานคร',
+            }"
+            class="text-[#8E8E8E]"
+          />
+        </div>
+      </NuxtLink>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>
           <p class="b4">โครงการที่ได้งาน</p>

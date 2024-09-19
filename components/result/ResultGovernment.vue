@@ -61,18 +61,19 @@ function highlight(title: string, text: string) {
     />
 
     <div class="flex justify-between py-5">
-      <div>
-        <p
-          class="b1 font-bold"
-          v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
-        ></p>
-        <ProjectIconGuide
-          :data="{
-            province: 'กรุงเทพมหานคร',
-          }"
-          class="text-[#8E8E8E]"
-        />
-      </div>
+      <NuxtLink to="/government">
+        <div>
+          <p
+            class="b1 font-bold"
+            v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
+          ></p>
+          <ProjectIconGuide
+            :data="{
+              province: 'กรุงเทพมหานคร',
+            }"
+            class="text-[#8E8E8E]"
+          /></div
+      ></NuxtLink>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>
           <p class="b4">โครงการทั้งหมด</p>

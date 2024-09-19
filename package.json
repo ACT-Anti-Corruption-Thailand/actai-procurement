@@ -15,6 +15,7 @@
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@stefanobartoletti/nuxt-social-share": "^1.1.0",
     "@wevisdemo/ui": "^8.1.0",
+    "d3": "^7.9.0",
     "nuxt": "^3.12.4",
     "sass": "^1.77.8",
     "vue": "latest",
