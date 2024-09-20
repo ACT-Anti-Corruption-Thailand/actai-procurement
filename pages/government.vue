@@ -82,12 +82,29 @@ const isShowTab = ref(true);
       </div>
     </div>
 
-    <div class="mx-auto max-w-6xl text-white">
+    <div
+      class="mx-auto max-w-6xl text-white"
+      v-if="menu == 'ภาพรวมโครงการที่จัดทำ'"
+    >
       <ACTLineButton />
 
-      <p class="b1 mt-5">
-        ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่ http://www.gprocurement.go.th/ แจ้งข้อมูลเพิ่มเติมที่
-        FB : องค์กรต่อต้านคอร์รัปชัน
+      <p class="b1 mt-5 flex items-center flex-wrap">
+        <info color="#FFFFFF" />
+        ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่<a
+          href="http://www.gprocurement.go.th/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline text-[#8DCCF0] mx-1"
+          >http://www.gprocurement.go.th/</a
+        >แจ้งข้อมูลเพิ่มเติมที่ FB :
+        <a
+          href="https://www.facebook.com/act.anticorruptionThailand/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline text-[#8DCCF0] mx-1"
+        >
+          องค์กรต่อต้านคอร์รัปชัน</a
+        >
       </p>
     </div>
   </div>

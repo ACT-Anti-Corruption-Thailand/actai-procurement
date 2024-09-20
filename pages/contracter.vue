@@ -1,5 +1,6 @@
 <script setup>
-const menu = ref('ทั้งหมด');
+const menu = ref('รายชื่อโครงการที่เกี่ยวข้อง');
+const isShowTab = ref(true);
 </script>
 
 <template>
@@ -7,27 +8,46 @@ const menu = ref('ทั้งหมด');
   <div class="bg-white p-5">
     <div class="max-w-6xl mx-auto flex gap-2">
       <div class="sm:w-3/5">
-        <h3 class="font-bold">
-          ประกวดราคาจ้างโครงการจ้างก่อสร้างอาคารรัฐสภาแห่งใหม่ พร้อมอาคารประกอบ
+        <h3 class="font-black">
+          บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
         </h3>
         <p class="b1">เลขที่โครงการ : 56015020021</p>
-        <p class="b4 text-[#8E8E8E]">โครงการฯ อัปเดตข้อมูลเมื่อ 25/01/2565</p>
+        <p class="b4 text-[#8E8E8E]">โครงการฯ อัปเดตข้อมูลเมื่อ 20/12/2566</p>
       </div>
       <div class="sm:w-2/5"></div>
     </div>
   </div>
   <div class="bg-[#1F1F1F] p-5">
     <div class="flex flex-col-mb gap-5 max-w-6xl mx-auto">
-      <div class="sm:w-1/4">
-        <div class="flex">
+      <div :class="[isShowTab ? 'sm:w-1/4' : 'hidden']">
+        <div class="flex justify-between w-full py-3">
           <p class="b4 font-bold text-[#8E8E8E]">รายการข้อมูล</p>
+          <img
+            src="../public/src/images/minimize.svg"
+            alt="minimize"
+            @click="isShowTab = false"
+            class="cursor-pointer"
+          />
         </div>
 
-        <div class="text-white b1">
-          <div class="p-4 border-l-4 border-l-[#EC1C24] bg-black border-b">
+        <div class="text-white b1 cursor-pointer">
+          <div
+            class="p-4 border-b"
+            :class="{
+              'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ข้อมูลทั่วไป',
+            }"
+            @click="menu = 'ข้อมูลทั่วไป'"
+          >
             <p>ข้อมูลทั่วไป</p>
           </div>
-          <div class="p-4 border-b">
+          <div
+            class="p-4 border-b"
+            :class="{
+              'border-l-4 border-l-[#EC1C24] bg-black':
+                menu == 'การรับงานกับหน่วยงานรัฐ',
+            }"
+            @click="menu = 'การรับงานกับหน่วยงานรัฐ'"
+          >
             <p>การรับงานกับหน่วยงานรัฐ</p>
             <ul class="list-disc ml-5">
               <li>จำนวนโครงการ</li>
@@ -38,21 +58,96 @@ const menu = ref('ทั้งหมด');
               <li>พฤติกรรมการเสนอราคา</li>
             </ul>
           </div>
-          <div class="p-4 border-l-4 border-l-[#EC1C24] bg-black border-b">
+          <div
+            class="p-4 border-b"
+            :class="{
+              'border-l-4 border-l-[#EC1C24] bg-black':
+                menu == 'ประวัติการทิ้งงาน',
+            }"
+            @click="menu = 'ประวัติการทิ้งงาน'"
+          >
             <p>ประวัติการทิ้งงาน</p>
           </div>
-          <div class="p-4 border-b"><p>ความสัมพันธ์</p></div>
-          <div class="p-4 border-b">
+          <div
+            class="p-4 border-b"
+            :class="{
+              'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
+            }"
+            @click="menu = 'ความสัมพันธ์'"
+          >
+            <p>ความสัมพันธ์</p>
+          </div>
+          <div
+            class="p-4 border-b"
+            :class="{
+              'border-l-4 border-l-[#EC1C24] bg-black':
+                menu == 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน',
+            }"
+            @click="menu = 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'"
+          >
             <p>กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน</p>
           </div>
-          <div class="p-4 border-b"><p>รายชื่อโครงการที่เกี่ยวข้อง</p></div>
-          <div class="p-4 border-b"><p>หน่วยงานรัฐที่เป็นผู้ว่าจ้าง</p></div>
+          <div
+            class="p-4 border-b"
+            :class="{
+              'border-l-4 border-l-[#EC1C24] bg-black':
+                menu == 'รายชื่อโครงการที่เกี่ยวข้อง',
+            }"
+            @click="menu = 'รายชื่อโครงการที่เกี่ยวข้อง'"
+          >
+            <p>รายชื่อโครงการที่เกี่ยวข้อง</p>
+          </div>
+          <div
+            class="p-4 border-b"
+            :class="{
+              'border-l-4 border-l-[#EC1C24] bg-black':
+                menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง',
+            }"
+            @click="menu = 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'"
+          >
+            <p>หน่วยงานรัฐที่เป็นผู้ว่าจ้าง</p>
+          </div>
         </div>
       </div>
-      <div class="sm:w-3/4"><AbandonmentHistory /></div>
+      <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
+        <General v-if="menu == 'ข้อมูลทั่วไป'" />
+        <AbandonmentHistory v-else-if="menu == 'ประวัติการทิ้งงาน'" />
+        <Relationship v-else-if="menu == 'ความสัมพันธ์'" />
+        <RelatedProject v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'" />
+        <RelatedGovernment v-else-if="menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'" />
+
+        <img
+          src="../public/src/images/showtab-btn.svg"
+          alt="showtab button"
+          class="cursor-pointer fixed bottom-5 left-5"
+          @click="isShowTab = true"
+          v-if="!isShowTab"
+        />
+      </div>
     </div>
 
-    <ACTLineButton />
+    <div class="mx-auto max-w-6xl text-white" v-if="menu == 'ข้อมูลทั่วไป'">
+      <ACTLineButton />
+
+      <p class="b1 mt-5 flex items-center flex-wrap">
+        <info color="#FFFFFF" />
+        ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่<a
+          href="http://www.gprocurement.go.th/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline text-[#8DCCF0] mx-1"
+          >http://www.gprocurement.go.th/</a
+        >แจ้งข้อมูลเพิ่มเติมที่ FB :
+        <a
+          href="https://www.facebook.com/act.anticorruptionThailand/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline text-[#8DCCF0] mx-1"
+        >
+          องค์กรต่อต้านคอร์รัปชัน</a
+        >
+      </p>
+    </div>
   </div>
   <Footer />
 </template>
