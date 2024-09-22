@@ -65,6 +65,12 @@
         <DownloadAndCopy />
       </div>
 
+      <SortBy
+        text="เรียงตาม"
+        :list="['วงเงินสัญญา', 'วันที่ทำสัญญา']"
+        class="mb-3"
+      />
+
       <div class="overflow-auto">
         <table class="table-auto text-left w-[800px] lg:w-full">
           <thead class="bg-[#8E8E8E] b3 text-white">
@@ -83,7 +89,13 @@
             <template v-for="(item, i) in contractors" :key="i">
               <tr>
                 <td :rowspan="item.contracts.length">
-                  <b> {{ item.name }}</b> <br />
+                  <a
+                    target="_blank"
+                    :href="`/contracter?name=${item.name.replace(/ /g, '-')}`"
+                  >
+                    <b> {{ item.name }}</b></a
+                  >
+                  <br />
                   <div class="flex items-center gap-2">
                     <img src="../../public/src/images/contractor.svg" alt="" />
                     <p class="b4 text-[#8E8E8E]">56015020021</p>
@@ -209,7 +221,10 @@
                   <img src="../../public/src/images/winner.svg" alt="winner" />
                   <p class="b5">ผู้ชนะ</p>
                 </div>
-                บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
+                <a target="_blank" href="/contracter?name=ซิโน-ไทย">
+                  บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด
+                  (มหาชน)
+                </a>
                 <div class="flex items-center gap-2">
                   <img src="../../public/src/images/contractor.svg" alt="" />
                   <p class="b4 text-[#8E8E8E] font-normal">56015020021</p>

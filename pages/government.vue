@@ -7,12 +7,14 @@ const isShowTab = ref(true);
   <Header />
   <div class="bg-white p-5">
     <div class="max-w-6xl mx-auto flex gap-2">
-      <div class="sm:w-3/5">
+      <div class="sm:w-4/5">
         <h3 class="font-bold">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</h3>
         <p class="b1">กรุงเทพมหานคร</p>
         <p class="b4 text-[#8E8E8E]">หน่วยงานอัปเดตข้อมูลเมื่อ 01/09/2565</p>
       </div>
-      <div class="sm:w-2/5"></div>
+      <div class="sm:w-1/5">
+        <Share color="#0B5C90" text="แชร์หน้านี้" class="mt-2 ml-auto" />
+      </div>
     </div>
   </div>
   <div class="bg-[#1F1F1F] p-5">
@@ -82,14 +84,16 @@ const isShowTab = ref(true);
       </div>
     </div>
 
+    <Navigation section="gov" :activemenu="menu" @menu="(n) => (menu = n)" />
+
     <div
       class="mx-auto max-w-6xl text-white"
       v-if="menu == 'ภาพรวมโครงการที่จัดทำ'"
     >
       <ACTLineButton />
 
-      <p class="b1 mt-5 flex items-center flex-wrap">
-        <info color="#FFFFFF" />
+      <p class="b1 mt-5 flex items-center flex-wrap gap-2">
+        <img src="../public/src/images/status-icon.svg" />
         ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่<a
           href="http://www.gprocurement.go.th/"
           target="_blank"

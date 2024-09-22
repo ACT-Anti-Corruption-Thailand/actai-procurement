@@ -193,7 +193,7 @@ table th:last-child {
 }
 
 .dropdown-list {
-  @apply mt-1 w-full b1 text-left bg-white h-40 overflow-x-scroll z-10;
+  @apply mt-1 w-full b1 text-left max-h-44 bg-white overflow-x-scroll z-10 shadow-md  pb-0;
 
   li {
     @apply p-2.5 cursor-pointer text-black hover:bg-black hover:text-white;

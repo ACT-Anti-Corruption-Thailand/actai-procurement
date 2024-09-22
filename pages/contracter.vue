@@ -1,5 +1,5 @@
 <script setup>
-const menu = ref('รายชื่อโครงการที่เกี่ยวข้อง');
+const menu = ref('ข้อมูลทั่วไป');
 const isShowTab = ref(true);
 </script>
 
@@ -7,14 +7,23 @@ const isShowTab = ref(true);
   <Header />
   <div class="bg-white p-5">
     <div class="max-w-6xl mx-auto flex gap-2">
-      <div class="sm:w-3/5">
+      <div class="sm:w-4/5">
         <h3 class="font-black">
           บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
         </h3>
         <p class="b1">เลขที่โครงการ : 56015020021</p>
         <p class="b4 text-[#8E8E8E]">โครงการฯ อัปเดตข้อมูลเมื่อ 20/12/2566</p>
       </div>
-      <div class="sm:w-2/5"></div>
+      <div class="sm:w-1/5">
+        <div class="bg-[#FFEFF0] rounded-md text-[#EC1C24] b2 p-2.5 mb-2">
+          <div class="flex items-center gap-2">
+            <img src="../public/src/images/risk-flag.svg" alt="risk" />
+            <p class="font-bold">ตรวจพบความน่าสนใจ x กรณี</p>
+          </div>
+        </div>
+
+        <Share color="#0B5C90" text="แชร์หน้านี้" class="mt-2" />
+      </div>
     </div>
   </div>
   <div class="bg-[#1F1F1F] p-5">
@@ -115,6 +124,7 @@ const isShowTab = ref(true);
         <Relationship v-else-if="menu == 'ความสัมพันธ์'" />
         <RelatedProject v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'" />
         <RelatedGovernment v-else-if="menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'" />
+        <WorkWithGovernment v-else-if="menu == 'การรับงานกับหน่วยงานรัฐ'" />
 
         <img
           src="../public/src/images/showtab-btn.svg"
@@ -126,11 +136,17 @@ const isShowTab = ref(true);
       </div>
     </div>
 
+    <Navigation
+      section="contracter"
+      :activemenu="menu"
+      @menu="(n) => (menu = n)"
+    />
+
     <div class="mx-auto max-w-6xl text-white" v-if="menu == 'ข้อมูลทั่วไป'">
       <ACTLineButton />
 
-      <p class="b1 mt-5 flex items-center flex-wrap">
-        <info color="#FFFFFF" />
+      <p class="b1 mt-5 flex items-center flex-wrap gap-2">
+        <img src="../public/src/images/status-icon.svg" />
         ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่<a
           href="http://www.gprocurement.go.th/"
           target="_blank"

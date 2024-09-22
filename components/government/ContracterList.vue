@@ -13,6 +13,12 @@
         <DownloadAndCopy />
       </div>
 
+      <SortBy
+        text="เรียงตาม"
+        :list="['วงเงินสัญญา', 'จำนวนโครงการ']"
+        class="mb-3"
+      />
+
       <div class="overflow-auto">
         <table class="table-auto text-left w-[800px] lg:w-full">
           <thead class="bg-[#8E8E8E] b3 text-white">

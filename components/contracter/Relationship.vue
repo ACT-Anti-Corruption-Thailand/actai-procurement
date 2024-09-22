@@ -29,6 +29,7 @@
             class="b1 text-[#0B5C90] font-bold mb-3"
             >{{ item.name }}</a
           >
+          <arrow color="#0B5C90" class="-rotate-45 mt-1" />
           <div
             class="w-full h-[1px] bg-[#EC1C24] flex-1 mt-3 hidden sm:block"
           ></div>
@@ -61,8 +62,8 @@
               </p>
             </div>
             <div>
-              <span class="text-[#8E8E8E] b1" v-for="item3 in item2.relatedTo">
-                {{ item3 }},
+              <span class="text-[#8E8E8E] b1" v-if="item2.relatedTo != null">
+                {{ item2.relatedTo.join(', ') }}
               </span>
             </div>
           </div>
@@ -81,7 +82,7 @@
             <img src="../../public/src/images/corporation.svg" alt="" />
           </div>
           <a
-            :href="`#`"
+            :href="`/contracter?name=${item.name.replace(/ /g, '-')}`"
             target="_blank"
             rel="noopener noreferrer"
             class="b1 text-[#0B5C90] font-bold"
@@ -117,8 +118,8 @@
               </p>
             </div>
             <div>
-              <span class="text-[#8E8E8E] b1" v-for="item3 in item2.relatedTo">
-                {{ item3 }},
+              <span class="text-[#8E8E8E] b1" v-if="item2.relatedTo != null">
+                {{ item2.relatedTo.join(', ') }}
               </span>
             </div>
           </div>
@@ -190,27 +191,27 @@ const relationshipWith = {
         },
       ],
     },
-    {
-      name: 'พลเอกสุรพันธ์ สัจจิพานนท์',
-      relationships: [
-        {
-          relationshipType: 'มีที่อยู่เดียวกับองค์กร',
-          relatedTo: null,
-        },
-        {
-          relationshipType: 'เป็น/เคยเป็นกรรมการ/หุ้นส่วน',
-          relatedTo: null,
-        },
-        {
-          relationshipType: 'เป็นเครือญาติของกรรมการ/หุ้นส่วน',
-          relatedTo: [
-            'พลเอกสุรพันธ์ สัจจิพานนท์',
-            'นายเรวัต ฉ่ำเฉลิม',
-            'นายวัลลภ รุ่งกิจวรเสถียร',
-          ],
-        },
-      ],
-    },
+    // {
+    //   name: 'พลเอกสุรพันธ์ สัจจิพานนท์',
+    //   relationships: [
+    //     {
+    //       relationshipType: 'มีที่อยู่เดียวกับองค์กร',
+    //       relatedTo: null,
+    //     },
+    //     {
+    //       relationshipType: 'เป็น/เคยเป็นกรรมการ/หุ้นส่วน',
+    //       relatedTo: null,
+    //     },
+    //     {
+    //       relationshipType: 'เป็นเครือญาติของกรรมการ/หุ้นส่วน',
+    //       relatedTo: [
+    //         'พลเอกสุรพันธ์ สัจจิพานนท์',
+    //         'นายเรวัต ฉ่ำเฉลิม',
+    //         'นายวัลลภ รุ่งกิจวรเสถียร',
+    //       ],
+    //     },
+    //   ],
+    // },
   ],
   companies: [
     {

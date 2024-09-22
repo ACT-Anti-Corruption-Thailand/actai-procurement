@@ -31,6 +31,7 @@
           </div>
 
           <p
+            @click="isOpen = true"
             class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer"
           >
             <info color="#0B5C90" />
@@ -115,9 +116,13 @@
         </div>
       </div>
     </div>
+
+    <Modal v-if="isOpen" @close="isOpen = false" title="ตัวเลขนี้บ่งบอกอะไร" />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const isOpen = ref(false);
+</script>
 
 <style lang="scss" scoped></style>

@@ -45,7 +45,7 @@
           <info color="#8DCCF0" />
           <span>อ่านคำแนะนำและข้อจำกัดของเครื่องมือค้นหา</span>
         </p>
-        <Share class="mt-1" />
+        <Share class="mt-1 mx-auto" color="#FFFFFF" text="แชร์" />
       </div>
     </div>
   </div>
