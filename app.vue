@@ -13,7 +13,7 @@
 import '@wevisdemo/ui/styles/cookie-consent.css';
 import WvCookieConsent from '@wevisdemo/ui/vue/cookie-consent';
 
-const cookieOptions = ['Functionality', 'Performance', 'Advertising'];
+const cookieOptions = ['Performance'];
 
 onMounted(() => {
   setTimeout(() => {

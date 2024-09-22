@@ -16,39 +16,38 @@ function highlight(title: string, text: string) {
     return innerHTML;
   }
 }
+
+const searchText = ref('');
+
+onMounted(() => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  searchText.value = urlParams.get('search');
+});
 </script>
 
 <template>
-  <div class="">
+  <div v-if="searchText != 'ก่อสร้าง'">
+    <h5 class="text-center text-[#8E8E8E]">ไม่พบหน่วยงานรัฐที่มีคำค้นนี้</h5>
+  </div>
+  <div class="" v-else>
     <div class="flex flex-col-mb sm:items-center justify-between">
-      <h4 class="font-bold">xx,xxxx หน่วยงานรัฐ</h4>
+      <h4 class="font-bold">xx,xxx หน่วยงานรัฐ</h4>
       <FilterPopup />
     </div>
 
     <div class="flex items-center justify-between my-5 flex-col-mb">
       <div class="flex gap-2 items-center relative">
-        <p class="b1">เรียงตาม</p>
         <SortBy
-          class="bg-[#F5F5F5]"
-          :list="['ความใกล้เคียงคำค้น', 'วันที่ประกาศโครงการ', 'งบประมาณรวม']"
+          :list="[
+            'ความใกล้เคียงคำค้น',
+            'งบประมาณรวม',
+            'จำนวนโครงการทั้งหมด',
+            'จำนวนโครงการเสี่ยงทุจริต',
+            '% โครงการเสี่ยงทุจริตจากทั้งหมด',
+          ]"
+          text="เรียงตาม"
         />
-
-        <RadioGroup v-model="sortBy" class="flex gap-1">
-          <RadioGroupOption
-            v-slot="{ checked }"
-            class="flex-1 radio-btn b1 rounded-md"
-            value="desc"
-          >
-            <img src="../../public/src/images/sort-desc.svg" alt="" />
-          </RadioGroupOption>
-          <RadioGroupOption
-            v-slot="{ checked }"
-            class="flex-1 radio-btn b1 rounded-md"
-            value="asc"
-          >
-            <img src="../../public/src/images/sort-asc.svg" alt="" />
-          </RadioGroupOption>
-        </RadioGroup>
       </div>
       <DownloadAndCopy />
     </div>
@@ -61,7 +60,7 @@ function highlight(title: string, text: string) {
     />
 
     <div class="flex justify-between py-5">
-      <NuxtLink to="/government">
+      <a target="_blank" href="/government?name=สอบราคาซื้อชุดก่อสร้าง">
         <div>
           <p
             class="b1 font-bold"
@@ -73,7 +72,7 @@ function highlight(title: string, text: string) {
             }"
             class="text-[#8E8E8E]"
           /></div
-      ></NuxtLink>
+      ></a>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>
           <p class="b4">โครงการทั้งหมด</p>

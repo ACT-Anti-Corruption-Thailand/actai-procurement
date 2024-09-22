@@ -79,7 +79,7 @@
                   <div class="flex-1 relative">
                     <ListBox
                       title=""
-                      :selected="selected[0].year"
+                      :selected="selected[0].yearFrom"
                       :list="filterList.year"
                     />
                   </div>
@@ -89,7 +89,7 @@
                   <div class="flex-1 relative">
                     <ListBox
                       title=""
-                      :selected="selected[0].year"
+                      :selected="selected[0].yearTo"
                       :list="filterList.year"
                     />
                   </div>
@@ -231,11 +231,12 @@ import {
 } from '@headlessui/vue';
 
 const isOpen = ref(false);
-const plan = ref('งบประมาณ ');
+const plan = ref('งบประมาณ');
 
 const selected = [
   {
-    year: '2567',
+    yearFrom: '2566',
+    yearTo: '2567',
     agencies: 'ทุกหน่วยงาน',
     agencyBelongTo: 'ทุกหน่วยงาน',
     contractorType: 'ทุกประเภท',
@@ -310,4 +311,8 @@ function openModal() {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.radio-btn[aria-checked='true'] {
+  background: #d9d9d9 !important;
+}
+</style>

@@ -17,6 +17,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="samutprakan"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -26,6 +27,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="samutsakhon"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -35,6 +37,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nakhonpathom"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -44,6 +47,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nakhonnayok"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -53,6 +57,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="bangkok"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -62,6 +67,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nonthaburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -71,6 +77,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="saraburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -80,6 +87,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="pathumthani"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -89,6 +97,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="ayutthaya"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -98,6 +107,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="suphanburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -107,6 +117,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="lopburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -116,6 +127,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="singburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -125,6 +137,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="angthong"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -134,6 +147,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nakhon-sawan"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -143,6 +157,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="chainat"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -152,6 +167,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="uthaithani"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -161,6 +177,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phichit"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -170,6 +187,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="kamphaengphet"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -179,6 +197,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phetchabun"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -188,6 +207,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phitsanulok"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -197,6 +217,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="sukhothai"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -206,6 +227,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phrae"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -215,6 +237,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nan"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -224,6 +247,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="uttaradit"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -233,6 +257,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="lamphun"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -242,6 +267,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="mae-hong-son"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -251,6 +277,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phayao"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -260,6 +287,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="lampang"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -269,6 +297,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="chiangmai"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -278,6 +307,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="chiangrai"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -287,6 +317,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="prachuap-khiri-khan"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -296,6 +327,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phetchaburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -305,6 +337,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="ratchaburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -314,6 +347,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="kanchanaburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -323,6 +357,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="tak"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -332,6 +367,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="ubon-ratchathani"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -341,6 +377,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="sisaket"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -350,6 +387,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="surin"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -359,6 +397,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="buriram"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -368,6 +407,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="amnat-charoen"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -377,6 +417,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="roi-et"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -386,6 +427,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="maha-sarakham"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -395,6 +437,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nakhon-ratchasima"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -404,6 +447,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="yasothon"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -413,6 +457,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="kalasin"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -422,6 +467,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="khonkaen"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -431,6 +477,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="chaiyaphum"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -440,6 +487,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="mukdahan"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -448,7 +496,7 @@
         stroke="black"
         stroke-linejoin="round"
       />
-      <g id="sakon-nakhon">
+      <g :class="`provinces-${props.no}`" id="sakon-nakhon">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -462,6 +510,7 @@
         />
       </g>
       <path
+        :class="`provinces-${props.no}`"
         id="udonthani"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -471,6 +520,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nong-bua-lamphu"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -480,6 +530,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="loei"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -489,6 +540,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nakhon-phanom"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -498,6 +550,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="bueng-kan"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -507,6 +560,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nong-khai"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -516,6 +570,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="trat"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -525,6 +580,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="chanthaburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -534,6 +590,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="ranong"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -542,7 +599,7 @@
         stroke="black"
         stroke-linejoin="round"
       />
-      <g id="chonburi">
+      <g :class="`provinces-${props.no}`" id="chonburi">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -556,6 +613,7 @@
         />
       </g>
       <path
+        :class="`provinces-${props.no}`"
         id="sa-kaeo"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -565,6 +623,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="chachoengsao"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -574,6 +633,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="prachinburi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -583,6 +643,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="narathiwat"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -592,6 +653,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="yala"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -600,7 +662,7 @@
         stroke="black"
         stroke-linejoin="round"
       />
-      <g id="pattani">
+      <g :class="`provinces-${props.no}`" id="pattani">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -614,6 +676,7 @@
         />
       </g>
       <path
+        :class="`provinces-${props.no}`"
         id="songkhla"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -623,6 +686,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="satun"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -632,6 +696,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phatthalung"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -641,6 +706,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="trang"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -650,6 +716,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="krabi"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -659,6 +726,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phuket"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -668,6 +736,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="nakhon-si-thammarat"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -677,6 +746,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="phang-nga"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -685,7 +755,7 @@
         stroke="black"
         stroke-linejoin="round"
       />
-      <g id="surat-thani">
+      <g :class="`provinces-${props.no}`" id="surat-thani">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -699,6 +769,7 @@
         />
       </g>
       <path
+        :class="`provinces-${props.no}`"
         id="ranong_2"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -708,6 +779,7 @@
         stroke-linejoin="round"
       />
       <path
+        :class="`provinces-${props.no}`"
         id="chumphon"
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -720,47 +792,28 @@
   </svg>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import * as d3 from 'd3';
 
-const provinces = [
-  {
-    name: 'กรุงเทพมหานคร',
-    name_en: 'bangkok',
-    totalProject: 3564,
-    totalBudgetMoney: 38899482862,
-    totalCorruptionProject: 497,
-  },
-  {
-    name: 'ปทุมธานี',
-    name_en: 'pathumthani',
-    totalProject: 120,
-    totalBudgetMoney: 482865642,
-    totalCorruptionProject: 34,
-  },
-  {
-    name: 'เชียงใหม่',
-    name_en: 'chiangmai',
-    totalProject: 2000,
-    totalBudgetMoney: 6482865642,
-    totalCorruptionProject: 34,
-  },
-  {
-    name: 'แพร่',
-    name_en: 'phrae',
-    totalProject: 356,
-    totalBudgetMoney: 270443964,
-    totalCorruptionProject: 239,
-  },
-];
+const props = defineProps<{
+  no: string;
+  provinces: array;
+}>();
 
-const color = d3.scaleLinear([0, 3564], ['white', 'black']);
+const maxVal = props.no == '1' ? 3564 : 46135658110;
+
+const color = d3.scaleLinear([0, maxVal], ['#F5F5F5', '#484848']);
 
 onMounted(() => {
-  provinces.forEach((element) => {
-    document.getElementById(element.name_en).style.fill = color(
-      element.totalProject
-    );
+  props.provinces.forEach((element) => {
+    if (props.no == '1')
+      document.querySelector(
+        '.provinces-' + props.no + '#' + element.name_en
+      ).style.fill = color(element.totalProject);
+    else
+      document.querySelector(
+        '.provinces-' + props.no + '#' + element.name_en
+      ).style.fill = color(element.totalBudgetMoney);
   });
 });
 </script>

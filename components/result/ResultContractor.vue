@@ -1,38 +1,37 @@
+<script setup lang="ts">
+import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
+
+const sortBy = ref('desc');
+
+const searchText = ref('');
+
+onMounted(() => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  searchText.value = urlParams.get('search');
+});
+</script>
+
 <template>
-  <div class="">
+  <div v-if="searchText != 'ก่อสร้าง'">
+    <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
+  </div>
+  <div class="" v-else>
     <div class="flex flex-col-mb sm:items-center justify-between">
-      <h4 class="font-bold">xx,xxxx,xxxx ผู้รับจ้าง</h4>
+      <h4 class="font-bold">xx,xxx,xxx ผู้รับจ้าง</h4>
       <FilterPopup />
     </div>
 
     <div class="flex items-center justify-between my-5 flex-col-mb">
       <div class="flex gap-2 items-center relative">
-        <p class="b1">เรียงตาม</p>
         <SortBy
-          class="bg-[#F5F5F5]"
+          text="เรียงตาม"
           :list="[
             'ความใกล้เคียงคำค้น',
             'วงเงินสัญญารวม',
             'จำนวนโครงการที่ได้งาน',
           ]"
         />
-
-        <RadioGroup v-model="sortBy" class="flex gap-1">
-          <RadioGroupOption
-            v-slot="{ checked }"
-            class="flex-1 radio-btn b1 rounded-md"
-            value="desc"
-          >
-            <img src="../../public/src/images/sort-desc.svg" alt="" />
-          </RadioGroupOption>
-          <RadioGroupOption
-            v-slot="{ checked }"
-            class="flex-1 radio-btn b1 rounded-md"
-            value="asc"
-          >
-            <img src="../../public/src/images/sort-asc.svg" alt="" />
-          </RadioGroupOption>
-        </RadioGroup>
       </div>
       <DownloadAndCopy />
     </div>
@@ -46,7 +45,7 @@
     />
 
     <div class="flex justify-between py-5">
-      <NuxtLink to="/contracter">
+      <a target="_blank" href="/contracter?name=สอบราคาซื้อชุดก่อสร้าง">
         <div>
           <p class="b1 font-bold">
             บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
@@ -58,7 +57,7 @@
             class="text-[#8E8E8E]"
           />
         </div>
-      </NuxtLink>
+      </a>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>
           <p class="b4">โครงการที่ได้งาน</p>
@@ -100,11 +99,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
-
-const sortBy = ref('desc');
-</script>
 
 <style lang="scss" scoped></style>

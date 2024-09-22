@@ -1,4 +1,5 @@
 <template>
+  {{ query }}
   <ClientOnly fallback-tag="span" fallback="Loading...">
     <div class="w-full max-w-xl flex">
       <Combobox v-model="selected" class="">
@@ -11,6 +12,13 @@
               class="w-full border-none py-2 px-3 text-black focus:ring-[#C2141B]"
               :displayValue="(person) => person.name"
               @change="query = $event.target.value"
+            />
+            <img
+              src="../public/src/images/close.svg"
+              alt="close"
+              class="absolute right-5 my-auto w-4 h-4 inset-y-0 cursor-pointer"
+              @click="query = ''"
+              v-if="query != ''"
             />
           </div>
           <TransitionRoot
@@ -36,35 +44,40 @@
                 :value="person"
                 v-slot="{ selected, active }"
               >
-                <li
-                  class="relative cursor-default select-none py-2 px-2 text-left b2"
-                  :class="{
-                    'bg-black text-white': active,
-                    'text-black': !active,
-                  }"
-                >
-                  <span
-                    class="block truncate"
+                <NuxtLink :to="`/result?search=${person.name}`">
+                  <li
+                    class="relative cursor-default select-none py-2 px-2 text-left b2"
                     :class="{
-                      'font-medium': selected,
-                      'font-normal': !selected,
+                      'bg-black text-white': active,
+                      'text-black': !active,
                     }"
                   >
-                    {{ person.name }}
-                  </span>
-                  <span
-                    v-if="selected"
-                    class="absolute inset-y-0 left-0 flex items-center pl-3"
-                    :class="{ 'text-white': active, 'text-black': !active }"
-                  >
-                  </span>
-                </li>
+                    <span
+                      class="block truncate"
+                      :class="{
+                        'font-medium': selected,
+                        'font-normal': !selected,
+                      }"
+                    >
+                      {{ person.name }}
+                    </span>
+                    <span
+                      v-if="selected"
+                      class="absolute inset-y-0 left-0 flex items-center pl-3"
+                      :class="{ 'text-white': active, 'text-black': !active }"
+                    >
+                    </span>
+                  </li>
+                </NuxtLink>
               </ComboboxOption>
             </ComboboxOptions>
           </TransitionRoot>
         </div>
       </Combobox>
-      <NuxtLink to="/result">
+      <NuxtLink
+        :to="`/result?search=${query}`"
+        :class="[query == '' ? 'pointer-events-none' : '']"
+      >
         <div class="h-11 w-11">
           <img
             src="/public/src/images/search.svg"

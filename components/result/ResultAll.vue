@@ -17,10 +17,23 @@ function highlight(title: string, text: string) {
     return innerHTML;
   }
 }
+
+const searchText = ref('');
+
+onMounted(() => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  searchText.value = urlParams.get('search');
+});
 </script>
 
 <template>
-  <div class="mx-auto max-w-6xl">
+  <div v-if="searchText != 'ก่อสร้าง'">
+    <h5 class="text-center text-[#8E8E8E]">
+      ไม่พบโครงการจัดซื้อจัดจ้าง หน่วยงานรัฐ และผู้รับจ้างที่มีคำค้นนี้
+    </h5>
+  </div>
+  <div class="mx-auto max-w-6xl" v-else>
     <div class="border-b border-black mb-5">
       <h4 class="font-black">โครงการจัดซื้อจัดจ้าง</h4>
 
@@ -28,7 +41,7 @@ function highlight(title: string, text: string) {
 
       <div v-for="(item, i) in 3" :key="i" class="py-5">
         <div class="flex justify-between flex-col-mb">
-          <NuxtLink to="/project">
+          <a target="_blank" href="/project?name=สอบราคาซื้อชุดก่อสร้าง">
             <div>
               <p
                 class="b1 font-bold"
@@ -41,7 +54,7 @@ function highlight(title: string, text: string) {
                 <img src="../../public/src/images/risk-flag.svg" alt="risk" />
                 <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
               </div>
-            </div></NuxtLink
+            </div></a
           >
           <div
             class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
@@ -70,7 +83,7 @@ function highlight(title: string, text: string) {
       />
 
       <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
-        <NuxtLink to="/government">
+        <a target="_blank" href="/government?name=การไฟฟ้านครหลวง">
           <div>
             <p
               class="b1 font-bold"
@@ -82,7 +95,7 @@ function highlight(title: string, text: string) {
               }"
               class="text-[#8E8E8E]"
             /></div
-        ></NuxtLink>
+        ></a>
         <div class="flex sm:gap-10 text-right flex-col-mb">
           <div>
             <p class="b4">โครงการทั้งหมด</p>
@@ -90,7 +103,7 @@ function highlight(title: string, text: string) {
           </div>
           <div class="text-[#EC1C24]">
             <p class="b4">โครงการเสี่ยงทุจริต</p>
-            <p class="b1">10,000 (xx.x%)</p>
+            <p class="b1">10,000 (5.26%)</p>
           </div>
           <div>
             <p class="b4">งบประมาณรวม (บาท)</p>
@@ -117,7 +130,7 @@ function highlight(title: string, text: string) {
       />
 
       <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
-        <NuxtLink to="/contracter">
+        <a target="_blank" href="/contracter?name=การไฟฟ้านครหลวง">
           <div>
             <p
               class="b1 font-bold"
@@ -130,7 +143,7 @@ function highlight(title: string, text: string) {
               class="text-[#8E8E8E]"
             />
           </div>
-        </NuxtLink>
+        </a>
         <div class="flex sm:gap-10 text-right flex-col-mb">
           <div>
             <p class="b4">โครงการทั้งหมด</p>
@@ -138,7 +151,7 @@ function highlight(title: string, text: string) {
           </div>
           <div class="text-[#EC1C24]">
             <p class="b4">โครงการเสี่ยงทุจริต</p>
-            <p class="b1">10,000 (xx.x%)</p>
+            <p class="b1">10,000 (5.26%)</p>
           </div>
           <div>
             <p class="b4">งบประมาณรวม (บาท)</p>

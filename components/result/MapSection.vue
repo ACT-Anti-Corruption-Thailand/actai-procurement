@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white p-4 sm:p-7 rounded-md">
-    <h5 class="font-bold">การกระจายตัวโครงการใน xx จังหวัด</h5>
+    <h4 class="font-black">การกระจายตัวโครงการใน 4 จังหวัด</h4>
 
     <RadioGroup v-model="plan" class="flex lg:hidden">
       <RadioGroupOption
@@ -21,12 +21,16 @@
 
     <div class="flex gap-2 flex-col-mb">
       <div class="flex-1" v-if="plan == 'all' || plan == 'จำนวนโครงการ'">
-        <p class="b1 font-bold hidden lg:block">จำนวนโครงการ</p>
-        <p class="text-[#7F7F7F] font-bold">รวม xxx,xxx,xxx โครงการ</p>
+        <h5 class="font-bold hidden lg:block">จำนวนโครงการ</h5>
+        <p class="b1 font-bold">รวม 6,040 โครงการ</p>
         <div
           class="border rounded-md border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
-          <Map class="mx-auto max-w-xs h-fit w-fit" />
+          <Map
+            class="mx-auto max-w-xs h-fit w-fit"
+            no="1"
+            :provinces="provinces"
+          />
 
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
@@ -41,28 +45,28 @@
         </div>
       </div>
       <div class="flex-1" v-if="plan == 'all' || plan == 'งบประมาณ'">
-        <p class="b1 font-bold hidden lg:block">งบประมาณ</p>
-        <p class="text-[#7F7F7F] font-bold">รวม xxx,xxx,xxx,xxx,xxx บาท</p>
+        <h5 class="font-bold hidden lg:block">งบประมาณ</h5>
+        <p class="b1 font-bold">รวม 6,135,658,110 บาท</p>
         <div
           class="border rounded-md border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
-          <Map class="mx-auto max-w-xs h-fit" />
+          <Map class="mx-auto max-w-xs h-fit" no="2" :provinces="provinces" />
 
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
               <p>0</p>
-              <p>3,564</p>
+              <p>46,135k</p>
             </div>
             <div
               class="h-[10px] w-full bg-gradient-to-r from-[#F5F5F5] to-[#484848]"
             ></div>
-            <p>หน่วย : โครงการ</p>
+            <p>หน่วย : บาท</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="flex justify-center max-w-4xl mx-auto gap-2">
+    <div class="flex justify-center items-center max-w-4xl mx-auto gap-2">
       <RadioGroup v-model="sortBy" class="flex gap-1">
         <RadioGroupOption
           v-slot="{ checked }"
@@ -79,12 +83,16 @@
           <img src="../../public/src/images/sort-asc.svg" alt="" />
         </RadioGroupOption>
       </RadioGroup>
-      <input
-        type="text"
-        class="input-text"
-        v-model="searchText"
-        placeholder="พิมพ์ชื่อจังหวัด"
-      />
+
+      <div class="relative w-full">
+        <input
+          type="text"
+          class="input-text h-full"
+          v-model="searchText"
+          placeholder="พิมพ์ชื่อจังหวัด"
+        />
+        <SearchIcon color="#000000" class="absolute inset-y-0 my-auto left-2" />
+      </div>
     </div>
 
     <div class="flex gap-5 mt-3">
@@ -92,6 +100,7 @@
         <p class="b4 text-right">จำนวนโครงการ</p>
         <div
           class="flex justify-between items-center py-2 border-b cursor-pointer"
+          @click="setFill(item.name_en, 1)"
           v-for="(item, i) in searchResult"
         >
           <div class="flex gap-2 items-center">
@@ -110,8 +119,8 @@
       <div class="flex-1" v-if="plan == 'all' || plan == 'งบประมาณ'">
         <p class="b4 text-right">งบประมาณ (บาท)</p>
         <div
-          class="flex justify-between items-center py-2 border-b"
-          @click="setFill(item.name_en)"
+          class="flex justify-between items-center py-2 border-b cursor-pointer"
+          @click="setFill(item.name_en, 2)"
           v-for="(item, i) in searchResult"
         >
           <div class="flex gap-2 items-center">
@@ -119,7 +128,7 @@
             <p class="b1 font-bold">{{ item.name }}</p>
           </div>
           <div>
-            <p class="b1">{{ item.totalProject.toLocaleString() }}</p>
+            <p class="b1">{{ item.totalBudgetMoney.toLocaleString() }}</p>
           </div>
         </div>
 
@@ -182,13 +191,28 @@ const searchResult = computed(() => {
   });
 });
 
-// const setFill = (id) => {
-//   document.getElementById(id).style.stroke = 'red';
-// };
+const setFill = (id, n) => {
+  let provinces_list = document.getElementsByClassName('provinces-1');
+  let provinces_list_2 = document.getElementsByClassName('provinces-2');
+
+  [...provinces_list].forEach((element) => {
+    element.style.stroke = 'black';
+  });
+
+  [...provinces_list_2].forEach((element) => {
+    element.style.stroke = 'black';
+  });
+
+  document.querySelector('.provinces-' + n + '#' + id).style.stroke = 'red';
+};
 
 onMounted(() => {
   plan.value = window.innerWidth > 1024 ? 'all' : 'จำนวนโครงการ';
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.input-text {
+  padding-left: 30px !important;
+}
+</style>

@@ -31,7 +31,17 @@
                 class="absolute right-5 top-5 cursor-pointer"
                 @click="$emit('close')"
               />
-              <PopupData />
+              <SearchTutorial
+                v-if="title == 'อ่านคำแนะนำและข้อจำกัดของเครื่องมือค้นหา'"
+              />
+              <HowToCheckRiskProject
+                v-else-if="title == 'ACT Ai ตรวจสอบโครงการเสี่ยงอย่างไร ?'"
+              />
+              <MeaningOfType
+                v-else-if="
+                  title == 'วิธีการจัดหา มีอะไรบ้าง ลักษณะเป็นอย่างไร?'
+                "
+              />
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -40,7 +50,7 @@
   </TransitionRoot>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import {
   TransitionRoot,
@@ -49,6 +59,10 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue';
+
+const props = defineProps<{
+  title: string;
+}>();
 
 const isOpen = ref(true);
 </script>

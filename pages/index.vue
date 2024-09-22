@@ -50,7 +50,11 @@
     </div>
   </div>
 
-  <Modal v-if="isOpen" @close="isOpen = false" />
+  <Modal
+    v-if="isOpen"
+    @close="isOpen = false"
+    title="อ่านคำแนะนำและข้อจำกัดของเครื่องมือค้นหา"
+  />
 
   <InfoOfTheMonth />
 

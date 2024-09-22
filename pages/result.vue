@@ -13,7 +13,7 @@ const iconGuide = ref({
 const mockDataGuide = ref({
   name: '',
   province: 'แพร่',
-  year: '2567 (10/11/2566)',
+  year: '2567 (10/11/2567)',
   owner: 'สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน',
   no: '= 56015020021',
 });
