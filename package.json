@@ -15,10 +15,12 @@
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@stefanobartoletti/nuxt-social-share": "^1.1.0",
     "@wevisdemo/ui": "^8.1.0",
+    "chart.js": "^4.4.4",
     "d3": "^7.9.0",
     "nuxt": "^3.12.4",
     "sass": "^1.77.8",
     "vue": "latest",
+    "vue-chartjs": "^5.3.1",
     "vue-social-sharing": "^4.0.0-alpha4"
   },
   "devDependencies": {

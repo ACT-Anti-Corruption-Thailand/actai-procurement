@@ -42,6 +42,7 @@
                   title == 'วิธีการจัดหา มีอะไรบ้าง ลักษณะเป็นอย่างไร?'
                 "
               />
+              <MeaningOfChart v-else-if="title == 'กราฟนี้บ่งบอกอะไร'" />
               <MeaningOfNumber v-else-if="title == 'ตัวเลขนี้บ่งบอกอะไร'" />
             </DialogPanel>
           </TransitionChild>

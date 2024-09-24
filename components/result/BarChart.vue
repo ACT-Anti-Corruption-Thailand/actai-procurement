@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
+
 const props = defineProps<{
   title: string;
   data: object;
+  isInGov: boolean;
 }>();
 
 const maxVal = ref(0);
@@ -296,12 +299,47 @@ const setChartTitle = computed(() => {
     return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะโครงการล่าสุด*';
   else return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามวิธีการจัดหา';
 });
+
+const plan = ref('ความเสี่ยงทุจริต');
 </script>
 
 <template>
   <div class="rounded-md flex flex-col-mb mb-3">
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
-      <h4 class="font-black">{{ props.title }}</h4>
+      <h4 class="font-black" v-if="!props.isInGov">{{ props.title }}</h4>
+
+      <template v-if="props.isInGov">
+        <h4 class="font-black">จำนวนโครงการที่จัดทำ</h4>
+        <p class="b1 font-bold mb-3">รวม xxx,xxx,xxx โครงการ</p>
+
+        <p class="b1">แบ่งสัดส่วนตาม</p>
+        <RadioGroup v-model="plan" class="flex flex-col radio-wrapper">
+          <RadioGroupOption
+            v-slot="{ checked }"
+            class="flex-1 radio-btn b1"
+            value="ความเสี่ยงทุจริต"
+            @click="$emit('title', 'ความเสี่ยงทุจริต')"
+          >
+            <span>ความเสี่ยงทุจริต</span>
+          </RadioGroupOption>
+          <RadioGroupOption
+            v-slot="{ checked }"
+            class="flex-1 radio-btn b1"
+            value="สถานะโครงการ"
+            @click="$emit('title', 'สถานะโครงการ')"
+          >
+            <span>สถานะโครงการล่าสุด</span>
+          </RadioGroupOption>
+          <RadioGroupOption
+            v-slot="{ checked }"
+            class="flex-1 radio-btn b1"
+            value="วิธีการจัดหา"
+            @click="$emit('title', 'วิธีการจัดหา')"
+          >
+            <span>วิธีการจัดหา</span>
+          </RadioGroupOption>
+        </RadioGroup></template
+      >
 
       <template v-if="props.title == 'งบประมาณ'">
         <p class="b1 font-bold">รวมทุกปีงบประมาณ* x,xxx,xxx,xxx,xxx,xxx บาท</p>
@@ -312,7 +350,9 @@ const setChartTitle = computed(() => {
       >
 
       <template v-else-if="props.title == 'ความเสี่ยงทุจริต'">
-        <p class="b1 font-bold">รวม xxx,xxx,xxx โครงการ</p>
+        <p class="b1 font-bold" v-if="!props.isInGov">
+          รวม xxx,xxx,xxx โครงการ
+        </p>
         <p class="b4 text-[#8E8E8E] text-right">
           หน่วย : โครงการ (%ของโครงการทั้งหมด)
         </p>
@@ -336,7 +376,9 @@ const setChartTitle = computed(() => {
       </template>
 
       <template v-else-if="props.title == 'สถานะโครงการ'">
-        <p class="b1 font-bold">รวม xxx,xxx,xxx โครงการ</p>
+        <p class="b1 font-bold" v-if="!props.isInGov">
+          รวม xxx,xxx,xxx โครงการ
+        </p>
         <p class="b4 text-[#8E8E8E] text-right">
           หน่วย : โครงการ (%ของโครงการทั้งหมด)
         </p>
@@ -396,7 +438,9 @@ const setChartTitle = computed(() => {
       </template>
 
       <template v-else-if="props.title == 'วิธีการจัดหา'">
-        <p class="b1 font-bold">รวม xxx,xxx,xxx โครงการ</p>
+        <p class="b1 font-bold" v-if="!props.isInGov">
+          รวม xxx,xxx,xxx โครงการ
+        </p>
         <p class="b4 text-[#8E8E8E] text-right">
           หน่วย : โครงการ (%ของโครงการทั้งหมด)
         </p>
@@ -650,33 +694,9 @@ const setChartTitle = computed(() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-.yaxis-text {
-  writing-mode: vertical-lr;
-  color: #8e8e8e;
-  font-weight: bold;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 10px;
-  text-align: center;
-}
-
-.checkbox-wrapper {
-  border-radius: 10px 0 0 10px;
-  padding: 28px;
-
-  @include mobile {
-    border-radius: 10px 10px 0 0;
-    padding: 15px;
-  }
-}
-
-.chart-wrapper {
-  border-radius: 0 10px 10px 0;
-
-  @include mobile {
-    border-radius: 0 0 10px 10px;
-  }
+<style scoped>
+.radio-wrapper {
+  border: 1px solid #d9d9d9 !important;
+  border-radius: 10px !important;
 }
 </style>

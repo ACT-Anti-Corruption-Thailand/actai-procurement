@@ -58,15 +58,7 @@
           </div>
 
           <hr class="my-5" />
-          <p class="b2 flex gap-2">
-            สถานะโครงการ
-            <span
-              class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer"
-            >
-              <info color="#0B5C90" />
-              <span>มีสถานะอะไรบ้าง</span>
-            </span>
-          </p>
+          <p class="b2 flex gap-2">สถานะโครงการ</p>
           <p class="b1">ระหว่างดำเนินการ</p>
         </div>
         <div class="flex-1">
@@ -80,6 +72,7 @@
               <p class="b2 flex">
                 วิธีการจัดหา
                 <span
+                  @click="isOpen2 = true"
                   class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer"
                 >
                   <info color="#0B5C90" />
@@ -89,15 +82,7 @@
               <p class="b1">ประกวดราคา</p>
             </div>
             <div class="flex-1">
-              <p class="b2 flex">
-                ประเภทการจัดหา
-                <span
-                  class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer"
-                >
-                  <info color="#0B5C90" />
-                  <span>มีประเภทอะไรบ้าง</span></span
-                >
-              </p>
+              <p class="b2 flex">ประเภทการจัดหา</p>
               <p class="b1">จ้างก่อสร้าง</p>
             </div>
           </div>
@@ -118,11 +103,18 @@
     </div>
 
     <Modal v-if="isOpen" @close="isOpen = false" title="ตัวเลขนี้บ่งบอกอะไร" />
+
+    <Modal
+      v-if="isOpen2"
+      @close="isOpen2 = false"
+      title="วิธีการจัดหา มีอะไรบ้าง ลักษณะเป็นอย่างไร?"
+    />
   </div>
 </template>
 
 <script setup>
 const isOpen = ref(false);
+const isOpen2 = ref(false);
 </script>
 
 <style lang="scss" scoped></style>

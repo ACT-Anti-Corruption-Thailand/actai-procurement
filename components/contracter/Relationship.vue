@@ -11,10 +11,10 @@
         <div class="flex flex-1 gap-2">
           <div>
             <img
-              :src="`../../src/images/politician-photos-crop/${item.name.replace(
+              :src="`https://parliamentwatch.wevis.info/images/politicians/${item.name.replace(
                 ' ',
                 '-'
-              )}.jpg`"
+              )}.webp`"
               alt=""
               class="w-8 h-8 rounded-full border-2 border-black"
             />
@@ -136,7 +136,7 @@
           v-for="item in relationshipWith.politicalParties"
         >
           <img
-            :src="`../../src/images/party-logos/${item}.png`"
+            :src="`https://parliamentwatch.wevis.info/images/parties/${item}.webp`"
             alt=""
             class="w-8 h-8 rounded-full border-2 border-black"
             :alt="item"
