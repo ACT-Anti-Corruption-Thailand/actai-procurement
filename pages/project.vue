@@ -1,12 +1,16 @@
 <script setup>
 const menu = ref('ภาพรวม');
 const isShowTab = ref(true);
+
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 </script>
 
 <template>
   <Header />
   <div class="bg-white p-5">
-    <div class="max-w-6xl mx-auto flex gap-2">
+    <Breadcrumb title="สอบราคาซื้อชุดก่อสร้าง (60.14.13)" />
+    <div class="max-w-6xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
         <h3 class="font-black">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</h3>
         <p class="b1">เลขที่โครงการ : 56015020021</p>
@@ -18,6 +22,24 @@ const isShowTab = ref(true);
             <img src="../public/src/images/risk-flag.svg" alt="risk" />
             <p class="font-bold">พบความเสี่ยงทุจริต x ประเด็น</p>
           </div>
+
+          <Disclosure>
+            <DisclosureButton
+              class="ml-2 flex items-center text-[#EC1C24] gap-2 w-full b4"
+            >
+              <ChevronDownIcon class="size-2" /> ดูรายละเอียด
+            </DisclosureButton>
+            <DisclosurePanel class="text-[#EC1C24] b4">
+              <ul class="list-disc ml-10">
+                <li>เสนอราคาใกล้ราคากลาง</li>
+                <li>เสนอราคาสูง</li>
+                <li>เสนอราคาสูงกว่าราคากลาง</li>
+                <li>เสนอราคาเกาะกลุ่ม</li>
+                <li>เสนอราคาเท่ากัน</li>
+                <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
+              </ul>
+            </DisclosurePanel>
+          </Disclosure>
         </div>
 
         <div class="flex items-center gap-2">

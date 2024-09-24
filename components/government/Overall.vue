@@ -6,7 +6,7 @@
       :title="title"
       :data="yearlyAggregates"
       id="chart-2"
-      :isInGov="true"
+      titleType="1"
       @title="(n) => (title = n)"
       @isOpen="isOpen = true"
     />

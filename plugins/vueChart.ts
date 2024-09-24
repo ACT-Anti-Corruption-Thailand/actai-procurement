@@ -7,6 +7,7 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Filler,
 } from 'chart.js';
 export default defineNuxtPlugin(() => {
@@ -18,6 +19,7 @@ export default defineNuxtPlugin(() => {
     Title,
     Tooltip,
     Legend,
-    Filler
+    Filler,
+    BarElement
   );
 });

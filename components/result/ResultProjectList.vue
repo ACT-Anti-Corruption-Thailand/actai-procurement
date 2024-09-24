@@ -324,11 +324,17 @@ const menuList = ref([
 
         <div class="bg-black p-5 sm:p-10 rounded-md mt-3">
           <div class="max-w-6xl mx-auto">
-            <BarChart title="งบประมาณ" :data="yearlyAggregates" id="chart-1" />
+            <BarChart
+              title="งบประมาณ"
+              :data="yearlyAggregates"
+              titleType="0"
+              id="chart-1"
+            />
 
             <BarChart
               title="ความเสี่ยงทุจริต"
               :data="yearlyAggregates"
+              titleType="0"
               id="chart-2"
               @isOpen="isOpen = true"
             />
@@ -336,18 +342,21 @@ const menuList = ref([
             <BarChart
               title="สถานะโครงการ"
               :data="yearlyAggregates"
+              titleType="0"
               id="chart-3"
             />
 
             <BarChart
               title="สถานะสัญญา"
               :data="yearlyAggregates"
+              titleType="0"
               id="chart-4"
             />
 
             <BarChart
               title="วิธีการจัดหา"
               :data="yearlyAggregates"
+              titleType="0"
               id="chart-5"
               @isOpen="isOpen2 = true"
             />

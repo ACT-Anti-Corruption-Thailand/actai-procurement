@@ -4,7 +4,7 @@ import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
 const props = defineProps<{
   title: string;
   data: object;
-  isInGov: boolean;
+  titleType: string;
 }>();
 
 const maxVal = ref(0);
@@ -306,11 +306,31 @@ const plan = ref('ความเสี่ยงทุจริต');
 <template>
   <div class="rounded-md flex flex-col-mb mb-3">
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
-      <h4 class="font-black" v-if="!props.isInGov">{{ props.title }}</h4>
+      <h4 class="font-black" v-if="props.titleType == '0'">
+        {{ props.title }}
+      </h4>
 
-      <template v-if="props.isInGov">
-        <h4 class="font-black">จำนวนโครงการที่จัดทำ</h4>
-        <p class="b1 font-bold mb-3">รวม xxx,xxx,xxx โครงการ</p>
+      <template v-if="props.titleType != '0'">
+        <template v-if="props.titleType == '1'">
+          <h4 class="font-black">จำนวนโครงการที่จัดทำ</h4>
+          <p class="b1 font-bold mb-3">รวม xxx,xxx,xxx โครงการ</p>
+        </template>
+        <template v-else-if="props.titleType == '2'">
+          <h4 class="font-black">จำนวนโครงการที่ได้งาน</h4>
+          <p class="b1 font-bold mb-3">รวม xxx,xxx,xxx โครงการ</p>
+        </template>
+        <template v-else-if="props.titleType == '3'">
+          <h4 class="font-black">วงเงินสัญญา</h4>
+          <p class="b1 font-bold mb-3">
+            รวมทุกปี x,xxx,xxx,xxx,xxx,xxx.xx บาท*
+          </p>
+          <p class="b4 text-[#8E8E8E] mb-3">
+            *หมายเหตุ : วงเงินสัญญาที่แสดงอยู่นี้ เป็นวงเงินสัญญารวมของโครงการ
+            โดยโครงการสามารถมีผู้รับจ้างได้มากกว่า 1 ราย
+            จึงมีโอกาสที่วงเงินสัญญาเฉพาะของผู้รับจ้างรายนี้
+            จะน้อยกว่าที่แสดงอยู่
+          </p>
+        </template>
 
         <p class="b1">แบ่งสัดส่วนตาม</p>
         <RadioGroup v-model="plan" class="flex flex-col radio-wrapper">
@@ -350,7 +370,7 @@ const plan = ref('ความเสี่ยงทุจริต');
       >
 
       <template v-else-if="props.title == 'ความเสี่ยงทุจริต'">
-        <p class="b1 font-bold" v-if="!props.isInGov">
+        <p class="b1 font-bold" v-if="props.titleType == '0'">
           รวม xxx,xxx,xxx โครงการ
         </p>
         <p class="b4 text-[#8E8E8E] text-right">
@@ -376,7 +396,7 @@ const plan = ref('ความเสี่ยงทุจริต');
       </template>
 
       <template v-else-if="props.title == 'สถานะโครงการ'">
-        <p class="b1 font-bold" v-if="!props.isInGov">
+        <p class="b1 font-bold" v-if="props.titleType == '0'">
           รวม xxx,xxx,xxx โครงการ
         </p>
         <p class="b4 text-[#8E8E8E] text-right">
@@ -438,7 +458,7 @@ const plan = ref('ความเสี่ยงทุจริต');
       </template>
 
       <template v-else-if="props.title == 'วิธีการจัดหา'">
-        <p class="b1 font-bold" v-if="!props.isInGov">
+        <p class="b1 font-bold" v-if="props.titleType == '0'">
           รวม xxx,xxx,xxx โครงการ
         </p>
         <p class="b4 text-[#8E8E8E] text-right">

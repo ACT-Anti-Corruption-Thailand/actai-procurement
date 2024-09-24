@@ -1,12 +1,18 @@
 <script setup>
 const menu = ref('ข้อมูลทั่วไป');
 const isShowTab = ref(true);
+
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 </script>
 
 <template>
   <Header />
   <div class="bg-white p-5">
-    <div class="max-w-6xl mx-auto flex gap-2">
+    <Breadcrumb
+      title="  บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)"
+    />
+    <div class="max-w-6xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
         <h3 class="font-black">
           บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
@@ -20,6 +26,24 @@ const isShowTab = ref(true);
             <img src="../public/src/images/risk-flag.svg" alt="risk" />
             <p class="font-bold">ตรวจพบความน่าสนใจ x กรณี</p>
           </div>
+
+          <Disclosure>
+            <DisclosureButton
+              class="ml-2 flex items-center text-[#EC1C24] gap-2 w-full b4"
+            >
+              <ChevronDownIcon class="size-2" /> ดูรายละเอียด
+            </DisclosureButton>
+            <DisclosurePanel class="text-[#EC1C24] b4">
+              <ul class="list-disc ml-10">
+                <li>เสนอราคาใกล้ราคากลาง</li>
+                <li>เสนอราคาสูง</li>
+                <li>เสนอราคาสูงกว่าราคากลาง</li>
+                <li>เสนอราคาเกาะกลุ่ม</li>
+                <li>เสนอราคาเท่ากัน</li>
+                <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
+              </ul>
+            </DisclosurePanel>
+          </Disclosure>
         </div>
 
         <Share color="#0B5C90" text="แชร์หน้านี้" class="mt-2" />
@@ -120,11 +144,12 @@ const isShowTab = ref(true);
       </div>
       <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
         <General v-if="menu == 'ข้อมูลทั่วไป'" />
+        <WorkWithGovernment v-else-if="menu == 'การรับงานกับหน่วยงานรัฐ'" />
         <AbandonmentHistory v-else-if="menu == 'ประวัติการทิ้งงาน'" />
         <Relationship v-else-if="menu == 'ความสัมพันธ์'" />
+        <Auction v-else-if="menu == 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'" />
         <RelatedProject v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'" />
         <RelatedGovernment v-else-if="menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'" />
-        <WorkWithGovernment v-else-if="menu == 'การรับงานกับหน่วยงานรัฐ'" />
 
         <img
           src="../public/src/images/showtab-btn.svg"

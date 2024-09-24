@@ -6,14 +6,15 @@ const isShowTab = ref(true);
 <template>
   <Header />
   <div class="bg-white p-5">
-    <div class="max-w-6xl mx-auto flex gap-2">
+    <Breadcrumb title="การไฟฟ้านครหลวง ฝ่ายก่อสร้าง" />
+    <div class="max-w-6xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
         <h3 class="font-bold">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</h3>
         <p class="b1">กรุงเทพมหานคร</p>
         <p class="b4 text-[#8E8E8E]">หน่วยงานอัปเดตข้อมูลเมื่อ 01/09/2565</p>
       </div>
       <div class="sm:w-1/5">
-        <Share color="#0B5C90" text="แชร์หน้านี้" class="mt-2 ml-auto" />
+        <Share color="#0B5C90" text="แชร์หน้านี้" class="mt-2 sm:ml-auto" />
       </div>
     </div>
   </div>
