@@ -4,7 +4,10 @@ const BASE_URL = 'https://actai-redesign.pages.dev/';
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-gtag'],
+  gtag: {
+    id: 'G-BDE6X04BMC',
+  },
   runtimeConfig: {
     public: {
       baseUrl: BASE_URL,

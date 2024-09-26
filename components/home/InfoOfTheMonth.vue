@@ -29,7 +29,11 @@ const mockdata = ref([
       </p>
       <div class="overflow-auto mt-3 hide-scroll">
         <div class="flex gap-3 lg:justify-center max-w-6xl mx-auto">
-          <div v-for="(item, i) in mockdata" :key="i" class="flex-1">
+          <div
+            v-for="(item, i) in mockdata"
+            :key="i"
+            class="flex-1 flex flex-col"
+          >
             <p class="b1 font-bold mb-5">
               <template v-if="i == 0">โครงการฯ ที่งบประมาณสูงที่สุด</template>
               <template v-else-if="i == 1"
