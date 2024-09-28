@@ -56,7 +56,7 @@ onMounted(() => {
       :data="{
         province: '= ที่ตั้ง',
       }"
-      class="text-[#8E8E8E]"
+      color="#8E8E8E"
     />
 
     <div class="flex justify-between py-5">
@@ -70,20 +70,20 @@ onMounted(() => {
             :data="{
               province: 'กรุงเทพมหานคร',
             }"
-            class="text-[#8E8E8E]"
+            color="#8E8E8E"
           /></div
       ></a>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>
-          <p class="b4">โครงการทั้งหมด</p>
+          <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
           <p class="b1">222</p>
         </div>
         <div class="text-[#EC1C24]">
           <p class="b4">โครงการเสี่ยงทุจริต</p>
-          <p class="b1">27 (xx.x%)</p>
+          <p class="b1">27 (12.1%)</p>
         </div>
         <div>
-          <p class="b4">งบประมาณรวม (บาท)</p>
+          <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
           <p class="b1">340,000,000</p>
         </div>
       </div>
@@ -96,20 +96,20 @@ onMounted(() => {
           :data="{
             province: 'แพร่',
           }"
-          class="text-[#8E8E8E]"
+          color="#8E8E8E"
         />
       </div>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>
-          <p class="b4">โครงการทั้งหมด</p>
-          <p class="b1">1234</p>
+          <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
+          <p class="b1">1,234</p>
         </div>
         <div class="text-[#EC1C24]">
           <p class="b4">โครงการเสี่ยงทุจริต</p>
-          <p class="b1">432 (xx.x%)</p>
+          <p class="b1">432 (35.0%)</p>
         </div>
         <div>
-          <p class="b4">งบประมาณรวม (บาท)</p>
+          <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
           <p class="b1">390,150,000</p>
         </div>
       </div>

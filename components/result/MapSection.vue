@@ -66,7 +66,7 @@
       </div>
     </div>
 
-    <div class="flex justify-center items-center max-w-4xl mx-auto gap-2">
+    <div class="flex justify-center items-center max-w-4xl mx-auto gap-1">
       <RadioGroup v-model="sortBy" class="flex gap-1">
         <RadioGroupOption
           v-slot="{ checked }"
@@ -84,7 +84,7 @@
         </RadioGroupOption>
       </RadioGroup>
 
-      <div class="relative w-full">
+      <div class="relative w-3/4">
         <input
           type="text"
           class="input-text h-full"
@@ -214,5 +214,9 @@ onMounted(() => {
 <style lang="scss" scoped>
 .input-text {
   padding-left: 30px !important;
+
+  @include mobile {
+    // width: 150px !important;
+  }
 }
 </style>

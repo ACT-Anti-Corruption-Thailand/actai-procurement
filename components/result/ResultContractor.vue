@@ -39,9 +39,9 @@ onMounted(() => {
     <ProjectIconGuide
       :data="{
         province: '= ที่ตั้ง',
-        no: '= เลขทะเบียนนิติบุคคล',
+        entityNo: '= เลขทะเบียนนิติบุคคล',
       }"
-      class="text-[#8E8E8E]"
+      color="#8E8E8E"
     />
 
     <div class="flex justify-between py-5">
@@ -53,19 +53,20 @@ onMounted(() => {
           <ProjectIconGuide
             :data="{
               province: 'กรุงเทพมหานคร',
+              entityNo: '56015020021',
             }"
-            class="text-[#8E8E8E]"
+            color="#8E8E8E"
           />
         </div>
       </a>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>
-          <p class="b4">โครงการที่ได้งาน</p>
+          <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
           <p class="b1">84</p>
         </div>
 
         <div>
-          <p class="b4">วงเงินสัญญารวม (บาท)</p>
+          <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
           <p class="b1">320,000,000</p>
         </div>
       </div>
@@ -77,8 +78,9 @@ onMounted(() => {
         <ProjectIconGuide
           :data="{
             province: 'แพร่',
+            entityNo: '56015020021',
           }"
-          class="text-[#8E8E8E]"
+          color="#8E8E8E"
         />
         <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
           <img src="../../public/src/images/risk-flag.svg" alt="risk" />
@@ -87,12 +89,12 @@ onMounted(() => {
       </div>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>
-          <p class="b4">โครงการที่ได้งาน</p>
+          <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
           <p class="b1">36</p>
         </div>
 
         <div>
-          <p class="b4">วงเงินสัญญารวม (บาท)</p>
+          <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
           <p class="b1">140,000,000</p>
         </div>
       </div>

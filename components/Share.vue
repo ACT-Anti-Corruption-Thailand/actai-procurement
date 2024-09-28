@@ -27,11 +27,13 @@ function outFunc() {
 function setURL() {
   let url = config.public.baseUrl;
 
-  if (window.location.pathname != '/')
-    url += window.location.pathname.replace('/', '');
-  if (window.location.search != '') url += window.location.search;
+  if (typeof window !== 'undefined') {
+    if (window.location.pathname != '/')
+      url += window.location.pathname.replace('/', '');
+    if (window.location.search != '') url += window.location.search;
 
-  return url;
+    return url;
+  }
 }
 </script>
 

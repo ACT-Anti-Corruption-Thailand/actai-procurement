@@ -1,3 +1,12 @@
+<script setup lang="ts">
+const isOpen = ref(false);
+const config = useRuntimeConfig();
+
+function closeModal() {
+  isOpen.value = false;
+}
+</script>
+
 <template>
   <div class="relative">
     <video
@@ -35,8 +44,8 @@
 
         <p class="b3 text-[#BCBCBC]">
           <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ.
-          2562 - ปัจจุบัน โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด xx,xxx,xxx,xxx
-          โครงการ หน่วยงานรัฐ x,xxx หน่วยงาน และ ผู้รับจ้าง xx,xxx ราย
+          2562 - ปัจจุบัน โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด 100,000 โครงการ
+          หน่วยงานรัฐ 200 หน่วยงาน และ ผู้รับจ้าง 2,500 ราย
         </p>
         <p
           class="b4 flex gap-1 items-center text-[#8DCCF0] hover:text-[#0B5C90] duration-300 justify-center cursor-pointer"
@@ -71,7 +80,7 @@
           >
             3
           </div>
-          <h4 class="font-bold">เข้าใจการจัดซื้อจัดจ้างภาครัฐ</h4>
+          <h4 class="font-bold mb-3">เข้าใจการจัดซื้อจัดจ้างภาครัฐ</h4>
 
           <p class="b1">
             เราเข้าใจดีว่าข้อมูลเกี่ยวกับการจัดซื้อจัดจ้างภาครัฐนั้นเป็นเรื่องซับซ้อนและเต็มไปด้วยคำศัพท์เฉพาะ
@@ -211,14 +220,6 @@
 
   <Footer />
 </template>
-
-<script setup>
-const isOpen = ref(false);
-
-function closeModal() {
-  isOpen.value = false;
-}
-</script>
 
 <style lang="scss" scoped>
 #background-video {

@@ -156,18 +156,18 @@ onMounted(() => {
 
 const menuList = ref([
   {
-    title: 'สถานะโครงการที่พบมากที่สุด (xx%)',
-    desc: 'จัดทำสัญญา / PO แล้ว',
+    title: 'สถานะโครงการที่พบมากที่สุด (50%)',
+    desc: 'แล้วเสร็จตามสัญญา',
     id: 'chart-3',
   },
   {
-    title: 'สถานะของสัญญาที่พบมากที่สุด (xx%)',
-    desc: 'ส่งงานล่าช้ากว่ากำหนด',
+    title: 'สถานะของสัญญาที่พบมากที่สุด (50%)',
+    desc: 'จัดทำสัญญา/PO แล้ว',
     id: 'chart-4',
   },
   {
-    title: 'วิธีการจัดหาที่พบมากที่สุด (xx%)',
-    desc: 'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
+    title: 'วิธีการจัดหาที่พบมากที่สุด (50%)',
+    desc: 'เฉพาะเจาะจง',
     id: 'chart-5',
   },
   {
@@ -210,16 +210,16 @@ const menuList = ref([
             <p class="b1 font-bold">
               จำนวนโครงการจัดซื้อจัดจ้างตามเงื่อนไขที่ค้นหา
             </p>
-            <h2 class="font-bold">3 โครงการ</h2>
+            <h2 class="font-bold">2,000 โครงการ</h2>
             <hr />
             <div class="flex">
               <div class="flex-1">
                 <p class="b2">งบประมาณรวม (บาท)</p>
-                <h5 class="font-bold">570,000,000,000</h5>
+                <h5 class="font-bold">47,540,648</h5>
               </div>
               <div class="flex-1 text-[#EC1C24]">
                 <p class="b2">เป็นโครงการเสี่ยงทุจริต</p>
-                <h5 class="font-bold">100.00%</h5>
+                <h5 class="font-bold">1.05%</h5>
               </div>
             </div>
 
@@ -233,12 +233,18 @@ const menuList = ref([
 
           <div class="sm:w-2/5">
             <div class="rounded-md bg-[#F5F5F5] p-5 text-black mb-3">
-              <p class="b2">หน่วยงานรัฐเจ้าของโครงการ</p>
-              <h5 class="font-bold">x,xxx,xxx,xxx หน่วยงาน</h5>
+              <p class="b1">หน่วยงานรัฐเจ้าของโครงการ</p>
+              <h5 class="font-bold">20 หน่วยงาน</h5>
+              <p class="b2 text-[#0B5C90] flex gap-1">
+                ดูรายชื่อ <img src="../../public/src/images/popup.svg" alt="" />
+              </p>
             </div>
             <div class="rounded-md bg-[#F5F5F5] p-5 text-black">
-              <p class="b2">ผู้รับจ้าง</p>
-              <h5 class="font-bold">x,xxx,xxx,xxx ราย</h5>
+              <p class="b1">ผู้รับจ้าง</p>
+              <h5 class="font-bold">300 ราย</h5>
+              <p class="b2 text-[#0B5C90] flex gap-1">
+                ดูรายชื่อ <img src="../../public/src/images/popup.svg" alt="" />
+              </p>
             </div>
           </div>
         </div>
@@ -252,27 +258,33 @@ const menuList = ref([
           <DownloadAndCopy />
         </div>
 
-        <ProjectIconGuide :data="iconGuide" class="text-[#8E8E8E]" />
+        <ProjectIconGuide :data="iconGuide" color="#8E8E8E" />
 
-        <div class="flex justify-between py-5 flex-col-mb" v-for="item in 3">
-          <a target="_blank" href="/project?name=สอบราคาซื้อชุดก่อสร้าง">
-            <div>
-              <p
-                class="b1 font-bold"
-                v-html="
-                  highlight('สอบราคาซื้อชุดก่อสร้าง (60.14.13)', 'ก่อสร้าง')
-                "
-              ></p>
-              <ProjectIconGuide :data="mockDataGuide" class="text-[#8E8E8E]" />
-              <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
-                <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-                <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
-              </div>
-            </div></a
-          >
-          <div class="text-right">
-            <p class="b4">งบประมาณรวม (บาท)</p>
-            <p class="b1">190,000,000,000</p>
+        <div v-for="(item, i) in 3" :key="i" class="py-5">
+          <div class="flex justify-between flex-col-mb">
+            <a target="_blank" href="/project?name=สอบราคาซื้อชุดก่อสร้าง">
+              <div>
+                <p
+                  class="b1 font-bold"
+                  v-html="
+                    highlight('สอบราคาซื้อชุดก่อสร้าง (60.14.13)', 'ก่อสร้าง')
+                  "
+                ></p>
+                <ProjectIconGuide :data="mockDataGuide" color="#8E8E8E" />
+                <div
+                  class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 mt-1"
+                >
+                  <img src="../../public/src/images/risk-flag.svg" alt="risk" />
+                  <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
+                </div>
+              </div></a
+            >
+            <div
+              class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
+            >
+              <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+              <p class="b1">190,000,000,000</p>
+            </div>
           </div>
         </div>
       </TabPanel>
@@ -284,7 +296,7 @@ const menuList = ref([
               class="rounded-md bg-black p-5 hover:bg-[#333333] text-white relative"
             >
               <p class="b1">งบประมาณรวม (บาท)</p>
-              <h4 class="font-bold">570,000,000,000</h4>
+              <h4 class="font-bold">47,540,648</h4>
               <arrow
                 color="#FFFFFF"
                 class="absolute right-5 top-5 rotate-90"
@@ -295,7 +307,7 @@ const menuList = ref([
               class="rounded-md bg-black p-5 hover:bg-[#333333] text-[#EC1C24] relative"
             >
               <p class="b1">โครงการเสี่ยงทุจริต</p>
-              <h4 class="font-bold">100.00%</h4>
+              <h4 class="font-bold">1.05%</h4>
               <arrow
                 color="#FFFFFF"
                 class="absolute right-5 top-5 rotate-90"
@@ -315,7 +327,7 @@ const menuList = ref([
             <div
               class="rounded-md bg-black p-5 hover:bg-[#333333] text-white h-full relative"
             >
-              <p class="b1 w-[95%]">{{ item.title }}</p>
+              <p class="b2 w-[95%] text-[#DADADA]">{{ item.title }}</p>
               <p class="b1 font-bold">{{ item.desc }}</p>
               <arrow color="#FFFFFF" class="absolute right-5 top-5 rotate-90" />
             </div>

@@ -1,3 +1,34 @@
+<script setup>
+import { ref, computed } from 'vue';
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxButton,
+  ComboboxOptions,
+  ComboboxOption,
+  TransitionRoot,
+} from '@headlessui/vue';
+
+const searchList = [
+  { id: 1, name: 'ก่อสร้าง' },
+  { id: 2, name: 'ก่อสร้างถนน' },
+];
+
+let selected = ref('');
+let query = ref('');
+
+let filteredPeople = computed(() =>
+  query.value === ''
+    ? searchList
+    : searchList.filter((person) =>
+        person.name
+          .toLowerCase()
+          .replace(/\s+/g, '')
+          .includes(query.value.toLowerCase().replace(/\s+/g, ''))
+      )
+);
+</script>
+
 <template>
   {{ query }}
   <ClientOnly fallback-tag="span" fallback="Loading...">
@@ -9,7 +40,7 @@
           >
             <ComboboxInput
               placeholder="ค้นด้วยคำในชื่อโครงการ/เลขที่โครงการ/ชื่อหน่วยงาน/ชื่อผู้รับจ้าง/เลขทะเบียนนิติบุคคล"
-              class="w-full border-none py-2 px-3 text-black focus:ring-[#C2141B]"
+              class="w-full border-none py-2 px-3 text-black focus:ring-[#C2141B] b2"
               :displayValue="(person) => person.name"
               @change="query = $event.target.value"
             />
@@ -88,34 +119,3 @@
     </div>
   </ClientOnly>
 </template>
-
-<script setup>
-import { ref, computed } from 'vue';
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxButton,
-  ComboboxOptions,
-  ComboboxOption,
-  TransitionRoot,
-} from '@headlessui/vue';
-
-const searchList = [
-  { id: 1, name: 'ก่อสร้าง' },
-  { id: 2, name: 'ก่อสร้างถนน' },
-];
-
-let selected = ref('');
-let query = ref('');
-
-let filteredPeople = computed(() =>
-  query.value === ''
-    ? searchList
-    : searchList.filter((person) =>
-        person.name
-          .toLowerCase()
-          .replace(/\s+/g, '')
-          .includes(query.value.toLowerCase().replace(/\s+/g, ''))
-      )
-);
-</script>

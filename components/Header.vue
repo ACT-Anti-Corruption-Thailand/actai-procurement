@@ -8,7 +8,7 @@
           class="mx-auto w-14"
       /></NuxtLink>
     </div>
-    <div class="order-1 lg:order-0 w-full mt-3 lg:mt-0 max-w-xl">
+    <div class="order-1 md:order-0 w-full mt-3 md:mt-0 max-w-xl">
       <Search class="m-0" />
     </div>
     <div class="flex items-center gap-2 order-0 lg:order-1">

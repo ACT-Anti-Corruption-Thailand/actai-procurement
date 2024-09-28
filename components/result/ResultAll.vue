@@ -37,7 +37,7 @@ onMounted(() => {
     <div class="border-b border-black mb-5">
       <h4 class="font-black">โครงการจัดซื้อจัดจ้าง</h4>
 
-      <ProjectIconGuide :data="iconGuide" class="text-[#8E8E8E]" />
+      <ProjectIconGuide :data="iconGuide" color="#8E8E8E" />
 
       <div v-for="(item, i) in 3" :key="i" class="py-5">
         <div class="flex justify-between flex-col-mb">
@@ -49,8 +49,8 @@ onMounted(() => {
                   highlight('สอบราคาซื้อชุดก่อสร้าง (60.14.13)', 'ก่อสร้าง')
                 "
               ></p>
-              <ProjectIconGuide :data="mockDataGuide" class="text-[#8E8E8E]" />
-              <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
+              <ProjectIconGuide :data="mockDataGuide" color="#8E8E8E" />
+              <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 mt-1">
                 <img src="../../public/src/images/risk-flag.svg" alt="risk" />
                 <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
               </div>
@@ -59,7 +59,7 @@ onMounted(() => {
           <div
             class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
           >
-            <p class="b4">งบประมาณรวม (บาท)</p>
+            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
             <p class="b1">190,000,000,000</p>
           </div>
         </div>
@@ -68,7 +68,7 @@ onMounted(() => {
       <GoToText
         color="#0B5C90"
         text="ดูโครงการทั้งหมด (x,xxx,xxx,xxx)"
-        class="mb-5 text-[#0B5C90] cursor-pointer"
+        class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
         @click="$emit('changeMenu', 'โครงการฯ')"
       />
     </div>
@@ -79,7 +79,7 @@ onMounted(() => {
         :data="{
           province: '= ที่ตั้ง',
         }"
-        class="text-[#8E8E8E]"
+        color="#8E8E8E"
       />
 
       <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
@@ -93,12 +93,12 @@ onMounted(() => {
               :data="{
                 province: 'กรุงเทพมหานคร',
               }"
-              class="text-[#8E8E8E]"
+              color="#8E8E8E"
             /></div
         ></a>
         <div class="flex sm:gap-10 text-right flex-col-mb">
           <div>
-            <p class="b4">โครงการทั้งหมด</p>
+            <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
             <p class="b1">190,000</p>
           </div>
           <div class="text-[#EC1C24]">
@@ -106,7 +106,7 @@ onMounted(() => {
             <p class="b1">10,000 (5.26%)</p>
           </div>
           <div>
-            <p class="b4">งบประมาณรวม (บาท)</p>
+            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
             <p class="b1">190,000,000</p>
           </div>
         </div>
@@ -115,7 +115,7 @@ onMounted(() => {
       <GoToText
         color="#0B5C90"
         text="ดูหน่วยงานรัฐทั้งหมด (x,xxx,xxx,xxx)"
-        class="mb-5 text-[#0B5C90] cursor-pointer"
+        class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
         @click="$emit('changeMenu', 'หน่วยงานรัฐ')"
       />
     </div>
@@ -126,7 +126,7 @@ onMounted(() => {
         :data="{
           province: '= ที่ตั้ง',
         }"
-        class="text-[#8E8E8E]"
+        color="#8E8E8E"
       />
 
       <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
@@ -140,13 +140,13 @@ onMounted(() => {
               :data="{
                 province: 'กรุงเทพมหานคร',
               }"
-              class="text-[#8E8E8E]"
+              color="#8E8E8E"
             />
           </div>
         </a>
         <div class="flex sm:gap-10 text-right flex-col-mb">
           <div>
-            <p class="b4">โครงการทั้งหมด</p>
+            <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
             <p class="b1">190,000</p>
           </div>
           <div class="text-[#EC1C24]">
@@ -154,7 +154,7 @@ onMounted(() => {
             <p class="b1">10,000 (5.26%)</p>
           </div>
           <div>
-            <p class="b4">งบประมาณรวม (บาท)</p>
+            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
             <p class="b1">190,000,000</p>
           </div>
         </div>
@@ -163,7 +163,7 @@ onMounted(() => {
       <GoToText
         color="#0B5C90"
         text="ดูผู้รับจ้างทั้งหมด (x,xxx,xxx,xxx)"
-        class="mb-5 text-[#0B5C90] cursor-pointer"
+        class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
         @click="$emit('changeMenu', 'ผู้รับจ้าง')"
       />
     </div>

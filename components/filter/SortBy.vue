@@ -4,8 +4,10 @@
 
     <div class="relative">
       <Listbox v-model="selectedPerson">
-        <ListboxButton class="dropdown-btn"
-          >{{ selectedPerson }}<ChevronDownIcon
+        <ListboxButton class="dropdown-btn">
+          <span class="text-ellipsis text-nowrap overflow-hidden"
+            >{{ selectedPerson }} </span
+          ><ChevronDownIcon
         /></ListboxButton>
         <ListboxOptions class="dropdown-list absolute">
           <ListboxOption v-for="(item, i) in props.list" :key="i" :value="item">
@@ -56,9 +58,13 @@ const selectedPerson = ref(props.list[0]);
 const sortBy = ref('desc');
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .dropdown-btn {
   background: #f5f5f5 !important;
   width: 215px !important;
+
+  @include mobile {
+    width: 150px !important;
+  }
 }
 </style>

@@ -24,8 +24,7 @@ const mockdata = ref([
     <div class="text-center text-white">
       <h5 class="font-bold">ข้อมูลน่าสนใจประจำเดือนกรกฎาคม 2568</h5>
       <p class="b1 text-[#A6A6A6]">
-        มีโครงการฯ ใหม่ xx,xxx โครงการ โดย x,xxx หน่วยงานรัฐ และ x,xxx
-        ผู้รับจ้าง
+        มีโครงการฯ ใหม่ 100,000 โครงการ โดย 200 หน่วยงานรัฐ และ 2,500 ผู้รับจ้าง
       </p>
       <div class="overflow-auto mt-3 hide-scroll">
         <div class="flex gap-3 lg:justify-center max-w-6xl mx-auto">
@@ -41,7 +40,7 @@ const mockdata = ref([
               >
               <template v-else>ผู้รับจ้างที่มีมูลค่าสัญญารวมมากที่สุด</template>
             </p>
-            <ProjectData :data="item" :index="i" />
+            <ProjectData :data="item" :index="i" class="h-full" />
           </div>
         </div>
       </div>

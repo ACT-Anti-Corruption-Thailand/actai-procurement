@@ -48,24 +48,28 @@ const keyword = ['ก่อสร้าง', 'เฉลิมพระเกี�
           <div class="overflow-auto hide-scroll mt-3">
             <div class="flex gap-3">
               <div v-for="(item, i) in keyword" :key="i">
-                <div class="bg-white p-5 rounded-xl w-[288px] text-left">
-                  <p class="b1 font-bold mb-3 text-black">
-                    โครงการฯ ที่มีคำว่า
-                    <span class="text-[#74060A]">“{{ item }}”</span>
-                  </p>
-                  <p class="b4 text-[#5E5E5E]">รวม xxx,xxxx,xxx,xxx โครงการ</p>
-                  <p class="b4 text-[#5E5E5E]">
-                    ใช้งบประมาณรวม xx,xxx,xxx,xxx,xxx,xxx.xx บาท
-                  </p>
+                <NuxtLink :to="`/result?search=${item}`">
+                  <div
+                    class="bg-white p-5 hover:bg-[#DADADA] duration-300 rounded-xl w-[288px] text-left"
+                  >
+                    <p class="b1 font-bold mb-3 text-black">
+                      โครงการฯ ที่มีคำว่า
+                      <span class="text-[#74060A]">“{{ item }}”</span>
+                    </p>
+                    <p class="b4 text-[#5E5E5E]">
+                      รวม xxx,xxxx,xxx,xxx โครงการ
+                    </p>
+                    <p class="b4 text-[#5E5E5E]">
+                      ใช้งบประมาณรวม xx,xxx,xxx,xxx,xxx,xxx.xx บาท
+                    </p>
 
-                  <NuxtLink :to="`/result?search=${item}`">
                     <GoToText
                       color="#0B5C90"
                       text="ดูทั้งหมด"
                       class="mt-20 mb-0 text-[#0B5C90]"
                     />
-                  </NuxtLink>
-                </div>
+                  </div>
+                </NuxtLink>
               </div>
             </div>
           </div>

@@ -15,17 +15,19 @@
       <p class="b1">งบประมาณรวม 190,000,000,000 บาท</p></template
     >
     <template v-else-if="index == 1"
-      ><p class="b1 text-[#EC1C24] mt-3">โครงการเสี่ยงทุจริต 10,000 (xx.x%)</p>
-      <p class="b1">รวม 190,000 โครงการ</p>
-      <p class="b1">งบประมาณรวม 190,000,000 บาท</p></template
+      ><p class="b1 text-[#EC1C24] mt-3">
+        โครงการเสี่ยงทุจริต 27 โครงการ (12.2%)
+      </p>
+      <p class="b1">รวม 222 โครงการ</p>
+      <p class="b1">งบประมาณรวม 340,000,000 บาท</p></template
     >
     <template v-else>
       <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 my-3">
         <img src="../../public/src/images/risk-flag.svg" alt="pin" />
         <p class="b4 text-[#EC1C24]">ตรวจพบความน่าสนใจ</p>
       </div>
-      <p class="b1">รวม 190,000 โครงการ</p>
-      <p class="b1">วงเงินสัญญารวม 190,000,000 บาท</p></template
+      <p class="b1">รวม 84 โครงการ</p>
+      <p class="b1">วงเงินสัญญารวม 320,000,000 บาท</p></template
     >
   </div>
 </template>
