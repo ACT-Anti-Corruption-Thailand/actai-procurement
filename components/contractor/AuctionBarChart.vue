@@ -5,16 +5,19 @@
 
       <p class="b2">จำนวนโครงการที่ผ่านแต่ละขั้นตอน*ของการประมูลงาน รวมทุกปี</p>
 
-      <div class="flex b1 justify-between text-center">
-        <div>
+      <div class="flex b1 justify-between text-center mt-2 gap-1">
+        <div class="border-r flex-1">
+          <div class="w-3 h-3 mx-auto bg-[#DADADA]"></div>
           <p>ซื้อซอง</p>
           <p class="font-bold">1,000</p>
         </div>
-        <div>
+        <div class="border-r flex-1">
+          <div class="w-3 h-3 mx-auto bg-[#C0C0C0]"></div>
           <p>เสนอราคา</p>
           <p class="font-bold">600</p>
         </div>
-        <div>
+        <div class="flex-1">
+          <div class="w-3 h-3 mx-auto bg-[#2EA0DF]"></div>
           <p>ได้งาน</p>
           <p class="font-bold">800</p>
         </div>

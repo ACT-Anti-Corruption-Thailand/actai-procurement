@@ -27,14 +27,23 @@
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr>
               <th class="w-28">วันที่ประกาศผู้ทิ้งงาน</th>
-              <th class="w-72">ชื่อโครงการ</th>
+              <th class="w-72">
+                ชื่อโครงการ
+                <ProjectIconGuide
+                  :data="{
+                    contractNo: '= เลขที่สัญญา',
+                    no: '= เลขที่โครงการ',
+                  }"
+                  color="#DADADA"
+                />
+              </th>
               <th>หน่วยงานรัฐ</th>
               <th>วงเงินสัญญารวม</th>
             </tr>
           </thead>
           <tbody class="b1">
             <tr v-for="(item, i) in 5" :key="i">
-              <td>03/08/2567</td>
+              <td class="b2 text-[#5E5E5E]">03/08/2567</td>
               <td>
                 <a
                   target="_blank"
@@ -44,10 +53,10 @@
                 </a>
                 <ProjectIconGuide
                   :data="{
-                    province: 'แพร่',
                     no: '56015020021',
+                    contractNo: '1153/2564',
                   }"
-                  class="text-[#8E8E8E]"
+                  color="#8E8E8E"
                 />
                 <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
                   <img src="../../public/src/images/risk-flag.svg" alt="risk" />
@@ -70,8 +79,6 @@
   </div>
 </template>
 
-<script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-</script>
+<script setup></script>
 
 <style lang="scss" scoped></style>

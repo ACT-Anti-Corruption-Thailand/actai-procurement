@@ -1,9 +1,23 @@
 <script setup>
 const menu = ref('ภาพรวม');
 const isShowTab = ref(true);
+const config = useRuntimeConfig();
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+
+onBeforeMount(async () => {
+  // const res = await fetch(`${config.public.apiUrl}/project/0`, {
+  //   method: 'get',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Access-Control-Allow-Origin': '*',
+  //     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  //     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE,OPTIONS',
+  //   },
+  // });
+  // console.log(res.body);
+});
 </script>
 
 <template>

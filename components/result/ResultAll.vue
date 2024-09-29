@@ -130,7 +130,7 @@ onMounted(() => {
       />
 
       <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
-        <a target="_blank" href="/contracter?name=การไฟฟ้านครหลวง">
+        <a target="_blank" href="/contractor?name=การไฟฟ้านครหลวง">
           <div>
             <p
               class="b1 font-bold"

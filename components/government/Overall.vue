@@ -23,16 +23,16 @@
           </div>
         </div>
 
-        <div class="flex items-center b1 gap-2 text-[#8E8E8E]">
+        <div class="flex items-center b1 gap-2 text-[#5E5E5E]">
           <div class="h-[1px] w-10 border border-dashed border-[#8E8E8E]"></div>
           <div>
-            <p>วงเงินสัญญารวม (บาท)</p>
+            <p>งบประมาณรวม (บาท)</p>
             <p class="font-bold">120,000,000.00</p>
           </div>
         </div>
 
         <div class="flex items-center b1 gap-2 text-[#8E8E8E]">
-          <div class="h-[15px] w-10 bg-[#8E8E8E]"></div>
+          <div class="h-[15px] w-10 bg-[#DADADA]"></div>
           <div>
             <p>ส่วนต่าง (บาท)</p>
             <p class="font-bold">10,000,000.00</p>
@@ -44,7 +44,7 @@
           @click="isOpen2 = true"
         >
           <info color="#0B5C90" />
-          <span>ตัวเลขนี้บ่งบอกอะไร</span>
+          <span>กราฟนี้บ่งบอกอะไร</span>
         </p>
       </div>
       <div

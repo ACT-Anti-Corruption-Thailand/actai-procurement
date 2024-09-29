@@ -91,7 +91,7 @@
                 <td :rowspan="item.contracts.length">
                   <a
                     target="_blank"
-                    :href="`/contracter?name=${item.name.replace(/ /g, '-')}`"
+                    :href="`/contractor?name=${item.name.replace(/ /g, '-')}`"
                   >
                     <b> {{ item.name }}</b></a
                   >
@@ -147,7 +147,17 @@
 
   <div class="bg-white rounded-md gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
-      <h4 class="font-black">การเสนอราคา</h4>
+      <h4 class="font-black mb-3">การเสนอราคา</h4>
+
+      <p class="b2 text-[#7F7F7F]">ตัวกรอง</p>
+      <div class="relative">
+        <input
+          type="text"
+          class="input-text h-full"
+          placeholder="กรองด้วยชื่อรายการ/ผู้เข้าเสนอราคา/เลขทะเบียนนิติบุคคล"
+        />
+        <SearchIcon color="#000000" class="absolute inset-y-0 my-auto left-2" />
+      </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex flex-col-mb justify-between mb-3">
@@ -221,7 +231,7 @@
                   <img src="../../public/src/images/winner.svg" alt="winner" />
                   <p class="b5">ผู้ชนะ</p>
                 </div>
-                <a target="_blank" href="/contracter?name=ซิโน-ไทย">
+                <a target="_blank" href="/contractor?name=ซิโน-ไทย">
                   บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด
                   (มหาชน)
                 </a>
@@ -347,4 +357,9 @@ const setDate = (date) => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.input-text {
+  padding-left: 30px;
+  background: white;
+}
+</style>

@@ -162,7 +162,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
     </div>
 
     <Navigation
-      section="contracter"
+      section="contractor"
       :activemenu="menu"
       @menu="(n) => (menu = n)"
     />

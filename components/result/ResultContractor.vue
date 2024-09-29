@@ -45,7 +45,7 @@ onMounted(() => {
     />
 
     <div class="flex justify-between py-5">
-      <a target="_blank" href="/contracter?name=สอบราคาซื้อชุดก่อสร้าง">
+      <a target="_blank" href="/contractor?name=สอบราคาซื้อชุดก่อสร้าง">
         <div>
           <p class="b1 font-bold">
             บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)

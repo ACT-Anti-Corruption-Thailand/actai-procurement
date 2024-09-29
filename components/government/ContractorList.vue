@@ -3,7 +3,23 @@
 
   <div class="bg-white rounded-md gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
-      <FilterPopup />
+      <div class="flex sm:items-end gap-2 flex-col-mb">
+        <div class="flex-1">
+          <p class="b2 text-[#7F7F7F]">ตัวกรอง</p>
+          <div class="relative">
+            <input
+              type="text"
+              class="input-text h-full"
+              placeholder="กรองด้วยชื่อรายการ/ผู้เข้าเสนอราคา/เลขทะเบียนนิติบุคคล"
+            />
+            <SearchIcon
+              color="#000000"
+              class="absolute inset-y-0 my-auto left-2"
+            />
+          </div>
+        </div>
+        <FilterPopup />
+      </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 flex-col-mb">
@@ -45,8 +61,11 @@
   </div>
 </template>
 
-<script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-</script>
+<script setup></script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.input-text {
+  padding-left: 30px;
+  background: white;
+}
+</style>

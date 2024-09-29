@@ -3,7 +3,30 @@
 
   <div class="bg-white rounded-md gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
-      <FilterPopup />
+      <div class="flex sm:items-end gap-2 flex-col-mb">
+        <div class="flex-1">
+          <p class="b2 text-[#7F7F7F]">ค้นหาโครงการ</p>
+          <div class="relative">
+            <input
+              type="text"
+              class="input-text h-full"
+              placeholder="พิมพ์คำในชื่อหรือเลขที่โครงการ"
+            />
+            <SearchIcon
+              color="#000000"
+              class="absolute inset-y-0 my-auto left-2"
+            />
+          </div>
+        </div>
+        <FilterPopup />
+      </div>
+
+      <div class="mt-3">
+        <input type="checkbox" name="" id="isRisk" class="text-black ring-0" />
+        <label for="isRisk" class="text-[#EC1C24] ml-1 b1"
+          >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
+        >
+      </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 flex-col-mb">
@@ -21,7 +44,15 @@
         <table class="table-auto text-left w-[800px] lg:w-full">
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr>
-              <th>ชื่อโครงการ</th>
+              <th>
+                ชื่อโครงการ<ProjectIconGuide
+                  :data="{
+                    province: '= ที่ตั้ง',
+                    no: '= เลขที่โครงการ',
+                  }"
+                  color="#DADADA"
+                />
+              </th>
               <th>วันที่ประกาศโครงการ</th>
               <th class="w-20">สถานะ</th>
               <th>วิธีการจัดหา</th>
@@ -46,7 +77,7 @@
                     province: 'แพร่',
                     no: '56015020021',
                   }"
-                  class="text-[#8E8E8E]"
+                  color="#7F7F7F"
                 />
                 <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
                   <img src="../../public/src/images/risk-flag.svg" alt="risk" />
@@ -69,7 +100,7 @@
               <td>
                 <a
                   target="_blank"
-                  :href="`/contracter?name=บริษัท-แพลนเน็ต-คอมมิวนิเคชั่น-เอเชีย-จำกัด-(มหาชน)`"
+                  :href="`/contractor?name=บริษัท-แพลนเน็ต-คอมมิวนิเคชั่น-เอเชีย-จำกัด-(มหาชน)`"
                   >1. บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)</a
                 >
               </td>
@@ -83,8 +114,11 @@
   </div>
 </template>
 
-<script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-</script>
+<script setup></script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.input-text {
+  padding-left: 30px;
+  background: white;
+}
+</style>

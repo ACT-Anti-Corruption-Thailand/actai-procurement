@@ -82,7 +82,7 @@
             <img src="../../public/src/images/corporation.svg" alt="" />
           </div>
           <a
-            :href="`/contracter?name=${item.name.replace(/ /g, '-')}`"
+            :href="`/contractor?name=${item.name.replace(/ /g, '-')}`"
             target="_blank"
             rel="noopener noreferrer"
             class="b1 text-[#0B5C90] font-bold"
@@ -108,6 +108,13 @@
                 />
                 <img
                   src="../../public/src/images/relationship_type_3.svg"
+                  alt=""
+                  v-else-if="
+                    item2.relationshipType == 'เป็นเครือญาติของกรรมการ/หุ้นส่วน'
+                  "
+                />
+                <img
+                  src="../../public/src/images/relationship_type_4.svg"
                   alt=""
                   v-else
                 />

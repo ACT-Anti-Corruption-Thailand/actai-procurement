@@ -30,8 +30,6 @@
   </div>
 </template>
 
-<script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-</script>
+<script setup></script>
 
 <style lang="scss" scoped></style>

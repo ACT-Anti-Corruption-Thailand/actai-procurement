@@ -9,7 +9,10 @@ const isShowTab = ref(true);
     <Breadcrumb title="การไฟฟ้านครหลวง ฝ่ายก่อสร้าง" />
     <div class="max-w-6xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
-        <h3 class="font-bold">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</h3>
+        <h3 class="font-black">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</h3>
+        <p class="b1 mb-3 text-[#7F7F7F]">
+          กระทรวงทรัพยากรธรรมชาติและสิ่งแวดล้อม
+        </p>
         <p class="b1">กรุงเทพมหานคร</p>
         <p class="b4 text-[#8E8E8E]">หน่วยงานอัปเดตข้อมูลเมื่อ 01/09/2565</p>
       </div>
@@ -73,7 +76,7 @@ const isShowTab = ref(true);
       <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
         <Overall v-if="menu == 'ภาพรวมโครงการที่จัดทำ'" />
         <ProjectList v-else-if="menu == 'รายชื่อโครงการที่จัดทำ'" />
-        <ContracterList v-else />
+        <ContractorList v-else />
 
         <img
           src="../public/src/images/showtab-btn.svg"
