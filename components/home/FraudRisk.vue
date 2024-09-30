@@ -47,8 +47,8 @@ const mockdata = ref([
 
           <div class="rounded-md p-3 border border-[#EC1C24]">
             <p class="b1">
-              <b>เคล็ดลับ:</b> คุณสามารถใช้เครื่องหมาย " "
-              ครอบคำที่ต้องการค้นหาเพื่อให้การสืบค้นแม่นยำมากยิ่งขึ้น
+              <b>หมายเหตุ:</b> เป็นเพียงการระบุความเสี่ยงเท่านั้น
+              ซึ่งไม่ได้หมายความว่ามีการทุจริตเกิดขึ้นแล้ว
             </p>
           </div>
         </div>
@@ -86,7 +86,16 @@ const mockdata = ref([
               ต.ค. 67 - ก.ย. 68
             </p>
 
-            <ProjectData :data="mockdata[0]" :index="0" />
+            <a
+              target="_blank"
+              :href="`/project?name=บริษัท-ซิโน-ไทย-เอ็นจีเนียริ่ง-แอนด์-คอนสตรัคชั่น-จำกัด-(มหาชน)`"
+            >
+              <ProjectData
+                :data="mockdata[0]"
+                :index="0"
+                class="hover:bg-[#DADADA] duration-300"
+              />
+            </a>
 
             <div class="flex items-center gap-2 my-3">
               <p class="b2 text-[#8DCCF0]">สุ่มใหม่</p>
@@ -124,7 +133,16 @@ const mockdata = ref([
               ต.ค. 67 - ก.ย. 68
             </p>
 
-            <ProjectData :data="mockdata[2]" :index="2" />
+            <a
+              target="_blank"
+              :href="`/project?name=สอบราคาซื้อชุดก่อสร้าง-(60.14.13.02)`"
+            >
+              <ProjectData
+                :data="mockdata[2]"
+                :index="2"
+                class="hover:bg-[#DADADA] duration-300"
+              />
+            </a>
 
             <div class="flex items-center gap-2 my-3">
               <p class="b2 text-[#8DCCF0]">สุ่มใหม่</p>

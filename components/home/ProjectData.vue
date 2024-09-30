@@ -5,7 +5,7 @@
     <p class="b1 font-bold mb-3 text-ellipsis line-clamp-2">
       {{ props.data.name }}
     </p>
-    <ProjectIconGuide :data="data" />
+    <ProjectIconGuide :data="data" color="#5E5E5E" />
 
     <template v-if="index == 0">
       <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 my-3">
