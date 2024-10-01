@@ -41,7 +41,6 @@ const handleEnterOptions = () => {
 </script>
 
 <template>
-  {{ query }}
   <ClientOnly fallback-tag="span" fallback="Loading...">
     <div class="w-full max-w-xl flex">
       <Combobox v-model="selected" class="">

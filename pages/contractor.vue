@@ -28,12 +28,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
           </div>
 
           <ClientOnly fallback-tag="span" fallback="Loading...">
-            <Disclosure>
-              <DisclosureButton
-                class="ml-2 flex items-center text-[#EC1C24] gap-2 w-full b4"
-              >
-                <ChevronDownIcon class="size-2" /> ดูรายละเอียด
-              </DisclosureButton>
+            <Disclosure v-slot="{ open }">
               <DisclosurePanel class="text-[#EC1C24] b4">
                 <ul class="list-disc ml-10">
                   <li>เสนอราคาใกล้ราคากลาง</li>
@@ -44,6 +39,14 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
                   <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
                 </ul>
               </DisclosurePanel>
+              <DisclosureButton
+                class="ml-2 flex items-center text-[#EC1C24] gap-2 w-full b4"
+              >
+                <ChevronDownIcon
+                  :class="[open ? 'rotate-180 transform' : '', 'size-2']"
+                />
+                {{ open ? 'ปิดรายละเอียด' : 'ดูรายละเอียด' }}
+              </DisclosureButton>
             </Disclosure>
           </ClientOnly>
         </div>
