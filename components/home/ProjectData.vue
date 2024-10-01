@@ -8,10 +8,7 @@
     <ProjectIconGuide :data="data" color="#5E5E5E" />
 
     <template v-if="index == 0">
-      <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 my-3">
-        <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-        <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
-      </div>
+      <ProjectTag text="พบความเสี่ยงทุจริต" />
       <p class="b1 text-[#5E5E5E]">งบประมาณรวม 190,000,000,000 บาท</p></template
     >
     <template v-else-if="index == 1"
@@ -22,10 +19,7 @@
       <p class="b1 text-[#5E5E5E]">งบประมาณรวม 340,000,000 บาท</p></template
     >
     <template v-else>
-      <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 my-3">
-        <img src="../../public/src/images/risk-flag.svg" alt="pin" />
-        <p class="b4 text-[#EC1C24]">ตรวจพบความน่าสนใจ</p>
-      </div>
+      <ProjectTag text="ตรวจพบความน่าสนใจ" />
       <p class="b1 text-[#5E5E5E]">รวม 84 โครงการ</p>
       <p class="b1 text-[#5E5E5E]">วงเงินสัญญารวม 320,000,000 บาท</p></template
     >

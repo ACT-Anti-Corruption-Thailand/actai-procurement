@@ -36,7 +36,7 @@ const isShowTab = ref(true);
 
         <div class="text-white b1 cursor-pointer">
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'ภาพรวมโครงการที่จัดทำ',
@@ -52,7 +52,7 @@ const isShowTab = ref(true);
             </ul>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'รายชื่อโครงการที่จัดทำ',
@@ -62,7 +62,7 @@ const isShowTab = ref(true);
             <p>รายชื่อโครงการที่จัดทำ</p>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'ผู้รับจ้างที่ได้งาน',

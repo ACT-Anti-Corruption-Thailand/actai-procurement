@@ -16,7 +16,7 @@
       <SearchIcon color="#000000" class="absolute inset-y-0 my-auto left-2" />
     </div>
 
-    <div class="flex justify-between b2 pt-5">
+    <div class="flex justify-between b2 pt-5 mb-3">
       <p class="text-[#0B5C90] flex gap-2 items-center">
         <svg
           width="16"
@@ -37,7 +37,7 @@
 
     <div
       v-for="item in result"
-      class="flex justify-between b1 pt-5 cursor-pointer"
+      class="flex justify-between b1 cursor-pointer hover:bg-white duration-300 p-2.5 rounded-lg"
       @click="selectCompany(item.name)"
     >
       <p>{{ item.name }}</p>

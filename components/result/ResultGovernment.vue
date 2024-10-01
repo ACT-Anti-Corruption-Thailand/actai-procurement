@@ -27,10 +27,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="searchText != 'ก่อสร้าง'">
+  <!-- <div>
     <h5 class="text-center text-[#8E8E8E]">ไม่พบหน่วยงานรัฐที่มีคำค้นนี้</h5>
-  </div>
-  <div class="" v-else>
+  </div> -->
+  <div class="mx-auto max-w-6xl px-4">
     <div class="flex flex-col-mb sm:items-center justify-between">
       <h4 class="font-bold">xx,xxx หน่วยงานรัฐ</h4>
       <FilterPopup />

@@ -1,15 +1,17 @@
 <template>
-  <div
-    class="flex flex-col-mb items-center justify-end max-w-6xl mx-auto mt-3 gap-2"
-  >
-    <button
-      v-for="item in activeMenuList"
-      class="navi-btn b1"
-      @click="$emit('menu', item)"
+  <ClientOnly fallback-tag="span" fallback="Loading...">
+    <div
+      class="flex flex-col-mb items-center justify-end max-w-6xl mx-auto mt-3 gap-2"
     >
-      {{ item }} {{ a }}
-    </button>
-  </div>
+      <button
+        v-for="item in activeMenuList"
+        class="navi-btn b1"
+        @click="$emit('menu', item)"
+      >
+        {{ item }}
+      </button>
+    </div></ClientOnly
+  >
 </template>
 
 <script setup lang="ts">

@@ -27,23 +27,25 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
             <p class="font-bold">ตรวจพบความน่าสนใจ x กรณี</p>
           </div>
 
-          <Disclosure>
-            <DisclosureButton
-              class="ml-2 flex items-center text-[#EC1C24] gap-2 w-full b4"
-            >
-              <ChevronDownIcon class="size-2" /> ดูรายละเอียด
-            </DisclosureButton>
-            <DisclosurePanel class="text-[#EC1C24] b4">
-              <ul class="list-disc ml-10">
-                <li>เสนอราคาใกล้ราคากลาง</li>
-                <li>เสนอราคาสูง</li>
-                <li>เสนอราคาสูงกว่าราคากลาง</li>
-                <li>เสนอราคาเกาะกลุ่ม</li>
-                <li>เสนอราคาเท่ากัน</li>
-                <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
-              </ul>
-            </DisclosurePanel>
-          </Disclosure>
+          <ClientOnly fallback-tag="span" fallback="Loading...">
+            <Disclosure>
+              <DisclosureButton
+                class="ml-2 flex items-center text-[#EC1C24] gap-2 w-full b4"
+              >
+                <ChevronDownIcon class="size-2" /> ดูรายละเอียด
+              </DisclosureButton>
+              <DisclosurePanel class="text-[#EC1C24] b4">
+                <ul class="list-disc ml-10">
+                  <li>เสนอราคาใกล้ราคากลาง</li>
+                  <li>เสนอราคาสูง</li>
+                  <li>เสนอราคาสูงกว่าราคากลาง</li>
+                  <li>เสนอราคาเกาะกลุ่ม</li>
+                  <li>เสนอราคาเท่ากัน</li>
+                  <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
+                </ul>
+              </DisclosurePanel>
+            </Disclosure>
+          </ClientOnly>
         </div>
 
         <Share color="#0B5C90" text="แชร์หน้านี้" class="mt-2" />
@@ -65,7 +67,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
         <div class="text-white b1 cursor-pointer">
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ข้อมูลทั่วไป',
             }"
@@ -74,7 +76,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
             <p>ข้อมูลทั่วไป</p>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'การรับงานกับหน่วยงานรัฐ',
@@ -92,7 +94,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
             </ul>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'ประวัติการทิ้งงาน',
@@ -102,7 +104,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
             <p>ประวัติการทิ้งงาน</p>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
             }"
@@ -111,7 +113,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
             <p>ความสัมพันธ์</p>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน',
@@ -121,7 +123,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
             <p>กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน</p>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'รายชื่อโครงการที่เกี่ยวข้อง',
@@ -131,7 +133,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
             <p>รายชื่อโครงการที่เกี่ยวข้อง</p>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง',

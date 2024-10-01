@@ -13,10 +13,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="searchText != 'ก่อสร้าง'">
+  <!-- <div>
     <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
-  </div>
-  <div class="" v-else>
+  </div> -->
+  <div class="mx-auto max-w-6xl px-4">
     <div class="flex flex-col-mb sm:items-center justify-between">
       <h4 class="font-bold">xx,xxx,xxx ผู้รับจ้าง</h4>
       <FilterPopup />
@@ -82,10 +82,7 @@ onMounted(() => {
           }"
           color="#8E8E8E"
         />
-        <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
-          <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-          <p class="b4 text-[#EC1C24]">ตรวจพบความน่าสนใจ</p>
-        </div>
+        <ProjectTag text="ตรวจพบความน่าสนใจ" />
       </div>
       <div class="flex sm:gap-10 text-right flex-col-mb">
         <div>

@@ -58,10 +58,7 @@
                   }"
                   color="#8E8E8E"
                 />
-                <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2">
-                  <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-                  <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
-                </div>
+                <ProjectTag text="พบความเสี่ยงทุจริต" />
               </td>
               <td>
                 <a

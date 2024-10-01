@@ -44,24 +44,24 @@ const mockDataGuide = ref({
       </p>
     </div>
   </div>
-  <div class="bg-white p-7">
-    <div class="mx-auto max-w-6xl">
-      <ClientOnly fallback-tag="span" fallback="Loading...">
-        <ResultAll
-          v-if="menu == 'ทั้งหมด'"
-          @changeMenu="(n) => (menu = n)"
-          :iconGuide="iconGuide"
-          :mockDataGuide="mockDataGuide"
-        />
-        <ResultProjectList
-          v-else-if="menu == 'โครงการฯ'"
-          :iconGuide="iconGuide"
-          :mockDataGuide="mockDataGuide"
-        />
-        <ResultGovernment v-else-if="menu == 'หน่วยงานรัฐ'" />
-        <ResultContractor v-else />
-      </ClientOnly>
-    </div>
+  <div class="bg-white pt-7">
+    <!-- <div class="mx-auto max-w-6xl"> -->
+    <ClientOnly fallback-tag="span" fallback="Loading...">
+      <ResultAll
+        v-if="menu == 'ทั้งหมด'"
+        @changeMenu="(n) => (menu = n)"
+        :iconGuide="iconGuide"
+        :mockDataGuide="mockDataGuide"
+      />
+      <ResultProjectList
+        v-else-if="menu == 'โครงการฯ'"
+        :iconGuide="iconGuide"
+        :mockDataGuide="mockDataGuide"
+      />
+      <ResultGovernment v-else-if="menu == 'หน่วยงานรัฐ'" />
+      <ResultContractor v-else />
+    </ClientOnly>
+    <!-- </div> -->
   </div>
   <Footer />
 </template>

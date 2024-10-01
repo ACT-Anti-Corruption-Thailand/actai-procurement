@@ -184,18 +184,13 @@ const menuList = ref([
 </script>
 
 <template>
-  <div v-if="searchText != 'ก่อสร้าง'">
+  <!-- <div>
     <h5 class="text-center text-[#8E8E8E]">
       ไม่พบโครงการจัดซื้อจัดจ้างที่มีคำค้นนี้
     </h5>
-  </div>
-  <TabGroup
-    :selectedIndex="selectedTab"
-    @change="changeTab"
-    as="Component"
-    v-else
-  >
-    <div class="flex flex-col-mb justify-between">
+  </div> -->
+  <TabGroup :selectedIndex="selectedTab" @change="changeTab" as="Component">
+    <div class="flex flex-col-mb justify-between mx-auto max-w-6xl px-4">
       <TabList>
         <Tab class="tab-menu b1">รายชื่อ</Tab>
         <Tab class="tab-menu b1">ภาพรวม</Tab>
@@ -204,7 +199,7 @@ const menuList = ref([
     </div>
 
     <TabPanels>
-      <TabPanel>
+      <TabPanel class="mx-auto max-w-6xl px-4">
         <div class="flex gap-2 py-5 flex-col-mb">
           <div class="rounded-md bg-black p-5 text-white sm:w-3/5">
             <p class="b1 font-bold">
@@ -271,14 +266,8 @@ const menuList = ref([
                   "
                 ></p>
                 <ProjectIconGuide :data="mockDataGuide" color="#8E8E8E" />
-                <div
-                  class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 mt-1"
-                >
-                  <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-                  <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
-                </div>
-              </div></a
-            >
+                <ProjectTag text="พบความเสี่ยงทุจริต" /></div
+            ></a>
             <div
               class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
             >
@@ -289,52 +278,57 @@ const menuList = ref([
         </div>
       </TabPanel>
       <TabPanel>
-        <h5 class="font-bold my-5">xxx,xxx,xxx โครงการจัดซื้อจัดจ้าง</h5>
-        <div class="flex flex-col-mb gap-2">
-          <a href="#chart-1" class="sm:w-2/4">
-            <div
-              class="rounded-md bg-black p-5 hover:bg-[#333333] text-white relative"
+        <div class="mx-auto max-w-6xl px-4 lg:px-0">
+          <h5 class="font-bold mb-5">xxx,xxx,xxx โครงการจัดซื้อจัดจ้าง</h5>
+          <div class="flex flex-col-mb gap-2">
+            <a href="#chart-1" class="sm:w-2/4">
+              <div
+                class="rounded-md bg-black p-5 hover:bg-[#333333] text-white relative"
+              >
+                <p class="b1">งบประมาณรวม (บาท)</p>
+                <h4 class="font-bold">47,540,648</h4>
+                <arrow
+                  color="#FFFFFF"
+                  class="absolute right-5 top-5 rotate-90"
+                /></div
+            ></a>
+            <a href="#chart-2" class="sm:w-2/4">
+              <div
+                class="rounded-md bg-black p-5 hover:bg-[#333333] text-[#EC1C24] relative"
+              >
+                <p class="b1">โครงการเสี่ยงทุจริต</p>
+                <h4 class="font-bold">1.05%</h4>
+                <arrow
+                  color="#FFFFFF"
+                  class="absolute right-5 top-5 rotate-90"
+                /></div
+            ></a>
+          </div>
+
+          <div class="flex justify-between flex-wrap gap-2 mt-2">
+            <a
+              :href="'#' + item.id"
+              :class="{
+                'w-full sm:w-[32%] lg:w-[19%]': item.id != 'maps',
+                'w-full sm:w-[49%] lg:w-[19%]': item.id == 'maps',
+              }"
+              v-for="item in menuList"
             >
-              <p class="b1">งบประมาณรวม (บาท)</p>
-              <h4 class="font-bold">47,540,648</h4>
-              <arrow
-                color="#FFFFFF"
-                class="absolute right-5 top-5 rotate-90"
-              /></div
-          ></a>
-          <a href="#chart-2" class="sm:w-2/4">
-            <div
-              class="rounded-md bg-black p-5 hover:bg-[#333333] text-[#EC1C24] relative"
-            >
-              <p class="b1">โครงการเสี่ยงทุจริต</p>
-              <h4 class="font-bold">1.05%</h4>
-              <arrow
-                color="#FFFFFF"
-                class="absolute right-5 top-5 rotate-90"
-              /></div
-          ></a>
+              <div
+                class="rounded-md bg-black p-5 hover:bg-[#333333] text-white h-full relative"
+              >
+                <p class="b2 w-[95%] text-[#DADADA]">{{ item.title }}</p>
+                <p class="b1 font-bold">{{ item.desc }}</p>
+                <arrow
+                  color="#FFFFFF"
+                  class="absolute right-5 top-5 rotate-90"
+                />
+              </div>
+            </a>
+          </div>
         </div>
 
-        <div class="flex justify-between flex-wrap gap-2 mt-2">
-          <a
-            :href="'#' + item.id"
-            :class="{
-              'w-full sm:w-[32%] lg:w-[19%]': item.id != 'maps',
-              'w-full sm:w-[49%] lg:w-[19%]': item.id == 'maps',
-            }"
-            v-for="item in menuList"
-          >
-            <div
-              class="rounded-md bg-black p-5 hover:bg-[#333333] text-white h-full relative"
-            >
-              <p class="b2 w-[95%] text-[#DADADA]">{{ item.title }}</p>
-              <p class="b1 font-bold">{{ item.desc }}</p>
-              <arrow color="#FFFFFF" class="absolute right-5 top-5 rotate-90" />
-            </div>
-          </a>
-        </div>
-
-        <div class="bg-black p-5 sm:p-10 rounded-md mt-3">
+        <div class="bg-[#1F1F1F] p-4 sm:p-10 mt-10">
           <div class="max-w-6xl mx-auto">
             <BarChart
               title="งบประมาณ"

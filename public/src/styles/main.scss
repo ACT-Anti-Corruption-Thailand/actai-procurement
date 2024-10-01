@@ -282,7 +282,8 @@ table th:last-child {
 
   div {
     width: 100%;
-    border: 1px solid #d9d9d9;
+    border-left: 1px solid #d9d9d9;
+    border-right: 1px solid #d9d9d9;
     padding: 5px 10px;
     text-align: left;
   }

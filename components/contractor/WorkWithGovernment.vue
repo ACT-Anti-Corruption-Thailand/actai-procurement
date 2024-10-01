@@ -50,7 +50,7 @@
       >
         <Map
           class="mx-auto max-w-xs h-fit"
-          :no="selected == 'งบประมาณ' ? 1 : 2"
+          :no="selected == 'งบประมาณ' ? '1' : '2'"
           :provinces="provinces"
         />
       </div>

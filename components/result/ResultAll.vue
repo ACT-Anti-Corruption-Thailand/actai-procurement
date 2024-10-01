@@ -28,12 +28,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="searchText != 'ก่อสร้าง'">
+  <!-- <div v-if="searchText != 'ก่อสร้าง'">
     <h5 class="text-center text-[#8E8E8E]">
       ไม่พบโครงการจัดซื้อจัดจ้าง หน่วยงานรัฐ และผู้รับจ้างที่มีคำค้นนี้
     </h5>
-  </div>
-  <div class="mx-auto max-w-6xl" v-else>
+  </div> -->
+  <div class="mx-auto max-w-6xl px-4">
     <div class="border-b border-black mb-5">
       <h4 class="font-black">โครงการจัดซื้อจัดจ้าง</h4>
 
@@ -50,12 +50,8 @@ onMounted(() => {
                 "
               ></p>
               <ProjectIconGuide :data="mockDataGuide" color="#8E8E8E" />
-              <div class="rounded-full bg-[#FFEFF0] p-1 w-fit flex gap-2 mt-1">
-                <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-                <p class="b4 text-[#EC1C24]">พบความเสี่ยงทุจริต</p>
-              </div>
-            </div></a
-          >
+              <ProjectTag text="พบความเสี่ยงทุจริต" /></div
+          ></a>
           <div
             class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
           >

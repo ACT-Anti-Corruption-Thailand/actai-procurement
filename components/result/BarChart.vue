@@ -333,32 +333,34 @@ const plan = ref('ความเสี่ยงทุจริต');
         </template>
 
         <p class="b1">แบ่งสัดส่วนตาม</p>
-        <RadioGroup v-model="plan" class="flex flex-col radio-wrapper">
-          <RadioGroupOption
-            v-slot="{ checked }"
-            class="flex-1 radio-btn b1"
-            value="ความเสี่ยงทุจริต"
-            @click="$emit('title', 'ความเสี่ยงทุจริต')"
-          >
-            <span>ความเสี่ยงทุจริต</span>
-          </RadioGroupOption>
-          <RadioGroupOption
-            v-slot="{ checked }"
-            class="flex-1 radio-btn b1"
-            value="สถานะโครงการ"
-            @click="$emit('title', 'สถานะโครงการ')"
-          >
-            <span>สถานะโครงการล่าสุด</span>
-          </RadioGroupOption>
-          <RadioGroupOption
-            v-slot="{ checked }"
-            class="flex-1 radio-btn b1"
-            value="วิธีการจัดหา"
-            @click="$emit('title', 'วิธีการจัดหา')"
-          >
-            <span>วิธีการจัดหา</span>
-          </RadioGroupOption>
-        </RadioGroup></template
+        <ClientOnly fallback-tag="span" fallback="Loading...">
+          <RadioGroup v-model="plan" class="flex flex-col radio-wrapper">
+            <RadioGroupOption
+              v-slot="{ checked }"
+              class="flex-1 radio-btn b1"
+              value="ความเสี่ยงทุจริต"
+              @click="$emit('title', 'ความเสี่ยงทุจริต')"
+            >
+              <span>ความเสี่ยงทุจริต</span>
+            </RadioGroupOption>
+            <RadioGroupOption
+              v-slot="{ checked }"
+              class="flex-1 radio-btn b1"
+              value="สถานะโครงการ"
+              @click="$emit('title', 'สถานะโครงการ')"
+            >
+              <span>สถานะโครงการล่าสุด</span>
+            </RadioGroupOption>
+            <RadioGroupOption
+              v-slot="{ checked }"
+              class="flex-1 radio-btn b1"
+              value="วิธีการจัดหา"
+              @click="$emit('title', 'วิธีการจัดหา')"
+            >
+              <span>วิธีการจัดหา</span>
+            </RadioGroupOption>
+          </RadioGroup></ClientOnly
+        ></template
       >
 
       <template v-if="props.title == 'งบประมาณ'">
@@ -390,7 +392,9 @@ const plan = ref('ความเสี่ยงทุจริต');
           />
           <label :for="`risk-${i + 1}`" class="b1 flex justify-between w-full"
             ><span>{{ item.name }}</span>
-            <span class="text-[#5E5E5E]">x,xxx,xxx,xxx (xx.xx%)</span></label
+            <span class="text-[#5E5E5E] text-right"
+              >x,xxx,xxx,xxx (xx.xx%)</span
+            ></label
           >
         </div>
       </template>
@@ -420,7 +424,9 @@ const plan = ref('ความเสี่ยงทุจริต');
             :for="`project-${i + 1}`"
             class="b1 flex justify-between w-full"
             ><span>{{ item.name }}</span>
-            <span class="text-[#5E5E5E]">x,xxx,xxx,xxx (xx.xx%)</span></label
+            <span class="text-[#5E5E5E] text-right"
+              >x,xxx,xxx,xxx (xx.xx%)</span
+            ></label
           >
         </div>
       </template>
@@ -452,7 +458,9 @@ const plan = ref('ความเสี่ยงทุจริต');
             :for="`contact-${i + 1}`"
             class="b1 flex justify-between w-full"
             ><span>{{ item.name }}</span>
-            <span class="text-[#5E5E5E]">x,xxx,xxx,xxx (xx.xx%)</span></label
+            <span class="text-[#5E5E5E] text-right"
+              >x,xxx,xxx,xxx (xx.xx%)</span
+            ></label
           >
         </div>
       </template>
@@ -478,7 +486,9 @@ const plan = ref('ความเสี่ยงทุจริต');
           />
           <label :for="`type-${i + 1}`" class="b1 flex justify-between w-full"
             ><span>{{ item.name }}</span>
-            <span class="text-[#5E5E5E]">x,xxx,xxx,xxx (xx.xx%)</span></label
+            <span class="text-[#5E5E5E] text-right"
+              >x,xxx,xxx,xxx (xx.xx%)</span
+            ></label
           >
         </div>
       </template>

@@ -9,24 +9,35 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 
-const searchList = [
-  { id: 1, name: 'ก่อสร้าง' },
-  { id: 2, name: 'ก่อสร้างถนน' },
-];
+const config = useRuntimeConfig();
+
+const searchList = ref([]);
 
 let selected = ref('');
 let query = ref('');
 
-let filteredPeople = computed(() =>
-  query.value === ''
-    ? searchList
-    : searchList.filter((person) =>
-        person.name
-          .toLowerCase()
-          .replace(/\s+/g, '')
-          .includes(query.value.toLowerCase().replace(/\s+/g, ''))
-      )
-);
+const getSearchList = async (keyword) => {
+  query.value = keyword;
+
+  const res = await fetch(
+    `${config.public.apiUrl}/search/keyword?text=${keyword}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    searchList.value = data.suggestKeywords;
+  }
+};
+
+const handleEnterOptions = () => {
+  query.value = selected.value;
+};
 </script>
 
 <template>
@@ -41,14 +52,16 @@ let filteredPeople = computed(() =>
             <ComboboxInput
               placeholder="ค้นด้วยคำในชื่อโครงการ/เลขที่โครงการ/ชื่อหน่วยงาน/ชื่อผู้รับจ้าง/เลขทะเบียนนิติบุคคล"
               class="w-full border-none py-2 px-3 text-black focus:ring-[#C2141B] b2"
-              :displayValue="(person) => person.name"
-              @change="query = $event.target.value"
+              @change="getSearchList($event.target.value)"
             />
             <img
               src="../public/src/images/close.svg"
               alt="close"
               class="absolute right-5 my-auto w-4 h-4 inset-y-0 cursor-pointer"
-              @click="query = ''"
+              @click="
+                query = '';
+                selected = '';
+              "
               v-if="query != ''"
             />
           </div>
@@ -56,26 +69,26 @@ let filteredPeople = computed(() =>
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-            @after-leave="query = ''"
+            @after-leave="handleEnterOptions()"
           >
             <ComboboxOptions
               class="absolute mt-1 max-h-60 max-w-[85%] sm:max-w-xl w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
             >
               <div
-                v-if="filteredPeople.length === 0 && query !== ''"
+                v-if="searchList.length == 0 && query != ''"
                 class="relative cursor-default select-none px-4 py-2 text-black b2"
               >
                 ไม่พบผลการค้นหา
               </div>
 
               <ComboboxOption
-                v-for="person in filteredPeople"
+                v-for="(person, i) in searchList"
                 as="template"
-                :key="person.id"
+                :key="i"
                 :value="person"
                 v-slot="{ selected, active }"
               >
-                <NuxtLink :to="`/result?search=${person.name}`">
+                <NuxtLink :to="`/result?search=${person}`">
                   <li
                     class="relative cursor-default select-none py-2 px-2 text-left b2"
                     :class="{
@@ -90,7 +103,7 @@ let filteredPeople = computed(() =>
                         'font-normal': !selected,
                       }"
                     >
-                      {{ person.name }}
+                      {{ person }}
                     </span>
                     <span
                       v-if="selected"

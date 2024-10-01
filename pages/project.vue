@@ -37,23 +37,28 @@ onBeforeMount(async () => {
             <p class="font-bold">พบความเสี่ยงทุจริต x ประเด็น</p>
           </div>
 
-          <Disclosure>
-            <DisclosureButton
-              class="ml-2 flex items-center text-[#EC1C24] gap-2 w-full b4"
-            >
-              <ChevronDownIcon class="size-2" /> ดูรายละเอียด
-            </DisclosureButton>
-            <DisclosurePanel class="text-[#EC1C24] b4">
-              <ul class="list-disc ml-10">
-                <li>เสนอราคาใกล้ราคากลาง</li>
-                <li>เสนอราคาสูง</li>
-                <li>เสนอราคาสูงกว่าราคากลาง</li>
-                <li>เสนอราคาเกาะกลุ่ม</li>
-                <li>เสนอราคาเท่ากัน</li>
-                <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
-              </ul>
-            </DisclosurePanel>
-          </Disclosure>
+          <ClientOnly fallback-tag="span" fallback="Loading...">
+            <Disclosure v-slot="{ open }">
+              <DisclosurePanel class="text-[#EC1C24] b4">
+                <ul class="list-disc ml-10">
+                  <li>เสนอราคาใกล้ราคากลาง</li>
+                  <li>เสนอราคาสูง</li>
+                  <li>เสนอราคาสูงกว่าราคากลาง</li>
+                  <li>เสนอราคาเกาะกลุ่ม</li>
+                  <li>เสนอราคาเท่ากัน</li>
+                  <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
+                </ul>
+              </DisclosurePanel>
+              <DisclosureButton
+                class="ml-2 flex items-center text-[#EC1C24] gap-2 w-full b4"
+              >
+                <ChevronDownIcon
+                  :class="[open ? 'rotate-180 transform' : '', 'size-2']"
+                />
+                {{ open ? 'ปิดรายละเอียด' : 'ดูรายละเอียด' }}
+              </DisclosureButton>
+            </Disclosure>
+          </ClientOnly>
         </div>
 
         <div class="flex items-center gap-2">
@@ -84,7 +89,7 @@ onBeforeMount(async () => {
 
         <div class="text-white b1 cursor-pointer">
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ภาพรวม',
             }"
@@ -93,7 +98,7 @@ onBeforeMount(async () => {
             <p>ภาพรวม</p>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ข้อมูลเจาะลึก',
             }"
@@ -107,7 +112,7 @@ onBeforeMount(async () => {
             </ul>
           </div>
           <div
-            class="p-4 border-b"
+            class="p-4 border-b border-[#333333] hover:bg-black"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'เอกสารที่เกี่ยวข้อง',

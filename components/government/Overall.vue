@@ -74,11 +74,12 @@
         <p class="b1 font-bold">รวม xxx,xxx,xxx.xx บาท ใน xx จังหวัด</p>
 
         <p class="b1 mt-3">แสดงความเข้มสีตาม</p>
-        <ListBox
-          title=""
-          :selected="selected"
-          :list="['งบประมาณ', 'จำนวนโครงการ']"
-        />
+        <ClientOnly fallback-tag="span" fallback="Loading...">
+          <ListBox
+            title=""
+            :selected="selected"
+            :list="['งบประมาณ', 'จำนวนโครงการ']"
+        /></ClientOnly>
 
         <div class="mt-3">
           <input
@@ -98,7 +99,7 @@
       >
         <Map
           class="mx-auto max-w-xs h-fit"
-          :no="selected == 'งบประมาณ' ? 1 : 2"
+          :no="selected == 'งบประมาณ' ? '1' : '2'"
           :provinces="provinces"
         />
       </div>

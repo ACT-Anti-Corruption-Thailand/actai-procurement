@@ -6,12 +6,16 @@ defineProps({
   text: String,
 });
 
+const urlLink = ref('');
+
 function copyURL() {
   let url = config.public.baseUrl;
 
   if (window.location.pathname != '/')
     url += window.location.pathname.replace('/', '');
   if (window.location.search != '') url += window.location.search;
+
+  urlLink.value = url;
 
   navigator.clipboard.writeText(url).then(function () {
     var tooltip = document.getElementById('myTooltip');
@@ -51,11 +55,11 @@ function setURL() {
         />
       </div>
 
-      <ShareNetwork network="facebook" :url="setURL()" title="">
+      <ShareNetwork network="facebook" :url="urlLink" title="">
         <Facebook :color="color" />
       </ShareNetwork>
 
-      <ShareNetwork network="twitter" :url="setURL()" title="">
+      <ShareNetwork network="twitter" :url="urlLink" title="">
         <X :color="color" />
       </ShareNetwork>
     </div>

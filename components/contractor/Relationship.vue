@@ -62,9 +62,9 @@
               </p>
             </div>
             <div>
-              <span class="text-[#8E8E8E] b1" v-if="item2.relatedTo != null">
+              <p class="text-[#8E8E8E] b1 ml-7" v-if="item2.relatedTo != null">
                 {{ item2.relatedTo.join(', ') }}
-              </span>
+              </p>
             </div>
           </div>
         </div>
@@ -125,9 +125,9 @@
               </p>
             </div>
             <div>
-              <span class="text-[#8E8E8E] b1" v-if="item2.relatedTo != null">
+              <p class="text-[#8E8E8E] b1 ml-7" v-if="item2.relatedTo != null">
                 {{ item2.relatedTo.join(', ') }}
-              </span>
+              </p>
             </div>
           </div>
         </div>

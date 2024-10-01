@@ -9,7 +9,7 @@
       /></NuxtLink>
     </div>
     <div class="order-1 md:order-0 w-full mt-3 md:mt-0 max-w-xl">
-      <Search class="m-0" />
+      <Search />
     </div>
     <div class="flex items-center gap-2 order-0 lg:order-1">
       <NuxtLink to="/learn">

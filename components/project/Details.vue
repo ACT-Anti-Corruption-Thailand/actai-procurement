@@ -20,11 +20,14 @@
           <h3 class="font-black">3</h3>
         </div>
 
-        <Disclosure>
+        <Disclosure v-slot="{ open }">
           <DisclosureButton
             class="py-2 flex items-center justify-end sm:justify-center gap-2 text-[#0B5C90] font-bold w-full"
           >
-            <ChevronDownIcon class="size-2" /> ดูรายชื่อ
+            <ChevronDownIcon
+              :class="[open ? 'rotate-180 transform' : '', 'size-2']"
+            />
+            {{ open ? 'ปิดรายชื่อ' : 'ดูรายชื่อ' }}
           </DisclosureButton>
           <DisclosurePanel class="text-gray-500">
             <div
@@ -35,20 +38,23 @@
               <div class="w-2 h-2 bg-[#8E8E8E]"></div>
               <p class="text-[#8E8E8E]">= ตกรอบ</p>
             </div>
-            <ul class="text-left list-decimal ml-5">
-              <li
-                v-for="c in contractorsBidding"
+
+            <div class="flex gap-2" v-for="(c, i) in contractorsBidding">
+              <p class="text-[#8E8E8E] mt-0.5">{{ i + 1 }}</p>
+              <div
                 :class="[
                   c.processInvolved.indexOf(item.title) != -1
                     ? 'text-black'
                     : 'text-[#8E8E8E]',
-                  'b3 pb-3',
+                  'b3 pb-3 text-left',
                 ]"
               >
                 <p>{{ c.name }}</p>
-                <p>12/08/2567</p>
-              </li>
-            </ul>
+                <p class="text-[#5E5E5E] flex gap-1 items-center">
+                  <year color="#5E5E5E" /> 12/08/2567
+                </p>
+              </div>
+            </div>
           </DisclosurePanel>
         </Disclosure>
       </div>
