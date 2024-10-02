@@ -5,8 +5,9 @@
     viewBox="0 0 362 681"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    :id="`map-container-${props.no}`"
   >
-    <g id="map">
+    <g :id="`map-${props.no}`">
       <path
         id="&#224;&#184;&#170;&#224;&#184;&#161;&#224;&#184;&#184;&#224;&#184;&#151;&#224;&#184;&#163;&#224;&#184;&#170;&#224;&#184;&#135;&#224;&#184;&#132;&#224;&#184;&#163;&#224;&#184;&#178;&#224;&#184;&#161;"
         fill-rule="evenodd"
@@ -790,6 +791,17 @@
       />
     </g>
   </svg>
+
+  <div class="absolute bottom-5 left-5 flex flex-col text-2xl">
+    <div class="cursor-pointer border-b p-3" :id="'zoom_in-' + props.no">
+      <PlusIcon class="size-3 text-[#0B5C90]" />
+    </div>
+    <div class="cursor-pointer p-3" :id="'zoom_out-' + props.no">
+      <MinusIcon class="size-3 text-[#0B5C90]" />
+    </div>
+  </div>
+
+  <!-- <div class="absolute">777</div> -->
 </template>
 
 <script setup lang="ts">
@@ -800,26 +812,63 @@ const props = defineProps<{
   provinces: array;
 }>();
 
+import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
+
 const maxVal = props.no == '1' ? 3564 : 46135658110;
 
 const color = d3.scaleLinear([0, maxVal], ['#F5F5F5', '#484848']);
 
 onMounted(() => {
+  const list = document.getElementsByClassName('provinces-1');
+
+  for (let item of list) {
+    document.querySelector(
+      '.provinces-' + props.no + '#' + item.id
+    ).style.stroke = '#D9D9D9';
+  }
+
   props.provinces.forEach((element) => {
-    if (props.no == '1')
+    if (props.no == '1') {
       document.querySelector(
         '.provinces-' + props.no + '#' + element.name_en
       ).style.fill = color(element.totalProject);
-    else
+
+      document.querySelector(
+        '.provinces-' + props.no + '#' + element.name_en
+      ).style.stroke = '#000000';
+    } else
       document.querySelector(
         '.provinces-' + props.no + '#' + element.name_en
       ).style.fill = color(element.totalBudgetMoney);
   });
+
+  const svg = d3.select<SVGElement, unknown>('svg#map-container-' + props.no);
+  const g = d3.select<SVGElement, unknown>('#map-' + props.no);
+
+  // Init D3 zoom
+  const zoom = d3.zoom().scaleExtent([1, 5]).on('zoom', zoomed);
+  svg.call(zoom);
+
+  // Center container within SVG
+  const centered = d3.zoomIdentity.translate(0, 0);
+  svg.call(zoom.transform, centered);
+
+  d3.select('#zoom_in-' + props.no).on('click', function () {
+    zoom.scaleBy(svg.transition().duration(300), 1.4);
+  });
+  d3.select('#zoom_out-' + props.no).on('click', function () {
+    zoom.scaleBy(svg.transition().duration(300), 0.7);
+  });
+
+  function zoomed(event, d) {
+    g.attr('transform', event.transform);
+  }
 });
 </script>
 
 <style lang="scss" scoped>
 svg {
   width: -webkit-fill-available;
+  max-height: 530px;
 }
 </style>
