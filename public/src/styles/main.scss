@@ -153,7 +153,7 @@ table th:last-child {
 // radio button
 
 .radio-btn {
-  @apply p-1.5 sm:p-2.5 text-center cursor-pointer w-fit;
+  @apply p-1.5 sm:p-2.5 text-center cursor-pointer w-fit border;
 }
 
 .radio-btn[aria-checked='true'] {
@@ -189,6 +189,10 @@ table th:last-child {
 }
 
 .dropdown-btn[aria-expanded='true'] svg {
+  @apply -rotate-180;
+}
+
+.dropdown-btn[aria-expanded='true'] ~ .combobox-btn svg {
   @apply -rotate-180;
 }
 

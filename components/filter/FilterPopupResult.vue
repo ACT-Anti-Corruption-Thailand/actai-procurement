@@ -66,124 +66,158 @@
                 />
               </div>
 
-              <div class="overflow-y-scroll h-[80vh]">
-                <div class="text-[#7F7F7F] mt-5">
-                  <p class="font-bold b1">ปีงบประมาณ</p>
-                  <p class="b5">
-                    ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568
-                    หมายถึง ต.ค. 67 - ก.ย. 68
-                  </p>
-                </div>
+              <div class="overflow-y-scroll max-h-[80vh]">
+                <template v-if="props.section == 'โครงการ'">
+                  <div>
+                    <div class="text-[#7F7F7F] mt-5">
+                      <p class="font-bold b1">ปีงบประมาณ</p>
+                      <p class="b5">
+                        ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568
+                        หมายถึง ต.ค. 67 - ก.ย. 68
+                      </p>
+                    </div>
 
-                <div class="flex w-full gap-2 items-center">
-                  <div class="flex-1 relative">
-                    <ListBox
-                      title=""
-                      :selected="selected[0].yearFrom"
-                      :list="filterList.year"
+                    <div class="flex w-full gap-2 items-center">
+                      <div class="flex-1 relative">
+                        <ListBox
+                          title=""
+                          :selected="selected[0].yearFrom"
+                          :list="filterList.year"
+                        />
+                      </div>
+
+                      <p class="b1">-</p>
+
+                      <div class="flex-1 relative">
+                        <ListBox
+                          title=""
+                          :selected="selected[0].yearTo"
+                          :list="filterList.year"
+                        />
+                      </div>
+                    </div>
+
+                    <Combobox
+                      title="หน่วยงานรัฐเจ้าของโครงการ"
+                      :selected="selected[0].agencies"
+                      :list="filterList.agencies"
                     />
-                  </div>
 
-                  <p class="b1">-</p>
-
-                  <div class="flex-1 relative">
-                    <ListBox
-                      title=""
-                      :selected="selected[0].yearTo"
-                      :list="filterList.year"
+                    <Combobox
+                      title="สังกัด"
+                      :selected="selected[0].agencyBelongTo"
+                      :list="filterList.agencyBelongTo"
                     />
-                  </div>
-                </div>
 
-                <ListBox
-                  title="หน่วยงานรัฐเจ้าของโครงการ"
-                  :selected="selected[0].agencies"
-                  :list="filterList.agencies"
-                />
-
-                <ListBox
-                  title="สังกัด"
-                  :selected="selected[0].agencyBelongTo"
-                  :list="filterList.agencyBelongTo"
-                />
-
-                <ListBox
-                  title="ที่ตั้งโครงการ"
-                  :selected="selected[0].provinces"
-                  :list="filterList.provinces"
-                />
-
-                <ListBox
-                  title="สถานะโครงการ"
-                  :selected="selected[0].projectStatus"
-                  :list="filterList.projectStatus"
-                />
-
-                <ListBox
-                  title="วิธีการจัดหา"
-                  :selected="selected[0].resoucingMethod"
-                  :list="filterList.resoucingMethod"
-                />
-
-                <ListBox
-                  title="ประเภทการจัดหา"
-                  :selected="selected[0].recourcingType"
-                  :list="filterList.recourcingType"
-                />
-
-                <ListBox
-                  title="ประเภทผู้รับจ้าง"
-                  :selected="selected[0].contractorType"
-                  :list="filterList.contractorType"
-                />
-
-                <div class="text-[#7F7F7F] mt-5">
-                  <p class="font-bold b1">วงเงิน</p>
-                </div>
-
-                <RadioGroup v-model="plan" class="flex">
-                  <RadioGroupOption
-                    v-slot="{ checked }"
-                    class="flex-1 radio-btn b1"
-                    value="งบประมาณ"
-                  >
-                    <span>งบประมาณ</span>
-                  </RadioGroupOption>
-                  <RadioGroupOption
-                    v-slot="{ checked }"
-                    class="flex-1 radio-btn b1"
-                    value="วงเงินสัญญา"
-                  >
-                    <span>วงเงินสัญญา</span>
-                  </RadioGroupOption>
-                </RadioGroup>
-
-                <div class="flex w-full gap-2 items-center my-3">
-                  <div class="flex-1 relative">
-                    <input
-                      type="text"
-                      class="dropdown-btn"
-                      placeholder="เริ่มต้น"
+                    <Combobox
+                      title="ที่ตั้งโครงการ"
+                      :selected="selected[0].provinces"
+                      :list="filterList.provinces"
                     />
-                  </div>
 
-                  <p class="b1">-</p>
-
-                  <div class="flex-1 relative">
-                    <input
-                      type="text"
-                      class="dropdown-btn"
-                      placeholder="สิ้นสุด"
+                    <Combobox
+                      title="สถานะโครงการ"
+                      :selected="selected[0].projectStatus"
+                      :list="filterList.projectStatus"
                     />
-                  </div>
-                </div>
 
-                <div class="flex items-center mb-4">
+                    <Combobox
+                      title="วิธีการจัดหา"
+                      :selected="selected[0].resoucingMethod"
+                      :list="filterList.resoucingMethod"
+                    />
+
+                    <Combobox
+                      title="ประเภทการจัดหา"
+                      :selected="selected[0].recourcingType"
+                      :list="filterList.recourcingType"
+                    />
+
+                    <Combobox
+                      title="ประเภทผู้รับจ้าง"
+                      :selected="selected[0].contractorType"
+                      :list="filterList.contractorType"
+                    />
+
+                    <div class="text-[#7F7F7F] mt-5">
+                      <p class="font-bold b1">วงเงิน</p>
+                    </div>
+
+                    <RadioGroup v-model="plan" class="flex">
+                      <RadioGroupOption
+                        v-slot="{ checked }"
+                        class="flex-1 radio-btn b1"
+                        value="งบประมาณ"
+                      >
+                        <span>งบประมาณ</span>
+                      </RadioGroupOption>
+                      <RadioGroupOption
+                        v-slot="{ checked }"
+                        class="flex-1 radio-btn b1"
+                        value="วงเงินสัญญา"
+                      >
+                        <span>วงเงินสัญญา</span>
+                      </RadioGroupOption>
+                    </RadioGroup>
+
+                    <div class="flex w-full gap-2 items-center my-3">
+                      <div class="flex-1 relative">
+                        <input
+                          type="text"
+                          class="dropdown-btn border-0"
+                          placeholder="เริ่มต้น"
+                        />
+                      </div>
+
+                      <p class="b1">-</p>
+
+                      <div class="flex-1 relative">
+                        <input
+                          type="text"
+                          class="dropdown-btn border-0"
+                          placeholder="สิ้นสุด"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template v-else-if="props.section == 'หน่วยงานรัฐ'">
+                  <div class="overflow-y-scroll max-h-[80vh]">
+                    <Combobox
+                      title="สังกัด"
+                      :selected="selected[0].agencyBelongTo"
+                      :list="filterList.agencyBelongTo"
+                    />
+
+                    <Combobox
+                      title="ที่ตั้งหน่วยงาน"
+                      :selected="selected[0].provinces"
+                      :list="filterList.provinces"
+                    /></div
+                ></template>
+                <template v-else>
+                  <Combobox
+                    title="ที่ตั้งผู้รับจ้าง"
+                    :selected="selected[0].provinces"
+                    :list="filterList.provinces"
+                  />
+
+                  <Combobox
+                    title="ประเภทผู้รับจ้าง"
+                    :selected="selected[0].contractorType"
+                    :list="filterList.contractorType"
+                  />
+                </template>
+
+                <div
+                  class="flex items-center my-4"
+                  v-if="props.section != 'หน่วยงานรัฐ'"
+                >
                   <input
                     id="default-checkbox"
                     type="checkbox"
                     value=""
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                    class="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded"
                   />
                   <label for="default-checkbox" class="ms-2 b1 text-[#EC1C24]"
                     >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
@@ -191,10 +225,12 @@
                 </div>
               </div>
 
-              <div class="flex items-center justify-end mt-3 sm:mt-0 gap-2">
+              <div
+                class="flex items-center justify-between sm:justify-end pt-3 sm:mt-0 gap-2"
+              >
                 <button
                   type="button"
-                  class="p-2.5 border border-[#0B5C90] rounded-[10px] ml-1 b2 text-[#0B5C90]"
+                  class="p-2.5 border border-[#0B5C90] rounded-[10px] b2 text-[#0B5C90] min-w-32"
                 >
                   ล้างตัวกรอง
                   <img
@@ -206,9 +242,9 @@
                 <button
                   type="button"
                   @click="isOpen = false"
-                  class="b2 rounded-[10px] bg-black p-2.5 text-sm font-medium text-white hover:bg-[#1F1F1F] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                  class="b2 rounded-[10px] bg-black p-2.5 min-w-32 text-white hover:bg-[#1F1F1F] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
                 >
-                  ตกลง
+                  ตกลง <CheckIcon class="size-4 inline" />
                 </button>
               </div>
             </DialogPanel>
@@ -219,7 +255,7 @@
   </TransitionRoot>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import {
   TransitionRoot,
@@ -229,6 +265,12 @@ import {
   RadioGroup,
   RadioGroupOption,
 } from '@headlessui/vue';
+
+const props = defineProps<{
+  section: string;
+}>();
+
+import { CheckIcon } from '@heroicons/vue/24/solid';
 
 const isOpen = ref(false);
 const plan = ref('งบประมาณ');

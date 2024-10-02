@@ -18,7 +18,7 @@
             />
           </div>
         </div>
-        <FilterPopup />
+        <FilterResultContractor section="รายชื่อโครงการที่เกี่ยวข้อง" />
       </div>
 
       <div class="mt-3">

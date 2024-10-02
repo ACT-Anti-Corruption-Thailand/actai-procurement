@@ -33,7 +33,7 @@ onMounted(() => {
   <div class="mx-auto max-w-6xl px-4">
     <div class="flex flex-col-mb sm:items-center justify-between">
       <h4 class="font-bold">xx,xxx หน่วยงานรัฐ</h4>
-      <FilterPopup />
+      <FilterPopupResult section="หน่วยงานรัฐ" />
     </div>
 
     <div class="flex items-center justify-between my-5 flex-col-mb">

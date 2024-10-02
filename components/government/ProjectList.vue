@@ -18,7 +18,7 @@
             />
           </div>
         </div>
-        <FilterPopup />
+        <FilterPopupGovernment section="รายชื่อโครงการที่จัดทำ" />
       </div>
 
       <div class="mt-3">

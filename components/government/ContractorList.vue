@@ -18,7 +18,7 @@
             />
           </div>
         </div>
-        <FilterPopup />
+        <FilterPopupGovernment section="ผู้รับจ้างที่ได้งาน" />
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">

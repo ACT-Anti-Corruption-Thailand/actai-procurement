@@ -1,10 +1,6 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 const config = useRuntimeConfig();
-
-function closeModal() {
-  isOpen.value = false;
-}
 </script>
 
 <template>

@@ -195,7 +195,7 @@ const menuList = ref([
         <Tab class="tab-menu b1">รายชื่อ</Tab>
         <Tab class="tab-menu b1">ภาพรวม</Tab>
       </TabList>
-      <div><FilterPopup /></div>
+      <div><FilterPopupResult section="โครงการ" /></div>
     </div>
 
     <TabPanels>

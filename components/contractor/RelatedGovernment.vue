@@ -18,7 +18,7 @@
             />
           </div>
         </div>
-        <FilterPopup />
+        <FilterResultContractor section="หน่วยงานรัฐที่เป็นผู้ว่าจ้าง" />
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
