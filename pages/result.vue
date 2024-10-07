@@ -1,4 +1,6 @@
 <script setup>
+const config = useRuntimeConfig();
+
 const menu = ref('ทั้งหมด');
 const menuList = ref(['ทั้งหมด', 'โครงการฯ', 'หน่วยงานรัฐ', 'ผู้รับจ้าง']);
 
@@ -15,14 +17,38 @@ const mockDataGuide = ref({
   province: 'แพร่',
   year: '2567 (10/11/2567)',
   owner: 'สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน',
-  no: '= 56015020021',
+  no: '56015020021',
+});
+
+const summaryData = ref([]);
+
+onMounted(async () => {
+  const queryString = window.location.search;
+  const keyword = 'ก';
+
+  const res = await fetch(
+    `${config.public.apiUrl}/project/search/summary?keyword=${keyword}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    summaryData.value = data;
+  }
 });
 </script>
 
 <template>
   <Header />
   <div class="overflow-auto bg-[#333333]">
-    <div class="p-4 flex gap-2 mx-auto sm:justify-center w-[700px]">
+    <div
+      class="p-4 flex gap-2 mx-auto sm:justify-center w-[450px] sm:w-[700px]"
+    >
       <div
         class="menu-btn text-white"
         :class="{ active: menu == item }"
@@ -30,7 +56,7 @@ const mockDataGuide = ref({
         v-for="(item, i) in menuList"
         :key="i"
       >
-        <h5>{{ item }}</h5>
+        <h5 class="b1 sm:text-[28px]">{{ item }}</h5>
       </div>
     </div>
   </div>
@@ -57,6 +83,7 @@ const mockDataGuide = ref({
         v-else-if="menu == 'โครงการฯ'"
         :iconGuide="iconGuide"
         :mockDataGuide="mockDataGuide"
+        :data="summaryData"
       />
       <ResultGovernment v-else-if="menu == 'หน่วยงานรัฐ'" />
       <ResultContractor v-else />

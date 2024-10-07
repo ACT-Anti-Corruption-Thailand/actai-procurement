@@ -1,17 +1,25 @@
 <template>
   <ClientOnly fallback-tag="span" fallback="Loading...">
     <div
-      class="flex flex-col-mb items-center justify-end max-w-6xl mx-auto mt-3 gap-2"
+      class="flex flex-col-mbd items-center justify-end max-w-6xl mx-auto mt-3 gap-2"
     >
       <button
-        v-for="item in activeMenuList"
-        class="navi-btn b1"
+        v-for="(item, i) in activeMenuList"
+        :class="[
+          menuIndex == 0 ? '!bg-white !text-black !w-full first' : '',
+          menuIndex == menu.length - 1 ? '!w-full last' : '',
+          menuIndex != 0 && i == 0 ? 'left' : '',
+          menuIndex != menu.length - 1 && i == 1 ? 'right' : '',
+          'navi-btn b1',
+        ]"
         @click="$emit('menu', item)"
       >
-        {{ item }}
-      </button>
-    </div></ClientOnly
-  >
+        <!-- <template v-if="item"></template> -->
+        <ChevronLeftIcon class="size-4 chevron-l" />
+        <span class="truncate"> {{ item }}</span>
+        <ChevronRightIcon class="size-4 chevron-r" />
+      </button></div
+  ></ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -20,7 +28,10 @@ const props = defineProps<{
   activemenu: string;
 }>();
 
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
+
 const projectMenu = ['ภาพรวม', 'ข้อมูลเจาะลึก', 'เอกสารที่เกี่ยวข้อง'];
+
 const govMenu = [
   'ภาพรวมโครงการที่จัดทำ',
   'รายชื่อโครงการที่จัดทำ',
@@ -36,11 +47,15 @@ const contracterMenu = [
   'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง',
 ];
 
+const menuIndex = ref(0);
+
 let menu = [];
 
 const activeMenuList = computed(() => {
   let activemenu = [];
   const index = menu.indexOf(props.activemenu);
+
+  menuIndex.value = index;
 
   if (index == 0) activemenu.push(menu[1]);
   else if (index == menu.length - 1) activemenu.push(menu[menu.length - 2]);
@@ -48,9 +63,6 @@ const activeMenuList = computed(() => {
     activemenu.push(menu[index - 1]);
     activemenu.push(menu[index + 1]);
   }
-
-  //   console.log(activemenu);
-  //   console.log(index, menu.length);
 
   return activemenu;
 });
@@ -64,14 +76,21 @@ onBeforeMount(() => {
 
 <style lang="scss" scoped>
 .navi-btn {
-  @apply sm:max-w-[250px] w-full rounded-full p-2.5;
+  @apply sm:max-w-[250px] w-2/4 rounded-full p-2.5 bg-white flex justify-center items-center gap-2;
+}
+
+.first {
+  @apply bg-white;
 }
 
 .navi-btn:first-child {
   @apply bg-[#333333] text-white;
 }
 
-.navi-btn:last-child {
-  @apply bg-white text-black;
+.first .chevron-l,
+.left .chevron-r,
+.right .chevron-l,
+.last .chevron-r {
+  @apply hidden;
 }
 </style>

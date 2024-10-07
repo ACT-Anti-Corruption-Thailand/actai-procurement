@@ -10,15 +10,14 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
   <Header />
   <div class="bg-white p-5">
     <Breadcrumb
-      title="  บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)"
+      title="บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)"
     />
     <div class="max-w-6xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
         <h3 class="font-black">
           บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
         </h3>
-        <p class="b1">เลขที่โครงการ : 56015020021</p>
-        <p class="b4 text-[#8E8E8E]">โครงการฯ อัปเดตข้อมูลเมื่อ 20/12/2566</p>
+        <p class="b4 text-[#8E8E8E]">ผู้รับจ้างอัปเดตข้อมูลเมื่อ 20/12/2566</p>
       </div>
       <div class="sm:w-1/5">
         <div class="bg-[#FFEFF0] rounded-md text-[#EC1C24] b2 p-2.5 mb-2">

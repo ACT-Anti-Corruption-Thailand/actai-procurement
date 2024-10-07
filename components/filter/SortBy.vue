@@ -67,4 +67,8 @@ const sortBy = ref('desc');
     width: 150px !important;
   }
 }
+
+.radio-btn {
+  border: 0;
+}
 </style>

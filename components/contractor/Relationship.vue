@@ -26,7 +26,7 @@
             )}/`"
             target="_blank"
             rel="noopener noreferrer"
-            class="b1 text-[#0B5C90] font-bold mb-3"
+            class="b1 text-[#0B5C90] hover:text-[#1688CA] font-bold mb-3"
             >{{ item.name }}</a
           >
           <arrow color="#0B5C90" class="-rotate-45 mt-1" />
@@ -85,7 +85,7 @@
             :href="`/contractor?name=${item.name.replace(/ /g, '-')}`"
             target="_blank"
             rel="noopener noreferrer"
-            class="b1 text-[#0B5C90] font-bold"
+            class="b1 text-[#0B5C90] hover:text-[#1688CA] font-bold"
             >{{ item.name }}</a
           >
           <div class="w-full h-[1px] bg-[#EC1C24] flex-1 mt-3"></div>
@@ -157,6 +157,7 @@
         href="https://poldata.actai.co/donation/#parties"
         target="_blank"
         rel="noopener noreferrer"
+        class="see-profile"
       >
         <GoToText color="#0B5C90" text="ดูประวัติการบริจาคเงิน" />
       </a>
@@ -245,3 +246,13 @@ const relationshipWith = {
   politicalParties: ['ประชาธิปัตย์', 'ก้าวไกล'],
 };
 </script>
+
+<style>
+.see-profile div svg {
+  @apply !-rotate-45;
+}
+
+.see-profile div p {
+  @apply hover:text-[#1688CA];
+}
+</style>

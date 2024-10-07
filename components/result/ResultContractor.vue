@@ -17,12 +17,12 @@ onMounted(() => {
     <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
   </div> -->
   <div class="mx-auto max-w-6xl px-4">
-    <div class="flex flex-col-mb sm:items-center justify-between">
+    <div class="flex items-center justify-between">
       <h4 class="font-bold">xx,xxx,xxx ผู้รับจ้าง</h4>
       <FilterPopupResult section="ผู้รับจ้าง" />
     </div>
 
-    <div class="flex items-center justify-between my-5 flex-col-mb">
+    <div class="flex items-center justify-between my-3 sm:my-5">
       <div class="flex gap-2 items-center relative">
         <SortBy
           text="เรียงตาม"

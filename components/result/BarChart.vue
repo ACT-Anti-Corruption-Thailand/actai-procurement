@@ -379,7 +379,7 @@ const plan = ref('ความเสี่ยงทุจริต');
           หน่วย : โครงการ (%ของโครงการทั้งหมด)
         </p>
         <div
-          class="flex items-center gap-2"
+          class="flex gap-2"
           v-for="(item, i) in checkboxList.filter((x) => x.section == 'risk')"
         >
           <input
@@ -407,7 +407,7 @@ const plan = ref('ความเสี่ยงทุจริต');
           หน่วย : โครงการ (%ของโครงการทั้งหมด)
         </p>
         <div
-          class="flex items-center gap-2"
+          class="flex gap-2"
           v-for="(item, i) in checkboxList.filter(
             (x) => x.section == 'status project'
           )"
@@ -441,7 +441,7 @@ const plan = ref('ความเสี่ยงทุจริต');
           หน่วย : สัญญา (%ของสัญญาทั้งหมด)
         </p>
         <div
-          class="flex items-center gap-2"
+          class="flex gap-2"
           v-for="(item, i) in checkboxList.filter(
             (x) => x.section == 'status contact'
           )"
@@ -473,7 +473,7 @@ const plan = ref('ความเสี่ยงทุจริต');
           หน่วย : โครงการ (%ของโครงการทั้งหมด)
         </p>
         <div
-          class="flex items-center gap-2"
+          class="flex gap-2"
           v-for="(item, i) in checkboxList.filter((x) => x.section == 'type')"
         >
           <input
@@ -728,5 +728,17 @@ const plan = ref('ความเสี่ยงทุจริต');
 .radio-wrapper {
   border: 1px solid #d9d9d9 !important;
   border-radius: 10px !important;
+}
+
+input[type='checkbox'] {
+  @apply mt-1;
+}
+
+label span:first-child {
+  @apply w-2/4;
+}
+
+label span:last-child {
+  @apply w-44 !text-right;
 }
 </style>

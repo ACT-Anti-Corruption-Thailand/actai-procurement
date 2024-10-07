@@ -1,6 +1,7 @@
 <template>
   <Header />
-  <div class="p-5 sm:p-10 bg-[#F5F5F5]">
+  <div class="p-5 !pb-10 bg-[#F5F5F5]">
+    <Breadcrumb title="นโยบายข้อมูลส่วนบุคคลสำหรับการใช้คุกกี้" />
     <h3 class="font-bold max-w-6xl mx-auto">
       นโยบายข้อมูลส่วนบุคคลสำหรับการใช้คุกกี้
     </h3>

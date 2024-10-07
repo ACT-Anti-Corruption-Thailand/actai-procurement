@@ -37,7 +37,19 @@ const getSearchList = async (keyword) => {
 
 const handleEnterOptions = () => {
   query.value = selected.value;
+  setKeyword();
 };
+
+const setKeyword = () => {
+  localStorage.setItem('keyword', selected.value);
+};
+
+onMounted(() => {
+  if (window.location.pathname == '/result') {
+    const kw = localStorage.getItem('keyword');
+    if (kw != '') selected.value = kw;
+  }
+});
 </script>
 
 <template>
@@ -81,6 +93,7 @@ const handleEnterOptions = () => {
               </div>
 
               <ComboboxOption
+                @click="setKeyword()"
                 v-for="(person, i) in searchList"
                 as="template"
                 :key="i"
@@ -120,12 +133,13 @@ const handleEnterOptions = () => {
       <NuxtLink
         :to="`/result?search=${query}`"
         :class="[query == '' ? 'pointer-events-none' : '']"
+        @click="setKeyword()"
       >
         <div class="h-11 w-11">
           <img
             src="/public/src/images/search.svg"
             alt=""
-            class="bg-[#C2141B] p-3 rounded-r-lg cursor-pointer"
+            class="bg-[#EC1C24] hover:bg-[#C2141B] p-3 rounded-r-lg cursor-pointer"
           /></div
       ></NuxtLink>
     </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center gap-1 w-full mb-5 sm:mb-10">
     <NuxtLink to="/" class="text-[#0B5C90] text-nowrap">หน้าหลัก</NuxtLink>
-    <p class="truncate">/ {{ props.title }}</p>
+    <p class="truncate text-[#8E8E8E]">/ {{ props.title }}</p>
   </div>
 </template>
 

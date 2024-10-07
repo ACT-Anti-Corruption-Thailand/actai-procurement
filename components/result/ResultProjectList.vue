@@ -8,6 +8,7 @@ const isOpen2 = ref(false);
 defineProps<{
   iconGuide: object;
   mockDataGuide: object;
+  data: object;
 }>();
 
 const yearlyAggregates = [
@@ -190,7 +191,7 @@ const menuList = ref([
     </h5>
   </div> -->
   <TabGroup :selectedIndex="selectedTab" @change="changeTab" as="Component">
-    <div class="flex flex-col-mb justify-between mx-auto max-w-6xl px-4">
+    <div class="flex justify-between items-center mx-auto max-w-6xl px-4">
       <TabList>
         <Tab class="tab-menu b1">รายชื่อ</Tab>
         <Tab class="tab-menu b1">ภาพรวม</Tab>
@@ -205,16 +206,18 @@ const menuList = ref([
             <p class="b1 font-bold">
               จำนวนโครงการจัดซื้อจัดจ้างตามเงื่อนไขที่ค้นหา
             </p>
-            <h2 class="font-bold">2,000 โครงการ</h2>
+            <h2 class="font-bold">{{ data.totalProject }} โครงการ</h2>
             <hr />
             <div class="flex">
               <div class="flex-1">
                 <p class="b2">งบประมาณรวม (บาท)</p>
-                <h5 class="font-bold">47,540,648</h5>
+                <h5 class="font-bold">
+                  {{ data.totalBudgetMoney.toLocaleString() }}
+                </h5>
               </div>
               <div class="flex-1 text-[#EC1C24]">
                 <p class="b2">เป็นโครงการเสี่ยงทุจริต</p>
-                <h5 class="font-bold">1.05%</h5>
+                <h5 class="font-bold">{{ data.totalProjectHasCorruption }}%</h5>
               </div>
             </div>
 
@@ -229,14 +232,14 @@ const menuList = ref([
           <div class="sm:w-2/5">
             <div class="rounded-md bg-[#F5F5F5] p-5 text-black mb-3">
               <p class="b1">หน่วยงานรัฐเจ้าของโครงการ</p>
-              <h5 class="font-bold">20 หน่วยงาน</h5>
+              <h5 class="font-bold">{{ data.totalAgency }} หน่วยงาน</h5>
               <p class="b2 text-[#0B5C90] flex gap-1">
                 ดูรายชื่อ <img src="../../public/src/images/popup.svg" alt="" />
               </p>
             </div>
             <div class="rounded-md bg-[#F5F5F5] p-5 text-black">
               <p class="b1">ผู้รับจ้าง</p>
-              <h5 class="font-bold">300 ราย</h5>
+              <h5 class="font-bold">{{ data.totalCompany }} ราย</h5>
               <p class="b2 text-[#0B5C90] flex gap-1">
                 ดูรายชื่อ <img src="../../public/src/images/popup.svg" alt="" />
               </p>
@@ -279,14 +282,16 @@ const menuList = ref([
       </TabPanel>
       <TabPanel>
         <div class="mx-auto max-w-6xl px-4 lg:px-0">
-          <h5 class="font-bold mb-5">xxx,xxx,xxx โครงการจัดซื้อจัดจ้าง</h5>
+          <h5 class="font-bold my-5">xxx,xxx,xxx โครงการจัดซื้อจัดจ้าง</h5>
           <div class="flex flex-col-mb gap-2">
             <a href="#chart-1" class="sm:w-2/4">
               <div
                 class="rounded-md bg-black p-5 hover:bg-[#333333] text-white relative"
               >
                 <p class="b1">งบประมาณรวม (บาท)</p>
-                <h4 class="font-bold">47,540,648</h4>
+                <h4 class="font-bold">
+                  {{ data.totalBudgetMoney.toLocaleString() }}
+                </h4>
                 <arrow
                   color="#FFFFFF"
                   class="absolute right-5 top-5 rotate-90"
@@ -297,7 +302,7 @@ const menuList = ref([
                 class="rounded-md bg-black p-5 hover:bg-[#333333] text-[#EC1C24] relative"
               >
                 <p class="b1">โครงการเสี่ยงทุจริต</p>
-                <h4 class="font-bold">1.05%</h4>
+                <h4 class="font-bold">{{ data.totalProjectHasCorruption }}%</h4>
                 <arrow
                   color="#FFFFFF"
                   class="absolute right-5 top-5 rotate-90"

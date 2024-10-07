@@ -34,7 +34,14 @@
               class="my-3 border-t border-b border-[#DADADA] py-3 flex flex-wrap items-center justify-center gap-1"
             >
               <div class="w-2 h-2 bg-black"></div>
-              <p>= เข้ารอบต่อไป</p>
+              <p>
+                =
+                {{
+                  item.title != 'เข้าเสนอราคา'
+                    ? 'เข้ารอบต่อไป'
+                    : 'ผู้ชนะการประมูล'
+                }}
+              </p>
               <div class="w-2 h-2 bg-[#8E8E8E]"></div>
               <p class="text-[#8E8E8E]">= ตกรอบ</p>
             </div>
@@ -50,7 +57,10 @@
                 ]"
               >
                 <p>{{ c.name }}</p>
-                <p class="text-[#5E5E5E] flex gap-1 items-center">
+                <p
+                  class="text-[#5E5E5E] flex gap-1 items-center"
+                  v-if="item.title == 'ซื้อซอง' || item.title == 'ยื่นซอง'"
+                >
                   <year color="#5E5E5E" /> 12/08/2567
                 </p>
               </div>
@@ -66,8 +76,10 @@
       <h4 class="font-black">ผู้ชนะการประมูล</h4>
     </div>
     <div class="p-5 rounded-b-md w-full">
-      <div class="flex flex-col-mb justify-between mb-3">
-        <h5 class="font-bold">ทั้งหมด x ราย ทำสัญญาจ้าง x ฉบับ</h5>
+      <div class="flex justify-between mb-3">
+        <h5 class="font-bold w-3/4 sm:w-2/4">
+          ทั้งหมด x ราย ทำสัญญาจ้าง x ฉบับ
+        </h5>
         <DownloadAndCopy />
       </div>
 
@@ -166,8 +178,8 @@
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
-      <div class="flex flex-col-mb justify-between mb-3">
-        <h5 class="font-bold">แยกตามรายการพิจารณา 1 รายการ</h5>
+      <div class="flex justify-between mb-3">
+        <h5 class="font-bold w-3/4">แยกตามรายการพิจารณา 1 รายการ</h5>
         <DownloadAndCopy />
       </div>
 
@@ -179,10 +191,14 @@
             <tr class="b3">
               <th>รายการพิจารณา</th>
               <th class="w-24">
-                ผู้เข้าเสนอราคา <br />
+                <span class="text-white">ผู้เข้าเสนอราคา</span> <br />
                 <div class="flex items-center gap-2">
-                  <img src="../../public/src/images/contractor.svg" alt="" />
-                  <p class="b4">เลขทะเบียนนิติบุคคล</p>
+                  <ProjectIconGuide
+                    :data="{
+                      entityNo: '= เลขทะเบียนนิติบุคคล',
+                    }"
+                    color="#D9D9D9"
+                  />
                 </div>
               </th>
               <th class="w-14">ราคาประมูล (บาท)</th>

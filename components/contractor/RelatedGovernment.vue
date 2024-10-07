@@ -3,7 +3,7 @@
 
   <div class="bg-white rounded-md gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
-      <div class="flex sm:items-end gap-2 flex-col-mb">
+      <div class="flex items-end gap-2">
         <div class="flex-1">
           <p class="b2 text-[#7F7F7F]">ค้นหาหน่วยงานรัฐ</p>
           <div class="relative">
@@ -22,8 +22,8 @@
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
-      <div class="flex items-center justify-between mb-3 flex-col-mb">
-        <h5 class="font-black">
+      <div class="flex items-center justify-between mb-3 gap-2">
+        <h5 class="font-black w-3/4">
           ทั้งหมด xxx หน่วยงาน วงเงินสัญญา xx,xxx,xxx บาท
         </h5>
         <DownloadAndCopy />
@@ -41,8 +41,8 @@
             <tr>
               <th>ลำดับ</th>
               <th>ผู้รับจ้าง</th>
-              <th>จำนวนโครงการ</th>
-              <th>วงเงินสัญญารวม (บาท)</th>
+              <th class="text-right">จำนวนโครงการ</th>
+              <th class="text-right">วงเงินสัญญารวม</th>
             </tr>
           </thead>
           <tbody class="b1">
@@ -56,8 +56,8 @@
                   สำนักงานคณะกรรมการป้องกันและปราบปรามยาเสพติด
                 </a>
               </td>
-              <td>3,000</td>
-              <td>15,890,000.23</td>
+              <td class="text-right">3,000</td>
+              <td class="text-right">15,890,000.23</td>
             </tr>
           </tbody>
         </table>

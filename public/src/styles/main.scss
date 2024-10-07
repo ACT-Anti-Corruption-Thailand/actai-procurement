@@ -103,7 +103,7 @@ a {
 }
 
 .menu-btn {
-  @apply border border-white rounded-full p-1 text-center w-40  cursor-pointer hover:bg-white hover:text-black hover:font-bold duration-300;
+  @apply border border-white rounded-full p-1 text-center w-24 sm:w-40  cursor-pointer hover:bg-white hover:text-black hover:font-bold duration-300;
 }
 
 .menu-btn.active {
@@ -111,7 +111,7 @@ a {
 }
 
 .tab-menu {
-  @apply border-b-2 border-[#DADADA] w-32 text-center outline-none font-bold;
+  @apply border-b-2 border-[#DADADA] w-20 sm:w-32 text-center outline-none font-bold;
 }
 
 .tab-menu[aria-selected='true'] {

@@ -14,7 +14,7 @@ const mockdata = ref([
   {
     name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
     province: 'กรุงเทพมหานคร',
-    no: '56015020021',
+    entityNo: '56015020021',
   },
 ]);
 </script>
@@ -33,7 +33,7 @@ const mockdata = ref([
             :key="i"
             class="flex-1 flex flex-col"
           >
-            <p class="b1 font-bold mb-5">
+            <p class="b1 font-bold mb-2.5">
               <template v-if="i == 0">โครงการฯ ที่งบประมาณสูงที่สุด</template>
               <template v-else-if="i == 1"
                 >หน่วยงานรัฐที่ของบประมาณมากที่สุด</template

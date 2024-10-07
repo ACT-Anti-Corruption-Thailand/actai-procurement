@@ -24,7 +24,7 @@
                 <p class="b1">xx%</p>
               </div>
               <div class="flex-1 text-[#7051B4]">
-                <p class="b2">ต่ำกว่างบประมาณรวม</p>
+                <p class="b2">สูงกว่าราคากลางรวม</p>
                 <p class="b1">xx%</p>
               </div>
             </div>
@@ -38,11 +38,16 @@
             <span>ตัวเลขนี้บ่งบอกอะไร</span>
           </p>
 
-          <!-- <hr class="my-5" /> -->
-          <!-- <p class="b4">ที่ตั้งโครงการ*</p>
-          <hr class="my-5" /> -->
+          <div class="border-t pt-3 mt-3">
+            <p class="b2 text-[#8E8E8E]">ที่ตั้งโครงการ*</p>
+            <p class="b1">จ. แพร่</p>
+            <p class="b4 text-[#8E8E8E]">
+              หมายเหตุ: ในกรณีที่ข้อมูลโครงการไม่ได้ระบุที่ตั้ง
+              ระบบจะใช้ที่ตั้งของหน่วยงานเจ้าของโครงการแทน
+            </p>
+          </div>
 
-          <div class="flex gap-2">
+          <div class="flex gap-2 mt-3">
             <div class="flex-1 border-t pt-3">
               <p class="b2 text-[#5E5E5E]">วันที่ประกาศโครงการ</p>
               <p class="b1">24/08/2562</p>

@@ -116,7 +116,7 @@ onMounted(() => {
       />
     </div>
 
-    <div class="border-b border-black mb-5">
+    <div class="mb-10">
       <h4 class="font-bold">ผู้รับจ้าง</h4>
       <ProjectIconGuide
         :data="{

@@ -1,6 +1,7 @@
 <template>
   <Header />
-  <div class="p-5 sm:p-10 bg-[#F5F5F5]">
+  <div class="p-5 !pb-10 bg-[#F5F5F5]">
+    <Breadcrumb title="เข้าใจการจัดซื้อจัดจ้าง" />
     <h3 class="font-bold max-w-6xl mx-auto">เข้าใจการจัดซื้อจัดจ้างภาครัฐ</h3>
   </div>
   <div class="max-w-6xl mx-auto p-5 sm:p-10 b1">

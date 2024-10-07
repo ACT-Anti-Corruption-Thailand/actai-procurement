@@ -55,7 +55,7 @@
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
               <p>0</p>
-              <p>46,135k</p>
+              <p>38B</p>
             </div>
             <div
               class="h-[10px] w-full bg-gradient-to-r from-[#F5F5F5] to-[#484848]"

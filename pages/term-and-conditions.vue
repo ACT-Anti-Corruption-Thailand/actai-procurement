@@ -1,6 +1,7 @@
 <template>
   <Header />
-  <div class="p-5 sm:p-10 bg-[#F5F5F5]">
+  <div class="p-5 !pb-10 bg-[#F5F5F5]">
+    <Breadcrumb title="Term & Conditions" />
     <h3 class="font-bold max-w-6xl mx-auto">
       ข้อกำหนดและเงื่อนไขการอนุญาตให้ใช้ข้อมูลเพื่อการต่อต้านคอร์รัปชัน ของ
       องค์กรต่อต้านคอร์รัปชัน (ประเทศไทย)

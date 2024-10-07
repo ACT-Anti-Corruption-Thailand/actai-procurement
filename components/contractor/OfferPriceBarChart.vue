@@ -8,7 +8,7 @@
       <p class="b4 text-[#8E8E8E] text-right">หน่วย : โครงการ</p>
 
       <div class="b1">
-        <div class="flex justify-between gap-2">
+        <div class="flex justify-between gap-2 border-b border-[#DADADA] pb-2">
           <div class="flex gap-2">
             <svg
               class="w-3 mt-2"
@@ -24,7 +24,7 @@
           </div>
           <p class="font-bold text-[#7051B4]">1,000</p>
         </div>
-        <div class="flex justify-between gap-2">
+        <div class="flex justify-between gap-2 border-b border-[#DADADA] py-2">
           <div class="flex gap-2">
             <svg
               class="w-4 mt-2"
@@ -44,7 +44,7 @@
           </div>
           <p class="font-bold text-[#EC7601]">1,000</p>
         </div>
-        <div class="flex justify-between gap-2">
+        <div class="flex justify-between gap-2 border-b border-[#DADADA] py-2">
           <div class="flex gap-2">
             <svg
               class="w-3 mt-2"
@@ -64,7 +64,7 @@
           </div>
           <p class="font-bold text-[#CE5700]">1,000</p>
         </div>
-        <div class="flex justify-between gap-2">
+        <div class="flex justify-between gap-2 pt-2">
           <div class="flex gap-2">
             <svg
               class="w-3 mt-2"

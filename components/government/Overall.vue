@@ -97,6 +97,7 @@
       <div
         class="py-7 pr-7 pl-10 bg-[#FFFFFF] chart-wrapper sm:w-2/3 text-[#8E8E8E] relative"
       >
+        {{ selected }}
         <Map
           class="mx-auto max-w-xs h-fit"
           :no="selected == 'งบประมาณ' ? '1' : '2'"

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center mt-3 sm:mt-0">
+  <div class="flex items-center mt-3">
     <button
       type="button"
       @click="openModal"
@@ -14,7 +14,7 @@
     </button>
     <button
       type="button"
-      class="p-2.5 border border-[#0B5C90] rounded-[10px] ml-1"
+      class="p-2.5 border border-[#0B5C90] hover:border-[#1688CA] rounded-[10px] ml-1"
     >
       <img
         src="../../public/src/images/reset.svg"
@@ -145,7 +145,7 @@
               >
                 <button
                   type="button"
-                  class="p-2.5 border border-[#0B5C90] rounded-[10px] b2 text-[#0B5C90] min-w-32"
+                  class="p-2.5 border border-[#0B5C90] hover:border-[#1688CA] rounded-[10px] b2 text-[#0B5C90] min-w-32"
                 >
                   ล้างตัวกรอง
                   <img

@@ -40,11 +40,12 @@ const config = useRuntimeConfig();
 
         <p class="b3 text-[#BCBCBC]">
           <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ.
-          2562 - ปัจจุบัน โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด 100,000 โครงการ
-          หน่วยงานรัฐ 200 หน่วยงาน และ ผู้รับจ้าง 2,500 ราย
+          2562 - ปัจจุบัน <br />
+          โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด 100,000 โครงการ หน่วยงานรัฐ 200
+          หน่วยงาน และ ผู้รับจ้าง 2,500 ราย
         </p>
         <p
-          class="b4 flex gap-1 items-center text-[#8DCCF0] hover:text-[#0B5C90] duration-300 justify-center cursor-pointer"
+          class="b4 flex gap-1 items-center text-[#8DCCF0] hover:text-[#2EA0DF] duration-300 justify-center cursor-pointer"
           @click="isOpen = true"
         >
           <info color="#8DCCF0" />
@@ -134,8 +135,8 @@ const config = useRuntimeConfig();
         ในประเทศไทยมีความพยายามในการต่อต้านและกำจัดการคอร์รัปชันอยู่ตลอด
         แต่ก็ยังมีปัญหาในการเข้าถึงข้อมูลที่ถูกต้อง เชื่อถือได้ และสะดวก
         รวมถึงขาดเครื่องมือที่ช่วยเอาข้อมูลที่เกี่ยวข้องมาเชื่อมโยงและวิเคราะห์
-        เพื่อให้เกิดประโยชน์ในการต่อต้านคอร์รัปชัน ACT Ai
-        จึงถูกพัฒนาให้เป็นเครื่องมือในการเปิดเผย เชื่อมโยง จัดการ
+        เพื่อให้เกิดประโยชน์ในการต่อต้านคอร์รัปชัน <br /><br />
+        ACT Ai จึงถูกพัฒนาให้เป็นเครื่องมือในการเปิดเผย เชื่อมโยง จัดการ
         และวิเคราะห์ชุดข้อมูลที่มีความสำคัญต่อการต่อต้านคอร์รัปชัน
         เพื่อสนับสนุนนักข่าว สื่อ ภาคประชาสังคม
         และประชาชนที่ต้องการเข้าถึงข้อมูลเพื่อตรวจสอบและติดตามการทำงานของภาครัฐโดยไม่มีค่าใช้จ่าย
@@ -183,7 +184,7 @@ const config = useRuntimeConfig();
   <div class="bg-[#1F1F1F] py-10 px-3">
     <div class="max-w-6xl mx-auto">
       <h5 class="font-bold text-white text-center mb-3">
-        ตัวอย่างโครงการอื่นๆ ในเครือ ACT Ai
+        ตัวอย่างโครงการอื่น ๆ ในเครือ ACT Ai
       </h5>
 
       <div class="overflow-auto">
@@ -219,7 +220,7 @@ const config = useRuntimeConfig();
 
 <style lang="scss" scoped>
 #background-video {
-  height: 90vh;
+  height: 91vh;
   width: 100vw;
   object-fit: cover;
   position: absolute;
