@@ -22,7 +22,7 @@ onBeforeMount(async () => {
 
 <template>
   <Header />
-  <div class="bg-white p-5 z-10">
+  <div class="bg-white p-5 z-10 sticky top-0">
     <Breadcrumb title="สอบราคาซื้อชุดก่อสร้าง (60.14.13)" />
     <div class="max-w-7xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">

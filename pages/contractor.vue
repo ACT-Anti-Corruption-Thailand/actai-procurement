@@ -8,7 +8,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
 <template>
   <Header />
-  <div class="bg-white p-5 z-10">
+  <div class="bg-white p-5 z-10 sticky top-0">
     <Breadcrumb
       title="บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)"
     />
