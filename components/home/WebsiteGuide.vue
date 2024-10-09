@@ -1,4 +1,5 @@
 <script setup>
+import { ChevronRightIcon } from '@heroicons/vue/24/solid';
 const keyword = ['ก่อสร้าง', 'เฉลิมพระเกียรติ', 'ถนน'];
 </script>
 
@@ -45,33 +46,37 @@ const keyword = ['ก่อสร้าง', 'เฉลิมพระเกี�
             *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
             ต.ค. 67 - ก.ย. 68
           </p>
-          <div class="overflow-auto hide-scroll mt-3">
-            <div class="flex gap-3">
-              <div v-for="(item, i) in keyword" :key="i">
-                <NuxtLink :to="`/result?search=${item}`">
-                  <div
-                    class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left"
-                  >
-                    <p class="b1 font-bold mb-3 text-black">
-                      โครงการฯ ที่มีคำว่า
-                      <span class="text-[#74060A]">“{{ item }}”</span>
-                    </p>
-                    <p class="b4 text-[#5E5E5E]">
-                      รวม xxx,xxxx,xxx,xxx โครงการ
-                    </p>
-                    <p class="b4 text-[#5E5E5E]">
-                      ใช้งบประมาณรวม xx,xxx,xxx,xxx,xxx,xxx.xx บาท
-                    </p>
 
-                    <GoToText
-                      color="#0B5C90"
-                      text="ดูทั้งหมด"
-                      class="mt-20 mb-0 text-[#0B5C90]"
-                    />
-                  </div>
-                </NuxtLink>
+          <div class="flex gap-2 items-center">
+            <div class="overflow-auto hide-scroll mt-3">
+              <div class="flex gap-3">
+                <div v-for="(item, i) in keyword" :key="i">
+                  <NuxtLink :to="`/result?search=${item}`">
+                    <div
+                      class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left"
+                    >
+                      <p class="b1 font-bold mb-3 text-black">
+                        โครงการฯ ที่มีคำว่า
+                        <span class="text-[#74060A]">“{{ item }}”</span>
+                      </p>
+                      <p class="b4 text-[#5E5E5E]">
+                        รวม xxx,xxxx,xxx,xxx โครงการ
+                      </p>
+                      <p class="b4 text-[#5E5E5E]">
+                        ใช้งบประมาณรวม xx,xxx,xxx,xxx,xxx,xxx.xx บาท
+                      </p>
+
+                      <GoToText
+                        color="#0B5C90"
+                        text="ดูทั้งหมด"
+                        class="mt-20 mb-0 text-[#0B5C90]"
+                      />
+                    </div>
+                  </NuxtLink>
+                </div>
               </div>
             </div>
+            <ChevronRightIcon class="size-8" />
           </div>
         </div>
       </div>
