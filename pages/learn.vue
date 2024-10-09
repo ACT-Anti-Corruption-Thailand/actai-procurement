@@ -6,8 +6,11 @@
   </div>
   <div class="max-w-6xl mx-auto p-5 sm:p-10 b1">
     <ClientOnly fallback-tag="span" fallback="Loading...">
-      <Disclosure>
-        <DisclosureButton class="disclosure-btn" id="การจัดซื้อจัดจ้างภาครัฐ">
+      <Disclosure :defaultOpen="isOpen">
+        <DisclosureButton
+          class="disclosure-btn"
+          id="what-is-government-procurement"
+        >
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">การจัดซื้อจัดจ้างภาครัฐ คืออะไร ?</h5>
         </DisclosureButton>
@@ -31,8 +34,8 @@
 
       <hr class="my-5" />
 
-      <Disclosure>
-        <DisclosureButton class="disclosure-btn" id="เกี่ยวข้องกับใครบ้าง">
+      <Disclosure :defaultOpen="isOpen2">
+        <DisclosureButton class="disclosure-btn" id="who-is-involved">
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">เกี่ยวข้องกับใครบ้าง ?</h5>
         </DisclosureButton>
@@ -63,8 +66,8 @@
 
       <hr class="my-5" />
 
-      <Disclosure>
-        <DisclosureButton class="disclosure-btn" id="มีกระบวนการอะไรบ้าง">
+      <Disclosure :defaultOpen="isOpen3">
+        <DisclosureButton class="disclosure-btn" id="processes">
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">มีกระบวนการอะไรบ้าง</h5>
         </DisclosureButton>
@@ -100,8 +103,8 @@
 
       <hr class="my-5" />
 
-      <Disclosure>
-        <DisclosureButton class="disclosure-btn">
+      <Disclosure :defaultOpen="isOpen4">
+        <DisclosureButton class="disclosure-btn" id="how-to-procure">
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">วิธีการจัดหา มีอะไรบ้าง ลักษณะเป็นอย่างไร?</h5>
         </DisclosureButton>
@@ -338,11 +341,8 @@
 
       <hr class="my-5" />
 
-      <Disclosure>
-        <DisclosureButton
-          class="disclosure-btn"
-          id="อยากร่วมจับโกงต้องสังเกตจากอะไร"
-        >
+      <Disclosure :defaultOpen="isOpen5">
+        <DisclosureButton class="disclosure-btn" id="how-to-report">
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">อยากร่วมจับโกง ต้องสังเกตจากอะไร?</h5>
         </DisclosureButton>
@@ -430,6 +430,24 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+
+const isOpen = ref(false);
+const isOpen2 = ref(false);
+const isOpen3 = ref(false);
+const isOpen4 = ref(false);
+const isOpen5 = ref(false);
+
+onMounted(() => {
+  const url = window.location.href.split('#');
+
+  if (url.length > 1) {
+    if (url[1] == 'what-is-government-procurement') isOpen.value = true;
+    else if (url[1] == 'who-is-involved') isOpen2.value = true;
+    else if (url[1] == 'processes') isOpen3.value = true;
+    else if (url[1] == 'how-to-procure') isOpen4.value = true;
+    else if (url[1] == 'how-to-report') isOpen5.value = true;
+  }
+});
 
 const mockdata = ref([
   'ประกาศเชิญชวนผู้ค้า (ผู้ประกอบการ) ให้ยื่นเสนอราคา',

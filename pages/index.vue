@@ -88,21 +88,21 @@ const config = useRuntimeConfig();
         <div class="w-full sm:w-3/5 text-left">
           <p class="b4">ตัวอย่างเนื้อหา</p>
 
-          <NuxtLink to="/learn#การจัดซื้อจัดจ้างภาครัฐ">
+          <NuxtLink to="/learn#what-is-government-procurement">
             <div class="info-btn">
               <p>การจัดซื้อจัดจ้างภาครัฐ คืออะไร ?</p>
               <arrow color="#000000" />
             </div>
           </NuxtLink>
 
-          <NuxtLink to="/learn#เกี่ยวข้องกับใครบ้าง">
+          <NuxtLink to="/learn#who-is-involved">
             <div class="info-btn">
               <p>เกี่ยวข้องกับใครบ้าง ?</p>
               <arrow color="#000000" />
             </div>
           </NuxtLink>
 
-          <NuxtLink to="/learn#มีกระบวนการอะไรบ้าง">
+          <NuxtLink to="/learn#processes">
             <div class="info-btn">
               <p>มีกระบวนการอะไรบ้าง ?</p>
               <arrow color="#000000" />

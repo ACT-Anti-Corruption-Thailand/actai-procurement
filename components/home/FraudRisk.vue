@@ -76,7 +76,7 @@ const mockdata = ref([
               </li>
             </ul>
 
-            <NuxtLink to="/learn#อยากร่วมจับโกงต้องสังเกตจากอะไร">
+            <NuxtLink to="/learn#how-to-report">
               <GoToText color="#8DCCF0" text="อ่านเกณฑ์แบบละเอียด" />
             </NuxtLink>
 

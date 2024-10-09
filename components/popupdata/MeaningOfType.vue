@@ -43,7 +43,7 @@
     </p>
 
     <div class="my-2">
-      <a href="/learn" target="_blank" class="text-[#0B5C90] b2"
+      <a href="/learn#how-to-procure" target="_blank" class="text-[#0B5C90] b2"
         >ดูคำอธิบายอย่างละเอียด</a
       >
     </div>
