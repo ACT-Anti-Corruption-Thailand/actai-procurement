@@ -44,6 +44,13 @@
               />
               <MeaningOfChart v-else-if="title == 'กราฟนี้บ่งบอกอะไร'" />
               <MeaningOfNumber v-else-if="title == 'ตัวเลขนี้บ่งบอกอะไร'" />
+
+              <div v-else-if="title == 'ผู้รับจ้างที่ได้งาน'">
+                <p class="font-bold b1">ผู้รับจ้างที่ได้งาน</p>
+                <p class="b2">
+                  สามารถมีได้มากกว่า 1 ราย ถ้าโครงการมีหลายสัญญาจ้าง/รายการย่อย
+                </p>
+              </div>
             </DialogPanel>
           </TransitionChild>
         </div>

@@ -1,6 +1,13 @@
 <template>
-  <div class="flex items-center gap-2 my-3">
-    <p :class="`b2 text-[${props.color}]`">{{ props.text }}</p>
+  <div
+    :class="[
+      props.color == '#0B5C90' ? 'link-1' : 'link-2',
+      'b2 duration-300 flex items-center gap-2 my-3',
+    ]"
+  >
+    <p>
+      {{ props.text }}
+    </p>
     <arrow :color="props.color" />
   </div>
 </template>

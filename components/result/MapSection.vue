@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-4 sm:p-7 rounded-md">
+  <div class="bg-white p-4 sm:p-7 rounded-10">
     <h4 class="font-black">การกระจายตัวโครงการใน 4 จังหวัด</h4>
 
     <RadioGroup v-model="plan" class="flex lg:hidden">
@@ -24,7 +24,7 @@
         <h5 class="font-bold hidden lg:block">จำนวนโครงการ</h5>
         <p class="b1 font-bold">รวม 6,040 โครงการ</p>
         <div
-          class="border rounded-md border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
+          class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
           <Map
             class="mx-auto max-w-xs h-fit w-fit"
@@ -48,7 +48,7 @@
         <h5 class="font-bold hidden lg:block">งบประมาณ</h5>
         <p class="b1 font-bold">รวม 6,135,658,110 บาท</p>
         <div
-          class="border rounded-md border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
+          class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
           <Map class="mx-auto max-w-xs h-fit" no="2" :provinces="provinces" />
 
@@ -70,14 +70,14 @@
       <RadioGroup v-model="sortBy" class="flex gap-1">
         <RadioGroupOption
           v-slot="{ checked }"
-          class="radio-btn b1 rounded-md"
+          class="radio-btn b1 rounded-10"
           value="desc"
         >
           <img src="../../public/src/images/sort-desc.svg" alt="" />
         </RadioGroupOption>
         <RadioGroupOption
           v-slot="{ checked }"
-          class="radio-btn b1 rounded-md"
+          class="radio-btn b1 rounded-10"
           value="asc"
         >
           <img src="../../public/src/images/sort-asc.svg" alt="" />

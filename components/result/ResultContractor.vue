@@ -3,6 +3,20 @@ import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
 
 const sortBy = ref('desc');
 
+function highlight(title: string, text: string) {
+  var innerHTML = title;
+  var index = innerHTML.indexOf(text);
+  if (index >= 0) {
+    innerHTML =
+      innerHTML.substring(0, index) +
+      "<span class='text-[#74060A]'>" +
+      innerHTML.substring(index, index + text.length) +
+      '</span>' +
+      innerHTML.substring(index + text.length);
+    return innerHTML;
+  }
+}
+
 const searchText = ref('');
 
 onMounted(() => {
@@ -44,57 +58,41 @@ onMounted(() => {
       color="#8E8E8E"
     />
 
-    <div class="flex justify-between py-5">
-      <a target="_blank" href="/contractor?name=สอบราคาซื้อชุดก่อสร้าง">
+    <div class="my-3">
+      <a
+        class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
+        v-for="(item, i) in 3"
+        :key="i"
+        target="_blank"
+        href="/contractor?name=การไฟฟ้านครหลวง"
+      >
         <div>
-          <p class="b1 font-bold">
-            บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
-          </p>
+          <p
+            class="b1 font-bold"
+            v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
+          ></p>
           <ProjectIconGuide
             :data="{
               province: 'กรุงเทพมหานคร',
-              entityNo: '56015020021',
             }"
             color="#8E8E8E"
           />
         </div>
+        <div class="flex sm:gap-10 text-right flex-col-mb">
+          <div>
+            <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
+            <p class="b1">190,000</p>
+          </div>
+          <div class="text-[#EC1C24]">
+            <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
+            <p class="b1">10,000 (5.26%)</p>
+          </div>
+          <div>
+            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+            <p class="b1">190,000,000</p>
+          </div>
+        </div>
       </a>
-      <div class="flex sm:gap-10 text-right flex-col-mb">
-        <div>
-          <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
-          <p class="b1">84</p>
-        </div>
-
-        <div>
-          <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
-          <p class="b1">320,000,000</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex justify-between py-5">
-      <div>
-        <p class="b1 font-bold">บริษัท โกลด์ อินฟินิท จำกัด</p>
-        <ProjectIconGuide
-          :data="{
-            province: 'แพร่',
-            entityNo: '56015020021',
-          }"
-          color="#8E8E8E"
-        />
-        <ProjectTag text="ตรวจพบความน่าสนใจ" />
-      </div>
-      <div class="flex sm:gap-10 text-right flex-col-mb">
-        <div>
-          <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
-          <p class="b1">36</p>
-        </div>
-
-        <div>
-          <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
-          <p class="b1">140,000,000</p>
-        </div>
-      </div>
     </div>
   </div>
 </template>

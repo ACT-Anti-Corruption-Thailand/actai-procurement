@@ -1,7 +1,7 @@
 <template>
   <h4 class="font-bold text-white mb-5">รายชื่อโครงการที่เกี่ยวข้อง</h4>
 
-  <div class="bg-white rounded-md gap-2 mb-3">
+  <div class="bg-white rounded-10 gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <div class="flex items-end gap-2">
         <div class="flex-1">
@@ -23,14 +23,14 @@
 
       <div class="mt-3">
         <input type="checkbox" name="" id="isRisk" class="text-black ring-0" />
-        <label for="isRisk" class="text-[#EC1C24] ml-1 b1"
+        <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
           >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
         >
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 gap-2">
-        <h5 class="font-black w-3/4">
+        <h5 class="font-black w-3/5">
           ทั้งหมด xx,xxx โครงการ วงเงินสัญญา xxx บาท
         </h5>
         <DownloadAndCopy />
@@ -43,7 +43,7 @@
       />
 
       <div class="overflow-auto">
-        <table class="table-auto text-left w-[800px] lg:w-full">
+        <table class="table-auto text-left table-wrapper">
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr>
               <th>
@@ -57,11 +57,15 @@
               </th>
               <th>วันที่ประกาศโครงการ</th>
               <th class="w-20">สถานะ</th>
-              <th>วิธีการจัดหา</th>
-              <th>หน่วยงานรัฐ</th>
-              <th>ผู้ร่วมประมูล</th>
-              <th>ผู้ชนะ</th>
-              <th>วงเงินสัญญารวมของโครงการ <br />งบประมาณรวม</th>
+              <th class="w-20">วิธีการจัดหา</th>
+              <th class="w-20">หน่วยงานรัฐ</th>
+              <th class="w-20">ผู้ร่วมประมูล</th>
+              <th class="w-20">ผู้ชนะ</th>
+              <th>
+                วงเงินสัญญารวมของโครงการ <br /><span class="text-[#DADADA]"
+                  >งบประมาณรวม</span
+                >
+              </th>
             </tr>
           </thead>
           <tbody class="b1">

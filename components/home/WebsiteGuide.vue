@@ -7,7 +7,7 @@ const keyword = ['ก่อสร้าง', 'เฉลิมพระเกี�
     <div class="text-center text-white">
       <h3 class="font-bold mb-10">เว็บไซต์นี้ทำอะไรได้บ้าง</h3>
       <div
-        class="flex flex-col lg:flex-row justify-center max-w-5xl mx-auto gap-5"
+        class="flex flex-col lg:flex-row justify-center max-w-6xl mx-auto gap-10"
       >
         <div class="w-full lg:w-2/5 text-left">
           <div
@@ -29,7 +29,7 @@ const keyword = ['ก่อสร้าง', 'เฉลิมพระเกี�
             เลขทะเบียนนิติบุคคลของผู้รับจ้าง
           </p>
 
-          <div class="rounded-[10px] p-2.5 bg-[#1F1F1F]">
+          <div class="rounded-10 p-2.5 bg-[#1F1F1F]">
             <p class="b1">
               <b>เคล็ดลับ:</b> คุณสามารถใช้เครื่องหมาย " "
               ครอบคำที่ต้องการค้นหาเพื่อให้การสืบค้นแม่นยำมากยิ่งขึ้น
@@ -50,7 +50,7 @@ const keyword = ['ก่อสร้าง', 'เฉลิมพระเกี�
               <div v-for="(item, i) in keyword" :key="i">
                 <NuxtLink :to="`/result?search=${item}`">
                   <div
-                    class="bg-white p-5 hover:bg-[#DADADA] duration-300 rounded-xl w-[288px] text-left"
+                    class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left"
                   >
                     <p class="b1 font-bold mb-3 text-black">
                       โครงการฯ ที่มีคำว่า

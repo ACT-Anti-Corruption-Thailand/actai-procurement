@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white p-5 rounded-xl w-full min-w-[300px] max-w-[370px] text-black text-left"
+    class="btn-dark-1 p-5 rounded-10 w-full min-w-[300px] max-w-[370px] text-black text-left"
   >
     <p class="b1 font-bold mb-3 text-ellipsis line-clamp-2">
       {{ props.data.name }}

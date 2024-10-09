@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-md flex flex-col-mb mb-3">
+  <div class="rounded-10 flex flex-col-mb mb-3">
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
       <h4 class="font-black">สัดส่วนขั้นตอนการประมูลงาน</h4>
 

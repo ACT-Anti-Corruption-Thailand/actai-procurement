@@ -1,7 +1,7 @@
 <template>
   <div>
     <h4 class="font-bold text-white mb-5">ข้อมูลทั่วไป</h4>
-    <div class="bg-white text-black p-7 rounded-md">
+    <div class="bg-white text-black p-7 rounded-10">
       <div>
         <div>
           <p class="b2 text-[#5E5E5E]">ที่อยู่</p>
@@ -61,7 +61,7 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-md gap-2 my-3">
+    <div class="bg-white rounded-10 gap-2 my-3">
       <div class="p-7">
         <h5 class="font-bold">รายชื่อกรรมการ/ผู้เป็นหุ้นส่วน</h5>
         <p class="b4 text-[#8E8E8E]">

@@ -109,7 +109,7 @@
       value=""
       class="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded"
     />
-    <label for="default-checkbox" class="ms-2 b1 text-[#EC1C24]"
+    <label for="default-checkbox" class="ms-2 b4 text-[#EC1C24]"
       >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
     >
   </div>

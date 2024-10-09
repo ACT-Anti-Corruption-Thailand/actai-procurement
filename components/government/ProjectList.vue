@@ -1,7 +1,7 @@
 <template>
   <h4 class="font-bold text-white mb-5">รายชื่อโครงการที่จัดทำ</h4>
 
-  <div class="bg-white rounded-md gap-2 mb-3">
+  <div class="bg-white rounded-10 gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <div class="flex items-end gap-2">
         <div class="flex-1">
@@ -23,14 +23,14 @@
 
       <div class="mt-3">
         <input type="checkbox" name="" id="isRisk" class="text-black ring-0" />
-        <label for="isRisk" class="text-[#EC1C24] ml-1 b1"
+        <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
           >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
         >
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 gap-2">
-        <h5 class="font-black w-3/4">
+        <h5 class="font-bold w-3/5">
           ทั้งหมด xx,xxx โครงการ วงเงินสัญญา xxx บาท
         </h5>
         <DownloadAndCopy />
@@ -46,7 +46,7 @@
         <table class="table-auto text-left w-[800px] lg:w-full">
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr>
-              <th class="w-72">
+              <th class="w-1/3">
                 ชื่อโครงการ
                 <ProjectIconGuide
                   :data="{
@@ -57,10 +57,17 @@
                 />
               </th>
               <th>วันที่ประกาศโครงการ</th>
-              <th>สถานะโครงการ</th>
-              <th>วิธีการจัดหา</th>
-              <th>ผู้รับจ้างที่ได้งาน</th>
-              <th>วงเงินสัญญารวม <br />งบประมาณรวม</th>
+              <th class="w-1/6">สถานะโครงการ</th>
+              <th class="w-1/4">วิธีการจัดหา</th>
+              <th class="w-1/4">
+                ผู้รับจ้างที่ได้งาน
+                <info
+                  color="#FFFFFF"
+                  class="inline cursor-pointer"
+                  @click="isOpen = true"
+                />
+              </th>
+              <th class="">วงเงินสัญญารวม <br />งบประมาณรวม</th>
             </tr>
           </thead>
           <tbody class="b1">
@@ -88,11 +95,19 @@
           </tbody>
         </table>
       </div>
+
+      <Modal
+        v-if="isOpen"
+        @close="isOpen = false"
+        title="ผู้รับจ้างที่ได้งาน"
+      />
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const isOpen = ref(false);
+</script>
 
 <style lang="scss" scoped>
 .input-text {

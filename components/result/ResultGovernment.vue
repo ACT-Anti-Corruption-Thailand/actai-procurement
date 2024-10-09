@@ -59,8 +59,14 @@ onMounted(() => {
       color="#8E8E8E"
     />
 
-    <div class="flex justify-between py-5">
-      <a target="_blank" href="/government?name=สอบราคาซื้อชุดก่อสร้าง">
+    <div class="my-3">
+      <a
+        class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
+        v-for="(item, i) in 3"
+        :key="i"
+        target="_blank"
+        href="/government?name=การไฟฟ้านครหลวง"
+      >
         <div>
           <p
             class="b1 font-bold"
@@ -71,48 +77,23 @@ onMounted(() => {
               province: 'กรุงเทพมหานคร',
             }"
             color="#8E8E8E"
-          /></div
-      ></a>
-      <div class="flex sm:gap-10 text-right flex-col-mb">
-        <div>
-          <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-          <p class="b1">222</p>
+          />
         </div>
-        <div class="text-[#EC1C24]">
-          <p class="b4">โครงการเสี่ยงทุจริต</p>
-          <p class="b1">27 (12.1%)</p>
+        <div class="flex sm:gap-10 text-right flex-col-mb">
+          <div>
+            <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
+            <p class="b1">190,000</p>
+          </div>
+          <div class="text-[#EC1C24]">
+            <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
+            <p class="b1">10,000 (5.26%)</p>
+          </div>
+          <div>
+            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+            <p class="b1">190,000,000</p>
+          </div>
         </div>
-        <div>
-          <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-          <p class="b1">340,000,000</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex justify-between py-5">
-      <div>
-        <p class="b1 font-bold">สำนักงานเศรษฐกิจการเกษตร</p>
-        <ProjectIconGuide
-          :data="{
-            province: 'แพร่',
-          }"
-          color="#8E8E8E"
-        />
-      </div>
-      <div class="flex sm:gap-10 text-right flex-col-mb">
-        <div>
-          <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-          <p class="b1">1,234</p>
-        </div>
-        <div class="text-[#EC1C24]">
-          <p class="b4">โครงการเสี่ยงทุจริต</p>
-          <p class="b1">432 (35.0%)</p>
-        </div>
-        <div>
-          <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-          <p class="b1">390,150,000</p>
-        </div>
-      </div>
+      </a>
     </div>
   </div>
 </template>

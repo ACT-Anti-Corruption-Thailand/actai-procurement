@@ -22,16 +22,18 @@ onBeforeMount(async () => {
 
 <template>
   <Header />
-  <div class="bg-white p-5">
+  <div class="bg-white p-5 z-10">
     <Breadcrumb title="สอบราคาซื้อชุดก่อสร้าง (60.14.13)" />
-    <div class="max-w-6xl mx-auto flex gap-2 flex-col-mb">
+    <div class="max-w-7xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
         <h3 class="font-black">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</h3>
         <p class="b1">เลขที่โครงการ : 56015020021</p>
         <p class="b4 text-[#8E8E8E]">โครงการฯ อัปเดตข้อมูลเมื่อ 24/08/2562</p>
       </div>
       <div class="sm:w-1/5">
-        <div class="bg-[#FFEFF0] rounded-md text-[#EC1C24] b2 p-2.5 mb-2">
+        <div
+          class="bg-[#FFEFF0] hover:bg-[#FFCECE] duration-300 rounded-10 text-[#EC1C24] b2 p-2.5 mb-2"
+        >
           <div class="flex items-center gap-2">
             <img src="../public/src/images/risk-flag.svg" alt="risk" />
             <p class="font-bold">พบความเสี่ยงทุจริต x ประเด็น</p>
@@ -75,7 +77,7 @@ onBeforeMount(async () => {
     </div>
   </div>
   <div class="bg-[#1F1F1F] p-5">
-    <div class="flex flex-col-mb gap-5 max-w-6xl mx-auto">
+    <div class="flex flex-col-mb gap-5 max-w-7xl mx-auto">
       <div :class="[isShowTab ? 'sm:w-1/4' : 'hidden']">
         <div class="flex justify-between w-full py-3">
           <p class="b4 font-bold text-[#8E8E8E]">รายการข้อมูล</p>
@@ -89,7 +91,7 @@ onBeforeMount(async () => {
 
         <div class="text-white b1 cursor-pointer">
           <div
-            class="p-4 border-b border-[#333333] hover:bg-black"
+            class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ภาพรวม',
             }"
@@ -98,7 +100,7 @@ onBeforeMount(async () => {
             <p>ภาพรวม</p>
           </div>
           <div
-            class="p-4 border-b border-[#333333] hover:bg-black"
+            class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ข้อมูลเจาะลึก',
             }"
@@ -112,7 +114,7 @@ onBeforeMount(async () => {
             </ul>
           </div>
           <div
-            class="p-4 border-b border-[#333333] hover:bg-black"
+            class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
                 menu == 'เอกสารที่เกี่ยวข้อง',

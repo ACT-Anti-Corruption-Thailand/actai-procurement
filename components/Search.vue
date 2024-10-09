@@ -83,7 +83,7 @@ onMounted(() => {
             @after-leave="handleEnterOptions()"
           >
             <ComboboxOptions
-              class="absolute mt-1 max-h-60 max-w-[85%] sm:max-w-xl w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+              class="absolute mt-1 max-h-60 max-w-[85%] sm:max-w-xl w-full overflow-auto rounded-10 bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
             >
               <div
                 v-if="searchList.length == 0 && query != ''"

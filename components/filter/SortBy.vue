@@ -20,14 +20,14 @@
     <RadioGroup v-model="sortBy" class="flex gap-1">
       <RadioGroupOption
         v-slot="{ checked }"
-        class="flex-1 radio-btn b1 rounded-md"
+        class="flex-1 radio-btn b1 rounded-10"
         value="desc"
       >
         <img src="../../public/src/images/sort-desc.svg" alt="" />
       </RadioGroupOption>
       <RadioGroupOption
         v-slot="{ checked }"
-        class="flex-1 radio-btn b1 rounded-md"
+        class="flex-1 radio-btn b1 rounded-10"
         value="asc"
       >
         <img src="../../public/src/images/sort-asc.svg" alt="" />
@@ -64,7 +64,7 @@ const sortBy = ref('desc');
   width: 215px !important;
 
   @include mobile {
-    width: 150px !important;
+    width: 110px !important;
   }
 }
 

@@ -20,7 +20,7 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        <div class="flex bg-[#5B0000] p-3 rounded-md gap-2 text-white">
+        <div class="flex bg-[#5B0000] p-3 rounded-10 gap-2 text-white">
           <img src="/src/images/report.svg" alt="" class="w-5" />
           <p class="b1 hidden sm:block">แจ้งเหตุสงสัยทุจริต</p>
         </div></a

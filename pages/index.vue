@@ -30,7 +30,7 @@ const config = useRuntimeConfig();
         <h5 class="text-[#BCBCBC] mb-3">
           ร่วมตรวจสอบความโปร่งใสของภาครัฐด้วยการมีส่วนร่วมของประชาชน
         </h5>
-        <p class="b1 font-bold">
+        <p class="b4 font-bold">
           ค้นหาโครงการจัดซื้อจัดจ้างภาครัฐ / หน่วยงานรัฐ / ผู้รับจ้าง
         </p>
 
@@ -45,7 +45,7 @@ const config = useRuntimeConfig();
           หน่วยงาน และ ผู้รับจ้าง 2,500 ราย
         </p>
         <p
-          class="b4 flex gap-1 items-center text-[#8DCCF0] hover:text-[#2EA0DF] duration-300 justify-center cursor-pointer"
+          class="b4 flex gap-1 items-center link-2 justify-center cursor-pointer"
           @click="isOpen = true"
         >
           <info color="#8DCCF0" />
@@ -70,14 +70,14 @@ const config = useRuntimeConfig();
 
   <div class="bg-white text-black py-10 px-3">
     <div class="text-center">
-      <div class="flex flex-col-mb justify-center max-w-5xl mx-auto gap-3">
+      <div class="flex flex-col-mb justify-center max-w-6xl mx-auto gap-3">
         <div class="w-full sm:w-2/5 text-left">
           <div
             class="rounded-full b2 p-2 border border-black w-[30px] h-[30px] flex justify-center items-center"
           >
             3
           </div>
-          <h4 class="font-bold mb-3">เข้าใจการจัดซื้อจัดจ้างภาครัฐ</h4>
+          <h4 class="font-black mb-3">เข้าใจการจัดซื้อจัดจ้างภาครัฐ</h4>
 
           <p class="b1">
             เราเข้าใจดีว่าข้อมูลเกี่ยวกับการจัดซื้อจัดจ้างภาครัฐนั้นเป็นเรื่องซับซ้อนและเต็มไปด้วยคำศัพท์เฉพาะ
@@ -113,7 +113,7 @@ const config = useRuntimeConfig();
             <GoToText
               color="#0B5C90"
               text="ดูเนื้อหาทั้งหมด"
-              class="mt-5 mb-0 text-[#0B5C90]"
+              class="mt-5 mb-0 link-1"
           /></NuxtLink>
         </div>
       </div>
@@ -122,7 +122,7 @@ const config = useRuntimeConfig();
 
   <div class="bg-black py-10 px-3">
     <div class="text-center text-white max-w-6xl mx-auto">
-      <h3 class="font-bold mb-10">
+      <h3 class="font-bold mb-5">
         เกี่ยวกับ ACT Ai จับโกงงบจัดซื้อจัดจ้างภาครัฐ
       </h3>
       <p class="b1">
@@ -192,7 +192,7 @@ const config = useRuntimeConfig();
           <div
             v-for="(item, i) in 3"
             :key="i"
-            class="border border-white rounded-md w-full sm:w-[370px]"
+            class="border border-white rounded-10 w-full sm:w-[370px]"
           >
             <div class="mock-og rounded-t-md"></div>
 

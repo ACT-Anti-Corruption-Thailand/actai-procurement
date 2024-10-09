@@ -84,7 +84,7 @@
             </li>
           </ul>
 
-          <div class="bg-[#F5F5F5] p-3 mt-3 rounded-md">
+          <div class="bg-[#F5F5F5] p-3 mt-3 rounded-10">
             <p class="font-bold">
               ตัวอย่างขั้นตอบของวิธีการจัดหา “ประกวดราคาอิเล็กทรอนิกส์
               (e-bidding)”
@@ -148,7 +148,7 @@
             </ul>
           </div>
 
-          <div class="bg-[#F5F5F5] p-3 mb-3 rounded-md">
+          <div class="bg-[#F5F5F5] p-3 mb-3 rounded-10">
             <p class="b3 text-[#8E8E8E] font-bold">คำอธิบายเพิ่มเติม</p>
             <p>
               <b> e-catalog (Electronic Catalog)</b> คือระบบข้อมูลสินค้า
@@ -412,7 +412,7 @@
             และป้องกันการทุจริตที่อาจเกิดขึ้น
           </p>
 
-          <div class="bg-[#F5F5F5] p-3 mt-3 rounded-md">
+          <div class="bg-[#F5F5F5] p-3 mt-3 rounded-10">
             <p>
               หมายเหตุ: เป็นเพียงการระบุความเสี่ยงเท่านั้น
               ซึ่งไม่ได้หมายความว่ามีการทุจริตเกิดขึ้นแล้ว

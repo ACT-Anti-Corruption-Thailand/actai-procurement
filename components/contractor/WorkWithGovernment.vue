@@ -20,7 +20,7 @@
       @isOpen="isOpen = true"
     />
 
-    <div class="rounded-md flex flex-col-mb mb-3">
+    <div class="rounded-10 flex flex-col-mb mb-3">
       <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
         <h4 class="font-black">การกระจายตัวโครงการ</h4>
         <p class="b1 font-bold">รวม xxx,xxx,xxx.xx บาท ใน xx จังหวัด</p>
@@ -39,7 +39,7 @@
             id="isRisk"
             class="text-black ring-0"
           />
-          <label for="isRisk" class="text-[#EC1C24] ml-1 b1"
+          <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
             >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต (xx,xxx โครงการ ใน xx
             จังหวัด)</label
           >

@@ -1,7 +1,7 @@
 <template>
   <h4 class="font-bold text-white mb-5">ความสัมพันธ์</h4>
 
-  <div class="bg-white rounded-md gap-2 mb-3">
+  <div class="bg-white rounded-10 gap-2 mb-3">
     <div class="p-5 rounded-b-md w-full">
       <h5 class="font-black">นักการเมือง/เจ้าหน้าที่รัฐ</h5>
       <div
@@ -26,10 +26,11 @@
             )}/`"
             target="_blank"
             rel="noopener noreferrer"
-            class="b1 text-[#0B5C90] hover:text-[#1688CA] font-bold mb-3"
-            >{{ item.name }}</a
-          >
-          <arrow color="#0B5C90" class="-rotate-45 mt-1" />
+            class="b1 link-1 font-bold flex items-center gap-2 h-fit"
+            >{{ item.name }}
+            <arrow color="#0B5C90" class="-rotate-45 mt-1 mb-2"
+          /></a>
+
           <div
             class="w-full h-[1px] bg-[#EC1C24] flex-1 mt-3 hidden sm:block"
           ></div>
@@ -157,10 +158,10 @@
         href="https://poldata.actai.co/donation/#parties"
         target="_blank"
         rel="noopener noreferrer"
-        class="see-profile"
-      >
-        <GoToText color="#0B5C90" text="ดูประวัติการบริจาคเงิน" />
-      </a>
+        class="b1 link-1 flex items-center gap-1 h-fit mt-1"
+        >ดูประวัติการบริจาคเงิน
+        <arrow color="#0B5C90" class="-rotate-45 mt-1 mb-1"
+      /></a>
     </div>
   </div>
 </template>
@@ -247,12 +248,7 @@ const relationshipWith = {
 };
 </script>
 
-<style>
-.see-profile div svg {
-  @apply !-rotate-45;
-}
-
-.see-profile div p {
-  @apply hover:text-[#1688CA];
+<style lang="scss">
+.test {
 }
 </style>

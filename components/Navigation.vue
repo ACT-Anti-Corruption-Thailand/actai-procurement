@@ -6,7 +6,9 @@
       <button
         v-for="(item, i) in activeMenuList"
         :class="[
-          menuIndex == 0 ? '!bg-white !text-black !w-full first' : '',
+          menuIndex == 0
+            ? '!bg-white hover:!bg-[#DADADA] !text-black !w-full first'
+            : '',
           menuIndex == menu.length - 1 ? '!w-full last' : '',
           menuIndex != 0 && i == 0 ? 'left' : '',
           menuIndex != menu.length - 1 && i == 1 ? 'right' : '',
@@ -76,15 +78,15 @@ onBeforeMount(() => {
 
 <style lang="scss" scoped>
 .navi-btn {
-  @apply sm:max-w-[250px] w-2/4 rounded-full p-2.5 bg-white flex justify-center items-center gap-2;
+  @apply sm:max-w-[250px] w-2/4 rounded-full p-2.5 bg-white hover:bg-[#DADADA] flex justify-center items-center gap-2;
 }
 
 .first {
-  @apply bg-white;
+  @apply bg-white hover:bg-[#DADADA];
 }
 
 .navi-btn:first-child {
-  @apply bg-[#333333] text-white;
+  @apply bg-[#333333] hover:bg-black text-white duration-300;
 }
 
 .first .chevron-l,

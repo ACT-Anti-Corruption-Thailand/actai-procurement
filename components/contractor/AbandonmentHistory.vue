@@ -1,9 +1,9 @@
 <template>
   <h4 class="font-bold text-white mb-5">ประวัติการทิ้งงาน</h4>
 
-  <div class="bg-white rounded-md gap-2 mb-3">
+  <div class="bg-white rounded-10 gap-2 mb-3">
     <div class="p-5 rounded-b-md w-full">
-      <div class="flex items-center justify-between mb-3 flex-col-mb">
+      <div class="flex items-center justify-between mb-3">
         <div>
           <h5 class="font-black">
             ทั้งหมด xxx โครงการ วงเงินสัญญา xx,xxx,xxx บาท
@@ -12,7 +12,7 @@
             หมายเหตุ: การขึ้นบัญชีผู้ทิ้งงานนี้ จะมีผลตามกฎหมายโดยทั่วไป
             เป็นระยะเวลา 10 ปี
             <a
-              class="underline text-[#0B5C90]"
+              class="underline link-1"
               target="_blank"
               href="https://www.dla.go.th/upload/template/tempNews/2014/12/32725_1.pdf"
               >อ่านหลักเกณฑ์เพิ่มเติม</a
@@ -23,11 +23,11 @@
       </div>
 
       <div class="overflow-auto">
-        <table class="table-auto text-left w-[800px] lg:w-full">
+        <table class="table-auto text-left table-wrapper">
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr>
-              <th class="w-28">วันที่ประกาศผู้ทิ้งงาน</th>
-              <th class="w-72">
+              <th class="">วันที่ประกาศผู้ทิ้งงาน</th>
+              <th class="w-2/4">
                 ชื่อโครงการ
                 <ProjectIconGuide
                   :data="{
@@ -37,7 +37,7 @@
                   color="#DADADA"
                 />
               </th>
-              <th>หน่วยงานรัฐ</th>
+              <th class="w-1/4">หน่วยงานรัฐ</th>
               <th>วงเงินสัญญารวม</th>
             </tr>
           </thead>

@@ -1,12 +1,12 @@
 <template>
   <h4 class="font-bold text-white mb-5">ข้อมูลเจาะลึก</h4>
-  <div class="bg-white rounded-md gap-2 mb-3">
+  <div class="bg-white rounded-10 gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black">จำนวนนิติบุคคลที่เข้าร่วมในแต่ละขั้นตอน</h4>
     </div>
     <div class="p-8 rounded-b-md w-full flex flex-col-mb gap-2">
       <div
-        class="px-3 py-5 bg-[#F5F5F5] rounded-md w-full text-center relative"
+        class="px-3 py-5 bg-[#F5F5F5] rounded-10 w-full text-center relative"
         v-for="(item, i) in biddingStep"
       >
         <img
@@ -71,13 +71,13 @@
     </div>
   </div>
 
-  <div class="bg-white rounded-md gap-2 mb-3">
+  <div class="bg-white rounded-10 gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black">ผู้ชนะการประมูล</h4>
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex justify-between mb-3">
-        <h5 class="font-bold w-3/4 sm:w-2/4">
+        <h5 class="font-bold w-3/5 sm:w-2/4">
           ทั้งหมด x ราย ทำสัญญาจ้าง x ฉบับ
         </h5>
         <DownloadAndCopy />
@@ -90,13 +90,13 @@
       />
 
       <div class="overflow-auto">
-        <table class="table-auto text-left w-[800px] lg:w-full">
+        <table class="table-auto text-left table-wrapper">
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr class="b3">
               <th>ผู้รับจ้าง</th>
               <th class="w-20">
                 เลขคุมสัญญา <br />
-                <span class="b4">เลขที่สัญญา</span>
+                <span class="b4 text-[#DADADA]">เลขที่สัญญา</span>
               </th>
               <th>วันที่ทำสัญญา</th>
               <th class="w-24">สถานะสัญญา</th>
@@ -163,7 +163,7 @@
     </div>
   </div>
 
-  <div class="bg-white rounded-md gap-2 mb-3">
+  <div class="bg-white rounded-10 gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black mb-3">การเสนอราคา</h4>
 
@@ -179,14 +179,14 @@
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex justify-between mb-3">
-        <h5 class="font-bold w-3/4">แยกตามรายการพิจารณา 1 รายการ</h5>
+        <h5 class="font-bold w-3/5">แยกตามรายการพิจารณา 1 รายการ</h5>
         <DownloadAndCopy />
       </div>
 
       <p class="text-right">ราคากลาง = x,xxx,xxx.xx บาท</p>
 
       <div class="overflow-auto">
-        <table class="table-auto text-left w-[800px] lg:w-full">
+        <table class="table-auto text-left table-wrapper">
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr class="b3">
               <th>รายการพิจารณา</th>
@@ -201,9 +201,9 @@
                   />
                 </div>
               </th>
-              <th class="w-14">ราคาประมูล (บาท)</th>
-              <th class="w-14">ส่วนต่างราคาผู้ชนะ</th>
-              <th class="w-14">ส่วนต่างราคากลาง</th>
+              <th class="w-[85px]">ราคาประมูล (บาท)</th>
+              <th class="w-[85px]">ส่วนต่างราคาผู้ชนะ</th>
+              <th class="w-[85px]">ส่วนต่างราคากลาง</th>
             </tr>
           </thead>
           <tbody class="b1">
@@ -331,14 +331,14 @@ const contractors = [
     name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
     contracts: [
       {
-        id: '60090',
+        id: '600906009000',
         number: '84/2560',
         date: '2024-08-28',
         status: 'จัดทำสัญญา/ PO แล้ว',
         money: 3716992.05,
       },
       {
-        id: '60091',
+        id: '600916009002',
         number: '85/2560',
         date: '2024-09-28',
         status: 'จัดทำสัญญา/ PO แล้ว',

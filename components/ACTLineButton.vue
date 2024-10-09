@@ -5,7 +5,7 @@
     rel="noopener noreferrer"
   >
     <div
-      class="mx-auto max-w-6xl rounded-md bg-[#EC1C24] hover:bg-[#C2141B] duration-300 p-5 mt-5 text-left text-white"
+      class="mx-auto max-w-6xl rounded-10 bg-[#EC1C24] hover:bg-[#C2141B] duration-300 p-5 mt-5 text-left text-white"
     >
       <div class="flex justify-between">
         <div class="flex gap-2">

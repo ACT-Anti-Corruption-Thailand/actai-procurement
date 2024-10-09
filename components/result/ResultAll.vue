@@ -39,9 +39,16 @@ onMounted(() => {
 
       <ProjectIconGuide :data="iconGuide" color="#8E8E8E" />
 
-      <div v-for="(item, i) in 3" :key="i" class="py-5">
-        <div class="flex justify-between flex-col-mb">
-          <a target="_blank" href="/project?name=สอบราคาซื้อชุดก่อสร้าง">
+      <div class="my-3">
+        <a
+          v-for="(item, i) in 3"
+          :key="i"
+          target="_blank"
+          href="/project?name=สอบราคาซื้อชุดก่อสร้าง"
+        >
+          <div
+            class="flex justify-between flex-col-mb p-2.5 sm:p-5 rounded-10 btn-light-4"
+          >
             <div>
               <p
                 class="b1 font-bold"
@@ -50,27 +57,28 @@ onMounted(() => {
                 "
               ></p>
               <ProjectIconGuide :data="mockDataGuide" color="#8E8E8E" />
-              <ProjectTag text="พบความเสี่ยงทุจริต" /></div
-          ></a>
-          <div
-            class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
-          >
-            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-            <p class="b1">190,000,000,000</p>
+              <ProjectTag text="พบความเสี่ยงทุจริต" />
+            </div>
+            <div
+              class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
+            >
+              <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+              <p class="b1">190,000,000,000</p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
 
       <GoToText
         color="#0B5C90"
         text="ดูโครงการทั้งหมด (x,xxx,xxx,xxx)"
-        class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
+        class="mb-5 mt-0 link-1"
         @click="$emit('changeMenu', 'โครงการฯ')"
       />
     </div>
 
     <div class="border-b border-black mb-5">
-      <h4 class="font-bold">หน่วยงานรัฐ</h4>
+      <h4 class="font-black">หน่วยงานรัฐ</h4>
       <ProjectIconGuide
         :data="{
           province: '= ที่ตั้ง',
@@ -78,55 +86,14 @@ onMounted(() => {
         color="#8E8E8E"
       />
 
-      <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
-        <a target="_blank" href="/government?name=การไฟฟ้านครหลวง">
-          <div>
-            <p
-              class="b1 font-bold"
-              v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
-            ></p>
-            <ProjectIconGuide
-              :data="{
-                province: 'กรุงเทพมหานคร',
-              }"
-              color="#8E8E8E"
-            /></div
-        ></a>
-        <div class="flex sm:gap-10 text-right flex-col-mb">
-          <div>
-            <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-            <p class="b1">190,000</p>
-          </div>
-          <div class="text-[#EC1C24]">
-            <p class="b4">โครงการเสี่ยงทุจริต</p>
-            <p class="b1">10,000 (5.26%)</p>
-          </div>
-          <div>
-            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-            <p class="b1">190,000,000</p>
-          </div>
-        </div>
-      </div>
-
-      <GoToText
-        color="#0B5C90"
-        text="ดูหน่วยงานรัฐทั้งหมด (x,xxx,xxx,xxx)"
-        class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
-        @click="$emit('changeMenu', 'หน่วยงานรัฐ')"
-      />
-    </div>
-
-    <div class="mb-10">
-      <h4 class="font-bold">ผู้รับจ้าง</h4>
-      <ProjectIconGuide
-        :data="{
-          province: '= ที่ตั้ง',
-        }"
-        color="#8E8E8E"
-      />
-
-      <div class="flex justify-between py-5" v-for="(item, i) in 3" :key="i">
-        <a target="_blank" href="/contractor?name=การไฟฟ้านครหลวง">
+      <div class="my-3">
+        <a
+          class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
+          v-for="(item, i) in 3"
+          :key="i"
+          target="_blank"
+          href="/government?name=การไฟฟ้านครหลวง"
+        >
           <div>
             <p
               class="b1 font-bold"
@@ -139,21 +106,75 @@ onMounted(() => {
               color="#8E8E8E"
             />
           </div>
+          <div class="flex sm:gap-10 text-right flex-col-mb">
+            <div>
+              <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
+              <p class="b1">190,000</p>
+            </div>
+            <div class="text-[#EC1C24]">
+              <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
+              <p class="b1">10,000 (5.26%)</p>
+            </div>
+            <div>
+              <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+              <p class="b1">190,000,000</p>
+            </div>
+          </div>
         </a>
-        <div class="flex sm:gap-10 text-right flex-col-mb">
+      </div>
+
+      <GoToText
+        color="#0B5C90"
+        text="ดูหน่วยงานรัฐทั้งหมด (x,xxx,xxx,xxx)"
+        class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
+        @click="$emit('changeMenu', 'หน่วยงานรัฐ')"
+      />
+    </div>
+
+    <div class="mb-10">
+      <h4 class="font-black">ผู้รับจ้าง</h4>
+      <ProjectIconGuide
+        :data="{
+          province: '= ที่ตั้ง',
+        }"
+        color="#8E8E8E"
+      />
+
+      <div class="my-3">
+        <a
+          class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
+          v-for="(item, i) in 3"
+          :key="i"
+          target="_blank"
+          href="/contractor?name=การไฟฟ้านครหลวง"
+        >
           <div>
-            <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-            <p class="b1">190,000</p>
+            <p
+              class="b1 font-bold"
+              v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
+            ></p>
+            <ProjectIconGuide
+              :data="{
+                province: 'กรุงเทพมหานคร',
+              }"
+              color="#8E8E8E"
+            />
           </div>
-          <div class="text-[#EC1C24]">
-            <p class="b4">โครงการเสี่ยงทุจริต</p>
-            <p class="b1">10,000 (5.26%)</p>
+          <div class="flex sm:gap-10 text-right flex-col-mb">
+            <div>
+              <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
+              <p class="b1">190,000</p>
+            </div>
+            <div class="text-[#EC1C24]">
+              <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
+              <p class="b1">10,000 (5.26%)</p>
+            </div>
+            <div>
+              <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+              <p class="b1">190,000,000</p>
+            </div>
           </div>
-          <div>
-            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-            <p class="b1">190,000,000</p>
-          </div>
-        </div>
+        </a>
       </div>
 
       <GoToText

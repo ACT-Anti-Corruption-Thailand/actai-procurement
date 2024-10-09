@@ -304,7 +304,7 @@ const plan = ref('ความเสี่ยงทุจริต');
 </script>
 
 <template>
-  <div class="rounded-md flex flex-col-mb mb-3">
+  <div class="rounded-10 flex flex-col-mb mb-3">
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
       <h4 class="font-black" v-if="props.titleType == '0'">
         {{ props.title }}
@@ -494,7 +494,7 @@ const plan = ref('ความเสี่ยงทุจริต');
       </template>
 
       <p
-        class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer"
+        class="b4 flex gap-1 items-center link-1"
         @click="$emit('isOpen')"
         v-if="props.title == 'ความเสี่ยงทุจริต'"
       >
@@ -503,7 +503,7 @@ const plan = ref('ความเสี่ยงทุจริต');
       </p>
 
       <p
-        class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer"
+        class="b4 flex gap-1 items-center link-1"
         @click="$emit('isOpen')"
         v-if="props.title == 'วิธีการจัดหา'"
       >
@@ -735,7 +735,7 @@ input[type='checkbox'] {
 }
 
 label span:first-child {
-  @apply w-2/4;
+  @apply w-3/5;
 }
 
 label span:last-child {

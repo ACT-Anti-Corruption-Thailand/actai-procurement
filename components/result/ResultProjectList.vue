@@ -191,7 +191,9 @@ const menuList = ref([
     </h5>
   </div> -->
   <TabGroup :selectedIndex="selectedTab" @change="changeTab" as="Component">
-    <div class="flex justify-between items-center mx-auto max-w-6xl px-4">
+    <div
+      class="flex justify-between items-center mx-auto max-w-6xl px-4 sm:px-0"
+    >
       <TabList>
         <Tab class="tab-menu b1">รายชื่อ</Tab>
         <Tab class="tab-menu b1">ภาพรวม</Tab>
@@ -202,11 +204,11 @@ const menuList = ref([
     <TabPanels>
       <TabPanel class="mx-auto max-w-6xl px-4">
         <div class="flex gap-2 py-5 flex-col-mb">
-          <div class="rounded-md bg-black p-5 text-white sm:w-3/5">
+          <div class="rounded-10 bg-black p-5 text-white sm:w-3/5">
             <p class="b1 font-bold">
               จำนวนโครงการจัดซื้อจัดจ้างตามเงื่อนไขที่ค้นหา
             </p>
-            <h2 class="font-bold">{{ data.totalProject }} โครงการ</h2>
+            <h2 class="font-black">{{ data.totalProject }} โครงการ</h2>
             <hr />
             <div class="flex">
               <div class="flex-1">
@@ -224,30 +226,62 @@ const menuList = ref([
             <GoToText
               color="#8DCCF0"
               text="ดูภาพรวมเพิ่มเติม"
-              class="cursor-pointer mb-0"
+              class="mb-0"
               @click="selectedTab = 1"
             />
           </div>
 
           <div class="sm:w-2/5">
-            <div class="rounded-md bg-[#F5F5F5] p-5 text-black mb-3">
+            <div class="rounded-10 bg-[#F5F5F5] p-5 text-black mb-3">
               <p class="b1">หน่วยงานรัฐเจ้าของโครงการ</p>
               <h5 class="font-bold">{{ data.totalAgency }} หน่วยงาน</h5>
-              <p class="b2 text-[#0B5C90] flex gap-1">
-                ดูรายชื่อ <img src="../../public/src/images/popup.svg" alt="" />
+              <p class="b2 link-1 flex items-center gap-1">
+                ดูรายชื่อ
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14 2H5C4.73502 2.00078 4.48112 2.10638 4.29375 2.29375C4.10639 2.48112 4.00078 2.73502 4 3V10C4.00078 10.265 4.10639 10.5189 4.29375 10.7062C4.48112 10.8936 4.73502 10.9992 5 11H14C14.265 10.9992 14.5189 10.8936 14.7062 10.7062C14.8936 10.5189 14.9992 10.265 15 10V3C14.9992 2.73502 14.8936 2.48112 14.7062 2.29375C14.5189 2.10638 14.265 2.00078 14 2ZM14 10H5V3H14V10Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M9 13H2V8H3V7H2C1.73502 7.00078 1.48112 7.10639 1.29375 7.29375C1.10638 7.48112 1.00078 7.73502 1 8V13C1.00078 13.265 1.10638 13.5189 1.29375 13.7062C1.48112 13.8936 1.73502 13.9992 2 14H9C9.26498 13.9992 9.51888 13.8936 9.70625 13.7062C9.89362 13.5189 9.99922 13.265 10 13V12H9V13Z"
+                    fill="currentColor"
+                  />
+                </svg>
               </p>
             </div>
-            <div class="rounded-md bg-[#F5F5F5] p-5 text-black">
+            <div class="rounded-10 bg-[#F5F5F5] p-5 text-black">
               <p class="b1">ผู้รับจ้าง</p>
               <h5 class="font-bold">{{ data.totalCompany }} ราย</h5>
-              <p class="b2 text-[#0B5C90] flex gap-1">
-                ดูรายชื่อ <img src="../../public/src/images/popup.svg" alt="" />
+              <p class="b2 link-1 flex items-center gap-1">
+                ดูรายชื่อ
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14 2H5C4.73502 2.00078 4.48112 2.10638 4.29375 2.29375C4.10639 2.48112 4.00078 2.73502 4 3V10C4.00078 10.265 4.10639 10.5189 4.29375 10.7062C4.48112 10.8936 4.73502 10.9992 5 11H14C14.265 10.9992 14.5189 10.8936 14.7062 10.7062C14.8936 10.5189 14.9992 10.265 15 10V3C14.9992 2.73502 14.8936 2.48112 14.7062 2.29375C14.5189 2.10638 14.265 2.00078 14 2ZM14 10H5V3H14V10Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M9 13H2V8H3V7H2C1.73502 7.00078 1.48112 7.10639 1.29375 7.29375C1.10638 7.48112 1.00078 7.73502 1 8V13C1.00078 13.265 1.10638 13.5189 1.29375 13.7062C1.48112 13.8936 1.73502 13.9992 2 14H9C9.26498 13.9992 9.51888 13.8936 9.70625 13.7062C9.89362 13.5189 9.99922 13.265 10 13V12H9V13Z"
+                    fill="currentColor"
+                  />
+                </svg>
               </p>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-between my-5 flex-col-mb">
+        <div class="flex items-center justify-between my-5">
           <SortBy
             text="เรียงตาม"
             :list="['ความใกล้เคียงคำค้น', 'วันที่ประกาศโครงการ', 'งบประมาณรวม']"
@@ -258,9 +292,16 @@ const menuList = ref([
 
         <ProjectIconGuide :data="iconGuide" color="#8E8E8E" />
 
-        <div v-for="(item, i) in 3" :key="i" class="py-5">
-          <div class="flex justify-between flex-col-mb">
-            <a target="_blank" href="/project?name=สอบราคาซื้อชุดก่อสร้าง">
+        <div class="my-3">
+          <a
+            v-for="(item, i) in 3"
+            :key="i"
+            target="_blank"
+            href="/project?name=สอบราคาซื้อชุดก่อสร้าง"
+          >
+            <div
+              class="flex justify-between flex-col-mb p-2.5 sm:p-5 rounded-10 btn-light-4"
+            >
               <div>
                 <p
                   class="b1 font-bold"
@@ -269,15 +310,16 @@ const menuList = ref([
                   "
                 ></p>
                 <ProjectIconGuide :data="mockDataGuide" color="#8E8E8E" />
-                <ProjectTag text="พบความเสี่ยงทุจริต" /></div
-            ></a>
-            <div
-              class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
-            >
-              <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-              <p class="b1">190,000,000,000</p>
+                <ProjectTag text="พบความเสี่ยงทุจริต" />
+              </div>
+              <div
+                class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
+              >
+                <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+                <p class="b1">190,000,000,000</p>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       </TabPanel>
       <TabPanel>
@@ -285,11 +327,9 @@ const menuList = ref([
           <h5 class="font-bold my-5">xxx,xxx,xxx โครงการจัดซื้อจัดจ้าง</h5>
           <div class="flex flex-col-mb gap-2">
             <a href="#chart-1" class="sm:w-2/4">
-              <div
-                class="rounded-md bg-black p-5 hover:bg-[#333333] text-white relative"
-              >
+              <div class="rounded-10 btn-chart p-5 text-white relative">
                 <p class="b1">งบประมาณรวม (บาท)</p>
-                <h4 class="font-bold">
+                <h4 class="font-black">
                   {{ data.totalBudgetMoney.toLocaleString() }}
                 </h4>
                 <arrow
@@ -298,11 +338,11 @@ const menuList = ref([
                 /></div
             ></a>
             <a href="#chart-2" class="sm:w-2/4">
-              <div
-                class="rounded-md bg-black p-5 hover:bg-[#333333] text-[#EC1C24] relative"
-              >
-                <p class="b1">โครงการเสี่ยงทุจริต</p>
-                <h4 class="font-bold">{{ data.totalProjectHasCorruption }}%</h4>
+              <div class="rounded-10 btn-chart p-5 relative text-white">
+                <p class="b1 text-[#EC1C24]">โครงการเสี่ยงทุจริต</p>
+                <h4 class="font-black text-[#EC1C24]">
+                  {{ data.totalProjectHasCorruption }}%
+                </h4>
                 <arrow
                   color="#FFFFFF"
                   class="absolute right-5 top-5 rotate-90"
@@ -319,9 +359,7 @@ const menuList = ref([
               }"
               v-for="item in menuList"
             >
-              <div
-                class="rounded-md bg-black p-5 hover:bg-[#333333] text-white h-full relative"
-              >
+              <div class="rounded-10 btn-chart p-5 text-white h-full relative">
                 <p class="b2 w-[95%] text-[#DADADA]">{{ item.title }}</p>
                 <p class="b1 font-bold">{{ item.desc }}</p>
                 <arrow
@@ -377,7 +415,7 @@ const menuList = ref([
 
           <div
             @click="scrollToTop()"
-            class="flex text-[#8DCCF0] justify-center gap-2 b2 mt-5 items-center cursor-pointer"
+            class="flex link-2 justify-center gap-2 b2 mt-5 items-center"
           >
             กลับด้านบน <arrow color="#8DCCF0" class="-rotate-90" />
           </div>
@@ -399,4 +437,8 @@ const menuList = ref([
   />
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.btn-chart {
+  @apply bg-black hover:bg-[#333333] duration-300 cursor-pointer;
+}
+</style>

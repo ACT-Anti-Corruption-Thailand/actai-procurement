@@ -1,7 +1,7 @@
 <template>
   <div>
     <h4 class="font-bold text-white mb-5">ภาพรวม</h4>
-    <div class="bg-white text-black p-7 rounded-md">
+    <div class="bg-white text-black p-7 rounded-10">
       <div class="flex flex-col-mb gap-3">
         <div class="flex-1">
           <div class="flex gap-2 border-t py-3">
@@ -15,7 +15,7 @@
             </div>
           </div>
 
-          <div class="bg-[#F5F5F5] p-2 rounded-md">
+          <div class="bg-[#F5F5F5] p-2 rounded-10">
             <p class="b2 text-[#7F7F7F]">วงเงินสัญญารวม (บาท)</p>
             <h4 class="font-black">382,900,000</h4>
             <div class="flex gap-2">
@@ -32,7 +32,7 @@
 
           <p
             @click="isOpen = true"
-            class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer my-3"
+            class="b4 flex gap-1 items-center link-1 my-3"
           >
             <info color="#0B5C90" />
             <span>ตัวเลขนี้บ่งบอกอะไร</span>
@@ -76,11 +76,11 @@
 
           <div class="flex flex-col-mb gap-2">
             <div class="flex-1 border-t pt-3">
-              <p class="b2 flex text-[#5E5E5E]">
+              <p class="b2 flex gap-1 text-[#5E5E5E]">
                 วิธีการจัดหา
                 <span
                   @click="isOpen2 = true"
-                  class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer"
+                  class="b4 flex gap-1 items-center link-1"
                 >
                   <info color="#0B5C90" />
                   <span>มีวิธีอะไรบ้าง</span></span

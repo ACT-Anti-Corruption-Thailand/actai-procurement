@@ -3,7 +3,7 @@
     <button
       type="button"
       @click="openModal"
-      class="b2 rounded-[10px] bg-black p-2.5 text-sm font-medium text-white hover:bg-[#1F1F1F] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+      class="b3 rounded-10 btn-light-1 p-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
     >
       <img
         src="../../public/src/images/filter-icon.svg"
@@ -14,13 +14,20 @@
     </button>
     <button
       type="button"
-      class="p-2.5 border border-[#0B5C90] hover:border-[#1688CA] rounded-[10px] ml-1"
+      class="p-2.5 border btn-light-3 link-1 rounded-10 ml-1"
     >
-      <img
-        src="../../public/src/images/reset.svg"
-        alt="filter"
-        class="inline"
-      />
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9 14C10.1867 14 11.3467 13.6481 12.3334 12.9888C13.3201 12.3295 14.0892 11.3925 14.5433 10.2961C14.9974 9.19975 15.1162 7.99335 14.8847 6.82946C14.6532 5.66558 14.0818 4.59648 13.2426 3.75736C12.4035 2.91825 11.3344 2.3468 10.1705 2.11529C9.00666 1.88378 7.80026 2.0026 6.7039 2.45673C5.60754 2.91085 4.67047 3.67989 4.01118 4.66658C3.35189 5.65328 3 6.81331 3 8V11.1L1.2 9.3L0.5 10L3.5 13L6.5 10L5.8 9.3L4 11.1V8C4 7.0111 4.29324 6.0444 4.84265 5.22215C5.39206 4.39991 6.17295 3.75904 7.08658 3.38061C8.00021 3.00217 9.00555 2.90315 9.97545 3.09608C10.9454 3.289 11.8363 3.76521 12.5355 4.46447C13.2348 5.16373 13.711 6.05465 13.9039 7.02455C14.0969 7.99446 13.9978 8.99979 13.6194 9.91342C13.241 10.8271 12.6001 11.6079 11.7779 12.1574C10.9556 12.7068 9.98891 13 9 13V14Z"
+          fill="currentColor"
+        />
+      </svg>
     </button>
   </div>
   <TransitionRoot :show="isOpen" as="template">
@@ -51,7 +58,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-[500px] transform overflow-hidden rounded-[10px] bg-[#F5F5F5] p-6 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-[500px] transform overflow-hidden rounded-10 bg-[#F5F5F5] p-6 text-left align-middle shadow-xl transition-all"
             >
               <div class="flex justify-between items-center">
                 <div class="text-[#7F7F7F] flex gap-2 b2 font-bold">
@@ -118,6 +125,7 @@
                   />
 
                   <Combobox
+                    v-if="props.section == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'"
                     title="วิธีการจัดหา"
                     :selected="selected[0].resoucingMethod"
                     :list="filterList.resoucingMethod"
@@ -141,7 +149,7 @@
                     value=""
                     class="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded"
                   />
-                  <label for="default-checkbox" class="ms-2 b1 text-[#EC1C24]"
+                  <label for="default-checkbox" class="ms-2 b4 text-[#EC1C24]"
                     >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
                   >
                 </div>
@@ -152,7 +160,7 @@
               >
                 <button
                   type="button"
-                  class="p-2.5 border border-[#0B5C90] hover:border-[#1688CA] rounded-[10px] b2 text-[#0B5C90] min-w-32"
+                  class="p-2.5 border border-[#0B5C90] hover:border-[#1688CA] rounded-10 b2 text-[#0B5C90] min-w-32"
                 >
                   ล้างตัวกรอง
                   <img
@@ -164,7 +172,7 @@
                 <button
                   type="button"
                   @click="isOpen = false"
-                  class="b2 rounded-[10px] bg-black p-2.5 min-w-32 text-white hover:bg-[#1F1F1F] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                  class="b2 rounded-10 bg-black p-2.5 min-w-32 text-white hover:bg-[#1F1F1F] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
                 >
                   ตกลง <CheckIcon class="size-4 inline" />
                 </button>

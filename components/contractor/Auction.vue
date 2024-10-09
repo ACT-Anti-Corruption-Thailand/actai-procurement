@@ -1,11 +1,14 @@
 <template>
   <h4 class="font-bold text-white mb-5">กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน</h4>
 
-  <div class="bg-[#F5F5F5] rounded-md p-7" v-if="!isSelectFirstCompany">
+  <div class="bg-[#F5F5F5] rounded-10 p-7" v-if="!isSelectFirstCompany">
     <p class="b1">
       บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
     </p>
-    <h5 class="font-bold mb-3">เคยร่วมประมูลกับเอกชน 29 ราย</h5>
+    <div class="flex items-center gap-2 justify-between mb-3">
+      <h5 class="font-bold w-2/4">เคยร่วมประมูลกับเอกชน 29 ราย</h5>
+      <FilterResultContractor section="" />
+    </div>
     <div class="relative w-full">
       <input
         type="text"
@@ -88,7 +91,7 @@
           <div class="b4 border border-black rounded-full w-5 h-5 text-center">
             1
           </div>
-          <div class="bg-white rounded-md p-2.5 font-bold b1 w-full flex-1">
+          <div class="bg-white rounded-10 p-2.5 font-bold b1 w-full flex-1">
             บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
           </div>
           <img src="../../public/src/images/close.svg" />
@@ -112,7 +115,7 @@
 
         <div class="flex gap-5 my-3">
           <div class="b2 pt-5 text-[#8E8E8E]">1</div>
-          <div class="bg-[#FFEFF0] rounded-md text-[#9A0D13] p-5 w-full">
+          <div class="bg-[#FFEFF0] rounded-10 text-[#9A0D13] p-5 w-full">
             <a
               target="_blank"
               :href="`/project?name=${item.name.replace(/ /g, '-')}`"

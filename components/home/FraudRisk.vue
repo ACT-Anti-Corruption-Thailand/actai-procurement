@@ -23,7 +23,7 @@ const mockdata = ref([
   <div class="bg-[#510003] py-10 px-3">
     <div class="text-center text-white">
       <div
-        class="flex flex-col lg:flex-row justify-center max-w-5xl mx-auto gap-5"
+        class="flex flex-col lg:flex-row justify-center max-w-6xl mx-auto gap-10"
       >
         <div class="w-full lg:w-2/5 text-left">
           <div
@@ -45,7 +45,7 @@ const mockdata = ref([
             ในหน้าโครงการและหน้าผู้รับจ้างเพื่อดูความเสี่ยงที่ควรตั้งข้อสังเกต
           </p>
 
-          <div class="rounded-[10px] p-2.5 border border-[#EC1C24]">
+          <div class="rounded-10 p-2.5 border border-[#EC1C24]">
             <p class="b1">
               <b>หมายเหตุ:</b> เป็นเพียงการระบุความเสี่ยงเท่านั้น
               ซึ่งไม่ได้หมายความว่ามีการทุจริตเกิดขึ้นแล้ว
@@ -90,16 +90,23 @@ const mockdata = ref([
               target="_blank"
               :href="`/project?name=บริษัท-ซิโน-ไทย-เอ็นจีเนียริ่ง-แอนด์-คอนสตรัคชั่น-จำกัด-(มหาชน)`"
             >
-              <ProjectData
-                :data="mockdata[0]"
-                :index="0"
-                class="hover:bg-[#DADADA] duration-300"
-              />
+              <ProjectData :data="mockdata[0]" :index="0" class="btn-dark-1" />
             </a>
 
-            <div class="flex items-center gap-2 my-3">
-              <p class="b2 text-[#8DCCF0]">สุ่มใหม่</p>
-              <img src="../../public/src/images/shuffle.svg" alt="shuffle" />
+            <div class="flex items-center gap-2 my-3 link-2">
+              <p class="b2">สุ่มใหม่</p>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.295 9.705L13.085 11.5H9.775L7.59 8L9.775 4.5H13.085L11.295 6.295L12 7L15 4L12 1L11.295 1.705L13.085 3.5H9.775C9.6059 3.50051 9.4397 3.54389 9.29192 3.62608C9.14414 3.70828 9.01962 3.8266 8.93 3.97L7 7.055L5.07 3.97C4.98038 3.8266 4.85586 3.70828 4.70808 3.62608C4.5603 3.54389 4.3941 3.50051 4.225 3.5H1V4.5H4.225L6.41 8L4.225 11.5H1V12.5H4.225C4.3941 12.4995 4.5603 12.4561 4.70808 12.3739C4.85586 12.2917 4.98038 12.1734 5.07 12.03L7 8.945L8.93 12.03C9.01962 12.1734 9.14414 12.2917 9.29192 12.3739C9.4397 12.4561 9.6059 12.4995 9.775 12.5H13.085L11.295 14.295L12 15L15 12L12 9L11.295 9.705Z"
+                  fill="currentColor"
+                />
+              </svg>
             </div>
           </div>
 
@@ -137,16 +144,23 @@ const mockdata = ref([
               target="_blank"
               :href="`/project?name=สอบราคาซื้อชุดก่อสร้าง-(60.14.13.02)`"
             >
-              <ProjectData
-                :data="mockdata[2]"
-                :index="2"
-                class="hover:bg-[#DADADA] duration-300"
-              />
+              <ProjectData :data="mockdata[2]" :index="2" class="btn-dark-1" />
             </a>
 
-            <div class="flex items-center gap-2 my-3">
-              <p class="b2 text-[#8DCCF0]">สุ่มใหม่</p>
-              <img src="../../public/src/images/shuffle.svg" alt="shuffle" />
+            <div class="flex items-center gap-2 my-3 link-2">
+              <p class="b2">สุ่มใหม่</p>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.295 9.705L13.085 11.5H9.775L7.59 8L9.775 4.5H13.085L11.295 6.295L12 7L15 4L12 1L11.295 1.705L13.085 3.5H9.775C9.6059 3.50051 9.4397 3.54389 9.29192 3.62608C9.14414 3.70828 9.01962 3.8266 8.93 3.97L7 7.055L5.07 3.97C4.98038 3.8266 4.85586 3.70828 4.70808 3.62608C4.5603 3.54389 4.3941 3.50051 4.225 3.5H1V4.5H4.225L6.41 8L4.225 11.5H1V12.5H4.225C4.3941 12.4995 4.5603 12.4561 4.70808 12.3739C4.85586 12.2917 4.98038 12.1734 5.07 12.03L7 8.945L8.93 12.03C9.01962 12.1734 9.14414 12.2917 9.29192 12.3739C9.4397 12.4561 9.6059 12.4995 9.775 12.5H13.085L11.295 14.295L12 15L15 12L12 9L11.295 9.705Z"
+                  fill="currentColor"
+                />
+              </svg>
             </div>
           </div>
         </div>
