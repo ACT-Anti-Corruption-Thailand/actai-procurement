@@ -1,3 +1,24 @@
+<script setup lang="ts">
+const isOpen = ref(false);
+const isOpen2 = ref(false);
+
+import type { ProjectDetails } from '../../public/src/data/data_details';
+
+const props = defineProps<{
+  data: ProjectDetails;
+}>();
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
+</script>
+
 <template>
   <div>
     <h4 class="font-bold text-white mb-5">ภาพรวม</h4>
@@ -7,25 +28,71 @@
           <div class="flex gap-2 border-t py-3">
             <div class="flex-1 border-r">
               <p class="b2">งบประมาณรวม (บาท)</p>
-              <p class="b1">120,000,000</p>
+              <p class="b1" v-if="props.data.totalBudgetMoney != null">
+                {{ props.data.totalBudgetMoney.toLocaleString() }}
+              </p>
             </div>
             <div class="flex-1">
               <p class="b2">ราคากลางรวม (บาท)</p>
-              <p class="b1">8,790,000</p>
+              <p class="b1" v-if="props.data.totalEstimatePrice != null">
+                {{ props.data.totalEstimatePrice.toLocaleString() }}
+              </p>
             </div>
           </div>
 
           <div class="bg-[#F5F5F5] p-2 rounded-10">
             <p class="b2 text-[#7F7F7F]">วงเงินสัญญารวม (บาท)</p>
-            <h4 class="font-black">382,900,000</h4>
+            <h4 class="font-black" v-if="props.data.totalContractMoney != null">
+              {{ props.data.totalContractMoney.toLocaleString() }}
+            </h4>
             <div class="flex gap-2">
-              <div class="flex-1 text-[#CE5700] sm:border-r">
-                <p class="b2">ต่ำกว่างบประมาณรวม</p>
-                <p class="b1">xx%</p>
+              <div
+                class="flex-1 sm:border-r"
+                :class="[
+                  props.data.totalBudgetMoney < props.data.totalContractMoney
+                    ? 'text-[#7051B4]'
+                    : 'text-[#CE5700]',
+                ]"
+              >
+                <p class="b2">
+                  {{
+                    props.data.totalBudgetMoney < props.data.totalEstimatePrice
+                      ? 'ต่ำกว่า'
+                      : 'สูงกว่า'
+                  }}งบประมาณรวม
+                </p>
+                <p class="b1">
+                  {{
+                    ((props.data.totalEstimatePrice -
+                      props.data.totalContractMoney) /
+                      props.data.totalEstimatePrice) *
+                    100
+                  }}%
+                </p>
               </div>
-              <div class="flex-1 text-[#7051B4]">
-                <p class="b2">สูงกว่าราคากลางรวม</p>
-                <p class="b1">xx%</p>
+              <div
+                class="flex-1"
+                :class="[
+                  props.data.totalBudgetMoney < props.data.totalContractMoney
+                    ? 'text-[#7051B4]'
+                    : 'text-[#CE5700]',
+                ]"
+              >
+                <p class="b2">
+                  {{
+                    props.data.totalBudgetMoney < props.data.totalEstimatePrice
+                      ? 'ต่ำกว่า'
+                      : 'สูงกว่า'
+                  }}ราคากลางรวม
+                </p>
+                <p class="b1">
+                  {{
+                    ((props.data.totalBudgetMoney -
+                      props.data.totalContractMoney) /
+                      props.data.totalBudgetMoney) *
+                    100
+                  }}%
+                </p>
               </div>
             </div>
           </div>
@@ -40,7 +107,13 @@
 
           <div class="border-t pt-3 mt-3">
             <p class="b2 text-[#8E8E8E]">ที่ตั้งโครงการ*</p>
-            <p class="b1">จ. แพร่</p>
+            <p class="b1">
+              {{
+                props.data.province == 'ไม่ระบุ'
+                  ? 'ไม่ระบุ'
+                  : 'จ.' + props.data.province
+              }}
+            </p>
             <p class="b4 text-[#8E8E8E]">
               หมายเหตุ: ในกรณีที่ข้อมูลโครงการไม่ได้ระบุที่ตั้ง
               ระบบจะใช้ที่ตั้งของหน่วยงานเจ้าของโครงการแทน
@@ -50,11 +123,11 @@
           <div class="flex gap-2 mt-3">
             <div class="flex-1 border-t pt-3">
               <p class="b2 text-[#5E5E5E]">วันที่ประกาศโครงการ</p>
-              <p class="b1">24/08/2562</p>
+              <p class="b1">{{ setDate(props.data.announcementDate) }}</p>
             </div>
             <div class="flex-1 border-t pt-3">
               <p class="b2 text-[#5E5E5E]">ปีงบประมาณ*</p>
-              <p class="b1">2556</p>
+              <p class="b1">{{ props.data.budgetYear }}</p>
               <p class="b4 text-[#8E8E8E]">
                 *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
                 ต.ค. 67 - ก.ย. 68
@@ -64,14 +137,14 @@
 
           <div class="border-t pt-3 mt-3">
             <p class="b2 text-[#8E8E8E]">สถานะโครงการ</p>
-            <p class="b1">ระหว่างดำเนินการ</p>
+            <p class="b1">{{ props.data.projectStatus }}</p>
           </div>
         </div>
         <div class="flex-1">
           <div class="border-t py-3">
             <p class="b2 text-[#5E5E5E]">หน่วยงานเจ้าของโครงการ</p>
-            <p class="b1">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</p>
-            <p class="b3">ที่ตั้ง : กรุงเทพมหานคร</p>
+            <p class="b1">{{ props.data?.agency?.name }}</p>
+            <p class="b3">ที่ตั้ง : {{ props.data?.agency?.province }}</p>
           </div>
 
           <div class="flex flex-col-mb gap-2">
@@ -86,11 +159,11 @@
                   <span>มีวิธีอะไรบ้าง</span></span
                 >
               </p>
-              <p class="b1">ประกวดราคา</p>
+              <p class="b1">{{ props.data.resourcingMethod }}</p>
             </div>
             <div class="flex-1 border-t pt-3">
               <p class="b2 text-[#5E5E5E]">ประเภทการจัดหา</p>
-              <p class="b1">จ้างก่อสร้าง</p>
+              <p class="b1">{{ props.data.resourcingType }}</p>
             </div>
           </div>
 
@@ -100,10 +173,15 @@
               (สามารถมีได้มากกว่า 1 ราย ถ้าโครงการมีหลายสัญญา/รายการย่อย)
             </p>
 
-            <p class="b1">
-              1. บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
-            </p>
-            <p class="b2 text-[#EC1C24]">เคยมีประวัติทิ้งงาน</p>
+            <template
+              v-for="(item, i) in props.data.winnerContractors"
+              :key="'winner-' + i"
+            >
+              <p class="b1">{{ i + 1 }}. {{ item.name }}</p>
+              <p class="b2 text-[#EC1C24]" v-if="item.hasAbandonProject">
+                เคยมีประวัติทิ้งงาน
+              </p>
+            </template>
           </div>
         </div>
       </div>
@@ -118,10 +196,5 @@
     />
   </div>
 </template>
-
-<script setup>
-const isOpen = ref(false);
-const isOpen2 = ref(false);
-</script>
 
 <style lang="scss" scoped></style>

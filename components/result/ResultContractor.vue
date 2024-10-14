@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
+import type { Contractor } from '../../public/src/data/search_result';
 
-const sortBy = ref('desc');
+const props = defineProps<{
+  contractorList?: Contractor;
+}>();
 
 function highlight(title: string, text: string) {
   var innerHTML = title;
-  var index = innerHTML.indexOf(text);
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+  var index = innerHTML.indexOf(urlParams);
+
   if (index >= 0) {
     innerHTML =
       innerHTML.substring(0, index) +
       "<span class='text-[#74060A]'>" +
-      innerHTML.substring(index, index + text.length) +
+      innerHTML.substring(index, index + urlParams.length) +
       '</span>' +
-      innerHTML.substring(index + text.length);
-    return innerHTML;
+      innerHTML.substring(index + urlParams.length);
   }
+  return innerHTML;
 }
 
 const searchText = ref('');
@@ -27,16 +31,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- <div>
+  <div v-if="props.contractorList?.pagination.totalItem == 0">
     <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
-  </div> -->
-  <div class="mx-auto max-w-6xl px-4">
+  </div>
+  <div class="mx-auto max-w-6xl px-4" v-else>
     <div class="flex items-center justify-between">
-      <h4 class="font-bold">xx,xxx,xxx ผู้รับจ้าง</h4>
-      <FilterPopupResult section="ผู้รับจ้าง" />
+      <h4 class="font-bold">
+        {{ props.contractorList?.pagination?.totalItem }} ผู้รับจ้าง
+      </h4>
+      <!-- <FilterPopupResult section="ผู้รับจ้าง" /> -->
     </div>
 
-    <div class="flex items-center justify-between my-3 sm:my-5">
+    <!-- <div class="flex items-center justify-between my-3 sm:my-5">
       <div class="flex gap-2 items-center relative">
         <SortBy
           text="เรียงตาม"
@@ -48,7 +54,7 @@ onMounted(() => {
         />
       </div>
       <DownloadAndCopy />
-    </div>
+    </div> -->
 
     <ProjectIconGuide
       :data="{
@@ -60,36 +66,33 @@ onMounted(() => {
 
     <div class="my-3">
       <a
+        v-for="item in props.contractorList?.searchResult"
         class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
-        v-for="(item, i) in 3"
-        :key="i"
+        :key="'contractor-' + item.companyId"
         target="_blank"
-        href="/contractor?name=การไฟฟ้านครหลวง"
+        :href="'/contractor/' + item.companyId"
       >
         <div>
           <p
             class="b1 font-bold"
-            v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
+            v-html="highlight(item?.companyName, keyword)"
           ></p>
           <ProjectIconGuide
             :data="{
-              province: 'กรุงเทพมหานคร',
+              province: item.companyName,
             }"
             color="#8E8E8E"
           />
+          <ProjectTag text="ตรวจพบความน่าสนใจ" v-if="item.hasCorruptionRisk" />
         </div>
         <div class="flex sm:gap-10 text-right flex-col-mb">
           <div>
-            <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-            <p class="b1">190,000</p>
-          </div>
-          <div class="text-[#EC1C24]">
-            <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
-            <p class="b1">10,000 (5.26%)</p>
+            <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
+            <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
           </div>
           <div>
-            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-            <p class="b1">190,000,000</p>
+            <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
+            <p class="b1">{{ item?.totalContractMoney.toLocaleString() }}</p>
           </div>
         </div>
       </a>

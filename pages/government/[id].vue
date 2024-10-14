@@ -1,20 +1,104 @@
-<script setup>
-const menu = ref('ภาพรวมโครงการที่จัดทำ');
+<script setup lang="ts">
+const menu = ref('รายชื่อโครงการที่จัดทำ');
+const config = useRuntimeConfig();
 const isShowTab = ref(true);
+
+import type { GovernmentDetails } from '../../public/src/data/data_details';
+import type { Project, Contractor } from '../../public/src/data/search_result';
+
+onBeforeMount(async () => {
+  await getGovData();
+  await getGovProject();
+  await getGovContracter();
+});
+
+const govData = ref<GovernmentDetails>([]);
+const govProjectList = ref<Project>([]);
+const govContracterList = ref<Contractor>([]);
+
+const getGovData = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(`${config.public.apiUrl}/agency/${segments}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    govData.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const getGovProject = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const params = new URLSearchParams();
+  params.set('keyword', govData.value.agencyName);
+  params.set('page', 1);
+  params.set('pageSize', 10);
+
+  const res = await fetch(`${config.public.apiUrl}/project/search?${params}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    govProjectList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const getGovContracter = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const params = new URLSearchParams();
+  params.set('keyword', govData.value.agencyName);
+  params.set('page', 1);
+  params.set('pageSize', 10);
+
+  const res = await fetch(`${config.public.apiUrl}/company/search?${params}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    govContracterList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
 </script>
 
 <template>
   <Header />
   <div class="bg-white p-5 z-10 sticky top-0">
-    <Breadcrumb title="การไฟฟ้านครหลวง ฝ่ายก่อสร้าง" />
+    <Breadcrumb :title="govData?.agencyName" />
     <div class="max-w-7xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
-        <h3 class="font-black">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</h3>
+        <h3 class="font-black">{{ govData.agencyName }}</h3>
         <p class="b1 mb-3 text-[#7F7F7F]">
-          กระทรวงทรัพยากรธรรมชาติและสิ่งแวดล้อม
+          {{ govData?.agencyBelongTo }}
         </p>
-        <p class="b1">กรุงเทพมหานคร</p>
-        <p class="b4 text-[#8E8E8E]">หน่วยงานอัปเดตข้อมูลเมื่อ 01/09/2565</p>
+        <p class="b1">{{ govData.province }}</p>
+        <p class="b4 text-[#8E8E8E]">
+          หน่วยงานอัปเดตข้อมูลเมื่อ {{ setDate(govData.lastUpdatedOn) }}
+        </p>
       </div>
       <div class="sm:w-1/5">
         <Share color="#0B5C90" text="แชร์หน้านี้" class="mt-2 sm:ml-auto" />
@@ -27,7 +111,7 @@ const isShowTab = ref(true);
         <div class="flex justify-between w-full py-3">
           <p class="b4 font-bold text-[#8E8E8E]">รายการข้อมูล</p>
           <img
-            src="../public/src/images/minimize.svg"
+            src="../../public/src/images/minimize.svg"
             alt="minimize"
             @click="isShowTab = false"
             class="cursor-pointer"
@@ -35,7 +119,7 @@ const isShowTab = ref(true);
         </div>
 
         <div class="text-white b1 cursor-pointer">
-          <div
+          <!-- <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -50,7 +134,7 @@ const isShowTab = ref(true);
               <li>งบประมาณโครงการ</li>
               <li>การกระจายตัวโครงการ</li>
             </ul>
-          </div>
+          </div> -->
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
@@ -75,8 +159,11 @@ const isShowTab = ref(true);
       </div>
       <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
         <Overall v-if="menu == 'ภาพรวมโครงการที่จัดทำ'" />
-        <ProjectList v-else-if="menu == 'รายชื่อโครงการที่จัดทำ'" />
-        <ContractorList v-else />
+        <ProjectList
+          v-else-if="menu == 'รายชื่อโครงการที่จัดทำ'"
+          :data="govProjectList"
+        />
+        <ContractorList v-else :data="govContracterList" />
 
         <img
           src="../public/src/images/showtab-btn.svg"
@@ -97,7 +184,7 @@ const isShowTab = ref(true);
       <ACTLineButton />
 
       <p class="b1 mt-5 flex items-center flex-wrap gap-2">
-        <img src="../public/src/images/status-icon.svg" />
+        <img src="../../public/src/images/status-icon.svg" />
         ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่<a
           href="http://www.gprocurement.go.th/"
           target="_blank"

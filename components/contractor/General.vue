@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import type { ContractorDetails } from '../../public/src/data/data_details';
+
+const props = defineProps<{
+  data: ContractorDetails;
+}>();
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
+</script>
+
 <template>
   <div>
     <h4 class="font-bold text-white mb-5">ข้อมูลทั่วไป</h4>
@@ -6,30 +24,31 @@
         <div>
           <p class="b2 text-[#5E5E5E]">ที่อยู่</p>
           <p class="b1">
-            อาคารซิโน-ไทย ทาวเวอร์ ชั้น 29-30, 32/59-60 ถนนอโศก สุขุมวิท 21
-            แขวงคลองเตยเหนือ เขตวัฒนา กรุงเทพมหานคร 10110
+            {{ props.data.address }}
           </p>
         </div>
 
         <div class="flex flex-col-mb gap-2 mt-3">
           <div class="flex-1 border-t pt-3">
             <p class="b2 text-[#5E5E5E]">เลขทะเบียนนิติบุคคล</p>
-            <p class="b1">0103515022863</p>
+            <p class="b1">{{ props.data.companyId }}</p>
           </div>
           <div class="flex-1 border-t pt-3">
             <p class="b2 text-[#5E5E5E]">ประเภทการจดทะเบียน</p>
-            <p class="b1">บริษัทจำกัด</p>
+            <p class="b1">{{ props.data.registeredType }}</p>
           </div>
         </div>
 
         <div class="flex flex-col-mb gap-2 mt-3">
           <div class="flex-1 border-t pt-3">
             <p class="b2 text-[#5E5E5E]">ทุนจดทะเบียน</p>
-            <p class="b1">200,000 บาท</p>
+            <p class="b1" v-if="props.data.registeredBudget != null">
+              {{ props.data.registeredBudget.toLocaleString() }} บาท
+            </p>
           </div>
           <div class="flex-1 border-t pt-3">
             <p class="b2 text-[#5E5E5E]">วันจดทะเบียน</p>
-            <p class="b1">29/08/2567</p>
+            <p class="b1">{{ setDate(props.data.registeredDate) }}</p>
           </div>
         </div>
 
@@ -37,7 +56,7 @@
           <div class="flex-1 border-t pt-3">
             <p class="b2 text-[#5E5E5E]">หมวดธุรกิจ</p>
             <p class="b1">
-              การผลิตเครื่องจักรอื่นๆที่ใช้งานทั่วไปซึ่งมิได้จัดประเภทไว้ในที่อื่น
+              {{ props.data.businessType }}
             </p>
             <p class="b4 text-[#8E8E8E]">
               หมายเหตุ:
@@ -47,15 +66,27 @@
           </div>
           <div class="flex-1 border-t pt-3">
             <p class="b2 text-[#5E5E5E]">สถานภาพ</p>
-            <p class="b1">ยังดำเนินกิจการอยู่</p>
+            <p class="b1">{{ props.data.status }}</p>
           </div>
         </div>
 
         <div class="flex-1 border-t pt-3 mt-3">
           <p class="b2 text-[#5E5E5E]">ประวัติการเปลี่ยนแปลง</p>
           <ul class="b1 list-disc ml-5">
-            <li>13/07/2567 เปลี่ยนชื่อนิติบุคคลจาก xxx เป็น yyy</li>
-            <li>29/08/2567 เปลี่ยนแปลงทุนจดทะเบียนจาก xxx เป็น yyy</li>
+            <li v-for="item in props.data.changeHistory">
+              {{ setDate(item.date) }} {{ item.change }}
+              {{
+                item.change == 'เปลี่ยนแปลงทุนจดทะเบียน'
+                  ? Number(item.old).toLocaleString()
+                  : item.old
+              }}
+              เป็น
+              {{
+                item.change == 'เปลี่ยนแปลงทุนจดทะเบียน'
+                  ? Number(item.new).toLocaleString()
+                  : item.new
+              }}
+            </li>
           </ul>
         </div>
       </div>
@@ -74,17 +105,24 @@
           <div class="flex-1">
             <hr class="my-5" />
             <p class="b2 text-[#5E5E5E]">กรรมการ/ผู้เป็นหุ้นส่วน</p>
-            <p v-for="(item, i) in partnerList.partners" class="b1" :key="i">
+            <p
+              v-for="(item, i) in props.data?.partnerList?.partners"
+              class="b1"
+              :key="i"
+            >
               {{ i + 1 }}. {{ item }}
             </p>
           </div>
-          <div class="flex-1">
+          <div
+            class="flex-1"
+            v-if="props.data?.partnerList?.managingPartners.length > 0"
+          >
             <hr class="my-5" />
             <p class="b2 text-[#5E5E5E]">
               กรรมการลงชื่อผูกพัน/หุ้นส่วนผู้จัดการ
             </p>
             <p
-              v-for="(item, i) in partnerList.managingPartners"
+              v-for="(item, i) in props.data.partnerList.managingPartners"
               class="b1"
               :key="i"
             >
@@ -93,7 +131,13 @@
           </div>
         </div>
       </div>
-      <div class="p-5 bg-[#F5F5F5] rounded-b-md w-full">
+      <div
+        class="p-5 bg-[#F5F5F5] rounded-b-md w-full"
+        v-if="
+          props.data?.retrospectiveList?.partners.length > 0 ||
+          props.data?.retrospectiveList?.managingPartners.length > 0
+        "
+      >
         <div class="flex flex-col-mb sm:items-center sm:justify-between">
           <p class="font-bold b1">รายชื่อและวาระย้อนหลัง</p>
           <p class="b4 sm:text-right">
@@ -107,20 +151,24 @@
             <hr class="my-5" />
             <p class="b2 text-[#5E5E5E]">กรรมการ/ผู้เป็นหุ้นส่วน</p>
             <p
-              v-for="(item, i) in retrospectiveList.partners"
+              v-for="(item, i) in props.data?.retrospectiveList?.partners"
               class="b1"
               :key="i"
             >
               {{ i + 1 }}. {{ item }}
             </p>
           </div>
-          <div class="flex-1">
+          <div
+            class="flex-1"
+            v-if="props.data.retrospectiveList?.managingPartners?.length > 0"
+          >
             <hr class="my-5" />
             <p class="b2 text-[#5E5E5E]">
               กรรมการลงชื่อผูกพัน/หุ้นส่วนผู้จัดการ
             </p>
             <p
-              v-for="(item, i) in retrospectiveList.managingPartners"
+              v-for="(item, i) in props.data?.retrospectiveList
+                ?.managingPartners"
               class="b1"
               :key="i"
             >
@@ -132,53 +180,5 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const partnerList = {
-  partners: [
-    'นายวัลลภ รุ่งกิจวรเสถียร',
-    'นายมาศถวิน ชาญวีรกูล',
-    'พลตำรวจเอกเจตน์ มงคลหัตถี',
-    'นายชำนิ จันทร์ฉาย',
-    'นายธนาธิป วิทยะสิรินันท์',
-    'นางอนิลรัตน์ นิติสาโรจน',
-    'นายสุชัย ภูพิชญ์พงษ์',
-    'นายภาคภูมิ ศรีชำน',
-  ],
-  managingPartners: [
-    'นายวัลลภ รุ่งกิจวรเสถียร',
-    'นายมาศถวิน ชาญวีรกูล',
-    'พลตำรวจเอกเจตน์ มงคลหัตถี',
-    'นายชำนิ จันทร์ฉาย',
-    'นายธนาธิป วิทยะสิรินันท์',
-    'นางอนิลรัตน์ นิติสาโรจน',
-    'นายสุชัย ภูพิชญ์พงษ์',
-    'นายภาคภูมิ ศรีชำน',
-  ],
-};
-
-const retrospectiveList = {
-  partners: [
-    'นายวัลลภ รุ่งกิจวรเสถียร',
-    'นายมาศถวิน ชาญวีรกูล',
-    'พลตำรวจเอกเจตน์ มงคลหัตถี',
-    'นายชำนิ จันทร์ฉาย',
-    'นายธนาธิป วิทยะสิรินันท์',
-    'นางอนิลรัตน์ นิติสาโรจน',
-    'นายสุชัย ภูพิชญ์พงษ์',
-    'นายภาคภูมิ ศรีชำน',
-  ],
-  managingPartners: [
-    'นายวัลลภ รุ่งกิจวรเสถียร',
-    'นายมาศถวิน ชาญวีรกูล',
-    'พลตำรวจเอกเจตน์ มงคลหัตถี',
-    'นายชำนิ จันทร์ฉาย',
-    'นายธนาธิป วิทยะสิรินันท์',
-    'นางอนิลรัตน์ นิติสาโรจน',
-    'นายสุชัย ภูพิชญ์พงษ์',
-    'นายภาคภูมิ ศรีชำน',
-  ],
-};
-</script>
 
 <style lang="scss" scoped></style>

@@ -1,24 +1,43 @@
 <script setup lang="ts">
-defineProps<{
+import type {
+  Government,
+  Project,
+  Contractor,
+} from '../../public/src/data/search_result';
+
+const props = defineProps<{
   iconGuide: object;
   mockDataGuide: object;
+  projectList?: Project;
+  govList?: Government;
+  contractorList?: Contractor;
 }>();
+
+defineEmits(['changeMenu']);
+
+const keyword = ref('');
 
 function highlight(title: string, text: string) {
   var innerHTML = title;
-  var index = innerHTML.indexOf(text);
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+  var index = innerHTML.indexOf(urlParams);
+
   if (index >= 0) {
     innerHTML =
       innerHTML.substring(0, index) +
       "<span class='text-[#74060A]'>" +
-      innerHTML.substring(index, index + text.length) +
+      innerHTML.substring(index, index + urlParams.length) +
       '</span>' +
-      innerHTML.substring(index + text.length);
-    return innerHTML;
+      innerHTML.substring(index + urlParams.length);
   }
+  return innerHTML;
 }
 
 const searchText = ref('');
+
+onBeforeMount(async () => {
+  keyword.value = localStorage.getItem('keyword');
+});
 
 onMounted(() => {
   const queryString = window.location.search;
@@ -28,42 +47,53 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- <div v-if="searchText != 'ก่อสร้าง'">
+  <div v-if="props.projectList?.pagination.totalItem == 0" class="pb-7">
     <h5 class="text-center text-[#8E8E8E]">
       ไม่พบโครงการจัดซื้อจัดจ้าง หน่วยงานรัฐ และผู้รับจ้างที่มีคำค้นนี้
     </h5>
-  </div> -->
-  <div class="mx-auto max-w-6xl px-4">
+  </div>
+
+  <div class="mx-auto max-w-6xl px-4" v-else>
     <div class="border-b border-black mb-5">
       <h4 class="font-black">โครงการจัดซื้อจัดจ้าง</h4>
 
-      <ProjectIconGuide :data="iconGuide" color="#8E8E8E" />
+      <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />
 
       <div class="my-3">
         <a
-          v-for="(item, i) in 3"
-          :key="i"
+          v-for="item in props.projectList?.searchResult.slice(0, 3)"
+          :key="'project-' + item.projectId"
           target="_blank"
-          href="/project?name=สอบราคาซื้อชุดก่อสร้าง"
+          :href="'/project/' + item.projectId"
         >
           <div
             class="flex justify-between flex-col-mb p-2.5 sm:p-5 rounded-10 btn-light-4"
           >
-            <div>
-              <p
-                class="b1 font-bold"
-                v-html="
-                  highlight('สอบราคาซื้อชุดก่อสร้าง (60.14.13)', 'ก่อสร้าง')
-                "
-              ></p>
-              <ProjectIconGuide :data="mockDataGuide" color="#8E8E8E" />
-              <ProjectTag text="พบความเสี่ยงทุจริต" />
+            <div class="w-3/4">
+              <p class="b1 font-bold" v-html="highlight(item?.projectName)"></p>
+
+              <ProjectIconGuide
+                :data="{
+                  province: item.province,
+                  year: item.budgetYear,
+                  owner: item.agencyName,
+                  no: item.projectId,
+                }"
+                color="#8E8E8E"
+              />
+
+              <ProjectTag
+                text="พบความเสี่ยงทุจริต"
+                v-if="item.hasCorruptionRisk"
+              />
             </div>
             <div
-              class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
+              class="sm:w-1/4 text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
             >
               <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-              <p class="b1">190,000,000,000</p>
+              <p class="b1" v-if="item?.totalBudget != null">
+                {{ item?.totalBudget.toLocaleString() }}
+              </p>
             </div>
           </div>
         </a>
@@ -71,7 +101,7 @@ onMounted(() => {
 
       <GoToText
         color="#0B5C90"
-        text="ดูโครงการทั้งหมด (x,xxx,xxx,xxx)"
+        :text="`ดูโครงการทั้งหมด (${props.projectList?.pagination.totalItem})`"
         class="mb-5 mt-0 link-1"
         @click="$emit('changeMenu', 'โครงการฯ')"
       />
@@ -88,20 +118,20 @@ onMounted(() => {
 
       <div class="my-3">
         <a
+          v-for="item in props.govList?.searchResult.slice(0, 3)"
           class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
-          v-for="(item, i) in 3"
-          :key="i"
+          :key="'gov-' + item.agencyId"
           target="_blank"
-          href="/government?name=การไฟฟ้านครหลวง"
+          :href="'/government/' + item.agencyId"
         >
           <div>
             <p
               class="b1 font-bold"
-              v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
+              v-html="highlight(item?.agencyName, keyword)"
             ></p>
             <ProjectIconGuide
               :data="{
-                province: 'กรุงเทพมหานคร',
+                province: item.province,
               }"
               color="#8E8E8E"
             />
@@ -109,15 +139,26 @@ onMounted(() => {
           <div class="flex sm:gap-10 text-right flex-col-mb">
             <div>
               <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-              <p class="b1">190,000</p>
+              <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
             </div>
             <div class="text-[#EC1C24]">
               <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
-              <p class="b1">10,000 (5.26%)</p>
+              <p class="b1">
+                {{ item?.totalProjectHasCorruptionRisk.toLocaleString() }}
+                ({{
+                  item?.totalProject == 0
+                    ? 0
+                    : (item?.totalProjectHasCorruptionRisk /
+                        item?.totalProject) *
+                      100
+                }}%)
+              </p>
             </div>
             <div>
               <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-              <p class="b1">190,000,000</p>
+              <p class="b1">
+                {{ item?.totalBudgetMoney.toLocaleString() }}
+              </p>
             </div>
           </div>
         </a>
@@ -125,7 +166,7 @@ onMounted(() => {
 
       <GoToText
         color="#0B5C90"
-        text="ดูหน่วยงานรัฐทั้งหมด (x,xxx,xxx,xxx)"
+        :text="`ดูหน่วยงานรัฐทั้งหมด (${props.govList?.pagination.totalItem})`"
         class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
         @click="$emit('changeMenu', 'หน่วยงานรัฐ')"
       />
@@ -142,36 +183,37 @@ onMounted(() => {
 
       <div class="my-3">
         <a
+          v-for="item in props.contractorList?.searchResult.slice(0, 3)"
           class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
-          v-for="(item, i) in 3"
-          :key="i"
+          :key="'contractor-' + item.companyId"
           target="_blank"
-          href="/contractor?name=การไฟฟ้านครหลวง"
+          :href="'/contractor/' + item.companyId"
         >
           <div>
             <p
               class="b1 font-bold"
-              v-html="highlight('การไฟฟ้านครหลวง ฝ่ายก่อสร้าง', 'ก่อสร้าง')"
+              v-html="highlight(item.companyName, keyword)"
             ></p>
             <ProjectIconGuide
               :data="{
-                province: 'กรุงเทพมหานคร',
+                province: item.province,
               }"
               color="#8E8E8E"
+            />
+
+            <ProjectTag
+              text="ตรวจพบความน่าสนใจ"
+              v-if="item.hasCorruptionRisk"
             />
           </div>
           <div class="flex sm:gap-10 text-right flex-col-mb">
             <div>
-              <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-              <p class="b1">190,000</p>
-            </div>
-            <div class="text-[#EC1C24]">
-              <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
-              <p class="b1">10,000 (5.26%)</p>
+              <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
+              <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
             </div>
             <div>
-              <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-              <p class="b1">190,000,000</p>
+              <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
+              <p class="b1">{{ item?.totalContractMoney.toLocaleString() }}</p>
             </div>
           </div>
         </a>
@@ -179,7 +221,7 @@ onMounted(() => {
 
       <GoToText
         color="#0B5C90"
-        text="ดูผู้รับจ้างทั้งหมด (x,xxx,xxx,xxx)"
+        :text="`ดูผู้รับจ้างทั้งหมด (${props.contractorList?.pagination.totalItem})`"
         class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
         @click="$emit('changeMenu', 'ผู้รับจ้าง')"
       />

@@ -1,8 +1,14 @@
-<script setup>
+<script setup lang="ts">
 const config = useRuntimeConfig();
 
 const menu = ref('ทั้งหมด');
 const menuList = ref(['ทั้งหมด', 'โครงการฯ', 'หน่วยงานรัฐ', 'ผู้รับจ้าง']);
+
+import type {
+  Government,
+  Project,
+  Contractor,
+} from '../public/src/data/search_result';
 
 const iconGuide = ref({
   name: '',
@@ -20,14 +26,24 @@ const mockDataGuide = ref({
   no: '56015020021',
 });
 
-const summaryData = ref([]);
+const summaryData = ref(null);
+const chartData = ref(null);
+const yearList = ref([]);
+const chartDataSet1 = ref([]);
+const chartDataSet2 = ref([]);
+const chartDataSet3 = ref([]);
+const chartDataSet4 = ref([]);
+const chartDataSet5 = ref([]);
+const keyword = ref(null);
+const projectList = ref<Project | null>(null);
+const govList = ref<Government | null>(null);
+const contractorList = ref<Contractor | null>(null);
 
 onMounted(async () => {
-  const queryString = window.location.search;
-  const keyword = 'ก';
+  const urlParams = decodeURI(window.location.href).split('=')[1];
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/search/summary?keyword=${keyword}`,
+    `${config.public.apiUrl}/project/search/summary?keyword=${urlParams}`,
     {
       method: 'get',
       headers: {
@@ -40,7 +56,119 @@ onMounted(async () => {
     const data = await res.json();
     summaryData.value = data;
   }
+
+  const res2 = await fetch(
+    `${config.public.apiUrl}/project/aggregate/by-budget-year?keyword=${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res2.json();
+    chartData.value = data;
+    setChartData(data.yearlyAggregates);
+  }
 });
+
+onBeforeMount(async () => {
+  await getProjectList();
+  await getGovList();
+  await getContractorList();
+});
+
+const getProjectList = async () => {
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/project/search?keyword=${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    projectList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const getGovList = async () => {
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/agency/search?keyword=${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    govList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const getContractorList = async () => {
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/company/search?keyword=${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    contractorList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const setChartData = (data) => {
+  const dataset_year = data.map((a) => a.budgetYear);
+  const dataset1 = data.map((a) => a.aggregateBy.budgetMoney);
+
+  yearList.value = dataset_year;
+
+  chartDataSet1.value.push({
+    label: '',
+    backgroundColor: '#000000',
+    data: dataset1,
+  });
+
+  // dataset_year.forEach((element, i) => {
+  chartDataSet2.value.push(
+    {
+      label: 'ประกวดราคา',
+      backgroundColor: '#CE5700',
+      data: [0, 0, 72, 39],
+    },
+    {
+      label: 'ประกวดราคานานาชาติ',
+      backgroundColor: '#F08C06',
+      data: [1, 2, 3, 1],
+    },
+    {
+      label: 'ตกลงราคา',
+      backgroundColor: '#6DD5D5',
+      data: [1, 2, 3, 1],
+    }
+  );
+  // });
+};
 </script>
 
 <template>
@@ -78,15 +206,22 @@ onMounted(async () => {
         @changeMenu="(n) => (menu = n)"
         :iconGuide="iconGuide"
         :mockDataGuide="mockDataGuide"
+        :projectList="projectList"
+        :govList="govList"
+        :contractorList="contractorList"
       />
       <ResultProjectList
         v-else-if="menu == 'โครงการฯ'"
         :iconGuide="iconGuide"
         :mockDataGuide="mockDataGuide"
         :data="summaryData"
+        :projectList="projectList"
+        :yearList="yearList"
+        :chartDataSet1="chartDataSet1"
+        :chartDataSet2="chartDataSet2"
       />
-      <ResultGovernment v-else-if="menu == 'หน่วยงานรัฐ'" />
-      <ResultContractor v-else />
+      <ResultGovernment v-else-if="menu == 'หน่วยงานรัฐ'" :govList="govList" />
+      <ResultContractor v-else :contractorList="contractorList" />
     </ClientOnly>
     <!-- </div> -->
   </div>

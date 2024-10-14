@@ -155,7 +155,7 @@
       </div>
 
       <a
-        href="https://poldata.actai.co/donation/#parties"
+        href="https://poldata.actai.co/info/บริษัท-ซิโน-ไทย-เอ็นจีเนียริ่ง-แอนด์-คอนสตรัคชั่น-จำกัด-(มหาชน)"
         target="_blank"
         rel="noopener noreferrer"
         class="b1 link-1 flex items-center gap-1 h-fit mt-1"

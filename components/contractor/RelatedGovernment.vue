@@ -1,8 +1,26 @@
+<script setup lang="ts">
+import type { Government } from '../../public/src/data/search_result';
+
+const props = defineProps<{
+  data: Government;
+}>();
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
+</script>
+
 <template>
   <h4 class="font-bold text-white mb-5">หน่วยงานรัฐที่เป็นผู้ว่าจ้าง</h4>
 
   <div class="bg-white rounded-10 gap-2 mb-3">
-    <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
+    <!-- <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <div class="flex items-end gap-2">
         <div class="flex-1">
           <p class="b2 text-[#7F7F7F]">ค้นหาหน่วยงานรัฐ</p>
@@ -20,20 +38,22 @@
         </div>
         <FilterResultContractor section="หน่วยงานรัฐที่เป็นผู้ว่าจ้าง" />
       </div>
-    </div>
+    </div> -->
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 gap-2">
         <h5 class="font-bold w-3/5">
-          ทั้งหมด xxx หน่วยงาน วงเงินสัญญา xx,xxx,xxx บาท
+          ทั้งหมด
+          {{ props.data?.pagination?.totalItem.toLocaleString() }} หน่วยงาน
+          วงเงินสัญญา xx,xxx,xxx บาท
         </h5>
-        <DownloadAndCopy />
+        <!-- <DownloadAndCopy /> -->
       </div>
 
-      <SortBy
+      <!-- <SortBy
         text="เรียงตาม"
         :list="['วงเงินสัญญา', 'จำนวนโครงการ']"
         class="mb-3"
-      />
+      /> -->
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -46,18 +66,24 @@
             </tr>
           </thead>
           <tbody class="b1">
-            <tr v-for="(item, i) in 10" :key="i">
+            <tr v-for="(item, i) in props.data?.searchResult" :key="i">
               <td class="text-[#7F7F7F]">{{ i + 1 }}</td>
               <td class="font-bold">
                 <a
+                  :href="'/government/' + item.agencyId"
                   target="_blank"
-                  :href="`/contractor?name=สำนักงานคณะกรรมการป้องกันและปราบปรามยาเสพติด`"
+                  rel="noopener noreferrer"
+                  class="hover:text-[#0B5C90]"
                 >
-                  สำนักงานคณะกรรมการป้องกันและปราบปรามยาเสพติด
+                  {{ item.agencyBelongTo }}
                 </a>
               </td>
-              <td class="text-right">3,000</td>
-              <td class="text-right">15,890,000.23</td>
+              <td class="text-right">
+                {{ item.totalProject.toLocaleString() }}
+              </td>
+              <td class="text-right">
+                {{ item.totalBudgetMoney.toLocaleString() }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -65,8 +91,6 @@
     </div>
   </div>
 </template>
-
-<script setup></script>
 
 <style lang="scss" scoped>
 .input-text {

@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import type { Project } from '../../public/src/data/search_result';
+
+const props = defineProps<{
+  data: Project;
+}>();
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
+</script>
+
 <template>
   <h4 class="font-bold text-white mb-5">ประวัติการทิ้งงาน</h4>
 
@@ -6,7 +24,9 @@
       <div class="flex items-center justify-between mb-3">
         <div>
           <h5 class="font-black">
-            ทั้งหมด xxx โครงการ วงเงินสัญญา xx,xxx,xxx บาท
+            ทั้งหมด
+            {{ props.data?.pagination?.totalItem.toLocaleString() }} โครงการ
+            วงเงินสัญญา xx,xxx,xxx บาท
           </h5>
           <p class="b4 text-[#8E8E8E]">
             หมายเหตุ: การขึ้นบัญชีผู้ทิ้งงานนี้ จะมีผลตามกฎหมายโดยทั่วไป
@@ -19,7 +39,7 @@
             >
           </p>
         </div>
-        <DownloadAndCopy />
+        <!-- <DownloadAndCopy /> -->
       </div>
 
       <div class="overflow-auto">
@@ -42,32 +62,40 @@
             </tr>
           </thead>
           <tbody class="b1">
-            <tr v-for="(item, i) in 5" :key="i">
-              <td class="b2 text-[#5E5E5E]">03/08/2567</td>
+            <tr v-for="(item, i) in props.data?.searchResult" :key="i">
+              <td class="b2 text-[#5E5E5E]">09/09/2567</td>
               <td>
                 <a
+                  :href="`/project/${item.projectId}`"
                   target="_blank"
-                  :href="`/project?name=สอบราคาซื้อชุดก่อสร้าง-(60.14.13.02)`"
+                  rel="noopener noreferrer"
+                  class="hover:text-[#0B5C90]"
                 >
-                  <b>สอบราคาซื้อชุดก่อสร้าง (60.14.13.02)</b>
-                </a>
+                  <b>{{ item.projectName }}</b></a
+                >
+
                 <ProjectIconGuide
                   :data="{
-                    no: '56015020021',
-                    contractNo: '1153/2564',
+                    no: item.projectId,
                   }"
                   color="#8E8E8E"
                 />
-                <ProjectTag text="พบความเสี่ยงทุจริต" />
+                <ProjectTag
+                  text="พบความเสี่ยงทุจริต"
+                  v-if="item.hasCorruptionRisk"
+                />
               </td>
               <td>
                 <a
                   target="_blank"
-                  :href="`/government?name=สำนักงานคณะกรรมการป้องกันและปราบปรามยาเสพติด`"
-                  >สำนักงานคณะกรรมการป้องกันและปราบปรามยาเสพติด</a
+                  :href="`/government/${item.agencyId}`"
+                  class="hover:text-[#0B5C90]"
+                  >{{ item.agencyName }}</a
                 >
               </td>
-              <td><b>15,890,000.23</b></td>
+              <td>
+                <b> {{ item.totalContractMoney.toLocaleString() }}</b>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -75,7 +103,5 @@
     </div>
   </div>
 </template>
-
-<script setup></script>
 
 <style lang="scss" scoped></style>

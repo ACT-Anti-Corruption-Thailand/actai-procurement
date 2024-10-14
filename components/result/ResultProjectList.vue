@@ -5,11 +5,17 @@ const selectedTab = ref(0);
 const isOpen = ref(false);
 const isOpen2 = ref(false);
 
-defineProps<{
+const props = defineProps<{
   iconGuide: object;
   mockDataGuide: object;
-  data: object;
+  data: array;
+  yearList: array;
+  projectList: array;
+  chartDataSet1: array;
+  chartDataSet2: array;
 }>();
+
+const dataTest = ref(null);
 
 const yearlyAggregates = [
   {
@@ -135,16 +141,18 @@ function scrollToTop() {
 
 function highlight(title: string, text: string) {
   var innerHTML = title;
-  var index = innerHTML.indexOf(text);
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+  var index = innerHTML.indexOf(urlParams);
+
   if (index >= 0) {
     innerHTML =
       innerHTML.substring(0, index) +
       "<span class='text-[#74060A]'>" +
-      innerHTML.substring(index, index + text.length) +
+      innerHTML.substring(index, index + urlParams.length) +
       '</span>' +
-      innerHTML.substring(index + text.length);
-    return innerHTML;
+      innerHTML.substring(index + urlParams.length);
   }
+  return innerHTML;
 }
 
 const searchText = ref('');
@@ -157,31 +165,45 @@ onMounted(() => {
 
 const menuList = ref([
   {
-    title: 'สถานะโครงการที่พบมากที่สุด (50%)',
-    desc: 'แล้วเสร็จตามสัญญา',
+    title: 'สถานะโครงการที่พบมากที่สุด',
+    desc: '',
+    total: 0,
     id: 'chart-3',
   },
   {
-    title: 'สถานะของสัญญาที่พบมากที่สุด (50%)',
-    desc: 'จัดทำสัญญา/PO แล้ว',
+    title: 'สถานะของสัญญาที่พบมากที่สุด',
+    desc: '',
+    total: 0,
     id: 'chart-4',
   },
   {
-    title: 'วิธีการจัดหาที่พบมากที่สุด (50%)',
-    desc: 'เฉพาะเจาะจง',
+    title: 'วิธีการจัดหาที่พบมากที่สุด',
+    desc: '',
+    total: 0,
     id: 'chart-5',
   },
   {
     title: 'จังหวัดที่มีจำนวนโครงการมากที่สุด',
-    desc: 'กรุงเทพมหานคร',
+    desc: '',
     id: 'maps',
   },
   {
     title: 'จังหวัดที่ใช้งบประมาณมากที่สุด',
-    desc: 'กรุงเทพมหานคร',
+    desc: '',
     id: 'maps',
   },
 ]);
+
+onMounted(() => {
+  menuList.value[0].desc = props.data.maxProjectStatus.name;
+  menuList.value[0].total = props.data.maxProjectStatus.total;
+  menuList.value[1].desc = props.data.maxContractStatus.name;
+  menuList.value[1].total = props.data.maxContractStatus.total;
+  menuList.value[2].desc = props.data.maxResourcingMethod.name;
+  menuList.value[2].total = props.data.maxResourcingMethod.total;
+  menuList.value[3].desc = props.data.provinceWithHighestBudgetMoney;
+  menuList.value[4].desc = props.data.provinceWithHighestProjects;
+});
 </script>
 
 <template>
@@ -198,7 +220,7 @@ const menuList = ref([
         <Tab class="tab-menu b1">รายชื่อ</Tab>
         <Tab class="tab-menu b1">ภาพรวม</Tab>
       </TabList>
-      <div><FilterPopupResult section="โครงการ" /></div>
+      <!-- <div><FilterPopupResult section="โครงการ" /></div> -->
     </div>
 
     <TabPanels>
@@ -213,8 +235,8 @@ const menuList = ref([
             <div class="flex">
               <div class="flex-1">
                 <p class="b2">งบประมาณรวม (บาท)</p>
-                <h5 class="font-bold">
-                  {{ data.totalBudgetMoney.toLocaleString() }}
+                <h5 class="font-bold" v-if="data != null">
+                  {{ data?.totalBudgetMoney.toLocaleString() }}
                 </h5>
               </div>
               <div class="flex-1 text-[#EC1C24]">
@@ -235,7 +257,10 @@ const menuList = ref([
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black mb-3">
               <p class="b1">หน่วยงานรัฐเจ้าของโครงการ</p>
               <h5 class="font-bold">{{ data.totalAgency }} หน่วยงาน</h5>
-              <p class="b2 link-1 flex items-center gap-1">
+              <!-- <p
+                class="b2 link-1 flex items-center gap-1"
+                v-if="data.totalAgency != 0"
+              >
                 ดูรายชื่อ
                 <svg
                   width="16"
@@ -253,12 +278,15 @@ const menuList = ref([
                     fill="currentColor"
                   />
                 </svg>
-              </p>
+              </p> -->
             </div>
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black">
               <p class="b1">ผู้รับจ้าง</p>
               <h5 class="font-bold">{{ data.totalCompany }} ราย</h5>
-              <p class="b2 link-1 flex items-center gap-1">
+              <!-- <p
+                class="b2 link-1 flex items-center gap-1"
+                v-if="data.totalCompany != 0"
+              >
                 ดูรายชื่อ
                 <svg
                   width="16"
@@ -276,47 +304,57 @@ const menuList = ref([
                     fill="currentColor"
                   />
                 </svg>
-              </p>
+              </p> -->
             </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-between my-5">
+        <!-- <div class="flex items-center justify-between my-5">
           <SortBy
             text="เรียงตาม"
             :list="['ความใกล้เคียงคำค้น', 'วันที่ประกาศโครงการ', 'งบประมาณรวม']"
           />
 
           <DownloadAndCopy />
-        </div>
+        </div> -->
 
-        <ProjectIconGuide :data="iconGuide" color="#8E8E8E" />
+        <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />
 
         <div class="my-3">
           <a
-            v-for="(item, i) in 3"
+            v-for="(item, i) in props.projectList.searchResult"
             :key="i"
             target="_blank"
-            href="/project?name=สอบราคาซื้อชุดก่อสร้าง"
+            :href="'/project/' + item.projectId"
           >
             <div
               class="flex justify-between flex-col-mb p-2.5 sm:p-5 rounded-10 btn-light-4"
             >
-              <div>
+              <div class="w-3/4">
                 <p
                   class="b1 font-bold"
-                  v-html="
-                    highlight('สอบราคาซื้อชุดก่อสร้าง (60.14.13)', 'ก่อสร้าง')
-                  "
+                  v-html="highlight(item.projectName)"
                 ></p>
-                <ProjectIconGuide :data="mockDataGuide" color="#8E8E8E" />
-                <ProjectTag text="พบความเสี่ยงทุจริต" />
+                <ProjectIconGuide
+                  :data="{
+                    name: '',
+                    province: item.province,
+                    year: item.budgetYear,
+                    owner: item.agencyName,
+                    no: item.projectId,
+                  }"
+                  color="#8E8E8E"
+                />
+                <ProjectTag
+                  text="พบความเสี่ยงทุจริต"
+                  v-if="item.hasCorruptionRisk"
+                />
               </div>
               <div
                 class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
               >
                 <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-                <p class="b1">190,000,000,000</p>
+                <p class="b1">{{ item.totalBudget.toLocaleString() }}</p>
               </div>
             </div>
           </a>
@@ -324,13 +362,15 @@ const menuList = ref([
       </TabPanel>
       <TabPanel>
         <div class="mx-auto max-w-6xl px-4 lg:px-0">
-          <h5 class="font-bold my-5">xxx,xxx,xxx โครงการจัดซื้อจัดจ้าง</h5>
+          <h5 class="font-bold my-5">
+            {{ data.totalProject }} โครงการจัดซื้อจัดจ้าง
+          </h5>
           <div class="flex flex-col-mb gap-2">
             <a href="#chart-1" class="sm:w-2/4">
               <div class="rounded-10 btn-chart p-5 text-white relative">
                 <p class="b1">งบประมาณรวม (บาท)</p>
-                <h4 class="font-black">
-                  {{ data.totalBudgetMoney.toLocaleString() }}
+                <h4 class="font-black" v-if="data != null">
+                  {{ data?.totalBudgetMoney.toLocaleString() }}
                 </h4>
                 <arrow
                   color="#FFFFFF"
@@ -341,7 +381,7 @@ const menuList = ref([
               <div class="rounded-10 btn-chart p-5 relative text-white">
                 <p class="b1 text-[#EC1C24]">โครงการเสี่ยงทุจริต</p>
                 <h4 class="font-black text-[#EC1C24]">
-                  {{ data.totalProjectHasCorruption }}%
+                  {{ data?.totalProjectHasCorruption }}%
                 </h4>
                 <arrow
                   color="#FFFFFF"
@@ -350,7 +390,7 @@ const menuList = ref([
             ></a>
           </div>
 
-          <div class="flex justify-between flex-wrap gap-2 mt-2">
+          <div class="flex justify-between flex-wrap gap-2 mt-2 mb-7">
             <a
               :href="'#' + item.id"
               :class="{
@@ -371,22 +411,24 @@ const menuList = ref([
           </div>
         </div>
 
-        <div class="bg-[#1F1F1F] p-4 sm:p-10 mt-10">
+        <!-- <div class="bg-[#1F1F1F] p-4 sm:p-10 mt-10">
           <div class="max-w-6xl mx-auto">
-            <BarChart
+            <BarChart3
+              :data="props.chartDataSet1"
+              :yearList="props.yearList"
               title="งบประมาณ"
-              :data="yearlyAggregates"
-              titleType="0"
-              id="chart-1"
+              section=""
             />
 
-            <BarChart
-              title="ความเสี่ยงทุจริต"
-              :data="yearlyAggregates"
-              titleType="0"
-              id="chart-2"
-              @isOpen="isOpen = true"
+            <BarChart3
+              :data="props.chartDataSet2"
+              :yearList="props.yearList"
+              title="วิธีการจัดหา"
+              id="chart-1"
+              section="risk"
             />
+
+  
 
             <BarChart
               title="สถานะโครงการ"
@@ -410,7 +452,7 @@ const menuList = ref([
               @isOpen="isOpen2 = true"
             />
 
-            <MapSection class="mt-5" id="maps" />
+           <MapSection class="mt-5" id="maps" />
           </div>
 
           <div
@@ -419,7 +461,7 @@ const menuList = ref([
           >
             กลับด้านบน <arrow color="#8DCCF0" class="-rotate-90" />
           </div>
-        </div>
+        </div> -->
       </TabPanel>
     </TabPanels>
   </TabGroup>

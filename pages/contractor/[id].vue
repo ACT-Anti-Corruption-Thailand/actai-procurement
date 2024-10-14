@@ -1,30 +1,130 @@
-<script setup>
+<script setup lang="ts">
 const menu = ref('ข้อมูลทั่วไป');
 const isShowTab = ref(true);
+const config = useRuntimeConfig();
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+
+import type { ContractorDetails } from '../../public/src/data/data_details';
+import type { Project, Government } from '../../public/src/data/search_result';
+
+onBeforeMount(async () => {
+  await getContracterData();
+  await getContracterProject();
+  await getContracterGov();
+});
+
+const contractorData = ref<ContractorDetails>([]);
+const contractorAbandonProjectList = ref<Project>([]);
+const contractorProjectList = ref<Project>([]);
+const contractorGovList = ref<Government>([]);
+
+const getContracterData = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(`${config.public.apiUrl}/company/${segments}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    contractorData.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const getContracterProject = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const params = new URLSearchParams();
+  params.set('keyword', contractorData.value.companyName);
+  params.set('page', 1);
+  params.set('pageSize', 10);
+
+  const res = await fetch(`${config.public.apiUrl}/project/search?${params}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const res2 = await fetch(
+    `${config.public.apiUrl}/project/search?${params}&hasAbandonProject=true`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    contractorProjectList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+
+  if (res2.ok) {
+    const data = await res2.json();
+    contractorAbandonProjectList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const getContracterGov = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const params = new URLSearchParams();
+  params.set('keyword', contractorData.value.companyName);
+  params.set('page', 1);
+  params.set('pageSize', 10);
+
+  const res = await fetch(`${config.public.apiUrl}/agency/search?${params}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    contractorGovList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
 </script>
 
 <template>
   <Header />
   <div class="bg-white p-5 z-10 sticky top-0">
-    <Breadcrumb
-      title="บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)"
-    />
+    <Breadcrumb :title="contractorData.companyName" />
     <div class="max-w-7xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
         <h3 class="font-black">
-          บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
+          {{ contractorData.companyName }}
         </h3>
-        <p class="b4 text-[#8E8E8E]">ผู้รับจ้างอัปเดตข้อมูลเมื่อ 20/12/2566</p>
+        <p class="b4 text-[#8E8E8E]">
+          ผู้รับจ้างอัปเดตข้อมูลเมื่อ
+          {{ setDate(contractorData.lastUpdatedOn) }}
+        </p>
       </div>
       <div class="sm:w-1/5">
         <div
+          v-if="contractorData.hasCorruptionRiskCases != 0"
           class="bg-[#FFEFF0] hover:bg-[#FFCECE] duration-300 rounded-10 text-[#EC1C24] b2 p-2.5 mb-2"
         >
           <div class="flex items-center gap-2">
-            <img src="../public/src/images/risk-flag.svg" alt="risk" />
+            <img src="../../public/src/images/risk-flag.svg" alt="risk" />
             <p class="font-bold">ตรวจพบความน่าสนใจ x กรณี</p>
           </div>
 
@@ -62,7 +162,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
         <div class="flex justify-between w-full py-3">
           <p class="b4 font-bold text-[#8E8E8E]">รายการข้อมูล</p>
           <img
-            src="../public/src/images/minimize.svg"
+            src="../../public/src/images/minimize.svg"
             alt="minimize"
             @click="isShowTab = false"
             class="cursor-pointer"
@@ -79,7 +179,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
           >
             <p>ข้อมูลทั่วไป</p>
           </div>
-          <div
+          <!-- <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -96,7 +196,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
               <li>สัดส่วนวิธีการประมูลงาน</li>
               <li>พฤติกรรมการเสนอราคา</li>
             </ul>
-          </div>
+          </div> -->
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
@@ -107,7 +207,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
           >
             <p>ประวัติการทิ้งงาน</p>
           </div>
-          <div
+          <!-- <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
@@ -125,7 +225,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
             @click="menu = 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'"
           >
             <p>กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน</p>
-          </div>
+          </div> -->
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
@@ -149,13 +249,22 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
         </div>
       </div>
       <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
-        <General v-if="menu == 'ข้อมูลทั่วไป'" />
+        <General v-if="menu == 'ข้อมูลทั่วไป'" :data="contractorData" />
         <WorkWithGovernment v-else-if="menu == 'การรับงานกับหน่วยงานรัฐ'" />
-        <AbandonmentHistory v-else-if="menu == 'ประวัติการทิ้งงาน'" />
+        <AbandonmentHistory
+          v-else-if="menu == 'ประวัติการทิ้งงาน'"
+          :data="contractorAbandonProjectList"
+        />
         <Relationship v-else-if="menu == 'ความสัมพันธ์'" />
         <Auction v-else-if="menu == 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'" />
-        <RelatedProject v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'" />
-        <RelatedGovernment v-else-if="menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'" />
+        <RelatedProject
+          v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'"
+          :data="contractorProjectList"
+        />
+        <RelatedGovernment
+          v-else-if="menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'"
+          :data="contractorGovList"
+        />
 
         <img
           src="../public/src/images/showtab-btn.svg"
@@ -177,7 +286,7 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
       <ACTLineButton />
 
       <p class="b1 mt-5 flex items-center flex-wrap gap-2">
-        <img src="../public/src/images/status-icon.svg" />
+        <img src="../../public/src/images/status-icon.svg" />
         ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่<a
           href="http://www.gprocurement.go.th/"
           target="_blank"

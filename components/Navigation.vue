@@ -1,7 +1,7 @@
 <template>
   <ClientOnly fallback-tag="span" fallback="Loading...">
     <div
-      class="flex flex-col-mbd items-center justify-end max-w-6xl mx-auto mt-3 gap-2"
+      class="flex flex-col-mbd items-center justify-end max-w-7xl mx-auto mt-3 gap-2"
     >
       <button
         v-for="(item, i) in activeMenuList"
@@ -32,19 +32,30 @@ const props = defineProps<{
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 
-const projectMenu = ['ภาพรวม', 'ข้อมูลเจาะลึก', 'เอกสารที่เกี่ยวข้อง'];
+// const projectMenu = ['ภาพรวม', 'ข้อมูลเจาะลึก', 'เอกสารที่เกี่ยวข้อง'];
+const projectMenu = ['ภาพรวม', 'เอกสารที่เกี่ยวข้อง'];
 
-const govMenu = [
-  'ภาพรวมโครงการที่จัดทำ',
-  'รายชื่อโครงการที่จัดทำ',
-  'ผู้รับจ้างที่ได้งาน',
-];
+// const govMenu = [
+//   'ภาพรวมโครงการที่จัดทำ',
+//   'รายชื่อโครงการที่จัดทำ',
+//   'ผู้รับจ้างที่ได้งาน',
+// ];
+
+const govMenu = ['รายชื่อโครงการที่จัดทำ', 'ผู้รับจ้างที่ได้งาน'];
+
+// const contracterMenu = [
+//   'ข้อมูลทั่วไป',
+//   'การรับงานกับหน่วยงานรัฐ',
+//   'ประวัติการทิ้งงาน',
+//   'ความสัมพันธ์',
+//   'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน',
+//   'รายชื่อโครงการที่เกี่ยวข้อง',
+//   'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง',
+// ];
+
 const contracterMenu = [
   'ข้อมูลทั่วไป',
-  'การรับงานกับหน่วยงานรัฐ',
   'ประวัติการทิ้งงาน',
-  'ความสัมพันธ์',
-  'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน',
   'รายชื่อโครงการที่เกี่ยวข้อง',
   'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง',
 ];

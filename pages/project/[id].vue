@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const menu = ref('ภาพรวม');
 const isShowTab = ref(true);
 const config = useRuntimeConfig();
@@ -6,36 +6,80 @@ const config = useRuntimeConfig();
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
+import type {
+  ProjectDetails,
+  ProjectDocuments,
+} from '../../public/src/data/data_details';
+
 onBeforeMount(async () => {
-  // const res = await fetch(`${config.public.apiUrl}/project/0`, {
-  //   method: 'get',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Access-Control-Allow-Origin': '*',
-  //     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  //     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE,OPTIONS',
-  //   },
-  // });
-  // console.log(res.body);
+  await getProjectData();
+  await getProjectData();
 });
+
+const projectData = ref<ProjectDetails>([]);
+const projectDocs = ref<ProjectDocuments>([]);
+
+const getProjectData = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(`${config.public.apiUrl}/project/${segments}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    projectData.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+
+  const res2 = await fetch(
+    `${config.public.apiUrl}/project/${segments}/document`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res2.ok) {
+    const data = await res2.json();
+    projectDocs.value = JSON.parse(JSON.stringify(data.relatedDocuments)) || [];
+  }
+};
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
 </script>
 
 <template>
   <Header />
   <div class="bg-white p-5 z-10 sticky top-0">
-    <Breadcrumb title="สอบราคาซื้อชุดก่อสร้าง (60.14.13)" />
-    <div class="max-w-7xl mx-auto flex gap-2 flex-col-mb">
+    <Breadcrumb :title="projectData.projectName" />
+    <div class="max-w-7xl mx-auto flex gap-5 flex-col-mb">
       <div class="sm:w-4/5">
-        <h3 class="font-black">การไฟฟ้านครหลวง ฝ่ายก่อสร้าง</h3>
-        <p class="b1">เลขที่โครงการ : 56015020021</p>
-        <p class="b4 text-[#8E8E8E]">โครงการฯ อัปเดตข้อมูลเมื่อ 24/08/2562</p>
+        <h3 class="font-black">{{ projectData.projectName }}</h3>
+        <p class="b1">เลขที่โครงการ : {{ projectData.projectId }}</p>
+        <p class="b4 text-[#8E8E8E]">
+          โครงการฯ อัปเดตข้อมูลเมื่อ {{ setDate(projectData.announcementDate) }}
+        </p>
       </div>
       <div class="sm:w-1/5">
         <div
+          v-if="projectData.corruptionRisk"
           class="bg-[#FFEFF0] hover:bg-[#FFCECE] duration-300 rounded-10 text-[#EC1C24] b2 p-2.5 mb-2"
         >
           <div class="flex items-center gap-2">
-            <img src="../public/src/images/risk-flag.svg" alt="risk" />
+            <img src="../../public/src/images/risk-flag.svg" alt="risk" />
             <p class="font-bold">พบความเสี่ยงทุจริต x ประเด็น</p>
           </div>
 
@@ -63,14 +107,14 @@ onBeforeMount(async () => {
           </ClientOnly>
         </div>
 
-        <div class="flex items-center gap-2">
-          <img src="../public/src/images/checkmark.svg" alt="checkmark" />
+        <!-- <div class="flex items-center gap-2">
+          <img src="../../public/src/images/checkmark.svg" alt="checkmark" />
           <p class="font-bold">เข้าร่วมโครงการ CoST</p>
         </div>
         <div class="flex items-center gap-2">
-          <img src="../public/src/images/checkmark.svg" alt="checkmark" />
+          <img src="../../public/src/images/checkmark.svg" alt="checkmark" />
           <p class="font-bold">เข้าร่วมโครงการ Integrity Pact</p>
-        </div>
+        </div> -->
 
         <Share color="#0B5C90" text="แชร์หน้านี้" class="mt-2" />
       </div>
@@ -82,7 +126,7 @@ onBeforeMount(async () => {
         <div class="flex justify-between w-full py-3">
           <p class="b4 font-bold text-[#8E8E8E]">รายการข้อมูล</p>
           <img
-            src="../public/src/images/minimize.svg"
+            src="../../public/src/images/minimize.svg"
             alt="minimize"
             @click="isShowTab = false"
             class="cursor-pointer"
@@ -99,7 +143,7 @@ onBeforeMount(async () => {
           >
             <p>ภาพรวม</p>
           </div>
-          <div
+          <!-- <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ข้อมูลเจาะลึก',
@@ -112,7 +156,7 @@ onBeforeMount(async () => {
               <li>ผู้ชนะการประมูล</li>
               <li>การเสนอราคา</li>
             </ul>
-          </div>
+          </div> -->
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
@@ -126,12 +170,12 @@ onBeforeMount(async () => {
         </div>
       </div>
       <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
-        <OverallProject v-if="menu == 'ภาพรวม'" />
+        <OverallProject v-if="menu == 'ภาพรวม'" :data="projectData" />
         <Details v-else-if="menu == 'ข้อมูลเจาะลึก'" />
-        <ProjectDocument v-else />
+        <ProjectDocument v-else :data="projectDocs" />
 
         <img
-          src="../public/src/images/showtab-btn.svg"
+          src="../../public/src/images/showtab-btn.svg"
           alt="showtab button"
           class="cursor-pointer fixed bottom-5 left-5"
           @click="isShowTab = true"
@@ -150,7 +194,7 @@ onBeforeMount(async () => {
       <ACTLineButton />
 
       <p class="b1 mt-5 flex items-center flex-wrap gap-2">
-        <img src="../public/src/images/status-icon.svg" />
+        <img src="../../public/src/images/status-icon.svg" />
         ท่านสามารถตรวจสอบความถูกต้องของข้อมูลเพื่อใช้ประกอบการอ้างอิงอีกครั้งได้ที่<a
           href="http://www.gprocurement.go.th/"
           target="_blank"

@@ -46,8 +46,9 @@ const setKeyword = () => {
 
 onMounted(() => {
   if (window.location.pathname == '/result') {
-    const kw = localStorage.getItem('keyword');
-    if (kw != '') selected.value = kw;
+    const kw = decodeURI(window.location.href).split('=')[1];
+    selected.value = kw;
+    query.value = kw;
   }
 });
 </script>
@@ -62,6 +63,7 @@ onMounted(() => {
           >
             <ComboboxInput
               placeholder="ค้นด้วยคำในชื่อโครงการ/เลขที่โครงการ/ชื่อหน่วยงาน/ชื่อผู้รับจ้าง/เลขทะเบียนนิติบุคคล"
+              id="search-input"
               class="w-full border-none py-2 px-3 text-black focus:ring-[#C2141B] b2"
               @change="getSearchList($event.target.value)"
             />
@@ -100,7 +102,7 @@ onMounted(() => {
                 :value="person"
                 v-slot="{ selected, active }"
               >
-                <NuxtLink :to="`/result?search=${person}`">
+                <a :href="`/result?search=${person}`">
                   <li
                     class="relative cursor-default select-none py-2 px-2 text-left b2"
                     :class="{
@@ -124,15 +126,15 @@ onMounted(() => {
                     >
                     </span>
                   </li>
-                </NuxtLink>
+                </a>
               </ComboboxOption>
             </ComboboxOptions>
           </TransitionRoot>
         </div>
       </Combobox>
-      <NuxtLink
-        :to="`/result?search=${query}`"
-        :class="[query == '' ? 'pointer-events-none' : '']"
+      <a
+        :href="`/result?search=${query}`"
+        :class="[selected == '' ? 'pointer-events-none' : '']"
         @click="setKeyword()"
       >
         <div class="h-11 w-11">
@@ -141,7 +143,7 @@ onMounted(() => {
             alt=""
             class="bg-[#EC1C24] hover:bg-[#C2141B] p-3 rounded-r-lg cursor-pointer"
           /></div
-      ></NuxtLink>
+      ></a>
     </div>
   </ClientOnly>
 </template>

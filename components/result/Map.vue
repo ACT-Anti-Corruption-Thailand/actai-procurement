@@ -871,4 +871,9 @@ svg {
   width: -webkit-fill-available;
   max-height: 530px;
 }
+
+.provinces-1,
+.provinces-2 {
+  @apply mix-blend-multiply;
+}
 </style>

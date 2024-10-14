@@ -1,8 +1,26 @@
+<script setup lang="ts">
+import type { Project } from '../../public/src/data/search_result';
+
+const props = defineProps<{
+  data: Project;
+}>();
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
+</script>
+
 <template>
   <h4 class="font-bold text-white mb-5">รายชื่อโครงการที่เกี่ยวข้อง</h4>
 
   <div class="bg-white rounded-10 gap-2 mb-3">
-    <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
+    <!-- <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <div class="flex items-end gap-2">
         <div class="flex-1">
           <p class="b2 text-[#7F7F7F]">ค้นหาโครงการ</p>
@@ -27,20 +45,22 @@
           >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
         >
       </div>
-    </div>
+    </div> -->
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 gap-2">
         <h5 class="font-black w-3/5">
-          ทั้งหมด xx,xxx โครงการ วงเงินสัญญา xxx บาท
+          ทั้งหมด
+          {{ props.data?.pagination?.totalItem.toLocaleString() }} โครงการ
+          วงเงินสัญญา xxx บาท
         </h5>
-        <DownloadAndCopy />
+        <!-- <DownloadAndCopy /> -->
       </div>
 
-      <SortBy
+      <!-- <SortBy
         text="เรียงตาม"
         :list="['วันที่ประกาศโครงการ', 'วงเงินสัญญา']"
         class="mb-3"
-      />
+      /> -->
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -69,46 +89,78 @@
             </tr>
           </thead>
           <tbody class="b1">
-            <tr v-for="(item, i) in 5" :key="i">
+            <tr v-for="(item, i) in props.data?.searchResult" :key="i">
               <td>
-                <b
-                  ><a
-                    target="_blank"
-                    :href="`/project?name=สอบราคาซื้อชุดก่อสร้าง-(60.14.13.02)`"
-                    >สอบราคาซื้อชุดก่อสร้าง (60.14.13.02)</a
-                  ></b
+                <a
+                  :href="`/project/${item.projectId}`"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="hover:text-[#0B5C90]"
+                >
+                  <b>{{ item.projectName }}</b></a
                 >
                 <ProjectIconGuide
                   :data="{
-                    province: 'แพร่',
-                    no: '56015020021',
+                    province: item.province,
+                    no: item.projectId,
                   }"
                   color="#7F7F7F"
                 />
-                <ProjectTag text="พบความเสี่ยงทุจริต" />
+                <ProjectTag
+                  text="พบความเสี่ยงทุจริต"
+                  v-if="item.hasCorruptionRisk"
+                />
               </td>
               <td>11/10/2567</td>
-              <td class="bg-[#C0C0C0]">เสนอราคา</td>
+              <td
+                :class="[
+                  item.projectStatus == 'เสนอราคา'
+                    ? 'bg-[#C0C0C0]'
+                    : 'bg-[#2EA0DF]',
+                ]"
+              >
+                {{ item.projectStatus }}
+              </td>
               <td>
-                ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์
-                โดยผ่านผู้ให้บริการตลาดกลาง
+                {{
+                  item.resourcingMethod == null ? '-' : item.resourcingMethod
+                }}
               </td>
               <td>
                 <a
                   target="_blank"
-                  :href="`/government?name=สำนักงานเลขาธิการสภาผู้แทนราษฎร`"
-                  >สำนักงานเลขาธิการสภาผู้แทนราษฎร</a
+                  :href="`/government/${item.agencyId}`"
+                  class="hover:text-[#0B5C90]"
+                  >{{ item.agencyName }}</a
                 >
               </td>
               <td>
                 <a
+                  v-if="item.bidder?.length > 0"
                   target="_blank"
                   :href="`/contractor?name=บริษัท-แพลนเน็ต-คอมมิวนิเคชั่น-เอเชีย-จำกัด-(มหาชน)`"
                   >บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)</a
                 >
+                <p v-else>-</p>
               </td>
-              <td>บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)</td>
-              <td><b>15,890,000.23</b> <br />15,890,000.23</td>
+              <td>
+                <a
+                  v-if="item.bidder?.length > 0"
+                  target="_blank"
+                  :href="`/contractor?name=บริษัท-แพลนเน็ต-คอมมิวนิเคชั่น-เอเชีย-จำกัด-(มหาชน)`"
+                  >บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)</a
+                >
+                <p v-else>-</p>
+              </td>
+              <td
+                v-if="
+                  item.totalContractMoney != null ||
+                  item.totalBudgetMoney != null
+                "
+              >
+                <b>{{ item.totalContractMoney.toLocaleString() }}</b>
+                <br />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -116,8 +168,6 @@
     </div>
   </div>
 </template>
-
-<script setup></script>
 
 <style lang="scss" scoped>
 .input-text {
