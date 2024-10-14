@@ -89,16 +89,7 @@ const mockdata = ref([
                 ต.ค. 67 - ก.ย. 68
               </p>
 
-              <a
-                target="_blank"
-                :href="`/project?name=บริษัท-ซิโน-ไทย-เอ็นจีเนียริ่ง-แอนด์-คอนสตรัคชั่น-จำกัด-(มหาชน)`"
-              >
-                <ProjectData
-                  :data="mockdata[0]"
-                  :index="0"
-                  class="btn-dark-1"
-                />
-              </a>
+              <ProjectData :data="mockdata[0]" :index="0" class="btn-dark-1" />
 
               <div class="flex items-center gap-2 my-3 link-2">
                 <p class="b2">สุ่มใหม่</p>
@@ -151,16 +142,7 @@ const mockdata = ref([
                 ต.ค. 67 - ก.ย. 68
               </p>
 
-              <a
-                target="_blank"
-                :href="`/project?name=สอบราคาซื้อชุดก่อสร้าง-(60.14.13.02)`"
-              >
-                <ProjectData
-                  :data="mockdata[2]"
-                  :index="2"
-                  class="btn-dark-1"
-                />
-              </a>
+              <ProjectData :data="mockdata[2]" :index="2" class="btn-dark-1" />
 
               <div class="flex items-center gap-2 my-3 link-2">
                 <p class="b2">สุ่มใหม่</p>
