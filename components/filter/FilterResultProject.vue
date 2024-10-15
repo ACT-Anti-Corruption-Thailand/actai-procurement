@@ -116,18 +116,8 @@
 </template>
 
 <script setup>
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-  RadioGroup,
-  RadioGroupOption,
-} from '@headlessui/vue';
+import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
 
-import { CheckIcon } from '@heroicons/vue/24/solid';
-
-const isOpen = ref(true);
 const plan = ref('งบประมาณ');
 
 const selected = [
@@ -199,6 +189,24 @@ const filterList = ref({
   recourcingType: ['ทุกประเภท', 'จ้างก่อสร้าง'],
   contractorType: ['ทุกประเภท', 'บริษัทจำกัด', 'ห้างหุ้นส่วน'],
 });
+
+// const getFilterList = async () => {
+//   const res = await fetch(`${config.public.apiUrl}/project/search/filters`, {
+//     method: 'get',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   });
+
+//   if (res.ok) {
+//     const data = await res.json();
+//     console.log(data);
+//   }
+// };
+
+// onMounted(async () => {
+//   await getFilterList();
+// });
 </script>
 
 <style scoped>

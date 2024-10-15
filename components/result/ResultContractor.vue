@@ -23,6 +23,24 @@ function highlight(title: string, text: string) {
 
 const searchText = ref('');
 
+const emit = defineEmits(['search']);
+
+const sort = ref('');
+const page = ref(0);
+
+const setParams = (type: string, val: string) => {
+  const searchParams = new URLSearchParams();
+
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+
+  searchParams.set('sortBy', type == 'sortBy' ? val : 'relevanceScore');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('pageSize', type == 'page' ? page.value : 10);
+
+  emit('search', '&' + searchParams.toString(), 'details');
+};
+
 onMounted(() => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -39,22 +57,33 @@ onMounted(() => {
       <h4 class="font-bold">
         {{ props.contractorList?.pagination?.totalItem }} ผู้รับจ้าง
       </h4>
-      <!-- <FilterPopupResult section="ผู้รับจ้าง" /> -->
+      <FilterPopupResult section="ผู้รับจ้าง" />
     </div>
 
-    <!-- <div class="flex items-center justify-between my-3 sm:my-5">
+    <div class="flex items-center justify-between my-3 sm:my-5">
       <div class="flex gap-2 items-center relative">
         <SortBy
-          text="เรียงตาม"
           :list="[
-            'ความใกล้เคียงคำค้น',
-            'วงเงินสัญญารวม',
-            'จำนวนโครงการที่ได้งาน',
+            {
+              name: 'ความใกล้เคียงคำค้น',
+              value: 'relevanceScore',
+            },
+            {
+              name: 'วงเงินสัญญารวม',
+              value: 'totalProject',
+            },
+            {
+              name: 'จำนวนโครงการที่ได้งาน',
+              value: 'totalContractAmount',
+            },
           ]"
+          text="เรียงตาม"
+          @change="setParams"
+          @sortBy="setParams"
         />
       </div>
-      <DownloadAndCopy />
-    </div> -->
+      <!-- <DownloadAndCopy /> -->
+    </div>
 
     <ProjectIconGuide
       :data="{
@@ -79,7 +108,7 @@ onMounted(() => {
           ></p>
           <ProjectIconGuide
             :data="{
-              province: item.companyName,
+              province: item.province,
             }"
             color="#8E8E8E"
           />
@@ -96,6 +125,19 @@ onMounted(() => {
           </div>
         </div>
       </a>
+
+      <div class="text-center">
+        <button
+          v-if="
+            props.contractorList?.searchResult.length <
+            props.contractorList?.pagination?.totalItem
+          "
+          class="border btn-light-3 link-1 p-2.5 w-32 rounded-10"
+          @click="setParams('page', 10)"
+        >
+          โหลดเพิ่ม
+        </button>
+      </div>
     </div>
   </div>
 </template>

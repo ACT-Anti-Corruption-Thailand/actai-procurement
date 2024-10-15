@@ -10,12 +10,13 @@
 
   <div class="flex w-full gap-2 items-center">
     <div class="flex-1 relative">
-      <Combobox v-model="selectedPeople" multiple v-slot="{ open }">
+      <Combobox v-model="selectedList" multiple v-slot="{ open }">
         <div class="relative">
           <ComboboxInput
             placeholder="test"
             :displayValue="(person) => query"
             class="dropdown-btn border-0 hover:ring-0"
+            @change="(person) => test(person)"
           />
           <ComboboxButton
             class="absolute inset-y-0 right-0 flex items-center pr-2 combobox-btn"
@@ -30,11 +31,11 @@
           @after-leave="handleEnterOptions()"
         >
           <div v-show="open">
-            <ComboboxOptions static class="dropdown-list absolute">
+            <ComboboxOptions static class="dropdown-list absolutes">
               <ComboboxOption
-                v-for="person in props.list"
-                :key="person.id"
-                :value="person"
+                v-for="(item, i) in result"
+                :key="i"
+                :value="item"
                 v-slot="{ selected, active }"
               >
                 <input
@@ -45,7 +46,7 @@
                   class="text-black mb-1"
                 />
                 <label class="ml-2 b1">
-                  {{ person }}
+                  {{ item }}
                 </label>
               </ComboboxOption>
             </ComboboxOptions>
@@ -59,7 +60,7 @@
 <script lang="ts" setup>
 const props = defineProps<{
   title: string;
-  selected: string;
+  defaultVal: string;
   list: object;
 }>();
 
@@ -74,22 +75,53 @@ import {
 
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
-const selectedPeople = ref([props.selected]);
+const selectedList = ref([]);
+const hasChange = ref(false);
 
-let query = ref(props.selected);
+let query = ref(props.defaultVal);
+
+const emit = defineEmits(['change']);
 
 const handleEnterOptions = () => {
   let text = '';
 
-  if (selectedPeople.value.length > 0) {
-    if (selectedPeople.value.length > 1)
+  if (selectedList.value.length > 1) {
+    const index = selectedList.value.indexOf(props.defaultVal);
+    if (index != -1) selectedList.value.splice(index, 1);
+  }
+
+  // console.log(selectedList.value);
+
+  if (selectedList.value.length > 0) {
+    if (selectedList.value.length > 1)
       text =
-        [...selectedPeople.value][0] +
+        [...selectedList.value][0] +
         ', +' +
-        (selectedPeople.value.length - 1).toString();
-    else text = [...selectedPeople.value][0];
+        (selectedList.value.length - 1).toString();
+    else text = [...selectedList.value][0];
+  } else {
+    text = props.defaultVal;
   }
   query.value = text;
+  hasChange.value = false;
+  emit('change', selectedList.value);
+};
+
+const result = computed(() => {
+  const data = [...props.list];
+
+  if (!hasChange.value) return [...props.list];
+  else
+    return data.filter((data) => {
+      if (data.includes(query.value)) {
+        return data;
+      }
+    });
+});
+
+const test = (a) => {
+  query.value = a.target.value;
+  hasChange.value = true;
 };
 </script>
 

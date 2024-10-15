@@ -3,21 +3,30 @@
     <p class="b1">{{ props.text }}</p>
 
     <div class="relative">
-      <Listbox v-model="selectedPerson">
+      <Listbox
+        v-model="selected"
+        @click="$emit('change', 'sortBy', selected.value)"
+        as="div"
+      >
         <ListboxButton class="dropdown-btn">
           <span class="text-ellipsis text-nowrap overflow-hidden"
-            >{{ selectedPerson }} </span
+            >{{ selected.name }} </span
           ><ChevronDownIcon
         /></ListboxButton>
         <ListboxOptions class="dropdown-list absolute">
           <ListboxOption v-for="(item, i) in props.list" :key="i" :value="item">
-            {{ item }}
+            {{ item.name }}
           </ListboxOption>
         </ListboxOptions>
       </Listbox>
     </div>
 
-    <RadioGroup v-model="sortBy" class="flex gap-1">
+    <RadioGroup
+      as="div"
+      v-model="sortBy"
+      class="flex gap-1"
+      @click="$emit('sortBy', 'sortOrder', sortBy)"
+    >
       <RadioGroupOption
         v-slot="{ checked }"
         class="flex-1 radio-btn b1 rounded-10"
@@ -54,7 +63,7 @@ import {
 
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
-const selectedPerson = ref(props.list[0]);
+const selected = ref(props.list[0]);
 const sortBy = ref('desc');
 </script>
 

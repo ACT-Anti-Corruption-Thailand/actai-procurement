@@ -1,22 +1,75 @@
-<script setup>
-const mockdata = ref([
-  {
-    name: 'สอบราคาซื้อชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ),ชุดก่อสร้าง(60.14.13.02 ),ชุดก่อสร้าง (60.14.13.02 ) (เลขที่โครงการ : 59046019435) เลขที่โครงการ: 59046019435',
-    province: 'แพร่',
-    year: '2568 (10/11/2567)',
-    owner: 'สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน',
-    no: '56015020021',
-  },
-  {
-    name: 'การไฟฟ้านครหลวง ฝ่ายก่อสร้าง',
-    province: 'กรุงเทพมหานคร',
-  },
-  {
-    name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
-    province: 'กรุงเทพมหานคร',
-    entityNo: '56015020021',
-  },
-]);
+<script setup lang="ts">
+import type { Project, Contractor } from '../../public/src/data/search_result';
+const config = useRuntimeConfig();
+
+const projectList = ref<Project | null>(null);
+const contractorList = ref<Contractor | null>(null);
+const random1 = ref(0);
+const random2 = ref(0);
+
+const getProjectList = async () => {
+  const urlParams = new URLSearchParams();
+  urlParams.set('keyword', '');
+  urlParams.set('page', 1);
+  urlParams.set('pageSize', 10);
+
+  const res = await fetch(
+    `${config.public.apiUrl}/project/search?${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    projectList.value = data;
+  }
+};
+
+const getContractorList = async () => {
+  const urlParams = new URLSearchParams();
+  urlParams.set('keyword', '');
+  urlParams.set('page', 1);
+  urlParams.set('pageSize', 10);
+
+  const res = await fetch(
+    `${config.public.apiUrl}/company/search?${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    contractorList.value = data;
+  }
+};
+
+const randomData = computed(() => {
+  return projectList.value?.searchResult[random1.value];
+});
+
+const randomData2 = computed(() => {
+  return contractorList.value?.searchResult[random2.value];
+});
+
+const randomNum = (n: number) => {
+  let r = Math.floor(Math.random() * 10);
+
+  if (n == 1) random1.value = r;
+  else random2.value = r;
+};
+
+onMounted(async () => {
+  await getProjectList();
+  await getContractorList();
+});
 </script>
 
 <template>
@@ -89,9 +142,18 @@ const mockdata = ref([
                 ต.ค. 67 - ก.ย. 68
               </p>
 
-              <ProjectData :data="mockdata[0]" :index="0" class="btn-dark-1" />
+              <a
+                :href="'/project/' + randomData?.projectId"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ProjectData :data="randomData" :index="0" class="btn-dark-1" />
+              </a>
 
-              <div class="flex items-center gap-2 my-3 link-2">
+              <div
+                class="flex items-center gap-2 my-3 link-2"
+                @click="randomNum(1)"
+              >
                 <p class="b2">สุ่มใหม่</p>
                 <svg
                   width="16"
@@ -142,9 +204,22 @@ const mockdata = ref([
                 ต.ค. 67 - ก.ย. 68
               </p>
 
-              <ProjectData :data="mockdata[2]" :index="2" class="btn-dark-1" />
+              <a
+                :href="'/contractor/' + randomData2?.companyId"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ProjectData
+                  :data="randomData2"
+                  :index="2"
+                  class="btn-dark-1"
+                />
+              </a>
 
-              <div class="flex items-center gap-2 my-3 link-2">
+              <div
+                class="flex items-center gap-2 my-3 link-2"
+                @click="randomNum(2)"
+              >
                 <p class="b2">สุ่มใหม่</p>
                 <svg
                   width="16"

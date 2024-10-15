@@ -1,6 +1,33 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 const config = useRuntimeConfig();
+
+const summary = ref({});
+
+const getOverallSummary = async () => {
+  const urlParams = new URLSearchParams();
+  urlParams.set('budgetYearStart', 2562);
+  urlParams.set('budgetYearEnd', 2568);
+
+  const res = await fetch(
+    `${config.public.apiUrl}/project/summary/by-budget-year?${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    summary.value = data;
+  }
+};
+
+onMounted(async () => {
+  await getOverallSummary();
+});
 </script>
 
 <template>
@@ -41,8 +68,12 @@ const config = useRuntimeConfig();
         <p class="b3 text-[#BCBCBC]">
           <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ.
           2562 - ปัจจุบัน <br />
-          โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด 100,000 โครงการ หน่วยงานรัฐ 200
-          หน่วยงาน และ ผู้รับจ้าง 2,500 ราย
+          โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด
+          <template v-if="summary?.totalProject != null">
+            {{ summary?.totalProject.toLocaleString() }} โครงการ หน่วยงานรัฐ
+            {{ summary?.totalAgency.toLocaleString() }} หน่วยงาน และ ผู้รับจ้าง
+            {{ summary?.totalCompany.toLocaleString() }} ราย
+          </template>
         </p>
         <p
           class="b4 flex gap-1 items-center link-2 justify-center cursor-pointer"

@@ -1,6 +1,36 @@
 <script setup>
 import { ChevronRightIcon } from '@heroicons/vue/24/solid';
 const keyword = ['ก่อสร้าง', 'เฉลิมพระเกียรติ', 'ถนน'];
+
+const config = useRuntimeConfig();
+const searchSummary = ref({});
+
+const getSearchSummary = async () => {
+  const urlParams = new URLSearchParams();
+  urlParams.set('page', 1);
+  urlParams.set('pageSize', 3);
+  urlParams.set('budgetYearStart', 2567);
+  urlParams.set('budgetYearEnd', 2568);
+
+  const res = await fetch(
+    `${config.public.apiUrl}/search/summary?${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    searchSummary.value = data;
+  }
+};
+
+onMounted(async () => {
+  await getSearchSummary();
+});
 </script>
 
 <template>
@@ -50,20 +80,23 @@ const keyword = ['ก่อสร้าง', 'เฉลิมพระเกี�
           <div class="flex gap-2 items-center">
             <div class="overflow-auto hide-scroll mt-3">
               <div class="flex gap-3">
-                <div v-for="(item, i) in keyword" :key="i">
-                  <NuxtLink :to="`/result?search=${item}`">
+                <div v-for="(item, i) in searchSummary?.result" :key="i">
+                  <NuxtLink :to="`/result?search=${item.searchKeyword}`">
                     <div
                       class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left"
                     >
                       <p class="b1 font-bold mb-3 text-black">
                         โครงการฯ ที่มีคำว่า
-                        <span class="text-[#74060A]">“{{ item }}”</span>
+                        <span class="text-[#74060A]"
+                          >“{{ item.searchKeyword }}”</span
+                        >
                       </p>
                       <p class="b4 text-[#5E5E5E]">
-                        รวม xxx,xxxx,xxx,xxx โครงการ
+                        รวม {{ item.totalProject.toLocaleString() }} โครงการ
                       </p>
                       <p class="b4 text-[#5E5E5E]">
-                        ใช้งบประมาณรวม xx,xxx,xxx,xxx,xxx,xxx.xx บาท
+                        ใช้งบประมาณรวม
+                        {{ item.totalBudgetMoney.toLocaleString() }} บาท
                       </p>
 
                       <GoToText

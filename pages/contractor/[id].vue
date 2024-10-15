@@ -13,6 +13,7 @@ onBeforeMount(async () => {
   await getContracterData();
   await getContracterProject();
   await getContracterGov();
+  // await getContracterRelationship();
 });
 
 const contractorData = ref<ContractorDetails>([]);
@@ -90,6 +91,25 @@ const getContracterGov = async () => {
   if (res.ok) {
     const data = await res.json();
     contractorGovList.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+};
+
+const getContracterRelationship = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/company/${segments}/relationship`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    console.log(data);
   }
 };
 
@@ -207,7 +227,7 @@ const setDate = (date) => {
           >
             <p>ประวัติการทิ้งงาน</p>
           </div>
-          <!-- <div
+          <!--      <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
@@ -216,7 +236,7 @@ const setDate = (date) => {
           >
             <p>ความสัมพันธ์</p>
           </div>
-          <div
+           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':

@@ -54,7 +54,10 @@ onMounted(() => {
   </div>
 
   <div class="mx-auto max-w-6xl px-4" v-else>
-    <div class="border-b border-black mb-5">
+    <div
+      class="border-b border-black mb-5"
+      v-if="props.projectList?.searchResult?.length > 0"
+    >
       <h4 class="font-black">โครงการจัดซื้อจัดจ้าง</h4>
 
       <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />
@@ -107,7 +110,10 @@ onMounted(() => {
       />
     </div>
 
-    <div class="border-b border-black mb-5">
+    <div
+      class="border-b border-black mb-5"
+      v-if="props.govList?.searchResult?.length > 0"
+    >
       <h4 class="font-black">หน่วยงานรัฐ</h4>
       <ProjectIconGuide
         :data="{
@@ -172,7 +178,7 @@ onMounted(() => {
       />
     </div>
 
-    <div class="mb-10">
+    <div class="mb-10" v-if="props.contractorList?.searchResult?.length > 0">
       <h4 class="font-black">ผู้รับจ้าง</h4>
       <ProjectIconGuide
         :data="{

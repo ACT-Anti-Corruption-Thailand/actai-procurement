@@ -35,8 +35,11 @@ const chartDataSet3 = ref([]);
 const chartDataSet4 = ref([]);
 const chartDataSet5 = ref([]);
 const keyword = ref(null);
+const projectListAll = ref<Project | null>(null);
 const projectList = ref<Project | null>(null);
+const govListAll = ref<Government | null>(null);
 const govList = ref<Government | null>(null);
+const contractorListAll = ref<Contractor | null>(null);
 const contractorList = ref<Contractor | null>(null);
 
 onMounted(async () => {
@@ -75,16 +78,20 @@ onMounted(async () => {
 });
 
 onBeforeMount(async () => {
-  await getProjectList();
-  await getGovList();
-  await getContractorList();
+  await getProjectList('', '');
+  await getProjectList('', 'details');
+  await getGovList('', '');
+  await getGovList('', 'details');
+  await getContractorList('', '');
+  await getContractorList('', 'details');
 });
 
-const getProjectList = async () => {
+const getProjectList = async (params: string, section: string) => {
   const urlParams = decodeURI(window.location.href).split('=')[1];
+  const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?keyword=${urlParams}`,
+    `${config.public.apiUrl}/project/search?keyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {
@@ -95,15 +102,19 @@ const getProjectList = async () => {
 
   if (res.ok) {
     const data = await res.json();
-    projectList.value = JSON.parse(JSON.stringify(data)) || [];
+
+    if (section == 'details')
+      projectList.value = JSON.parse(JSON.stringify(data)) || [];
+    else projectListAll.value = JSON.parse(JSON.stringify(data)) || [];
   }
 };
 
-const getGovList = async () => {
+const getGovList = async (params: string, section: string) => {
   const urlParams = decodeURI(window.location.href).split('=')[1];
+  const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?keyword=${urlParams}`,
+    `${config.public.apiUrl}/agency/search?keyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {
@@ -114,15 +125,18 @@ const getGovList = async () => {
 
   if (res.ok) {
     const data = await res.json();
-    govList.value = JSON.parse(JSON.stringify(data)) || [];
+    if (section == 'details')
+      govList.value = JSON.parse(JSON.stringify(data)) || [];
+    else govListAll.value = JSON.parse(JSON.stringify(data)) || [];
   }
 };
 
-const getContractorList = async () => {
+const getContractorList = async (params: string, section: string) => {
   const urlParams = decodeURI(window.location.href).split('=')[1];
+  const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?keyword=${urlParams}`,
+    `${config.public.apiUrl}/company/search?keyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {
@@ -133,7 +147,9 @@ const getContractorList = async () => {
 
   if (res.ok) {
     const data = await res.json();
-    contractorList.value = JSON.parse(JSON.stringify(data)) || [];
+    if (section == 'details')
+      contractorList.value = JSON.parse(JSON.stringify(data)) || [];
+    else contractorListAll.value = JSON.parse(JSON.stringify(data)) || [];
   }
 };
 
@@ -206,12 +222,13 @@ const setChartData = (data) => {
         @changeMenu="(n) => (menu = n)"
         :iconGuide="iconGuide"
         :mockDataGuide="mockDataGuide"
-        :projectList="projectList"
-        :govList="govList"
-        :contractorList="contractorList"
+        :projectList="projectListAll"
+        :govList="govListAll"
+        :contractorList="contractorListAll"
       />
       <ResultProjectList
         v-else-if="menu == 'โครงการฯ'"
+        @search="getProjectList"
         :iconGuide="iconGuide"
         :mockDataGuide="mockDataGuide"
         :data="summaryData"
@@ -220,8 +237,16 @@ const setChartData = (data) => {
         :chartDataSet1="chartDataSet1"
         :chartDataSet2="chartDataSet2"
       />
-      <ResultGovernment v-else-if="menu == 'หน่วยงานรัฐ'" :govList="govList" />
-      <ResultContractor v-else :contractorList="contractorList" />
+      <ResultGovernment
+        v-else-if="menu == 'หน่วยงานรัฐ'"
+        :govList="govList"
+        @search="getGovList"
+      />
+      <ResultContractor
+        v-else
+        :contractorList="contractorList"
+        @search="getContractorList"
+      />
     </ClientOnly>
     <!-- </div> -->
   </div>

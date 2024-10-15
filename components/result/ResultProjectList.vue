@@ -4,6 +4,7 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 const selectedTab = ref(0);
 const isOpen = ref(false);
 const isOpen2 = ref(false);
+const params = ref('');
 
 const props = defineProps<{
   iconGuide: object;
@@ -14,8 +15,6 @@ const props = defineProps<{
   chartDataSet1: array;
   chartDataSet2: array;
 }>();
-
-const dataTest = ref(null);
 
 const yearlyAggregates = [
   {
@@ -194,6 +193,24 @@ const menuList = ref([
   },
 ]);
 
+const emit = defineEmits(['search']);
+
+const sort = ref('');
+const page = ref(0);
+
+const setParams = (type: string, val: string) => {
+  const searchParams = new URLSearchParams();
+
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+
+  searchParams.set('sortBy', type == 'sortBy' ? val : 'relevanceScore');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('pageSize', type == 'page' ? page.value : 10);
+
+  emit('search', '&' + searchParams.toString(), 'details');
+};
+
 onMounted(() => {
   menuList.value[0].desc = props.data.maxProjectStatus.name;
   menuList.value[0].total = props.data.maxProjectStatus.total;
@@ -207,11 +224,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- <div>
+  <div v-if="props.projectList?.pagination.totalItem == 0">
     <h5 class="text-center text-[#8E8E8E]">
       ไม่พบโครงการจัดซื้อจัดจ้างที่มีคำค้นนี้
     </h5>
-  </div> -->
+  </div>
   <TabGroup :selectedIndex="selectedTab" @change="changeTab" as="Component">
     <div
       class="flex justify-between items-center mx-auto max-w-6xl px-4 sm:px-0"
@@ -220,7 +237,7 @@ onMounted(() => {
         <Tab class="tab-menu b1">รายชื่อ</Tab>
         <Tab class="tab-menu b1">ภาพรวม</Tab>
       </TabList>
-      <!-- <div><FilterPopupResult section="โครงการ" /></div> -->
+      <div><FilterPopupResult section="โครงการ" /></div>
     </div>
 
     <TabPanels>
@@ -309,20 +326,35 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- <div class="flex items-center justify-between my-5">
+        <div class="flex items-center justify-between my-5">
           <SortBy
             text="เรียงตาม"
-            :list="['ความใกล้เคียงคำค้น', 'วันที่ประกาศโครงการ', 'งบประมาณรวม']"
+            :list="[
+              {
+                name: 'ความใกล้เคียงคำค้น',
+                value: 'relevanceScore',
+              },
+              {
+                name: 'วันที่ประกาศโครงการ',
+                value: 'announcementDate',
+              },
+              {
+                name: 'งบประมาณรวม',
+                value: 'budgetMoney',
+              },
+            ]"
+            @change="setParams"
+            @sortBy="setParams"
           />
 
-          <DownloadAndCopy />
-        </div> -->
+          <!-- <DownloadAndCopy /> -->
+        </div>
 
         <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />
 
         <div class="my-3">
           <a
-            v-for="(item, i) in props.projectList.searchResult"
+            v-for="(item, i) in props.projectList?.searchResult"
             :key="i"
             target="_blank"
             :href="'/project/' + item.projectId"
@@ -358,6 +390,19 @@ onMounted(() => {
               </div>
             </div>
           </a>
+
+          <div class="text-center">
+            <button
+              v-if="
+                props.projectList?.searchResult.length <
+                props.projectList?.pagination?.totalItem
+              "
+              class="border btn-light-3 link-1 p-2.5 w-32 rounded-10"
+              @click="setParams('page', 10)"
+            >
+              โหลดเพิ่ม
+            </button>
+          </div>
         </div>
       </TabPanel>
       <TabPanel>

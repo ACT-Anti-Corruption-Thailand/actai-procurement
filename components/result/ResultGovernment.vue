@@ -24,6 +24,24 @@ function highlight(title: string, text: string) {
 const searchText = ref('');
 const keyword = ref('');
 
+const emit = defineEmits(['search']);
+
+const sort = ref('');
+const page = ref(0);
+
+const setParams = (type: string, val: string) => {
+  const searchParams = new URLSearchParams();
+
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+
+  searchParams.set('sortBy', type == 'sortBy' ? val : 'relevanceScore');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('pageSize', type == 'page' ? page.value : 10);
+
+  emit('search', '&' + searchParams.toString(), 'details');
+};
+
 onMounted(() => {
   keyword.value = localStorage.getItem('keyword');
   const queryString = window.location.search;
@@ -42,24 +60,41 @@ onMounted(() => {
       <h4 class="font-bold">
         {{ props.govList?.pagination?.totalItem }} หน่วยงานรัฐ
       </h4>
-      <!-- <FilterPopupResult section="หน่วยงานรัฐ" /> -->
+      <FilterPopupResult section="หน่วยงานรัฐ" />
     </div>
 
-    <!-- <div class="flex items-center justify-between my-3 sm:my-5">
+    <div class="flex items-center justify-between my-3 sm:my-5">
       <div class="flex gap-2 items-center relative">
         <SortBy
           :list="[
-            'ความใกล้เคียงคำค้น',
-            'งบประมาณรวม',
-            'จำนวนโครงการทั้งหมด',
-            'จำนวนโครงการเสี่ยงทุจริต',
-            '% โครงการเสี่ยงทุจริตจากทั้งหมด',
+            {
+              name: 'ความใกล้เคียงคำค้น',
+              value: 'relevanceScore',
+            },
+            {
+              name: 'งบประมาณรวม',
+              value: 'budgetMoney',
+            },
+            {
+              name: 'จำนวนโครงการทั้งหมด',
+              value: 'totalProject',
+            },
+            {
+              name: 'จำนวนโครงการเสี่ยงทุจริต',
+              value: 'totalProjectHasCorruptionRisk',
+            },
+            {
+              name: '% โครงการเสี่ยงทุจริตจากทั้งหมด',
+              value: 'percentageProjectHasCorruptionRisk',
+            },
           ]"
           text="เรียงตาม"
+          @change="setParams"
+          @sortBy="setParams"
         />
       </div>
-      <DownloadAndCopy />
-    </div> -->
+      <!-- <DownloadAndCopy /> -->
+    </div>
 
     <ProjectIconGuide
       :data="{
@@ -113,6 +148,19 @@ onMounted(() => {
           </div>
         </div>
       </a>
+
+      <div class="text-center">
+        <button
+          v-if="
+            props.govList?.searchResult.length <
+            props.govList?.pagination?.totalItem
+          "
+          class="border btn-light-3 link-1 p-2.5 w-32 rounded-10"
+          @click="setParams('page', 10)"
+        >
+          โหลดเพิ่ม
+        </button>
+      </div>
     </div>
   </div>
 </template>

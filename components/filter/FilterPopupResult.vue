@@ -13,6 +13,7 @@
       ตัวกรอง
     </button>
     <button
+      v-if="filterCount > 0"
       type="button"
       class="p-2.5 border btn-light-3 link-1 rounded-10 ml-1"
     >
@@ -88,8 +89,8 @@
                       <div class="flex-1 relative">
                         <ListBox
                           title=""
-                          :selected="selected[0].yearFrom"
-                          :list="filterList.year"
+                          :selected="selected.yearFrom"
+                          :list="filterListProject?.budgetYears"
                         />
                       </div>
 
@@ -98,52 +99,59 @@
                       <div class="flex-1 relative">
                         <ListBox
                           title=""
-                          :selected="selected[0].yearTo"
-                          :list="filterList.year"
+                          :selected="selected.yearTo"
+                          :list="filterListProject?.budgetYears"
                         />
                       </div>
                     </div>
 
                     <Combobox
                       title="หน่วยงานรัฐเจ้าของโครงการ"
-                      :selected="selected[0].agencies"
-                      :list="filterList.agencies"
+                      :list="filterListProject?.agencies"
+                      defaultVal="ทุกหน่วยงาน"
+                      @change="(n) => setFilter(n, 'agencies')"
                     />
 
                     <Combobox
                       title="สังกัด"
-                      :selected="selected[0].agencyBelongTo"
-                      :list="filterList.agencyBelongTo"
+                      :list="filterListProject?.agencyBelongTo"
+                      defaultVal="ทุกหน่วยงาน"
+                      @change="(n) => setFilter(n, 'agencyBelongTo')"
                     />
 
                     <Combobox
                       title="ที่ตั้งโครงการ"
-                      :selected="selected[0].provinces"
-                      :list="filterList.provinces"
+                      :list="filterListProject?.provinces"
+                      defaultVal="ทุกจังหวัด"
+                      @change="(n) => setFilter(n, 'provinces')"
                     />
 
                     <Combobox
                       title="สถานะโครงการ"
-                      :selected="selected[0].projectStatus"
-                      :list="filterList.projectStatus"
+                      :list="filterListProject?.projectStatus"
+                      defaultVal="ทุกสถานะ"
+                      @change="(n) => setFilter(n, 'projectStatus')"
                     />
 
                     <Combobox
                       title="วิธีการจัดหา"
-                      :selected="selected[0].resoucingMethod"
-                      :list="filterList.resoucingMethod"
+                      :list="filterListProject?.resourcingMethod"
+                      defaultVal="ทุกวิธี"
+                      @change="(n) => setFilter(n, 'resourcingMethod')"
                     />
 
                     <Combobox
                       title="ประเภทการจัดหา"
-                      :selected="selected[0].recourcingType"
-                      :list="filterList.recourcingType"
+                      :list="filterListProject?.resourcingType"
+                      defaultVal="ทุกประเภท"
+                      @change="(n) => setFilter(n, 'resourcingType')"
                     />
 
                     <Combobox
                       title="ประเภทผู้รับจ้าง"
-                      :selected="selected[0].contractorType"
-                      :list="filterList.contractorType"
+                      :list="filterListProject?.contractorType"
+                      defaultVal="ทุกประเภท"
+                      @change="(n) => setFilter(n, 'contractorType')"
                     />
 
                     <div class="text-[#7F7F7F] mt-5">
@@ -189,30 +197,34 @@
                   </div>
                 </template>
                 <template v-else-if="props.section == 'หน่วยงานรัฐ'">
-                  <div class="overflow-y-scroll max-h-[80vh]">
+                  <div>
                     <Combobox
                       title="สังกัด"
-                      :selected="selected[0].agencyBelongTo"
-                      :list="filterList.agencyBelongTo"
+                      :list="filterListGovernment?.agencyBelongTo"
+                      defaultVal="ทุกหน่วยงาน"
+                      @change="(n) => setFilter(n, 'agencyBelongTo')"
                     />
 
                     <Combobox
                       title="ที่ตั้งหน่วยงาน"
-                      :selected="selected[0].provinces"
-                      :list="filterList.provinces"
+                      :list="filterListGovernment.provinces"
+                      defaultVal="ทุกจังหวัด"
+                      @change="(n) => setFilter(n, 'provinces')"
                     /></div
                 ></template>
                 <template v-else>
                   <Combobox
                     title="ที่ตั้งผู้รับจ้าง"
-                    :selected="selected[0].provinces"
-                    :list="filterList.provinces"
+                    :list="filterListContractor.provinces"
+                    defaultVal="ทุกจังหวัด"
+                    @change="(n) => setFilter(n, 'provinces')"
                   />
 
                   <Combobox
                     title="ประเภทผู้รับจ้าง"
-                    :selected="selected[0].contractorType"
-                    :list="filterList.contractorType"
+                    :list="filterListContractor.contractorType"
+                    defaultVal="ทุกประเภท"
+                    @change="(n) => setFilter(n, 'contractorType')"
                   />
                 </template>
 
@@ -248,7 +260,7 @@
                 </button>
                 <button
                   type="button"
-                  @click="isOpen = false"
+                  @click="searchByResult"
                   class="b2 rounded-10 bg-black p-2.5 min-w-32 text-white hover:bg-[#1F1F1F] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
                 >
                   ตกลง <CheckIcon class="size-4 inline" />
@@ -279,78 +291,26 @@ const props = defineProps<{
 
 import { CheckIcon } from '@heroicons/vue/24/solid';
 
+const config = useRuntimeConfig();
 const isOpen = ref(false);
 const plan = ref('งบประมาณ');
+const filterCount = ref(0);
 
-const selected = [
-  {
-    yearFrom: '2566',
-    yearTo: '2567',
-    agencies: 'ทุกหน่วยงาน',
-    agencyBelongTo: 'ทุกหน่วยงาน',
-    contractorType: 'ทุกประเภท',
-    projectStatus: 'ทุกสถานะ',
-    provinces: 'ทุกจังหวัด',
-    recourcingType: 'ทุกประเภท',
-    resoucingMethod: 'ทุกวิธี',
-  },
-];
+const selected = {
+  yearFrom: '2567',
+  yearTo: '2567',
+  agencies: 'ทุกหน่วยงาน',
+  agencyBelongTo: 'ทุกหน่วยงาน',
+  contractorType: 'ทุกประเภท',
+  projectStatus: 'ทุกสถานะ',
+  provinces: 'ทุกจังหวัด',
+  resourcingType: 'ทุกประเภท',
+  resourcingMethod: 'ทุกวิธี',
+};
 
-const filterList = ref({
-  year: ['2560', '2561', '2562', '2563', '2564', '2565', '2566', '2567'],
-  agencies: [
-    'ทุกหน่วยงาน',
-    'การไฟฟ้านครหลวง ฝ่ายก่อสร้าง',
-    'สำนักเลขาธิการนายกรัฐมนตรี',
-    'สำนักงบประมาณ',
-  ],
-  agencyBelongTo: [
-    'ทุกหน่วยงาน',
-    'สำนักนายกรัฐมนตรี',
-    'กระทรวงกลาโหม',
-    'กระทรวงการคลัง',
-    'กระทรวงการต่างประเทศ',
-    'กระทรวงการท่องเทียวและกีฬา',
-    'กระทรวงพัฒนาสังคมและความมั่นคงของมนุษย์',
-    'กระทรวงเกษตรและสหกรณ์',
-    'สำนักงานพิพิธภัณฑ์เกษตรเฉลิมพระเกียรติพระบาทสมเด็จพระเจ้าอยู่หัว (องค์การมหาชน)',
-    'กระทรวงคมนาคม',
-    'กระทรวงทรัพยากรธรรมชาติและสิ่งแวดล้อม',
-    'กระทรวงดิจิทัลเพื่อเศรษฐกิจและสังคม',
-    'กระทรวงพลังงาน',
-    'กระทรวงพาณิชย์',
-    'กระทรวงมหาดไทย',
-    'กระทรวงยุติธรรม',
-    'กระทรวงแรงงาน',
-    'กระทรวงวัฒนธรรม',
-    'กระทรวงการอุคมศึกษา วิทยาศาสตร์ วิจัยและนวัตกรรม',
-    'กระทรวงศึกษาธิการ',
-    'กระทรวงสาธารณสุข',
-    'กระทรวงอุตสาหกรรม',
-    'หน่วยงานของรัฐที่ไม่สังกัดสำนักนายกรัฐมนตรี กระทรวงหรือทบวง',
-    'องค์กรอิสระตามรัฐธรรมนูญ',
-    'PTT MEA LTD',
-    'ไม่สามารถระบุได้',
-  ],
-  provinces: ['ทุกจังหวัด', 'กรุงเทพมหานคร', 'ปทุมธานี', 'แพร่'],
-  projectStatus: [
-    'ทุกสถานะ',
-    'แล้วเสร็จตามสัญญา',
-    'จัดทำสัญญา / PO แล้ว',
-    'ระหว่างดำเนินการ',
-    'ยกเลิกสัญญา',
-    'ยกเลิกโครงการ',
-  ],
-  resoucingMethod: [
-    'ทุกวิธี',
-    'ประกวดราคา',
-    'ตกลงราคา',
-    'สอบราคา',
-    'เฉพาะเจาะจง',
-  ],
-  recourcingType: ['ทุกประเภท', 'จ้างก่อสร้าง'],
-  contractorType: ['ทุกประเภท', 'บริษัทจำกัด', 'ห้างหุ้นส่วน'],
-});
+const filterListProject = ref({});
+const filterListGovernment = ref({});
+const filterListContractor = ref({});
 
 function closeModal() {
   isOpen.value = false;
@@ -358,6 +318,67 @@ function closeModal() {
 function openModal() {
   isOpen.value = true;
 }
+
+const getFilterListProject = async () => {
+  const res = await fetch(`${config.public.apiUrl}/project/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    filterListProject.value = data;
+    selected.yearFrom = data.budgetYears[0].toString();
+    selected.yearTo = data.budgetYears[data.budgetYears.length - 1].toString();
+  }
+};
+
+const getFilterListGovernment = async () => {
+  const res = await fetch(`${config.public.apiUrl}/agency/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    filterListGovernment.value = data;
+  }
+};
+
+const getFilterListContractor = async () => {
+  const res = await fetch(`${config.public.apiUrl}/company/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    filterListContractor.value = data;
+  }
+};
+
+onMounted(async () => {
+  await getFilterListProject();
+  await getFilterListGovernment();
+  await getFilterListContractor();
+});
+
+const setFilter = (val: any, section: string) => {
+  selected[section] = val.length > 0 ? [...val] : '';
+};
+
+const searchByResult = () => {
+  // console.log(selected);
+  // for (const property in selected) {
+  //   console.log(`${property}: ${selected[property]}`);
+  // }
+};
 </script>
 
 <style scoped>
