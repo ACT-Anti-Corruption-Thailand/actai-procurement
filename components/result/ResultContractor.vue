@@ -27,6 +27,7 @@ const emit = defineEmits(['search']);
 
 const sort = ref('');
 const page = ref(0);
+const keyword = ref('');
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
@@ -42,6 +43,7 @@ const setParams = (type: string, val: string) => {
 };
 
 onMounted(() => {
+  keyword.value = localStorage.getItem('keyword');
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   searchText.value = urlParams.get('search');

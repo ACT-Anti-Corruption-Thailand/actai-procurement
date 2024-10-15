@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  data: Object;
+  data?: Object;
   index: number;
 }>();
 </script>
