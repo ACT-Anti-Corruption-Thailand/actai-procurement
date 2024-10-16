@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-end gap-2">
-    <button
+    <!-- <button
       type="button"
       class="p-2.5 border btn-light-3 rounded-10 ml-1 b2 link-1 flex items-center gap-2"
     >
@@ -21,7 +21,7 @@
           fill="currentColor"
         />
       </svg>
-    </button>
+    </button> -->
     <button
       type="button"
       class="p-2.5 rounded-10 b2 text-[#0B5C90] hover:text-[#1688CA] gap-1 flex items-center"

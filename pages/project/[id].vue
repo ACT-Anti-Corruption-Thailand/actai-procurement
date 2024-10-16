@@ -9,17 +9,24 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 import type {
   ProjectDetails,
   ProjectDocuments,
+  ProjectContractor,
+  ProjectContract,
+  ProjectEstimatePrice,
 } from '../../public/src/data/data_details';
 
 onBeforeMount(async () => {
-  await getProjectData();
-  await getProjectData();
+  await getProjectDataAndDocs();
+  await getProjectEstimatePrice();
+  await getProjectContractor();
 });
 
 const projectData = ref<ProjectDetails>([]);
 const projectDocs = ref<ProjectDocuments>([]);
+const projectContractor = ref<ProjectContractor>([]);
+const projectContract = ref<ProjectContract>([]);
+const projectEstimatePrice = ref<ProjectEstimatePrice>([]);
 
-const getProjectData = async () => {
+const getProjectDataAndDocs = async () => {
   const segments = window.location.href.split('/')[4];
 
   const res = await fetch(`${config.public.apiUrl}/project/${segments}`, {
@@ -47,6 +54,59 @@ const getProjectData = async () => {
   if (res2.ok) {
     const data = await res2.json();
     projectDocs.value = JSON.parse(JSON.stringify(data.relatedDocuments)) || [];
+  }
+};
+
+const getProjectContractor = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/project/${segments}/contractor`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    projectContractor.value = data.contractors || [];
+  }
+
+  const res2 = await fetch(
+    `${config.public.apiUrl}/project/${segments}/contract`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res2.ok) {
+    const data = await res2.json();
+    projectContract.value = data.contractors || [];
+  }
+};
+
+const getProjectEstimatePrice = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/project/${segments}/item-estimate-price`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    projectEstimatePrice.value = data.items || [];
   }
 };
 
@@ -143,7 +203,7 @@ const setDate = (date) => {
           >
             <p>ภาพรวม</p>
           </div>
-          <!-- <div
+          <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ข้อมูลเจาะลึก',
@@ -156,7 +216,7 @@ const setDate = (date) => {
               <li>ผู้ชนะการประมูล</li>
               <li>การเสนอราคา</li>
             </ul>
-          </div> -->
+          </div>
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
@@ -171,7 +231,12 @@ const setDate = (date) => {
       </div>
       <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
         <OverallProject v-if="menu == 'ภาพรวม'" :data="projectData" />
-        <Details v-else-if="menu == 'ข้อมูลเจาะลึก'" />
+        <Details
+          v-else-if="menu == 'ข้อมูลเจาะลึก'"
+          :contracters="projectContractor"
+          :contracts="projectContract"
+          :estimatePrice="projectEstimatePrice"
+        />
         <ProjectDocument v-else :data="projectDocs" />
 
         <img

@@ -34,6 +34,45 @@ export interface ProjectDetails {
   lastUpdatedOn: Date;
 }
 
+export interface ProjectContractor {
+  contractors: [
+    {
+      id: string;
+      name: string;
+      isWinner: boolean;
+      processInvolved: [];
+    }
+  ];
+}
+
+export interface ProjectContract {
+  contractors: [
+    {
+      id: string;
+      name: string;
+      contracts: [
+        {
+          id: string;
+          name: string;
+          date: string;
+          status: string;
+          money: number;
+        }
+      ];
+    }
+  ];
+}
+
+export interface ProjectEstimatePrice {
+  items: [
+    {
+      name: string;
+      estimatePrice: number;
+      contractors: [];
+    }
+  ];
+}
+
 export interface ProjectDocuments {
   relatedDocuments: [
     {
@@ -65,7 +104,7 @@ export interface ContractorDetails {
   status: string;
   changeHistory: [
     {
-      date: 'string;
+      date: string;
       change: string;
       old: string;
       new: string;
@@ -80,4 +119,33 @@ export interface ContractorDetails {
     managingPartners: [];
   };
   corruptionRisk: [];
+}
+
+export interface ContracterRelationship {
+  // relationshipWith:
+  //   {
+  //     politicians: [ {
+  //       name: string;
+  //       relationships: [ {
+  //         relationshipType: string;
+  //         relatedTo: string[];
+  //       }];
+  //     }];
+  //     companies: [ {
+  //       id: string;
+  //       name: string;
+  //       relationships: [ {
+  //         relationshipType: string;
+  //         relatedTo: string[];
+  //       }];
+  //     }];
+  //     politicalParties: string[]
+  //   }
+  relatedCompanies: [];
+}
+
+export interface ContracterRelatedCompanies {
+  id: string;
+  name: string;
+  totalBiddingProject: number;
 }

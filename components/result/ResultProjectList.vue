@@ -237,7 +237,7 @@ onMounted(() => {
         <Tab class="tab-menu b1">รายชื่อ</Tab>
         <Tab class="tab-menu b1">ภาพรวม</Tab>
       </TabList>
-      <div><FilterPopupResult section="โครงการ" /></div>
+      <!-- <div><FilterPopupResult section="โครงการ" /></div> -->
     </div>
 
     <TabPanels>
@@ -456,7 +456,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- <div class="bg-[#1F1F1F] p-4 sm:p-10 mt-10">
+        <div class="bg-[#1F1F1F] p-4 sm:p-10 mt-10">
           <div class="max-w-6xl mx-auto">
             <BarChart3
               :data="props.chartDataSet1"
@@ -468,14 +468,12 @@ onMounted(() => {
             <BarChart3
               :data="props.chartDataSet2"
               :yearList="props.yearList"
-              title="วิธีการจัดหา"
+              title="ความเสี่ยงทุจริต"
               id="chart-1"
               section="risk"
             />
 
-  
-
-            <BarChart
+            <!-- <BarChart
               title="สถานะโครงการ"
               :data="yearlyAggregates"
               titleType="0"
@@ -497,7 +495,7 @@ onMounted(() => {
               @isOpen="isOpen2 = true"
             />
 
-           <MapSection class="mt-5" id="maps" />
+           <MapSection class="mt-5" id="maps" /> -->
           </div>
 
           <div
@@ -506,7 +504,7 @@ onMounted(() => {
           >
             กลับด้านบน <arrow color="#8DCCF0" class="-rotate-90" />
           </div>
-        </div> -->
+        </div>
       </TabPanel>
     </TabPanels>
   </TabGroup>

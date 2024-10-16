@@ -6,20 +6,27 @@ const config = useRuntimeConfig();
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
-import type { ContractorDetails } from '../../public/src/data/data_details';
+import type {
+  ContractorDetails,
+  ContracterRelationship,
+  ContracterRelatedCompanies,
+} from '../../public/src/data/data_details';
 import type { Project, Government } from '../../public/src/data/search_result';
 
 onBeforeMount(async () => {
   await getContracterData();
   await getContracterProject();
   await getContracterGov();
-  // await getContracterRelationship();
+  await getContracterRelationship();
+  await getContracterRelatedCompany();
 });
 
 const contractorData = ref<ContractorDetails>([]);
 const contractorAbandonProjectList = ref<Project>([]);
 const contractorProjectList = ref<Project>([]);
 const contractorGovList = ref<Government>([]);
+const contractorRelationship = ref<ContracterRelationship>([]);
+const contractorRelatedCompanies = ref<ContracterRelatedCompanies>([]);
 
 const getContracterData = async () => {
   const segments = window.location.href.split('/')[4];
@@ -109,7 +116,26 @@ const getContracterRelationship = async () => {
 
   if (res.ok) {
     const data = await res.json();
-    console.log(data);
+    contractorRelationship.value = data.relatedCompanies;
+  }
+};
+
+const getContracterRelatedCompany = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/company/${segments}/related-company`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    contractorRelatedCompanies.value = data.relatedCompanies;
   }
 };
 
@@ -227,7 +253,7 @@ const setDate = (date) => {
           >
             <p>ประวัติการทิ้งงาน</p>
           </div>
-          <!--      <div
+          <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
@@ -236,7 +262,7 @@ const setDate = (date) => {
           >
             <p>ความสัมพันธ์</p>
           </div>
-           <div
+          <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -245,7 +271,7 @@ const setDate = (date) => {
             @click="menu = 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'"
           >
             <p>กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน</p>
-          </div> -->
+          </div>
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
@@ -275,8 +301,14 @@ const setDate = (date) => {
           v-else-if="menu == 'ประวัติการทิ้งงาน'"
           :data="contractorAbandonProjectList"
         />
-        <Relationship v-else-if="menu == 'ความสัมพันธ์'" />
-        <Auction v-else-if="menu == 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'" />
+        <Relationship
+          v-else-if="menu == 'ความสัมพันธ์'"
+          :data="contractorRelationship"
+        />
+        <Auction
+          v-else-if="menu == 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'"
+          :data="contractorRelatedCompanies"
+        />
         <RelatedProject
           v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'"
           :data="contractorProjectList"

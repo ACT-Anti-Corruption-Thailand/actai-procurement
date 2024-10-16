@@ -60,7 +60,7 @@ onMounted(() => {
       <h4 class="font-bold">
         {{ props.govList?.pagination?.totalItem }} หน่วยงานรัฐ
       </h4>
-      <FilterPopupResult section="หน่วยงานรัฐ" />
+      <!-- <FilterPopupResult section="หน่วยงานรัฐ" /> -->
     </div>
 
     <div class="flex items-center justify-between my-3 sm:my-5">

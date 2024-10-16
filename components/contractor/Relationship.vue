@@ -1,7 +1,11 @@
 <template>
   <h4 class="font-bold text-white mb-5">ความสัมพันธ์</h4>
 
-  <div class="bg-white rounded-10 gap-2 mb-3">
+  <div v-if="props.data.length == 0" class="bg-white rounded-10 gap-2 mb-3 p-5">
+    <h5 class="text-center text-[#8E8E8E]">ไม่พบข้อมูล</h5>
+  </div>
+
+  <div class="bg-white rounded-10 gap-2 mb-3" v-else>
     <div class="p-5 rounded-b-md w-full">
       <h5 class="font-black">นักการเมือง/เจ้าหน้าที่รัฐ</h5>
       <div
@@ -166,7 +170,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { ContracterRelationship } from '../../public/src/data/data_details';
+
+const props = defineProps<{
+  data: ContracterRelationship;
+}>();
+
 const relationshipWith = {
   politicians: [
     {

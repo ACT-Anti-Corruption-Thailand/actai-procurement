@@ -156,6 +156,11 @@ const getContractorList = async (params: string, section: string) => {
 const setChartData = (data) => {
   const dataset_year = data.map((a) => a.budgetYear);
   const dataset1 = data.map((a) => a.aggregateBy.budgetMoney);
+  const dataset2 = data.map((a) => a.totalProject);
+  const dataset3 = data.map((a) => a.aggregateBy.hasCorruptionRiskProject);
+  const dataset4 = data.map((a) => a.aggregateBy.projectStatus);
+  const dataset5 = data.map((a) => a.aggregateBy.contractStatus);
+  const dataset6 = data.map((a) => a.aggregateBy.resourcingMethod);
 
   yearList.value = dataset_year;
 
@@ -165,25 +170,174 @@ const setChartData = (data) => {
     data: dataset1,
   });
 
-  // dataset_year.forEach((element, i) => {
   chartDataSet2.value.push(
     {
-      label: 'ประกวดราคา',
-      backgroundColor: '#CE5700',
-      data: [0, 0, 72, 39],
+      label: 'พบความเสี่ยง',
+      backgroundColor: onSetColor('พบความเสี่ยง'),
+      data: dataset3,
     },
     {
-      label: 'ประกวดราคานานาชาติ',
-      backgroundColor: '#F08C06',
-      data: [1, 2, 3, 1],
-    },
-    {
-      label: 'ตกลงราคา',
-      backgroundColor: '#6DD5D5',
-      data: [1, 2, 3, 1],
+      label: 'ไม่พบความเสี่ยง',
+      backgroundColor: onSetColor('ไม่พบความเสี่ยง'),
+      data: onSetChartData(dataset2, dataset3),
     }
   );
-  // });
+
+  dataset4.forEach((element) => {
+    element.forEach((element2) => {
+      let index = chartDataSet3.value.filter((x) => x.label == element2.name);
+
+      if (index.length == 0) {
+        chartDataSet3.value.push({
+          label: element2.name,
+          backgroundColor: onSetColor(element2.name),
+          data: [],
+        });
+      }
+    });
+  });
+
+  dataset5.forEach((element) => {
+    element.forEach((element2) => {
+      let index = chartDataSet4.value.filter((x) => x.label == element2.name);
+
+      if (index.length == 0) {
+        chartDataSet4.value.push({
+          label: element2.name,
+          backgroundColor: onSetColor(element2.name),
+          data: [],
+        });
+      }
+    });
+  });
+
+  dataset6.forEach((element) => {
+    element.forEach((element2) => {
+      let index = chartDataSet5.value.filter((x) => x.label == element2.name);
+
+      if (index.length == 0) {
+        chartDataSet5.value.push({
+          label: element2.name,
+          backgroundColor: onSetColor(element2.name),
+          data: [],
+        });
+      }
+    });
+  });
+
+  console.log(chartDataSet3.value);
+  console.log(chartDataSet4.value);
+  console.log(chartDataSet5.value);
+};
+
+const onSetChartData = (data, data2) => {
+  let a = [];
+
+  data.forEach((element, i) => {
+    a.push(element - data2[i]);
+  });
+
+  return a;
+};
+
+const onSetColor = (text: string) => {
+  const colorList = [
+    {
+      name: 'พบความเสี่ยง',
+      color: '#EC1C24',
+    },
+    {
+      name: 'ไม่พบความเสี่ยง',
+      color: '#000000',
+    },
+    {
+      name: 'แล้วเสร็จตามสัญญา',
+      color: '#0F7979',
+    },
+    {
+      name: 'จัดทำสัญญา/POแล้ว',
+      color: '#6DD5D5',
+    },
+    {
+      name: 'ระหว่างดำเนินการ',
+      color: '#DADADA',
+    },
+    {
+      name: 'ยกเลิกสัญญา',
+      color: '#FF8888',
+    },
+    {
+      name: 'ยกเลิกโครงการ',
+      color: '#FF5353',
+    },
+    {
+      name: 'ส่งงานล่าช้ากว่ากำหนด',
+      color: '#054775',
+    },
+    {
+      name: 'ส่งงานครบถ้วน',
+      color: '#0F7979',
+    },
+    {
+      name: 'ส่งงานตามกำหนด',
+      color: '#1AA8A8',
+    },
+    {
+      name: 'จัดทำสัญญา/PO แล้ว',
+      color: '#6DD5D5',
+    },
+    {
+      name: 'อยู่ระหว่างดำเนินการ',
+      color: '#DADADA',
+    },
+    {
+      name: 'ยกเลิกสัญญา',
+      color: '#FF8888',
+    },
+    {
+      name: 'ประกวดราคา',
+      color: '#CE5700',
+    },
+    {
+      name: 'ประกวดราคานานาชาติ',
+      color: '#F08C06',
+    },
+    {
+      name: 'ประกวดราคาอิเล็กทรอนิกส์ (e-bidding)',
+      color: '#F8B60E',
+    },
+    {
+      name: 'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
+      color: '#FEEDAF',
+    },
+    {
+      name: 'ตกลงราคา',
+      color: '#6DD5D5',
+    },
+    {
+      name: 'สอบราคา',
+      color: '#2EA0DF',
+    },
+    {
+      name: 'ตลาดอิเล็กทรอนิกส์ (e-market)',
+      color: '#7051B4',
+    },
+    {
+      name: 'พิเศษ',
+      color: '#EF9CC4',
+    },
+    {
+      name: 'คัดเลือก',
+      color: '#D83D88',
+    },
+    {
+      name: 'เฉพาะเจาะจง',
+      color: '#8A004B',
+    },
+  ];
+
+  let selected = colorList.filter((x) => x.name == text);
+  return selected[0].color;
 };
 </script>
 

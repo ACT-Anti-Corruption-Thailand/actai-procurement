@@ -57,8 +57,32 @@
 
 <script setup lang="ts">
 import { Bar } from 'vue-chartjs';
+const config = useRuntimeConfig();
 
 const isOpen = ref(false);
+
+const getChartData = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/company/${segments}/aggregate/by-budget-year`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    console.log(data);
+  }
+};
+
+onBeforeMount(async () => {
+  //await getChartData();
+});
 
 const chartData = ref({
   labels: ['’54', '’55', '’56'],
@@ -96,6 +120,9 @@ const chartOptions = ref({
       display: false,
     },
     tooltip: {
+      backgroundColor: '#F5F5F5',
+      titleColor: '#000',
+      bodyColor: '#000',
       titleFont: {
         size: 20,
         family: 'DB_Helvethaica_X',

@@ -59,7 +59,7 @@ onMounted(() => {
       <h4 class="font-bold">
         {{ props.contractorList?.pagination?.totalItem }} ผู้รับจ้าง
       </h4>
-      <FilterPopupResult section="ผู้รับจ้าง" />
+      <!-- <FilterPopupResult section="ผู้รับจ้าง" /> -->
     </div>
 
     <div class="flex items-center justify-between my-3 sm:my-5">

@@ -1,73 +1,184 @@
+<script setup lang="ts">
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+import type {
+  ProjectContractor,
+  ProjectContract,
+  ProjectEstimatePrice,
+} from '../../public/src/data/data_details';
+
+const props = defineProps<{
+  contracters: ProjectContractor;
+  contracts: ProjectContract;
+  estimatePrice: ProjectEstimatePrice;
+}>();
+
+const biddingStep = [
+  { title: 'ซื้อซอง', total: 0, img: 'buy-auction' },
+  { title: 'ยื่นซอง', total: 0, img: 'bidding' },
+  { title: 'ผ่านคุณสมบัติ', total: 0, img: 'passed' },
+  { title: 'เข้าเสนอราคา', total: 0, img: 'e-bidding' },
+];
+
+const contractorsBidding = [
+  {
+    id: '10',
+    name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
+    isWinner: true,
+    processInvolved: ['ซื้อซอง', 'ยื่นซอง', 'ผ่านคุณสมบัติ', 'เข้าเสนอราคา'],
+  },
+  {
+    id: '11',
+    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
+    isWinner: false,
+    processInvolved: ['ซื้อซอง', 'ยื่นซอง', 'ผ่านคุณสมบัติ', 'เข้าเสนอราคา'],
+  },
+  {
+    id: '12',
+    name: 'บริษัท เออาร์ดี เอ็นจิเนียริ่ง ซิสเต็มส์ จำกัด',
+    isWinner: false,
+    processInvolved: ['ซื้อซอง', 'ยื่นซอง'],
+  },
+];
+
+const contractors = [
+  {
+    id: '10',
+    name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
+    contracts: [
+      {
+        id: '600906009000',
+        number: '84/2560',
+        date: '2024-08-28',
+        status: 'จัดทำสัญญา/ PO แล้ว',
+        money: 3716992.05,
+      },
+      {
+        id: '600916009002',
+        number: '85/2560',
+        date: '2024-09-28',
+        status: 'จัดทำสัญญา/ PO แล้ว',
+        money: 3716992.05,
+      },
+    ],
+  },
+  {
+    id: '11',
+    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
+    contracts: [
+      {
+        id: '60090',
+        number: '84/2560',
+        date: '2024-08-28',
+        status: 'จัดทำสัญญา/ PO แล้ว',
+        money: 3716992.05,
+      },
+    ],
+  },
+  {
+    id: '12',
+    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
+    contracts: [
+      {
+        id: '60090',
+        number: '84/2560',
+        date: '2024-08-28',
+        status: 'จัดทำสัญญา/ PO แล้ว',
+        money: 3716992.05,
+      },
+    ],
+  },
+];
+
+const setDate = (date) => {
+  return new Date(date).toLocaleDateString('th-TH');
+};
+
+onBeforeMount(() => {
+  const contracter = props.contracters.map((data) => data.processInvolved);
+
+  contracter.forEach((element) => {
+    element.forEach((element2) => {
+      let b = biddingStep.filter((a) => a.title == element2);
+      b[0].total += 1;
+    });
+  });
+});
+</script>
+
 <template>
   <h4 class="font-bold text-white mb-5">ข้อมูลเจาะลึก</h4>
   <div class="bg-white rounded-10 gap-2 mb-3">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black">จำนวนนิติบุคคลที่เข้าร่วมในแต่ละขั้นตอน</h4>
     </div>
+
     <div class="p-8 rounded-b-md w-full flex flex-col-mb gap-2">
-      <div
-        class="px-3 py-5 bg-[#F5F5F5] rounded-10 w-full text-center relative"
-        v-for="(item, i) in biddingStep"
-      >
-        <img
-          :src="`../src/images/${item.img}.svg`"
-          :alt="item.name"
-          class="absolute sm:inset-x-0 -left-5 sm:-top-5 mx-auto"
-        />
+      <template v-for="(item, i) in biddingStep">
+        <div
+          class="px-3 py-5 bg-[#F5F5F5] rounded-10 w-full text-center relative"
+          v-if="item.total != 0"
+        >
+          <img
+            :src="`../src/images/${item.img}.svg`"
+            :alt="item.title"
+            class="absolute sm:inset-x-0 -left-5 sm:-top-5 mx-auto"
+          />
 
-        <div class="flex justify-between sm:flex-col items-center">
-          <p class="b1 ml-5 sm:ml-0 sm:mt-3">{{ item.title }}</p>
-          <h3 class="font-black">3</h3>
-        </div>
+          <div class="flex justify-between sm:flex-col items-center">
+            <p class="b1 ml-5 sm:ml-0 sm:mt-3">{{ item.title }}</p>
+            <h3 class="font-black">{{ item.total }}</h3>
+          </div>
 
-        <Disclosure v-slot="{ open }">
-          <DisclosureButton
-            class="py-2 flex items-center justify-end sm:justify-center gap-2 text-[#0B5C90] font-bold w-full"
-          >
-            <ChevronDownIcon
-              :class="[open ? 'rotate-180 transform' : '', 'size-2']"
-            />
-            {{ open ? 'ปิดรายชื่อ' : 'ดูรายชื่อ' }}
-          </DisclosureButton>
-          <DisclosurePanel class="text-gray-500">
-            <div
-              class="my-3 border-t border-b border-[#DADADA] py-3 flex flex-wrap items-center justify-center gap-1"
+          <Disclosure v-slot="{ open }" v-if="item.total != 0">
+            <DisclosureButton
+              class="py-2 flex items-center justify-end sm:justify-center gap-2 text-[#0B5C90] font-bold w-full"
             >
-              <div class="w-2 h-2 bg-black"></div>
-              <p>
-                =
-                {{
-                  item.title != 'เข้าเสนอราคา'
-                    ? 'เข้ารอบต่อไป'
-                    : 'ผู้ชนะการประมูล'
-                }}
-              </p>
-              <div class="w-2 h-2 bg-[#8E8E8E]"></div>
-              <p class="text-[#8E8E8E]">= ตกรอบ</p>
-            </div>
-
-            <div class="flex gap-2" v-for="(c, i) in contractorsBidding">
-              <p class="text-[#8E8E8E] mt-0.5">{{ i + 1 }}</p>
+              <ChevronDownIcon
+                :class="[open ? 'rotate-180 transform' : '', 'size-2']"
+              />
+              {{ open ? 'ปิดรายชื่อ' : 'ดูรายชื่อ' }}
+            </DisclosureButton>
+            <DisclosurePanel class="text-gray-500">
               <div
-                :class="[
-                  c.processInvolved.indexOf(item.title) != -1
-                    ? 'text-black'
-                    : 'text-[#8E8E8E]',
-                  'b3 pb-3 text-left',
-                ]"
+                class="my-3 border-t border-b border-[#DADADA] py-3 flex flex-wrap items-center justify-center gap-1"
               >
-                <p>{{ c.name }}</p>
-                <p
-                  class="text-[#5E5E5E] flex gap-1 items-center"
-                  v-if="item.title == 'ซื้อซอง' || item.title == 'ยื่นซอง'"
-                >
-                  <year color="#5E5E5E" /> 12/08/2567
+                <div class="w-2 h-2 bg-black"></div>
+                <p>
+                  =
+                  {{
+                    item.title != 'เข้าเสนอราคา'
+                      ? 'เข้ารอบต่อไป'
+                      : 'ผู้ชนะการประมูล'
+                  }}
                 </p>
+                <div class="w-2 h-2 bg-[#8E8E8E]"></div>
+                <p class="text-[#8E8E8E]">= ตกรอบ</p>
               </div>
-            </div>
-          </DisclosurePanel>
-        </Disclosure>
-      </div>
+
+              <div class="flex gap-2" v-for="(c, i) in props.contracters">
+                <p class="text-[#8E8E8E] mt-0.5">{{ i + 1 }}</p>
+                <div
+                  :class="[
+                    c?.processInvolved.indexOf(item.name) != -1
+                      ? 'text-black'
+                      : 'text-[#8E8E8E]',
+                    'b3 pb-3 text-left',
+                  ]"
+                >
+                  <p>{{ c?.name }}</p>
+                  <p
+                    class="text-[#5E5E5E] flex gap-1 items-center"
+                    v-if="item.title == 'ซื้อซอง' || item.title == 'ยื่นซอง'"
+                  >
+                    <year color="#5E5E5E" /> 12/08/2567
+                  </p>
+                </div>
+              </div>
+            </DisclosurePanel>
+          </Disclosure>
+        </div>
+      </template>
     </div>
   </div>
 
@@ -78,16 +189,16 @@
     <div class="p-5 rounded-b-md w-full">
       <div class="flex justify-between mb-3">
         <h5 class="font-bold w-3/5 sm:w-2/4">
-          ทั้งหมด x ราย ทำสัญญาจ้าง x ฉบับ
+          ทั้งหมด {{ props.contracts.length }} ราย ทำสัญญาจ้าง x ฉบับ
         </h5>
-        <DownloadAndCopy />
+        <!-- <DownloadAndCopy /> -->
       </div>
 
-      <SortBy
+      <!-- <SortBy
         text="เรียงตาม"
         :list="['วงเงินสัญญา', 'วันที่ทำสัญญา']"
         class="mb-3"
-      />
+      /> -->
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -103,20 +214,17 @@
               <th>วงเงินสัญญา (บาท)</th>
             </tr>
           </thead>
-          <tbody class="b1">
-            <template v-for="(item, i) in contractors" :key="i">
+          <tbody class="b1" v-if="props.contracts.length > 0">
+            <template v-for="(item, i) in props.contracts" :key="i">
               <tr>
                 <td :rowspan="item.contracts.length">
-                  <a
-                    target="_blank"
-                    :href="`/contractor?name=${item.name.replace(/ /g, '-')}`"
-                  >
+                  <a target="_blank" :href="`/contractor/${item.id}`">
                     <b> {{ item.name }}</b></a
                   >
                   <br />
                   <div class="flex items-center gap-2">
                     <img src="../../public/src/images/contractor.svg" alt="" />
-                    <p class="b4 text-[#8E8E8E]">56015020021</p>
+                    <p class="b4 text-[#8E8E8E]">{{ item.id }}</p>
                   </div>
                 </td>
 
@@ -158,6 +266,11 @@
               </template>
             </template>
           </tbody>
+          <tbody class="b1 text-center" v-else>
+            <tr>
+              <td colspan="5">ไม่พบข้อมูล</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -179,11 +292,15 @@
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex justify-between mb-3">
-        <h5 class="font-bold w-3/5">แยกตามรายการพิจารณา 1 รายการ</h5>
-        <DownloadAndCopy />
+        <h5 class="font-bold w-3/5">
+          แยกตามรายการพิจารณา {{ props.estimatePrice.length }} รายการ
+        </h5>
+        <!-- <DownloadAndCopy /> -->
       </div>
 
-      <p class="text-right">ราคากลาง = x,xxx,xxx.xx บาท</p>
+      <p class="text-right" v-if="props.estimatePrice.length > 0">
+        ราคากลาง = x,xxx,xxx.xx บาท
+      </p>
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -206,7 +323,7 @@
               <th class="w-[85px]">ส่วนต่างราคากลาง</th>
             </tr>
           </thead>
-          <tbody class="b1">
+          <tbody class="b1" v-if="props.estimatePrice.length > 0">
             <tr>
               <td :rowspan="4" class="w-20">
                 เครื่องวัดส่วนประกอบของร่างกายแบบความต้านทานกระแสไฟฟ้า
@@ -287,97 +404,16 @@
               </td>
             </tr>
           </tbody>
+          <tbody class="b1 text-center" v-else>
+            <tr>
+              <td colspan="5">ไม่พบข้อมูล</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
   </div>
 </template>
-
-<script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-import { ChevronDownIcon } from '@heroicons/vue/24/solid';
-
-const biddingStep = [
-  { title: 'ซื้อซอง', img: 'buy-auction' },
-  { title: 'ยื่นซอง', img: 'bidding' },
-  { title: 'ผ่านคุณสมบัติ', img: 'passed' },
-  { title: 'เข้าเสนอราคา', img: 'e-bidding' },
-];
-
-const contractorsBidding = [
-  {
-    id: '10',
-    name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
-    isWinner: true,
-    processInvolved: ['ซื้อซอง', 'ยื่นซอง', 'ผ่านคุณสมบัติ', 'เข้าเสนอราคา'],
-  },
-  {
-    id: '11',
-    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
-    isWinner: false,
-    processInvolved: ['ซื้อซอง', 'ยื่นซอง', 'ผ่านคุณสมบัติ', 'เข้าเสนอราคา'],
-  },
-  {
-    id: '12',
-    name: 'บริษัท เออาร์ดี เอ็นจิเนียริ่ง ซิสเต็มส์ จำกัด',
-    isWinner: false,
-    processInvolved: ['ซื้อซอง', 'ยื่นซอง'],
-  },
-];
-
-const contractors = [
-  {
-    id: '10',
-    name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
-    contracts: [
-      {
-        id: '600906009000',
-        number: '84/2560',
-        date: '2024-08-28',
-        status: 'จัดทำสัญญา/ PO แล้ว',
-        money: 3716992.05,
-      },
-      {
-        id: '600916009002',
-        number: '85/2560',
-        date: '2024-09-28',
-        status: 'จัดทำสัญญา/ PO แล้ว',
-        money: 3716992.05,
-      },
-    ],
-  },
-  {
-    id: '11',
-    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
-    contracts: [
-      {
-        id: '60090',
-        number: '84/2560',
-        date: '2024-08-28',
-        status: 'จัดทำสัญญา/ PO แล้ว',
-        money: 3716992.05,
-      },
-    ],
-  },
-  {
-    id: '12',
-    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
-    contracts: [
-      {
-        id: '60090',
-        number: '84/2560',
-        date: '2024-08-28',
-        status: 'จัดทำสัญญา/ PO แล้ว',
-        money: 3716992.05,
-      },
-    ],
-  },
-];
-
-const setDate = (date) => {
-  return new Date(date).toLocaleDateString('th-TH');
-};
-</script>
 
 <style lang="scss" scoped>
 .input-text {
