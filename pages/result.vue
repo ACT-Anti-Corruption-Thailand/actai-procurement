@@ -8,6 +8,7 @@ import type {
   Government,
   Project,
   Contractor,
+  MapData,
 } from '../public/src/data/search_result';
 
 const iconGuide = ref({
@@ -41,6 +42,7 @@ const govListAll = ref<Government | null>(null);
 const govList = ref<Government | null>(null);
 const contractorListAll = ref<Contractor | null>(null);
 const contractorList = ref<Contractor | null>(null);
+const mapDataList = ref<MapData | null>(null);
 
 onMounted(async () => {
   const urlParams = decodeURI(window.location.href).split('=')[1];
@@ -84,6 +86,7 @@ onBeforeMount(async () => {
   await getGovList('', 'details');
   await getContractorList('', '');
   await getContractorList('', 'details');
+  await getMapData();
 });
 
 const getProjectList = async (params: string, section: string) => {
@@ -153,6 +156,25 @@ const getContractorList = async (params: string, section: string) => {
   }
 };
 
+const getMapData = async () => {
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/project/aggregate/by-province?keyword=${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    mapDataList.value = data.provinces;
+  }
+};
+
 const setChartData = (data) => {
   const dataset_year = data.map((a) => a.budgetYear);
   const dataset1 = data.map((a) => a.aggregateBy.budgetMoney);
@@ -183,51 +205,89 @@ const setChartData = (data) => {
     }
   );
 
-  dataset4.forEach((element) => {
-    element.forEach((element2) => {
-      let index = chartDataSet3.value.filter((x) => x.label == element2.name);
+  const projectStatuses = [
+    ...new Set(
+      data.flatMap((o) => o.aggregateBy.projectStatus).map((o) => o.name)
+    ),
+  ]; // be ส่งมาเท่าข้อมูลที่มี
 
-      if (index.length == 0) {
-        chartDataSet3.value.push({
-          label: element2.name,
-          backgroundColor: onSetColor(element2.name),
-          data: [],
-        });
-      }
-    });
+  //console.log(data[0].aggregateBy.projectStatus.map((o) => o.name)); // be ส่งมาทั้งหมด
+
+  chartDataSet3.value = projectStatuses.map((name) => {
+    return {
+      label: name,
+      backgroundColor: onSetColor(name),
+      data: data.map(
+        (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
+      ),
+    };
   });
 
-  dataset5.forEach((element) => {
-    element.forEach((element2) => {
-      let index = chartDataSet4.value.filter((x) => x.label == element2.name);
+  const projectContractStatuses = [
+    ...new Set(
+      data.flatMap((o) => o.aggregateBy.contractStatus).map((o) => o.name)
+    ),
+  ];
 
-      if (index.length == 0) {
-        chartDataSet4.value.push({
-          label: element2.name,
-          backgroundColor: onSetColor(element2.name),
-          data: [],
-        });
-      }
-    });
+  chartDataSet4.value = projectContractStatuses.map((name) => {
+    return {
+      label: name,
+      backgroundColor: onSetColor(name),
+      data: data.map(
+        (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
+      ),
+    };
   });
 
-  dataset6.forEach((element) => {
-    element.forEach((element2) => {
-      let index = chartDataSet5.value.filter((x) => x.label == element2.name);
+  const projectResourceMethod = [
+    ...new Set(
+      data.flatMap((o) => o.aggregateBy.resourcingMethod).map((o) => o.name)
+    ),
+  ];
 
-      if (index.length == 0) {
-        chartDataSet5.value.push({
-          label: element2.name,
-          backgroundColor: onSetColor(element2.name),
-          data: [],
-        });
-      }
-    });
+  // console.log([
+  //   ...new Set(
+  //     data.flatMap((o) => o.aggregateBy.resourcingMethod).map((o) => o.name)
+  //   ),
+  // ]);
+
+  const chartData1 = projectResourceMethod
+    .map((name) => {
+      const chartdata = data.map(
+        (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
+      );
+
+      return {
+        label: name,
+        backgroundColor: '#000000',
+        sum: chartdata.reduce((sum, num) => sum + num, 0),
+        data: chartdata,
+      };
+    })
+    .sort((a, z) => z.sum - a.sum);
+
+  // console.log(chartData1);
+
+  const a = chartData1.slice(0, 9);
+  // console.log(a);
+
+  const b = chartData1.slice(9);
+  const c = {
+    label: 'อื่นๆ',
+    backgroundColor: '#F5F5F5',
+    data: a.reduce((sum, years) => {
+      years.data.forEach((num, i) => {
+        sum[i] += num;
+      });
+      return sum;
+    }, new Array(b[0].data.length).fill(0)),
+  };
+
+  a.forEach((element) => {
+    chartDataSet5.value.push(element);
   });
 
-  console.log(chartDataSet3.value);
-  console.log(chartDataSet4.value);
-  console.log(chartDataSet5.value);
+  chartDataSet5.value.push(c);
 };
 
 const onSetChartData = (data, data2) => {
@@ -390,6 +450,10 @@ const onSetColor = (text: string) => {
         :yearList="yearList"
         :chartDataSet1="chartDataSet1"
         :chartDataSet2="chartDataSet2"
+        :chartDataSet3="chartDataSet3"
+        :chartDataSet4="chartDataSet4"
+        :chartDataSet5="chartDataSet5"
+        :mapData="mapDataList"
       />
       <ResultGovernment
         v-else-if="menu == 'หน่วยงานรัฐ'"

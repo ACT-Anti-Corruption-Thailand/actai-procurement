@@ -58,3 +58,14 @@ export interface Contractor {
     }
   ];
 }
+
+export interface MapData {
+  provinces: [
+    {
+      name: string;
+      totalProject: number;
+      totalBudgetMoney: number;
+      totalCorruptionProject: number;
+    }
+  ];
+}

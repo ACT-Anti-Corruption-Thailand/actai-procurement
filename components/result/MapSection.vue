@@ -1,6 +1,9 @@
 <template>
-  <div class="bg-white p-4 sm:p-7 rounded-10">
-    <h4 class="font-black">การกระจายตัวโครงการใน 4 จังหวัด</h4>
+  <div
+    class="bg-white p-4 sm:p-7 rounded-10"
+    v-if="totalBudget != 0 && totalProject != 0"
+  >
+    <h4 class="font-black">การกระจายตัวโครงการใน {{ total }} จังหวัด</h4>
 
     <RadioGroup v-model="plan" class="flex lg:hidden">
       <RadioGroupOption
@@ -142,8 +145,15 @@
 
 <script setup lang="ts">
 import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
+import type { MapData } from '../../public/src/data/search_result';
+
+const props = defineProps<{
+  data: MapData;
+}>();
 
 const sortBy = ref('desc');
+const totalProject = ref(0);
+const totalBudget = ref(0);
 let searchText = ref('');
 let plan = ref('จำนวนโครงการ');
 
@@ -208,6 +218,11 @@ const setFill = (id, n) => {
 
 onMounted(() => {
   plan.value = window.innerWidth > 1024 ? 'all' : 'จำนวนโครงการ';
+
+  const a = props.data.map((o) => o.totalProject);
+  totalProject.value = a.reduce((partialSum, a) => partialSum + a, 0);
+  const b = props.data.map((o) => o.totalBudgetMoney);
+  totalBudget.value = b.reduce((partialSum, a) => partialSum + a, 0);
 });
 </script>
 

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import type { Project, MapData } from '../../public/src/data/search_result';
+import { data } from 'autoprefixer';
 
 const selectedTab = ref(0);
 const isOpen = ref(false);
@@ -11,9 +13,13 @@ const props = defineProps<{
   mockDataGuide: object;
   data: array;
   yearList: array;
-  projectList: array;
+  projectList: Project;
   chartDataSet1: array;
   chartDataSet2: array;
+  chartDataSet3: array;
+  chartDataSet4: array;
+  chartDataSet5: array;
+  mapData: MapData;
 }>();
 
 const yearlyAggregates = [
@@ -212,14 +218,14 @@ const setParams = (type: string, val: string) => {
 };
 
 onMounted(() => {
-  menuList.value[0].desc = props.data.maxProjectStatus.name;
-  menuList.value[0].total = props.data.maxProjectStatus.total;
-  menuList.value[1].desc = props.data.maxContractStatus.name;
-  menuList.value[1].total = props.data.maxContractStatus.total;
-  menuList.value[2].desc = props.data.maxResourcingMethod.name;
-  menuList.value[2].total = props.data.maxResourcingMethod.total;
-  menuList.value[3].desc = props.data.provinceWithHighestBudgetMoney;
-  menuList.value[4].desc = props.data.provinceWithHighestProjects;
+  menuList.value[0].desc = props.data?.maxProjectStatus?.name;
+  menuList.value[0].total = props.data?.maxProjectStatus?.total;
+  menuList.value[1].desc = props.data?.maxContractStatus?.name;
+  menuList.value[1].total = props.data?.maxContractStatus?.total;
+  menuList.value[2].desc = props.data?.maxResourcingMethod?.name;
+  menuList.value[2].total = props.data?.maxResourcingMethod?.total;
+  menuList.value[3].desc = props.data?.provinceWithHighestBudgetMoney;
+  menuList.value[4].desc = props.data?.provinceWithHighestProjects;
 });
 </script>
 
@@ -247,18 +253,23 @@ onMounted(() => {
             <p class="b1 font-bold">
               จำนวนโครงการจัดซื้อจัดจ้างตามเงื่อนไขที่ค้นหา
             </p>
-            <h2 class="font-black">{{ data.totalProject }} โครงการ</h2>
+            <h2 class="font-black">{{ props.data?.totalProject }} โครงการ</h2>
             <hr />
             <div class="flex">
               <div class="flex-1">
                 <p class="b2">งบประมาณรวม (บาท)</p>
-                <h5 class="font-bold" v-if="data != null">
-                  {{ data?.totalBudgetMoney.toLocaleString() }}
+                <h5
+                  class="font-bold"
+                  v-if="props.data?.totalBudgetMoney != null"
+                >
+                  {{ props.data?.totalBudgetMoney.toLocaleString() }}
                 </h5>
               </div>
               <div class="flex-1 text-[#EC1C24]">
                 <p class="b2">เป็นโครงการเสี่ยงทุจริต</p>
-                <h5 class="font-bold">{{ data.totalProjectHasCorruption }}%</h5>
+                <h5 class="font-bold">
+                  {{ props.data?.totalProjectHasCorruption }}%
+                </h5>
               </div>
             </div>
 
@@ -273,7 +284,7 @@ onMounted(() => {
           <div class="sm:w-2/5">
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black mb-3">
               <p class="b1">หน่วยงานรัฐเจ้าของโครงการ</p>
-              <h5 class="font-bold">{{ data.totalAgency }} หน่วยงาน</h5>
+              <h5 class="font-bold">{{ props.data?.totalAgency }} หน่วยงาน</h5>
               <!-- <p
                 class="b2 link-1 flex items-center gap-1"
                 v-if="data.totalAgency != 0"
@@ -299,7 +310,7 @@ onMounted(() => {
             </div>
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black">
               <p class="b1">ผู้รับจ้าง</p>
-              <h5 class="font-bold">{{ data.totalCompany }} ราย</h5>
+              <h5 class="font-bold">{{ props.data?.totalCompany }} ราย</h5>
               <!-- <p
                 class="b2 link-1 flex items-center gap-1"
                 v-if="data.totalCompany != 0"
@@ -408,14 +419,14 @@ onMounted(() => {
       <TabPanel>
         <div class="mx-auto max-w-6xl px-4 lg:px-0">
           <h5 class="font-bold my-5">
-            {{ data.totalProject }} โครงการจัดซื้อจัดจ้าง
+            {{ props.data?.totalProject }} โครงการจัดซื้อจัดจ้าง
           </h5>
           <div class="flex flex-col-mb gap-2">
             <a href="#chart-1" class="sm:w-2/4">
               <div class="rounded-10 btn-chart p-5 text-white relative">
                 <p class="b1">งบประมาณรวม (บาท)</p>
                 <h4 class="font-black" v-if="data != null">
-                  {{ data?.totalBudgetMoney.toLocaleString() }}
+                  {{ props.data?.totalBudgetMoney.toLocaleString() }}
                 </h4>
                 <arrow
                   color="#FFFFFF"
@@ -426,7 +437,7 @@ onMounted(() => {
               <div class="rounded-10 btn-chart p-5 relative text-white">
                 <p class="b1 text-[#EC1C24]">โครงการเสี่ยงทุจริต</p>
                 <h4 class="font-black text-[#EC1C24]">
-                  {{ data?.totalProjectHasCorruption }}%
+                  {{ props.data?.totalProjectHasCorruption }}%
                 </h4>
                 <arrow
                   color="#FFFFFF"
@@ -473,29 +484,31 @@ onMounted(() => {
               section="risk"
             />
 
-            <!-- <BarChart
+            <BarChart3
+              :data="props.chartDataSet3"
+              :yearList="props.yearList"
               title="สถานะโครงการ"
-              :data="yearlyAggregates"
-              titleType="0"
-              id="chart-3"
+              id="chart-2"
+              section="status project"
             />
 
-            <BarChart
+            <BarChart3
+              :data="props.chartDataSet4"
+              :yearList="props.yearList"
               title="สถานะสัญญา"
-              :data="yearlyAggregates"
-              titleType="0"
-              id="chart-4"
+              id="chart-3"
+              section="status contact"
             />
 
-            <BarChart
+            <BarChart3
               title="วิธีการจัดหา"
-              :data="yearlyAggregates"
-              titleType="0"
-              id="chart-5"
-              @isOpen="isOpen2 = true"
+              :data="props.chartDataSet5"
+              section="type"
+              id="chart-4"
+              :yearList="props.yearList"
             />
 
-           <MapSection class="mt-5" id="maps" /> -->
+            <MapSection class="mt-5" id="maps" :data="props.mapData" />
           </div>
 
           <div
