@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import type { Project, MapData } from '../../public/src/data/search_result';
-import { data } from 'autoprefixer';
 
 const selectedTab = ref(0);
 const isOpen = ref(false);
@@ -21,120 +20,6 @@ const props = defineProps<{
   chartDataSet5: array;
   mapData: MapData;
 }>();
-
-const yearlyAggregates = [
-  {
-    budgetYear: '2555',
-    totalProject: 0,
-    totalContract: 0,
-    aggregateBy: {
-      budgetMoney: 0,
-      hasCorruptionRiskProject: 0,
-      hasNoCorruptionRiskProject: 0,
-      projectStatus: {
-        completed: 0,
-        contracted: 0,
-        inprogress: 0,
-        cancelContract: 0,
-        cancelProject: 0,
-      },
-      contractStatus: {
-        delivered: 0,
-        deliveredOnTime: 0,
-        deliveredLate: 0,
-        contracted: 0,
-        inprogress: 0,
-        cancelContract: 0,
-      },
-      resourcingMethod: {
-        bidding: 0,
-        internationalBidding: 0,
-        eBidding: 0,
-        eBiddingViaMarket: 0,
-        settlePrice: 0,
-        checkPrice: 0,
-        eMarket: 0,
-        specialMethod: 0,
-        selective: 0,
-        specific: 0,
-      },
-    },
-  },
-  {
-    budgetYear: '2556',
-    totalProject: 100,
-    totalContract: 60,
-    aggregateBy: {
-      budgetMoney: 120000000,
-      hasCorruptionRiskProject: 20,
-      hasNoCorruptionRiskProject: 10,
-      projectStatus: {
-        completed: 10,
-        contracted: 30,
-        inprogress: 20,
-        cancelContract: 20,
-        cancelProject: 20,
-      },
-      contractStatus: {
-        delivered: 10,
-        deliveredOnTime: 5,
-        deliveredLate: 5,
-        contracted: 25,
-        inprogress: 5,
-        cancelContract: 20,
-      },
-      resourcingMethod: {
-        bidding: 10,
-        internationalBidding: 20,
-        eBidding: 20,
-        eBiddingViaMarket: 5,
-        settlePrice: 10,
-        checkPrice: 8,
-        eMarket: 4,
-        specialMethod: 23,
-        selective: 32,
-        specific: 20,
-      },
-    },
-  },
-  {
-    budgetYear: '2557',
-    totalProject: 34,
-    totalContract: 5,
-    aggregateBy: {
-      budgetMoney: 65000000,
-      hasCorruptionRiskProject: 5,
-      hasNoCorruptionRiskProject: 5,
-      projectStatus: {
-        completed: 0,
-        contracted: 0,
-        inprogress: 0,
-        cancelContract: 0,
-        cancelProject: 0,
-      },
-      contractStatus: {
-        delivered: 0,
-        deliveredOnTime: 0,
-        deliveredLate: 0,
-        contracted: 0,
-        inprogress: 0,
-        cancelContract: 0,
-      },
-      resourcingMethod: {
-        bidding: 0,
-        internationalBidding: 0,
-        eBidding: 0,
-        eBiddingViaMarket: 0,
-        settlePrice: 0,
-        checkPrice: 0,
-        eMarket: 0,
-        specialMethod: 0,
-        selective: 0,
-        specific: 0,
-      },
-    },
-  },
-];
 
 function changeTab(index) {
   selectedTab.value = index;
@@ -268,7 +153,13 @@ onMounted(() => {
               <div class="flex-1 text-[#EC1C24]">
                 <p class="b2">เป็นโครงการเสี่ยงทุจริต</p>
                 <h5 class="font-bold">
-                  {{ props.data?.totalProjectHasCorruption }}%
+                  {{
+                    (
+                      (props.data?.totalProjectHasCorruption /
+                        props.data?.totalProject) *
+                      100
+                    ).toFixed(2)
+                  }}%
                 </h5>
               </div>
             </div>
@@ -437,7 +328,13 @@ onMounted(() => {
               <div class="rounded-10 btn-chart p-5 relative text-white">
                 <p class="b1 text-[#EC1C24]">โครงการเสี่ยงทุจริต</p>
                 <h4 class="font-black text-[#EC1C24]">
-                  {{ props.data?.totalProjectHasCorruption }}%
+                  {{
+                    (
+                      (props.data?.totalProjectHasCorruption /
+                        props.data?.totalProject) *
+                      100
+                    ).toFixed(2)
+                  }}%
                 </h4>
                 <arrow
                   color="#FFFFFF"
@@ -469,43 +366,44 @@ onMounted(() => {
 
         <div class="bg-[#1F1F1F] p-4 sm:p-10 mt-10">
           <div class="max-w-6xl mx-auto">
-            <BarChart3
+            <BarChart
               :data="props.chartDataSet1"
               :yearList="props.yearList"
               title="งบประมาณ"
-              section=""
+              id="chart-1"
+              section="budget"
             />
 
-            <BarChart3
+            <BarChart
               :data="props.chartDataSet2"
               :yearList="props.yearList"
               title="ความเสี่ยงทุจริต"
-              id="chart-1"
+              id="chart-2"
               section="risk"
             />
 
-            <BarChart3
+            <BarChart
               :data="props.chartDataSet3"
               :yearList="props.yearList"
               title="สถานะโครงการ"
-              id="chart-2"
-              section="status project"
+              id="chart-3"
+              section="project"
             />
 
-            <BarChart3
+            <BarChart
               :data="props.chartDataSet4"
               :yearList="props.yearList"
               title="สถานะสัญญา"
-              id="chart-3"
-              section="status contact"
+              id="chart-4"
+              section="contract"
             />
 
-            <BarChart3
-              title="วิธีการจัดหา"
+            <BarChart
               :data="props.chartDataSet5"
-              section="type"
-              id="chart-4"
               :yearList="props.yearList"
+              title="วิธีการจัดหา"
+              id="chart-5"
+              section="method"
             />
 
             <MapSection class="mt-5" id="maps" :data="props.mapData" />

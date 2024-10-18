@@ -180,9 +180,6 @@ const setChartData = (data) => {
   const dataset1 = data.map((a) => a.aggregateBy.budgetMoney);
   const dataset2 = data.map((a) => a.totalProject);
   const dataset3 = data.map((a) => a.aggregateBy.hasCorruptionRiskProject);
-  const dataset4 = data.map((a) => a.aggregateBy.projectStatus);
-  const dataset5 = data.map((a) => a.aggregateBy.contractStatus);
-  const dataset6 = data.map((a) => a.aggregateBy.resourcingMethod);
 
   yearList.value = dataset_year;
 
@@ -190,214 +187,163 @@ const setChartData = (data) => {
     label: '',
     backgroundColor: '#000000',
     data: dataset1,
+    sum: dataset1.reduce((sum, num) => sum + num, 0),
+  });
+
+  let a = [];
+
+  dataset2.forEach((element, i) => {
+    a.push(element - dataset3[i]);
   });
 
   chartDataSet2.value.push(
     {
       label: 'พบความเสี่ยง',
-      backgroundColor: onSetColor('พบความเสี่ยง'),
+      backgroundColor: '#EC1C24',
       data: dataset3,
+      sum: dataset3.reduce((sum, num) => sum + num, 0),
+      isChecked: true,
     },
     {
       label: 'ไม่พบความเสี่ยง',
-      backgroundColor: onSetColor('ไม่พบความเสี่ยง'),
-      data: onSetChartData(dataset2, dataset3),
+      backgroundColor: '#000000',
+      data: a,
+      sum: a.reduce((sum, num) => sum + num, 0),
+      isChecked: true,
     }
   );
 
-  const projectStatuses = [
-    ...new Set(
-      data.flatMap((o) => o.aggregateBy.projectStatus).map((o) => o.name)
-    ),
-  ]; // be ส่งมาเท่าข้อมูลที่มี
+  onSetChartData('status', data);
+  onSetChartData('contract', data);
+  onSetChartData('method', data);
+};
 
-  //console.log(data[0].aggregateBy.projectStatus.map((o) => o.name)); // be ส่งมาทั้งหมด
-
-  chartDataSet3.value = projectStatuses.map((name) => {
-    return {
-      label: name,
-      backgroundColor: onSetColor(name),
-      data: data.map(
-        (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
+const onSetChartData = (section: string, data) => {
+  if (section == 'status') {
+    const projectStatuses = [
+      ...new Set(
+        data.flatMap((o) => o.aggregateBy.projectStatus).map((o) => o.name)
       ),
-    };
-  });
+    ]; // be ส่งมาเท่าข้อมูลที่มี ถ้าส่งมาหมดก็ไม่ต้อง new set
 
-  const projectContractStatuses = [
-    ...new Set(
-      data.flatMap((o) => o.aggregateBy.contractStatus).map((o) => o.name)
-    ),
-  ];
+    const colorProjectStatus = [
+      '#0F7979',
+      '#6DD5D5',
+      '#DADADA',
+      '#FF8888',
+      '#FF5353',
+    ];
 
-  chartDataSet4.value = projectContractStatuses.map((name) => {
-    return {
-      label: name,
-      backgroundColor: onSetColor(name),
-      data: data.map(
-        (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
-      ),
-    };
-  });
-
-  const projectResourceMethod = [
-    ...new Set(
-      data.flatMap((o) => o.aggregateBy.resourcingMethod).map((o) => o.name)
-    ),
-  ];
-
-  // console.log([
-  //   ...new Set(
-  //     data.flatMap((o) => o.aggregateBy.resourcingMethod).map((o) => o.name)
-  //   ),
-  // ]);
-
-  const chartData1 = projectResourceMethod
-    .map((name) => {
+    chartDataSet3.value = projectStatuses.map((name, i) => {
       const chartdata = data.map(
-        (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
+        (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
       );
 
       return {
         label: name,
-        backgroundColor: '#000000',
+        backgroundColor: colorProjectStatus[i],
+        data: data.map(
+          (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
+        ),
         sum: chartdata.reduce((sum, num) => sum + num, 0),
-        data: chartdata,
+        isChecked: true,
       };
-    })
-    .sort((a, z) => z.sum - a.sum);
+    });
+  } else if (section == 'contract') {
+    const projectContractStatuses = [
+      ...new Set(
+        data.flatMap((o) => o.aggregateBy.contractStatus).map((o) => o.name)
+      ),
+    ];
 
-  // console.log(chartData1);
+    const colorContracttStatus = [
+      '#054775',
+      '#0F7979',
+      '#1AA8A8',
+      '#6DD5D5',
+      '#DADADA',
+      '#FF8888',
+    ];
 
-  const a = chartData1.slice(0, 9);
-  // console.log(a);
+    chartDataSet4.value = projectContractStatuses.map((name, i) => {
+      const chartdata = data.map(
+        (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
+      );
 
-  const b = chartData1.slice(9);
-  const c = {
-    label: 'อื่นๆ',
-    backgroundColor: '#F5F5F5',
-    data: a.reduce((sum, years) => {
-      years.data.forEach((num, i) => {
-        sum[i] += num;
-      });
-      return sum;
-    }, new Array(b[0].data.length).fill(0)),
-  };
+      return {
+        label: name,
+        backgroundColor: colorContracttStatus[i],
+        data: data.map(
+          (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
+        ),
+        sum: chartdata.reduce((sum, num) => sum + num, 0),
+        isChecked: true,
+      };
+    });
+  } else {
+    const projectResourceMethod = [
+      ...new Set(
+        data.flatMap((o) => o.aggregateBy.resourcingMethod).map((o) => o.name)
+      ),
+    ];
 
-  a.forEach((element) => {
-    chartDataSet5.value.push(element);
-  });
+    const colorResourceMethod = [
+      '#CE5700',
+      '#F08C06',
+      '#F8B60E',
+      '#FEEDAF',
+      '#6DD5D5',
+      '#2EA0DF',
+      '#7051B4',
+      '#EF9CC4',
+      '#D83D88',
+      '#8A004B',
+    ];
 
-  chartDataSet5.value.push(c);
-};
+    const chartData1 = projectResourceMethod
+      .map((name, i) => {
+        const chartdata = data.map(
+          (d) =>
+            d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
+        );
 
-const onSetChartData = (data, data2) => {
-  let a = [];
+        return {
+          label: name,
+          backgroundColor: '',
+          sum: chartdata.reduce((sum, num) => sum + num, 0),
+          data: chartdata,
+          isChecked: true,
+        };
+      })
+      .sort((a, z) => z.sum - a.sum);
 
-  data.forEach((element, i) => {
-    a.push(element - data2[i]);
-  });
+    const a = chartData1.slice(0, 9);
+    a.forEach((element, i) => {
+      element.backgroundColor = colorResourceMethod[i];
+    });
+    const b = chartData1.slice(9);
 
-  return a;
-};
+    const c = {
+      label: 'อื่นๆ',
+      backgroundColor: '#5E5E5E',
+      data: b.reduce((sum, years) => {
+        years.data.forEach((num, i) => {
+          sum[i] += num;
+        });
+        return sum;
+      }, new Array(b[0].data.length).fill(0)),
+      sum: 0,
+      isChecked: true,
+    };
 
-const onSetColor = (text: string) => {
-  const colorList = [
-    {
-      name: 'พบความเสี่ยง',
-      color: '#EC1C24',
-    },
-    {
-      name: 'ไม่พบความเสี่ยง',
-      color: '#000000',
-    },
-    {
-      name: 'แล้วเสร็จตามสัญญา',
-      color: '#0F7979',
-    },
-    {
-      name: 'จัดทำสัญญา/POแล้ว',
-      color: '#6DD5D5',
-    },
-    {
-      name: 'ระหว่างดำเนินการ',
-      color: '#DADADA',
-    },
-    {
-      name: 'ยกเลิกสัญญา',
-      color: '#FF8888',
-    },
-    {
-      name: 'ยกเลิกโครงการ',
-      color: '#FF5353',
-    },
-    {
-      name: 'ส่งงานล่าช้ากว่ากำหนด',
-      color: '#054775',
-    },
-    {
-      name: 'ส่งงานครบถ้วน',
-      color: '#0F7979',
-    },
-    {
-      name: 'ส่งงานตามกำหนด',
-      color: '#1AA8A8',
-    },
-    {
-      name: 'จัดทำสัญญา/PO แล้ว',
-      color: '#6DD5D5',
-    },
-    {
-      name: 'อยู่ระหว่างดำเนินการ',
-      color: '#DADADA',
-    },
-    {
-      name: 'ยกเลิกสัญญา',
-      color: '#FF8888',
-    },
-    {
-      name: 'ประกวดราคา',
-      color: '#CE5700',
-    },
-    {
-      name: 'ประกวดราคานานาชาติ',
-      color: '#F08C06',
-    },
-    {
-      name: 'ประกวดราคาอิเล็กทรอนิกส์ (e-bidding)',
-      color: '#F8B60E',
-    },
-    {
-      name: 'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
-      color: '#FEEDAF',
-    },
-    {
-      name: 'ตกลงราคา',
-      color: '#6DD5D5',
-    },
-    {
-      name: 'สอบราคา',
-      color: '#2EA0DF',
-    },
-    {
-      name: 'ตลาดอิเล็กทรอนิกส์ (e-market)',
-      color: '#7051B4',
-    },
-    {
-      name: 'พิเศษ',
-      color: '#EF9CC4',
-    },
-    {
-      name: 'คัดเลือก',
-      color: '#D83D88',
-    },
-    {
-      name: 'เฉพาะเจาะจง',
-      color: '#8A004B',
-    },
-  ];
+    c.sum = c.data.reduce((sum, num) => sum + num, 0);
 
-  let selected = colorList.filter((x) => x.name == text);
-  return selected[0].color;
+    a.forEach((element) => {
+      chartDataSet5.value.push(element);
+    });
+
+    chartDataSet5.value.push(c);
+  }
 };
 </script>
 

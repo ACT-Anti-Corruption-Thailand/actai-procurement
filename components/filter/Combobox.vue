@@ -90,8 +90,6 @@ const handleEnterOptions = () => {
     if (index != -1) selectedList.value.splice(index, 1);
   }
 
-  // console.log(selectedList.value);
-
   if (selectedList.value.length > 0) {
     if (selectedList.value.length > 1)
       text =
