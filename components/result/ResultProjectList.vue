@@ -2,11 +2,6 @@
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import type { Project, MapData } from '../../public/src/data/search_result';
 
-const selectedTab = ref(0);
-const isOpen = ref(false);
-const isOpen2 = ref(false);
-const params = ref('');
-
 const props = defineProps<{
   iconGuide: object;
   mockDataGuide: object;
@@ -21,38 +16,16 @@ const props = defineProps<{
   mapData: MapData;
 }>();
 
-function changeTab(index) {
-  selectedTab.value = index;
-}
-
-function scrollToTop() {
-  window.scrollTo(0, 0);
-}
-
-function highlight(title: string, text: string) {
-  var innerHTML = title;
-  const urlParams = decodeURI(window.location.href).split('=')[1];
-  var index = innerHTML.indexOf(urlParams);
-
-  if (index >= 0) {
-    innerHTML =
-      innerHTML.substring(0, index) +
-      "<span class='text-[#74060A]'>" +
-      innerHTML.substring(index, index + urlParams.length) +
-      '</span>' +
-      innerHTML.substring(index + urlParams.length);
-  }
-  return innerHTML;
-}
-
+const selectedTab = ref(0);
+const isOpen = ref(false);
+const isOpen2 = ref(false);
+const isOpenGovModal = ref(false);
+const isOpenContractorModal = ref(false);
+const params = ref('');
+const emit = defineEmits(['search']);
+const sort = ref('');
+const page = ref(0);
 const searchText = ref('');
-
-onMounted(() => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  searchText.value = urlParams.get('search');
-});
-
 const menuList = ref([
   {
     title: 'สถานะโครงการที่พบมากที่สุด',
@@ -84,10 +57,29 @@ const menuList = ref([
   },
 ]);
 
-const emit = defineEmits(['search']);
+function changeTab(index) {
+  selectedTab.value = index;
+}
 
-const sort = ref('');
-const page = ref(0);
+function scrollToTop() {
+  window.scrollTo(0, 0);
+}
+
+function highlight(title: string, text: string) {
+  var innerHTML = title;
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+  var index = innerHTML.indexOf(urlParams);
+
+  if (index >= 0) {
+    innerHTML =
+      innerHTML.substring(0, index) +
+      "<span class='text-[#74060A]'>" +
+      innerHTML.substring(index, index + urlParams.length) +
+      '</span>' +
+      innerHTML.substring(index + urlParams.length);
+  }
+  return innerHTML;
+}
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
@@ -103,6 +95,10 @@ const setParams = (type: string, val: string) => {
 };
 
 onMounted(() => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  searchText.value = urlParams.get('search');
+
   menuList.value[0].desc = props.data?.maxProjectStatus?.name;
   menuList.value[0].total = props.data?.maxProjectStatus?.total;
   menuList.value[1].desc = props.data?.maxContractStatus?.name;
@@ -140,7 +136,7 @@ onMounted(() => {
             </p>
             <h2 class="font-black">{{ props.data?.totalProject }} โครงการ</h2>
             <hr />
-            <div class="flex">
+            <div class="flex gap-2">
               <div class="flex-1">
                 <p class="b2">งบประมาณรวม (บาท)</p>
                 <h5
@@ -176,9 +172,10 @@ onMounted(() => {
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black mb-3">
               <p class="b1">หน่วยงานรัฐเจ้าของโครงการ</p>
               <h5 class="font-bold">{{ props.data?.totalAgency }} หน่วยงาน</h5>
-              <!-- <p
+              <p
+                @click="isOpenGovModal = true"
                 class="b2 link-1 flex items-center gap-1"
-                v-if="data.totalAgency != 0"
+                v-if="props.data?.totalAgency != 0"
               >
                 ดูรายชื่อ
                 <svg
@@ -197,14 +194,15 @@ onMounted(() => {
                     fill="currentColor"
                   />
                 </svg>
-              </p> -->
+              </p>
             </div>
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black">
               <p class="b1">ผู้รับจ้าง</p>
               <h5 class="font-bold">{{ props.data?.totalCompany }} ราย</h5>
-              <!-- <p
+              <p
+                @click="isOpenContractorModal = true"
                 class="b2 link-1 flex items-center gap-1"
-                v-if="data.totalCompany != 0"
+                v-if="props.data?.totalCompany != 0"
               >
                 ดูรายชื่อ
                 <svg
@@ -223,7 +221,7 @@ onMounted(() => {
                     fill="currentColor"
                   />
                 </svg>
-              </p> -->
+              </p>
             </div>
           </div>
         </div>
@@ -306,6 +304,15 @@ onMounted(() => {
             </button>
           </div>
         </div>
+
+        <GovernmentPopup
+          v-if="isOpenGovModal"
+          @close="isOpenGovModal = false"
+        />
+        <ContractorPopup
+          v-if="isOpenContractorModal"
+          @close="isOpenContractorModal = false"
+        />
       </TabPanel>
       <TabPanel>
         <div class="mx-auto max-w-6xl px-4 lg:px-0">

@@ -23,6 +23,7 @@
     "pinia": "^2.2.4",
     "sass": "^1.77.8",
     "vue": "latest",
+    "vue-awesome-paginate": "^1.2.0",
     "vue-chartjs": "^5.3.1",
     "vue-social-sharing": "^4.0.0-alpha4"
   },

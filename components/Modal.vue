@@ -23,7 +23,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-[70vw] max-w-[650px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              class="w-[90vw] max-w-[650px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
               <img
                 src="../public/src/images/close.svg"
