@@ -254,6 +254,7 @@ const setDate = (date) => {
             <p>ประวัติการทิ้งงาน</p>
           </div>
           <div
+            v-if="contractorRelationship?.relatedCompanies?.length > 0"
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
@@ -263,6 +264,7 @@ const setDate = (date) => {
             <p>ความสัมพันธ์</p>
           </div>
           <div
+            v-if="contractorRelationship?.relatedCompanies?.length > 0"
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
