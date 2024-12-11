@@ -2,10 +2,14 @@
 const config = useRuntimeConfig();
 const summary = ref({});
 
+var date = new Date();
+const firstDay = new Date(date.getFullYear(), date.getMonth(), 2);
+const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+
 const getSummary = async () => {
   const urlParams = new URLSearchParams();
-  urlParams.set('startDate', '2024-09-01');
-  urlParams.set('endDate', '2024-10-31');
+  urlParams.set('startDate', firstDay.toISOString().split('T')[0]);
+  urlParams.set('endDate', lastDay.toISOString().split('T')[0]);
 
   const res = await fetch(
     `${config.public.apiUrl}/project/summary/by-date?${urlParams}`,
@@ -23,6 +27,15 @@ const getSummary = async () => {
   }
 };
 
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
+
 onMounted(async () => {
   await getSummary();
 });
@@ -38,7 +51,9 @@ onMounted(async () => {
     "
   >
     <div class="text-center text-white">
-      <h5 class="font-bold">ข้อมูลน่าสนใจประจำเดือนกรกฎาคม 2568</h5>
+      <h5 class="font-bold">
+        ข้อมูลน่าสนใจประจำเดือน{{ setDate(new Date()) }}
+      </h5>
       <p class="b1 text-[#A6A6A6]">
         มีโครงการฯ ใหม่ {{ summary?.totalProject?.toLocaleString() }} โครงการ
         โดย {{ summary?.totalAgency?.toLocaleString() }} หน่วยงานรัฐ และ

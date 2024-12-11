@@ -14,7 +14,7 @@ const getProjectList = async () => {
   urlParams.set('pageSize', 10);
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?${urlParams}`,
+    `${config.public.apiUrl}/project/search?${urlParams.toString()}`,
     {
       method: 'get',
       headers: {
@@ -36,7 +36,7 @@ const getContractorList = async () => {
   urlParams.set('pageSize', 10);
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?${urlParams}`,
+    `${config.public.apiUrl}/company/search?${urlParams.toString()}`,
     {
       method: 'get',
       headers: {
@@ -135,7 +135,7 @@ onMounted(async () => {
               </NuxtLink>
             </div>
 
-            <div>
+            <div v-if="projectList?.searchResult.length > 0">
               <p class="b2">ตัวอย่างจากปีงบประมาณล่าสุด* (2568)</p>
               <p class="b4 text-[#A6A6A6] mb-3">
                 *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
@@ -197,7 +197,7 @@ onMounted(async () => {
               </NuxtLink>
             </div>
 
-            <div>
+            <div v-if="contractorList?.searchResult.length > 0">
               <p class="b2">ตัวอย่างจากปีงบประมาณล่าสุด* (2568)</p>
               <p class="b4 text-[#A6A6A6] mb-3">
                 *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง

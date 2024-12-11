@@ -104,7 +104,7 @@ onMounted(() => {
 
       <GoToText
         color="#0B5C90"
-        :text="`ดูโครงการทั้งหมด (${props.projectList?.pagination.totalItem})`"
+        :text="`ดูโครงการทั้งหมด (${props.projectList?.pagination.totalItem.toLocaleString()})`"
         class="mb-5 mt-0 link-1"
         @click="$emit('changeMenu', 'โครงการฯ')"
       />
@@ -154,9 +154,11 @@ onMounted(() => {
                 ({{
                   item?.totalProject == 0
                     ? 0
-                    : (item?.totalProjectHasCorruptionRisk /
-                        item?.totalProject) *
-                      100
+                    : (
+                        (item?.totalProjectHasCorruptionRisk /
+                          item?.totalProject) *
+                        100
+                      ).toFixed(2)
                 }}%)
               </p>
             </div>
@@ -172,7 +174,7 @@ onMounted(() => {
 
       <GoToText
         color="#0B5C90"
-        :text="`ดูหน่วยงานรัฐทั้งหมด (${props.govList?.pagination.totalItem})`"
+        :text="`ดูหน่วยงานรัฐทั้งหมด (${props.govList?.pagination.totalItem.toLocaleString()})`"
         class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
         @click="$emit('changeMenu', 'หน่วยงานรัฐ')"
       />
@@ -227,7 +229,7 @@ onMounted(() => {
 
       <GoToText
         color="#0B5C90"
-        :text="`ดูผู้รับจ้างทั้งหมด (${props.contractorList?.pagination.totalItem})`"
+        :text="`ดูผู้รับจ้างทั้งหมด (${props.contractorList?.pagination.totalItem.toLocaleString()})`"
         class="mb-5 mt-0 text-[#0B5C90] cursor-pointer"
         @click="$emit('changeMenu', 'ผู้รับจ้าง')"
       />

@@ -49,7 +49,7 @@ const getGovList = async (params: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?page=${currentPage.value}&pageSize=5&keyword=${urlParams}${p}`,
+    `${config.public.apiUrl}/agency/search?page=${currentPage.value}&pageSize=5&projectKeyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {
@@ -98,7 +98,7 @@ onMounted(async () => {
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-[90vw] max-w-[650px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              class="w-[90vw] max-w-[800px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
               <img
                 src="../../public/src/images/close.svg"
@@ -115,7 +115,8 @@ onMounted(async () => {
                     >”
                   </h4>
                   <p class="b1">
-                    {{ govList?.pagination?.totalItem }} หน่วยงานรัฐ
+                    {{ govList?.pagination?.totalItem.toLocaleString() }}
+                    หน่วยงานรัฐ
                   </p>
                 </div>
 
@@ -162,12 +163,12 @@ onMounted(async () => {
                 <div class="my-3">
                   <a
                     v-for="item in govList?.searchResult"
-                    class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
+                    class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4 gap-2"
                     :key="'gov-' + item.agencyId"
                     target="_blank"
                     :href="'/government/' + item.agencyId"
                   >
-                    <div>
+                    <div class="basis-2/5">
                       <p
                         class="b1 font-bold"
                         v-html="highlight(item?.agencyName, keyword)"
@@ -179,7 +180,9 @@ onMounted(async () => {
                         color="#8E8E8E"
                       />
                     </div>
-                    <div class="flex sm:gap-10 text-right flex-col-mb">
+                    <div
+                      class="basis-3/5 flex justify-between sm:gap-10 text-right flex-col-mb"
+                    >
                       <div>
                         <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
                         <p class="b1">
@@ -195,9 +198,11 @@ onMounted(async () => {
                           ({{
                             item?.totalProject == 0
                               ? 0
-                              : (item?.totalProjectHasCorruptionRisk /
-                                  item?.totalProject) *
-                                100
+                              : (
+                                  (item?.totalProjectHasCorruptionRisk /
+                                    item?.totalProject) *
+                                  100
+                                ).toFixed(2)
                           }}%)
                         </p>
                       </div>

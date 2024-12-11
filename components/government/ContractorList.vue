@@ -60,8 +60,8 @@ const setDate = (date) => {
             <tr>
               <th>ลำดับ</th>
               <th>ผู้รับจ้าง</th>
-              <th class="text-right">จำนวนโครงการ</th>
-              <th class="text-right">วงเงินสัญญารวม</th>
+              <th class="text-right w-24">จำนวนโครงการ</th>
+              <th class="text-right w-16">วงเงินสัญญารวม</th>
             </tr>
           </thead>
           <tbody class="b1">

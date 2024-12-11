@@ -20,6 +20,8 @@ const biddingStep = [
   { title: 'เข้าเสนอราคา', total: 0, img: 'e-bidding' },
 ];
 
+const sum = biddingStep.reduce((partialSum, a) => partialSum + a.total, 0);
+
 const contractorsBidding = [
   {
     id: '10',
@@ -113,7 +115,8 @@ onBeforeMount(() => {
       <h4 class="font-black">จำนวนนิติบุคคลที่เข้าร่วมในแต่ละขั้นตอน</h4>
     </div>
 
-    <div class="p-8 rounded-b-md w-full flex flex-col-mb gap-2">
+    <div v-if="sum == 0" class="p-8 b1 text-center">ไม่พบข้อมูล</div>
+    <div v-else class="p-8 rounded-b-md w-full flex flex-col-mb gap-2">
       <template v-for="(item, i) in biddingStep">
         <div
           class="px-3 py-5 bg-[#F5F5F5] rounded-10 w-full text-center relative"

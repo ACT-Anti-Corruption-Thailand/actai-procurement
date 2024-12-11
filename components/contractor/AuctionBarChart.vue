@@ -80,7 +80,7 @@ const getChartData = async () => {
 };
 
 onBeforeMount(async () => {
-  //await getChartData();
+  await getChartData();
 });
 
 const chartData = ref({

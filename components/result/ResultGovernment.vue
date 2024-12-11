@@ -58,7 +58,7 @@ onMounted(() => {
   <div class="mx-auto max-w-6xl px-4" v-else>
     <div class="flex items-center justify-between">
       <h4 class="font-bold">
-        {{ props.govList?.pagination?.totalItem }} หน่วยงานรัฐ
+        {{ props.govList?.pagination?.totalItem.toLocaleString() }} หน่วยงานรัฐ
       </h4>
       <!-- <FilterPopupResult section="หน่วยงานรัฐ" /> -->
     </div>
@@ -135,8 +135,11 @@ onMounted(() => {
               ({{
                 item?.totalProject == 0
                   ? 0
-                  : (item?.totalProjectHasCorruptionRisk / item?.totalProject) *
-                    100
+                  : (
+                      (item?.totalProjectHasCorruptionRisk /
+                        item?.totalProject) *
+                      100
+                    ).toFixed(2)
               }}%)
             </p>
           </div>
@@ -150,16 +153,13 @@ onMounted(() => {
       </a>
 
       <div class="text-center">
-        <button
+        <LoadMore
           v-if="
             props.govList?.searchResult.length <
             props.govList?.pagination?.totalItem
           "
-          class="border btn-light-3 link-1 p-2.5 w-32 rounded-10"
           @click="setParams('page', 10)"
-        >
-          โหลดเพิ่ม
-        </button>
+        />
       </div>
     </div>
   </div>

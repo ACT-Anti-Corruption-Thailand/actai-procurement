@@ -3,11 +3,12 @@ const isOpen = ref(false);
 const config = useRuntimeConfig();
 
 const summary = ref({});
+const d = new Date();
 
 const getOverallSummary = async () => {
   const urlParams = new URLSearchParams();
   urlParams.set('budgetYearStart', 2562);
-  urlParams.set('budgetYearEnd', 2568);
+  urlParams.set('budgetYearEnd', d.getFullYear() + 543);
 
   const res = await fetch(
     `${config.public.apiUrl}/project/summary/by-budget-year?${urlParams}`,

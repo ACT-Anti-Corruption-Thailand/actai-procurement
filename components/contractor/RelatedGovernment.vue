@@ -75,7 +75,7 @@ const setDate = (date) => {
                   rel="noopener noreferrer"
                   class="hover:text-[#0B5C90]"
                 >
-                  {{ item.agencyBelongTo }}
+                  {{ item.agencyName }}
                 </a>
               </td>
               <td class="text-right">

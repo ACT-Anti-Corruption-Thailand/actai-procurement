@@ -57,7 +57,8 @@ onMounted(() => {
   <div class="mx-auto max-w-6xl px-4" v-else>
     <div class="flex items-center justify-between">
       <h4 class="font-bold">
-        {{ props.contractorList?.pagination?.totalItem }} ผู้รับจ้าง
+        {{ props.contractorList?.pagination?.totalItem.toLocaleString() }}
+        ผู้รับจ้าง
       </h4>
       <!-- <FilterPopupResult section="ผู้รับจ้าง" /> -->
     </div>
@@ -111,6 +112,7 @@ onMounted(() => {
           <ProjectIconGuide
             :data="{
               province: item.province,
+              entityNo: item.companyId,
             }"
             color="#8E8E8E"
           />
@@ -129,16 +131,13 @@ onMounted(() => {
       </a>
 
       <div class="text-center">
-        <button
+        <LoadMore
           v-if="
             props.contractorList?.searchResult.length <
             props.contractorList?.pagination?.totalItem
           "
-          class="border btn-light-3 link-1 p-2.5 w-32 rounded-10"
           @click="setParams('page', 10)"
-        >
-          โหลดเพิ่ม
-        </button>
+        />
       </div>
     </div>
   </div>

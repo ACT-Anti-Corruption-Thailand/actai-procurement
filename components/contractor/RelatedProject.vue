@@ -111,7 +111,7 @@ const setDate = (date) => {
                   v-if="item.hasCorruptionRisk"
                 />
               </td>
-              <td>11/10/2567</td>
+              <td>{{ setDate(item.announcementDate) }}</td>
               <td
                 :class="[
                   item.projectStatus == 'เสนอราคา'
@@ -128,28 +128,36 @@ const setDate = (date) => {
               </td>
               <td>
                 <a
+                  v-if="item.agencyName"
                   target="_blank"
                   :href="`/government/${item.agencyId}`"
                   class="hover:text-[#0B5C90]"
                   >{{ item.agencyName }}</a
                 >
-              </td>
-              <td>
-                <a
-                  v-if="item.bidder?.length > 0"
-                  target="_blank"
-                  :href="`/contractor?name=บริษัท-แพลนเน็ต-คอมมิวนิเคชั่น-เอเชีย-จำกัด-(มหาชน)`"
-                  >บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)</a
-                >
+
                 <p v-else>-</p>
               </td>
               <td>
-                <a
-                  v-if="item.bidder?.length > 0"
-                  target="_blank"
-                  :href="`/contractor?name=บริษัท-แพลนเน็ต-คอมมิวนิเคชั่น-เอเชีย-จำกัด-(มหาชน)`"
-                  >บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)</a
-                >
+                <ul class="list-decimal" v-if="item.contractors?.length > 0">
+                  <li v-for="data in item.contractors">
+                    <a
+                      target="_blank"
+                      :href="`/contractor${data.id}`"
+                      class="hover:text-[#0B5C90]"
+                      >{{ data.name }}</a
+                    >
+                  </li>
+                </ul>
+
+                <p v-else>-</p>
+              </td>
+              <td>
+                <ul class="list-decimal" v-if="item.bidder?.length > 0">
+                  <li v-for="data in item.bidder">
+                    {{ data }}
+                  </li>
+                </ul>
+
                 <p v-else>-</p>
               </td>
               <td

@@ -94,7 +94,7 @@ onMounted(async () => {
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-[90vw] max-w-[650px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              class="w-[90vw] max-w-[800px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
             >
               <img
                 src="../../public/src/images/close.svg"
@@ -111,7 +111,8 @@ onMounted(async () => {
                     >”
                   </h4>
                   <p class="b1">
-                    {{ contractorList?.pagination?.totalItem }} ราย
+                    {{ contractorList?.pagination?.totalItem.toLocaleString() }}
+                    ราย
                   </p>
                 </div>
 
@@ -143,6 +144,7 @@ onMounted(async () => {
                 <ProjectIconGuide
                   :data="{
                     province: '= ที่ตั้ง',
+                    entityNo: '= เลขทะเบียนนิติบุคคล',
                   }"
                   color="#8E8E8E"
                 />
@@ -163,6 +165,7 @@ onMounted(async () => {
                       <ProjectIconGuide
                         :data="{
                           province: item.province,
+                          entityNo: item.companyId,
                         }"
                         color="#8E8E8E"
                       />

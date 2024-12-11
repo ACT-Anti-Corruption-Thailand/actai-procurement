@@ -4,13 +4,14 @@ const keyword = ['ก่อสร้าง', 'เฉลิมพระเกี�
 
 const config = useRuntimeConfig();
 const searchSummary = ref({});
+const d = new Date();
 
 const getSearchSummary = async () => {
   const urlParams = new URLSearchParams();
   urlParams.set('page', 1);
-  urlParams.set('pageSize', 3);
-  urlParams.set('budgetYearStart', 2567);
-  urlParams.set('budgetYearEnd', 2568);
+  urlParams.set('pageSize', 10);
+  urlParams.set('budgetYearStart', 2562);
+  urlParams.set('budgetYearEnd', 2567);
 
   const res = await fetch(
     `${config.public.apiUrl}/search/summary?${urlParams}`,
@@ -34,7 +35,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-black py-10 px-3">
+  <div class="bg-black py-10 px-3" v-if="searchSummary?.result?.length > 0">
     <div class="text-center text-white">
       <h3 class="font-bold mb-10">เว็บไซต์นี้ทำอะไรได้บ้าง</h3>
       <div

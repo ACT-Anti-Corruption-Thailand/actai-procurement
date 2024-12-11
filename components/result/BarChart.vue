@@ -50,7 +50,7 @@
             class="b1 flex justify-between w-full"
             ><span class="w-3/5">{{ item.label }}</span>
             <span class="text-[#5E5E5E] text-right"
-              >{{ item.sum }} ({{
+              >{{ item.sum.toLocaleString() }} ({{
                 ((item.sum / total) * 100).toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                 })
@@ -171,7 +171,8 @@ const chartOptions = ref({
           let total = a.reduce((a, b) => a + b, 0);
           totalByData.value = total;
 
-          if (props.section != 'budget') return total + ' โครงการ';
+          if (props.section != 'budget')
+            return total.toLocaleString() + ' โครงการ';
         },
         label: function (context) {
           if (props.section != 'budget') {
@@ -223,7 +224,7 @@ const chartOptions = ref({
                 maximumFractionDigits: 2,
               }) + ''
             );
-          else return value;
+          else return value.toLocaleString();
         },
       },
     },

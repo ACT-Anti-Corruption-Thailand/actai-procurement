@@ -2,7 +2,7 @@
   <div>
     <h4 class="font-bold text-white mb-5">ภาพรวมโครงการที่จัดทำ</h4>
 
-    <BarChart
+    <!-- <BarChart
       :title="title"
       :data="yearlyAggregates"
       id="chart-2"
@@ -18,7 +18,7 @@
       titleType="3"
       @title="(n) => (title = n)"
       @isOpen="isOpen = true"
-    />
+    /> -->
 
     <div class="rounded-10 flex flex-col-mb mb-3">
       <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
@@ -56,9 +56,9 @@
       </div>
     </div>
 
-    <AuctionBarChart />
+    <!-- <AuctionBarChart /> -->
 
-    <OfferPriceBarChart />
+    <!-- <OfferPriceBarChart /> -->
 
     <Modal
       v-if="isOpen"

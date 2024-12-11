@@ -157,6 +157,8 @@ const totalBudget = ref(0);
 let searchText = ref('');
 let plan = ref('จำนวนโครงการ');
 
+console.log(props.data);
+
 const provinces = [
   {
     name: 'กรุงเทพมหานคร',

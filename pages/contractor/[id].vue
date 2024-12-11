@@ -225,7 +225,7 @@ const setDate = (date) => {
           >
             <p>ข้อมูลทั่วไป</p>
           </div>
-          <!-- <div
+          <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -242,7 +242,7 @@ const setDate = (date) => {
               <li>สัดส่วนวิธีการประมูลงาน</li>
               <li>พฤติกรรมการเสนอราคา</li>
             </ul>
-          </div> -->
+          </div>
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
@@ -253,8 +253,7 @@ const setDate = (date) => {
           >
             <p>ประวัติการทิ้งงาน</p>
           </div>
-          <div
-            v-if="contractorRelationship?.relatedCompanies?.length > 0"
+          <!-- <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
@@ -264,7 +263,6 @@ const setDate = (date) => {
             <p>ความสัมพันธ์</p>
           </div>
           <div
-            v-if="contractorRelationship?.relatedCompanies?.length > 0"
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -273,7 +271,7 @@ const setDate = (date) => {
             @click="menu = 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'"
           >
             <p>กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน</p>
-          </div>
+          </div> -->
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{

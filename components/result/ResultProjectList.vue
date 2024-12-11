@@ -30,18 +30,21 @@ const menuList = ref([
   {
     title: 'สถานะโครงการที่พบมากที่สุด',
     desc: '',
+    percent: 0,
     total: 0,
     id: 'chart-3',
   },
   {
     title: 'สถานะของสัญญาที่พบมากที่สุด',
     desc: '',
+    percent: 0,
     total: 0,
     id: 'chart-4',
   },
   {
     title: 'วิธีการจัดหาที่พบมากที่สุด',
     desc: '',
+    percent: 0,
     total: 0,
     id: 'chart-5',
   },
@@ -101,10 +104,16 @@ onMounted(() => {
 
   menuList.value[0].desc = props.data?.maxProjectStatus?.name;
   menuList.value[0].total = props.data?.maxProjectStatus?.total;
+  menuList.value[0].percent =
+    (props.data?.maxProjectStatus?.total / props.data?.totalProject) * 100;
   menuList.value[1].desc = props.data?.maxContractStatus?.name;
   menuList.value[1].total = props.data?.maxContractStatus?.total;
+  menuList.value[1].percent =
+    (props.data?.maxContractStatus?.total / props.data?.totalProject) * 100;
   menuList.value[2].desc = props.data?.maxResourcingMethod?.name;
   menuList.value[2].total = props.data?.maxResourcingMethod?.total;
+  menuList.value[2].percent =
+    (props.data?.maxResourcingMethod?.total / props.data?.totalProject) * 100;
   menuList.value[3].desc = props.data?.provinceWithHighestBudgetMoney;
   menuList.value[4].desc = props.data?.provinceWithHighestProjects;
 });
@@ -134,7 +143,9 @@ onMounted(() => {
             <p class="b1 font-bold">
               จำนวนโครงการจัดซื้อจัดจ้างตามเงื่อนไขที่ค้นหา
             </p>
-            <h2 class="font-black">{{ props.data?.totalProject }} โครงการ</h2>
+            <h2 class="font-black">
+              {{ props.data?.totalProject.toLocaleString() }} โครงการ
+            </h2>
             <hr />
             <div class="flex gap-2">
               <div class="flex-1">
@@ -171,7 +182,9 @@ onMounted(() => {
           <div class="sm:w-2/5">
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black mb-3">
               <p class="b1">หน่วยงานรัฐเจ้าของโครงการ</p>
-              <h5 class="font-bold">{{ props.data?.totalAgency }} หน่วยงาน</h5>
+              <h5 class="font-bold">
+                {{ props.data?.totalAgency.toLocaleString() }} หน่วยงาน
+              </h5>
               <p
                 @click="isOpenGovModal = true"
                 class="b2 link-1 flex items-center gap-1"
@@ -198,7 +211,9 @@ onMounted(() => {
             </div>
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black">
               <p class="b1">ผู้รับจ้าง</p>
-              <h5 class="font-bold">{{ props.data?.totalCompany }} ราย</h5>
+              <h5 class="font-bold">
+                {{ props.data?.totalCompany.toLocaleString() }} ราย
+              </h5>
               <p
                 @click="isOpenContractorModal = true"
                 class="b2 link-1 flex items-center gap-1"
@@ -247,7 +262,7 @@ onMounted(() => {
             @sortBy="setParams"
           />
 
-          <!-- <DownloadAndCopy /> -->
+          <DownloadAndCopy />
         </div>
 
         <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />
@@ -292,16 +307,13 @@ onMounted(() => {
           </a>
 
           <div class="text-center">
-            <button
+            <LoadMore
               v-if="
                 props.projectList?.searchResult.length <
                 props.projectList?.pagination?.totalItem
               "
-              class="border btn-light-3 link-1 p-2.5 w-32 rounded-10"
               @click="setParams('page', 10)"
-            >
-              โหลดเพิ่ม
-            </button>
+            />
           </div>
         </div>
 
@@ -317,7 +329,8 @@ onMounted(() => {
       <TabPanel>
         <div class="mx-auto max-w-6xl px-4 lg:px-0">
           <h5 class="font-bold my-5">
-            {{ props.data?.totalProject }} โครงการจัดซื้อจัดจ้าง
+            {{ props.data?.totalProject.toLocaleString() }}
+            โครงการจัดซื้อจัดจ้าง
           </h5>
           <div class="flex flex-col-mb gap-2">
             <a href="#chart-1" class="sm:w-2/4">
@@ -360,11 +373,16 @@ onMounted(() => {
               v-for="item in menuList"
             >
               <div class="rounded-10 btn-chart p-5 text-white h-full relative">
-                <p class="b2 w-[95%] text-[#DADADA]">{{ item.title }}</p>
+                <p class="b2 w-[90%] text-[#DADADA]">
+                  {{ item.title }}
+                  <span v-if="item.percent != null"
+                    >({{ item.percent?.toFixed(2) }}%)</span
+                  >
+                </p>
                 <p class="b1 font-bold">{{ item.desc }}</p>
                 <arrow
                   color="#FFFFFF"
-                  class="absolute right-5 top-5 rotate-90"
+                  class="absolute right-5 top-6 rotate-90"
                 />
               </div>
             </a>
