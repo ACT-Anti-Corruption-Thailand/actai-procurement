@@ -3,7 +3,9 @@
     class="bg-white p-4 sm:p-7 rounded-10"
     v-if="totalBudget != 0 && totalProject != 0"
   >
-    <h4 class="font-black">การกระจายตัวโครงการใน {{ total }} จังหวัด</h4>
+    <h4 class="font-black">
+      การกระจายตัวโครงการใน {{ provinces.length }} จังหวัด
+    </h4>
 
     <RadioGroup v-model="plan" class="flex lg:hidden">
       <RadioGroupOption
@@ -25,20 +27,23 @@
     <div class="flex gap-2 flex-col-mb">
       <div class="flex-1" v-if="plan == 'all' || plan == 'จำนวนโครงการ'">
         <h5 class="font-bold hidden lg:block">จำนวนโครงการ</h5>
-        <p class="b1 font-bold">รวม 6,040 โครงการ</p>
+        <p class="b1 font-bold">
+          รวม {{ totalProject.toLocaleString() }} โครงการ
+        </p>
         <div
           class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
           <Map
             class="mx-auto max-w-xs h-fit w-fit"
             no="1"
-            :provinces="provinces"
+            :provinces="props.data"
+            :total="totalProject"
           />
 
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
               <p>0</p>
-              <p>3,564</p>
+              <p>{{ totalProject.toLocaleString() }}</p>
             </div>
             <div
               class="h-[10px] w-full bg-gradient-to-r from-[#F5F5F5] to-[#484848]"
@@ -49,16 +54,21 @@
       </div>
       <div class="flex-1" v-if="plan == 'all' || plan == 'งบประมาณ'">
         <h5 class="font-bold hidden lg:block">งบประมาณ</h5>
-        <p class="b1 font-bold">รวม 6,135,658,110 บาท</p>
+        <p class="b1 font-bold">รวม {{ totalBudget.toLocaleString() }} บาท</p>
         <div
           class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
-          <Map class="mx-auto max-w-xs h-fit" no="2" :provinces="provinces" />
+          <Map
+            class="mx-auto max-w-xs h-fit"
+            no="2"
+            :provinces="props.data"
+            :total="totalBudget"
+          />
 
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
               <p>0</p>
-              <p>38B</p>
+              <p>{{ totalBudget.toLocaleString() }}</p>
             </div>
             <div
               class="h-[10px] w-full bg-gradient-to-r from-[#F5F5F5] to-[#484848]"
@@ -102,7 +112,8 @@
       <div class="flex-1" v-if="plan == 'all' || plan == 'จำนวนโครงการ'">
         <p class="b4 text-right">จำนวนโครงการ</p>
         <div
-          class="flex justify-between items-center py-2 border-b cursor-pointer"
+          class="flex justify-between items-center py-2 cursor-pointer"
+          :class="{ 'border-b': i != searchResult.length - 1 }"
           @click="setFill(item.name_en, 1)"
           v-for="(item, i) in searchResult"
         >
@@ -122,7 +133,8 @@
       <div class="flex-1" v-if="plan == 'all' || plan == 'งบประมาณ'">
         <p class="b4 text-right">งบประมาณ (บาท)</p>
         <div
-          class="flex justify-between items-center py-2 border-b cursor-pointer"
+          class="flex justify-between items-center py-2 cursor-pointer"
+          :class="{ 'border-b': i != searchResult.length - 1 }"
           @click="setFill(item.name_en, 2)"
           v-for="(item, i) in searchResult"
         >
@@ -154,47 +166,19 @@ const props = defineProps<{
 const sortBy = ref('desc');
 const totalProject = ref(0);
 const totalBudget = ref(0);
+const provinces = ref([]);
 let searchText = ref('');
 let plan = ref('จำนวนโครงการ');
-
-console.log(props.data);
-
-const provinces = [
-  {
-    name: 'กรุงเทพมหานคร',
-    name_en: 'bangkok',
-    totalProject: 3564,
-    totalBudgetMoney: 38899482862,
-    totalCorruptionProject: 497,
-  },
-  {
-    name: 'ปทุมธานี',
-    name_en: 'pathumthani',
-    totalProject: 120,
-    totalBudgetMoney: 482865642,
-    totalCorruptionProject: 34,
-  },
-  {
-    name: 'เชียงใหม่',
-    name_en: 'chiangmai',
-    totalProject: 2000,
-    totalBudgetMoney: 6482865642,
-    totalCorruptionProject: 34,
-  },
-  {
-    name: 'แพร่',
-    name_en: 'phrae',
-    totalProject: 356,
-    totalBudgetMoney: 270443964,
-    totalCorruptionProject: 239,
-  },
-];
 
 const searchResult = computed(() => {
   let filteredData =
     sortBy.value == 'desc'
-      ? provinces.sort((a, b) => b.totalProject - a.totalProject)
-      : provinces.sort((a, b) => a.totalProject - b.totalProject);
+      ? props.data
+          .filter((x) => x.totalProject != 0)
+          .sort((a, b) => b.totalProject - a.totalProject)
+      : props.data
+          .filter((x) => x.totalProject != 0)
+          .sort((a, b) => a.totalProject - b.totalProject);
 
   return filteredData.filter((data) => {
     if (data.name.includes(searchText.value)) {
@@ -221,9 +205,11 @@ const setFill = (id, n) => {
 onMounted(() => {
   plan.value = window.innerWidth > 1024 ? 'all' : 'จำนวนโครงการ';
 
-  const a = props.data.map((o) => o.totalProject);
+  provinces.value = props.data.filter((x) => x.totalProject != 0);
+
+  const a = provinces.value.map((o) => o.totalProject);
   totalProject.value = a.reduce((partialSum, a) => partialSum + a, 0);
-  const b = props.data.map((o) => o.totalBudgetMoney);
+  const b = provinces.value.map((o) => o.totalBudgetMoney);
   totalBudget.value = b.reduce((partialSum, a) => partialSum + a, 0);
 });
 </script>
