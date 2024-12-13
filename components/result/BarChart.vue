@@ -79,7 +79,7 @@
     </div>
     <div class="py-7 pr-7 pl-10 bg-[#FFFFFF] chart-wrapper sm:w-2/3 relative">
       <p class="yaxis-text">
-        {{ props.title == 'งบประมาณ' ? 'ล้านบาท' : 'จำนวนโครงการ' }}
+        {{ props.title == 'งบประมาณ' ? 'บาท' : 'จำนวนโครงการ' }}
       </p>
 
       <p class="text-[#8E8E8E] text-center mb-3 b2">

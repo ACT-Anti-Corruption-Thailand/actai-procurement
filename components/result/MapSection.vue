@@ -68,7 +68,13 @@
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
               <p>0</p>
-              <p>{{ totalBudget.toLocaleString() }}</p>
+              <p>
+                {{
+                  totalBudget > 1000000
+                    ? (totalBudget / 1000000).toLocaleString() + 'K'
+                    : totalBudget.toLocaleString()
+                }}
+              </p>
             </div>
             <div
               class="h-[10px] w-full bg-gradient-to-r from-[#F5F5F5] to-[#484848]"
@@ -158,6 +164,7 @@
 <script setup lang="ts">
 import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
 import type { MapData } from '../../public/src/data/search_result';
+import Province_data from '../../public/src/provinces.json';
 
 const props = defineProps<{
   data: MapData;
@@ -180,14 +187,27 @@ const searchResult = computed(() => {
           .filter((x) => x.totalProject != 0)
           .sort((a, b) => a.totalProject - b.totalProject);
 
+  setFill();
+
   return filteredData.filter((data) => {
     if (data.name.includes(searchText.value)) {
+      if (searchText.value != '') {
+        let p = Province_data.filter((x) => x.name_th == data.name);
+
+        document.querySelector(
+          '.provinces-1' + '#' + p[0].name_en
+        ).style.stroke = 'red';
+        document.querySelector(
+          '.provinces-2' + '#' + p[0].name_en
+        ).style.stroke = 'red';
+      }
+
       return data;
     }
   });
 });
 
-const setFill = (id, n) => {
+const setFill = () => {
   let provinces_list = document.getElementsByClassName('provinces-1');
   let provinces_list_2 = document.getElementsByClassName('provinces-2');
 
@@ -198,8 +218,6 @@ const setFill = (id, n) => {
   [...provinces_list_2].forEach((element) => {
     element.style.stroke = 'black';
   });
-
-  document.querySelector('.provinces-' + n + '#' + id).style.stroke = 'red';
 };
 
 onMounted(() => {

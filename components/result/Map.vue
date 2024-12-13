@@ -1,3 +1,80 @@
+<script setup lang="ts">
+import * as d3 from 'd3';
+import Province_data from '../../public/src/provinces.json';
+
+const props = defineProps<{
+  no: string;
+  provinces: array;
+  total: number;
+}>();
+
+import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
+
+const color = d3.scaleLinear([0, props.total], ['#F5F5F5', '#484848']);
+
+onMounted(() => {
+  const list = document.getElementsByClassName('provinces-1');
+
+  for (let item of list) {
+    document.querySelector(
+      '.provinces-' + props.no + '#' + item.id
+    ).style.stroke = '#D9D9D9';
+  }
+
+  props.provinces.forEach((element) => {
+    if (element.name != 'ไม่ระบุ') {
+      let p = Province_data.filter(
+        (x) => x.name_th == element.name && x.name_th != 'ไม่ระบุ'
+      );
+
+      if (props.no == '1') {
+        if (element.totalProject != 0) {
+          console.log(p[0].name_en);
+
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).style.fill = color(element.totalProject);
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).style.stroke = '#000000';
+        }
+      } else {
+        if (element.totalBudgetMoney != 0) {
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).style.fill = color(element.totalBudgetMoney);
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).style.stroke = '#000000';
+        }
+      }
+    }
+  });
+
+  const svg = d3.select<SVGElement, unknown>('svg#map-container-' + props.no);
+  const g = d3.select<SVGElement, unknown>('#map-' + props.no);
+
+  // Init D3 zoom
+  const zoom = d3.zoom().scaleExtent([1, 5]).on('zoom', zoomed);
+  svg.call(zoom);
+
+  // Center container within SVG
+  const centered = d3.zoomIdentity.translate(0, 0);
+  svg.call(zoom.transform, centered);
+
+  d3.select('#zoom_in-' + props.no).on('click', function () {
+    zoom.scaleBy(svg.transition().duration(300), 1.4);
+  });
+  d3.select('#zoom_out-' + props.no).on('click', function () {
+    zoom.scaleBy(svg.transition().duration(300), 0.7);
+  });
+
+  function zoomed(event, d) {
+    g.attr('transform', event.transform);
+  }
+});
+</script>
+
 <template>
   <svg
     width="362"
@@ -801,69 +878,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import * as d3 from 'd3';
-import Province_data from '../../public/src/provinces.json';
-
-const props = defineProps<{
-  no: string;
-  provinces: array;
-  total: number;
-}>();
-
-import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
-
-const color = d3.scaleLinear([0, props.total], ['#F5F5F5', '#484848']);
-
-onMounted(() => {
-  const list = document.getElementsByClassName('provinces-1');
-
-  console.log(Province_data);
-
-  for (let item of list) {
-    document.querySelector(
-      '.provinces-' + props.no + '#' + item.id
-    ).style.stroke = '#D9D9D9';
-  }
-
-  props.provinces.forEach((element) => {
-    //   if (props.no == '1') {
-    //     document.querySelector(
-    //       '.provinces-' + props.no + '#' + element.name_en
-    //     ).style.fill = color(element.totalProject);
-    //     document.querySelector(
-    //       '.provinces-' + props.no + '#' + element.name_en
-    //     ).style.stroke = '#000000';
-    //   } else
-    //     document.querySelector(
-    //       '.provinces-' + props.no + '#' + element.name_en
-    //     ).style.fill = color(element.totalBudgetMoney);
-  });
-
-  const svg = d3.select<SVGElement, unknown>('svg#map-container-' + props.no);
-  const g = d3.select<SVGElement, unknown>('#map-' + props.no);
-
-  // Init D3 zoom
-  const zoom = d3.zoom().scaleExtent([1, 5]).on('zoom', zoomed);
-  svg.call(zoom);
-
-  // Center container within SVG
-  const centered = d3.zoomIdentity.translate(0, 0);
-  svg.call(zoom.transform, centered);
-
-  d3.select('#zoom_in-' + props.no).on('click', function () {
-    zoom.scaleBy(svg.transition().duration(300), 1.4);
-  });
-  d3.select('#zoom_out-' + props.no).on('click', function () {
-    zoom.scaleBy(svg.transition().duration(300), 0.7);
-  });
-
-  function zoomed(event, d) {
-    g.attr('transform', event.transform);
-  }
-});
-</script>
 
 <style lang="scss" scoped>
 svg {
