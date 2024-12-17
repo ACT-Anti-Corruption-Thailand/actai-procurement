@@ -42,14 +42,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    class="bg-[#1F1F1F] py-10 px-3"
-    v-if="
-      summary.totalProject != 0 ||
-      summary.totalAgency != 0 ||
-      summary.totalCompany != 0
-    "
-  >
+  <div class="bg-[#1F1F1F] py-10 px-3">
     <div class="text-center text-white">
       <h5 class="font-bold">
         ข้อมูลน่าสนใจประจำเดือน{{ setDate(new Date()) }}
