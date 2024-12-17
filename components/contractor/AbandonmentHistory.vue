@@ -26,7 +26,8 @@ const setDate = (date) => {
           <h5 class="font-black">
             ทั้งหมด
             {{ props.data?.pagination?.totalItem.toLocaleString() }} โครงการ
-            วงเงินสัญญา xx,xxx,xxx บาท
+            วงเงินสัญญา
+            {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
           </h5>
           <p class="b4 text-[#8E8E8E]">
             หมายเหตุ: การขึ้นบัญชีผู้ทิ้งงานนี้ จะมีผลตามกฎหมายโดยทั่วไป
@@ -63,7 +64,9 @@ const setDate = (date) => {
           </thead>
           <tbody class="b1">
             <tr v-for="(item, i) in props.data?.searchResult" :key="i">
-              <td class="b2 text-[#5E5E5E]">09/09/2567</td>
+              <td class="b2 text-[#5E5E5E]">
+                {{ setDate(item.announcementDate) }}
+              </td>
               <td>
                 <a
                   :href="`/project/${item.projectId}`"
@@ -92,6 +95,8 @@ const setDate = (date) => {
                   class="hover:text-[#0B5C90]"
                   >{{ item.agencyName }}</a
                 >
+
+                <p v-if="item.agencyName == null">-</p>
               </td>
               <td>
                 <b> {{ item.totalContractMoney.toLocaleString() }}</b>

@@ -125,17 +125,22 @@ const setDate = (date) => {
   <Header />
   <div class="bg-white p-5 z-10 sticky top-0">
     <Breadcrumb :title="projectData.projectName" />
-    <div class="max-w-7xl mx-auto flex gap-5 flex-col-mb">
+    <div class="max-w-7xl mx-auto flex gap-3 sm:gap-5 flex-col-mb">
       <div class="sm:w-4/5">
         <h3 class="font-black">{{ projectData.projectName }}</h3>
         <p class="b1">เลขที่โครงการ : {{ projectData.projectId }}</p>
         <p class="b4 text-[#8E8E8E]">
-          โครงการฯ อัปเดตข้อมูลเมื่อ {{ setDate(projectData.announcementDate) }}
+          โครงการฯ อัปเดตข้อมูลเมื่อ
+          {{
+            projectData.lastUpdatedOn != null
+              ? setDate(projectData.lastUpdatedOn)
+              : '-'
+          }}
         </p>
       </div>
       <div class="sm:w-1/5">
         <div
-          v-if="projectData.corruptionRisk"
+          v-if="projectData?.corruptionRisk?.length > 0"
           class="bg-[#FFEFF0] hover:bg-[#FFCECE] duration-300 rounded-10 text-[#EC1C24] b2 p-2.5 mb-2"
         >
           <div class="flex items-center gap-2">
@@ -281,4 +286,10 @@ const setDate = (date) => {
   <Footer />
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+h3 {
+  @include mobile {
+    font-size: 26px;
+  }
+}
+</style>

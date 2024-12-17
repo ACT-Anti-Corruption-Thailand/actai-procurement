@@ -122,25 +122,32 @@ export interface ContractorDetails {
 }
 
 export interface ContracterRelationship {
-  // relationshipWith:
-  //   {
-  //     politicians: [ {
-  //       name: string;
-  //       relationships: [ {
-  //         relationshipType: string;
-  //         relatedTo: string[];
-  //       }];
-  //     }];
-  //     companies: [ {
-  //       id: string;
-  //       name: string;
-  //       relationships: [ {
-  //         relationshipType: string;
-  //         relatedTo: string[];
-  //       }];
-  //     }];
-  //     politicalParties: string[]
-  //   }
+  relationshipWith: {
+    politicians: [
+      {
+        name: string;
+        relationships: [
+          {
+            relationshipType: string;
+            relatedTo: string[];
+          }
+        ];
+      }
+    ];
+    companies: [
+      {
+        id: string;
+        name: string;
+        relationships: [
+          {
+            relationshipType: string;
+            relatedTo: string[];
+          }
+        ];
+      }
+    ];
+    politicalParties: string[];
+  };
   relatedCompanies: [];
 }
 
@@ -148,4 +155,23 @@ export interface ContracterRelatedCompanies {
   id: string;
   name: string;
   totalBiddingProject: number;
+}
+
+export interface ContracterParticipatedCompanies {
+  participatedProjects: [
+    {
+      agency: {
+        id: string;
+        name: string;
+      };
+      projects: [
+        {
+          id: string;
+          name: string;
+          winner: string;
+          bidders: string[];
+        }
+      ];
+    }
+  ];
 }

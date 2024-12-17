@@ -8,10 +8,12 @@
   <div v-else>
     <div class="bg-[#F5F5F5] rounded-10 p-7" v-if="!isSelectFirstCompany">
       <p class="b1">
-        บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
+        {{ props.companyName }}
       </p>
       <div class="flex items-center gap-2 justify-between mb-3">
-        <h5 class="font-bold w-2/4">เคยร่วมประมูลกับเอกชน 29 ราย</h5>
+        <h5 class="font-bold w-2/4">
+          เคยร่วมประมูลกับเอกชน {{ props.data.length }} ราย
+        </h5>
         <FilterResultContractor section="" />
       </div>
       <div class="relative w-full">
@@ -46,7 +48,7 @@
       <div
         v-for="item in result"
         class="flex justify-between b1 cursor-pointer hover:bg-white duration-300 p-2.5 rounded-lg"
-        @click="selectCompany(item.name)"
+        @click="selectCompany(item)"
       >
         <p>{{ item.name }}</p>
         <p class="text-[#9A0D13] b2 flex gap-2 items-center">
@@ -70,7 +72,10 @@
       <div class="bg-[#F5F5F5] rounded-t-md p-7">
         <p
           class="b4 flex items-center gap-1 text-[#0B5C90] mb-3 cursor-pointer"
-          @click="isSelectFirstCompany = false"
+          @click="
+            isSelectFirstCompany = false;
+            participatedCompany = [];
+          "
         >
           <svg
             width="16"
@@ -87,19 +92,22 @@
           กลับ
         </p>
         <p class="b1">
-          บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
+          {{ props.companyName }}
         </p>
 
         <div>
           <p class="b4 ml-1.5">+</p>
-          <div class="flex items-center gap-2">
+          <div
+            class="flex items-center gap-2"
+            v-for="item in participatedCompany"
+          >
             <div
               class="b4 border border-black rounded-full w-5 h-5 text-center"
             >
               1
             </div>
             <div class="bg-white rounded-10 p-2.5 font-bold b1 w-full flex-1">
-              บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)
+              {{ item }}
             </div>
             <img src="../../public/src/images/close.svg" />
           </div>
@@ -111,37 +119,39 @@
       </div>
       <div class="bg-[#FFFFFF] rounded-b-md p-7">
         <h5 class="font-bold text-[#5E5E5E]">
-          <span class="text-[#9A0D13]">เคยประมูลร่วมกัน 2 โครงการ</span> ของ 2
-          หน่วยงานรัฐ
+          <span class="text-[#9A0D13]"
+            >เคยประมูลร่วมกัน {{ totalProject }} โครงการ</span
+          >
+          ของ {{ contracterParticipatedCompanyById.length }} หน่วยงานรัฐ
         </h5>
 
-        <template v-for="item in participatedProjects">
+        <template v-for="item in contracterParticipatedCompanyById">
           <p class="b2 text-[#9A0D13]">
-            <span class="text-[#5E5E5E]">{{ item.agency.name }}</span> 1 โครงการ
+            <span class="text-[#5E5E5E]">{{ item.agency.name }}</span>
+            {{ item.projects.length }}
+            โครงการ
           </p>
 
-          <div class="flex gap-5 my-3">
+          <div class="flex gap-5 my-3" v-for="item2 in item.projects">
             <div class="b2 pt-5 text-[#8E8E8E]">1</div>
             <div class="bg-[#FFEFF0] rounded-10 text-[#9A0D13] p-5 w-full">
               <a target="_blank" :href="`/project/0`">
-                <p class="b2 font-bold">{{ item.name }}</p>
+                <p class="b2 font-bold">{{ item2.name }}</p>
               </a>
-              <p class="b4">เลขที่โครงการ: {{ item.id }}</p>
-              <p class="b4 text-black">
-                <b>ผู้ชนะ:</b> {{ item.bidders.join(',') }}
-              </p>
+              <p class="b4 my-1">เลขที่โครงการ: {{ item2.id }}</p>
+              <p class="b4 text-black"><b>ผู้ชนะ:</b> {{ item2.winner }}</p>
 
               <Disclosure>
                 <DisclosureButton
                   class="flex items-center text-[#0B5C90] gap-2 w-full b4 mt-3"
                 >
                   <ChevronDownIcon class="size-2" /> ดูรายชื่อผู้เข้าร่วมประมูล
-                  ({{ item.bidders.length }} ราย)
+                  ({{ item2.bidders.length }} ราย)
                 </DisclosureButton>
                 <DisclosurePanel class="b4 text-black mt-3">
                   <p class="font-bold">ผู้เข้าร่วมประมูล:</p>
                   <ul class="list-decimal ml-5">
-                    <li v-for="item2 in item.bidders">{{ item2 }}</li>
+                    <li v-for="item3 in item2.bidders">{{ item3 }}</li>
                   </ul>
                 </DisclosurePanel>
               </Disclosure>
@@ -156,78 +166,77 @@
 <script lang="ts" setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
-import type { ContracterRelatedCompanies } from '../../public/src/data/data_details';
+import type {
+  ContracterRelatedCompanies,
+  ContracterParticipatedCompanies,
+} from '../../public/src/data/data_details';
 
 const props = defineProps<{
   data: ContracterRelatedCompanies;
+  companyName: string;
 }>();
 
+const config = useRuntimeConfig();
+
+const contractorRelatedCompanyById = ref<ContracterRelatedCompanies>([]);
+const contracterParticipatedCompanyById = ref<ContracterParticipatedCompanies>(
+  []
+);
 const searchText = ref('');
 const isSelectFirstCompany = ref(false);
 const firstCompany = ref('');
-
-const relatedCompanies = [
-  {
-    id: '11',
-    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
-    totalBiddingProject: 15,
-  },
-  {
-    id: '12',
-    name: 'บริษัท เออาร์ดี เอ็นจิเนียริ่ง ซิสเต็มส์ จำกัด',
-    totalBiddingProject: 10,
-  },
-  {
-    id: '13',
-    name: 'ธรู ไอพี คอมมิวนิค จำกัด',
-    totalBiddingProject: 4,
-  },
-];
+const participatedCompany = ref([]);
+const totalProject = ref(0);
 
 const result = computed(() =>
   searchText.value === ''
-    ? relatedCompanies
-    : relatedCompanies.filter((person) =>
-        person.name.includes(searchText.value)
-      )
+    ? props.data
+    : props.data.filter((person) => person.name.includes(searchText.value))
 );
 
-const participatedProjects = [
-  {
-    id: '0',
-    name: 'สอบราคาซื้อชุดก่อสร้าง (60.14.13)',
-    agency: {
-      id: '0',
-      name: 'การไฟฟ้านครหลวง ฝ่ายก่อสร้าง',
-    },
-    winner: 'บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)',
-    bidders: [
-      'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
-      'บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)',
-      'บริษัท เออาร์ดี เอ็นจิเนียริ่ง ซิสเต็มส์ จำกัด',
-      'บริษัท โกลด์ อินฟินิท จำกัด',
-    ],
-  },
-  {
-    id: '1',
-    name: 'สอบราคาซื้อชุดก่อสร้าง (60.14.13)',
-    agency: {
-      id: '1',
-      name: 'สำนักงานเศรษฐกิจการเกษตร',
-    },
-    winner: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
-    bidders: [
-      'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
-      'บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)',
-      'บริษัท เออาร์ดี เอ็นจิเนียริ่ง ซิสเต็มส์ จำกัด',
-      'บริษัท โกลด์ อินฟินิท จำกัด',
-    ],
-  },
-];
-
-const selectCompany = (name: string) => {
-  firstCompany.value = name;
+const selectCompany = (data) => {
+  firstCompany.value = data.name;
   isSelectFirstCompany.value = true;
+  participatedCompany.value.push(data.name);
+  getContracterRelatedCompany(data.id);
+  getContracterParticipatedCompany(data.id);
+};
+
+const getContracterRelatedCompany = async (id) => {
+  const res = await fetch(
+    `${config.public.apiUrl}/company/${id}/related-company`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    contractorRelatedCompanyById.value = data.relatedCompanies;
+  }
+};
+
+const getContracterParticipatedCompany = async (id) => {
+  const res = await fetch(
+    `${config.public.apiUrl}/project/participated-company?companyId=` + id,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    contracterParticipatedCompanyById.value = data.participatedProjects;
+
+    const a = data.participatedProjects.map((x) => x.projects.length);
+    totalProject.value = a.reduce((a, b) => a + b, 0);
+  }
 };
 </script>
 

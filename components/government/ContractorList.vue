@@ -43,7 +43,8 @@ const setDate = (date) => {
       <div class="flex items-center justify-between mb-3">
         <h5 class="font-bold w-3/5">
           ทั้งหมด {{ props.data?.pagination.totalItem.toLocaleString() }} ราย
-          วงเงินสัญญา xx,xxx,xxx บาท
+          วงเงินสัญญา
+          {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
         </h5>
         <!-- <DownloadAndCopy /> -->
       </div>

@@ -1,14 +1,400 @@
+<script setup lang="ts">
+import type { MapData } from '../../public/src/data/search_result';
+import { Line } from 'vue-chartjs';
+import type { ChartComponentRef } from 'vue-chartjs';
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+} from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+
+const titleChartSelected = ref('ความเสี่ยงทุจริต');
+const sectionChartSelected = ref('risk');
+let selected = ref('งบประมาณ');
+const isOpen = ref(false);
+const isOpen2 = ref(false);
+const totalContractOverall = ref(0);
+const totalBudgetOverall = ref(0);
+const totalProject = ref(0);
+const totalCorruptProject = ref(0);
+const totalBudget = ref(0);
+const mapDataList = ref<MapData | null>(null);
+const bar = ref<ChartComponentRef | null>(null);
+const data = ref([]);
+const yearList = ref([]);
+const chartDataSet1 = ref([]);
+const chartDataSet2 = ref([]);
+const chartDataSet3 = ref([]);
+const chartDataSet4 = ref([]);
+const chartDataSet5 = ref([]);
+const isDone = ref(false);
+
+const chartData = ref({
+  labels: [],
+  datasets: [],
+});
+
+const chartOptions = ref({
+  responsive: true,
+  maintainAspectRatio: false,
+  interaction: {
+    mode: 'index',
+    intersect: false,
+  },
+  plugins: {
+    filler: {
+      propagate: false,
+    },
+    legend: {
+      display: false,
+    },
+    tooltip: {
+      titleFont: {
+        size: 20,
+        family: 'DB_Helvethaica_X',
+      },
+      bodyFont: {
+        size: 16,
+        family: 'DB_Helvethaica_X',
+      },
+      callbacks: {
+        title: function (context) {
+          return 'ปี ' + context[0].label.replace('’', '');
+        },
+        label: function (context) {
+          return context.formattedValue;
+        },
+        footer: function (context) {
+          let a = context[0].raw - context[1].raw;
+          return a == 0
+            ? 0
+            : ((context[0].raw - context[1].raw) * -1).toLocaleString();
+        },
+      },
+    },
+  },
+  scales: {
+    x: {
+      ticks: {
+        font: {
+          size: 16,
+          family: 'DB_Helvethaica_X',
+          color: '#8E8E8E',
+        },
+      },
+    },
+    y: {
+      ticks: {
+        font: {
+          size: 16,
+          family: 'DB_Helvethaica_X',
+        },
+        callback: function (value, index, ticks) {
+          return value > 1000000
+            ? (value / 1000000).toLocaleString() + 'M'
+            : value;
+        },
+      },
+    },
+  },
+});
+
+onBeforeMount(async () => {
+  const config = useRuntimeConfig();
+  const urlParams = window.location.pathname.split('/')[2];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/project/aggregate/by-budget-year?agencyId=${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    let q = data.yearlyAggregates.map((x) => x.aggregateBy.budgetMoney);
+
+    chartData.value = {
+      labels: data.yearlyAggregates.map((x) => x.budgetYear.toString()),
+      datasets: [
+        {
+          label: 'วงเงินสัญญารวม (บาท)',
+          backgroundColor: '#FFFFFF',
+          borderColor: '#000000',
+          data: data.yearlyAggregates.map((x) => x.totalContract),
+          fill: true,
+        },
+        {
+          label: 'งบประมาณรวม (บาท)',
+          backgroundColor: '#DADADA',
+          borderColor: '#5E5E5E',
+          borderDash: [5, 5],
+          data: q,
+          fill: true,
+        },
+      ],
+    };
+
+    totalContractOverall.value = data.yearlyAggregates.reduce(
+      (a, b) => a + b.totalContract,
+      0
+    );
+
+    totalBudgetOverall.value = q.reduce((a, b) => a + b, 0);
+
+    data.value = data.yearlyAggregates;
+    yearList.value = data.yearlyAggregates.map((x) => x.budgetYear.toString());
+
+    setChartData(data.yearlyAggregates);
+
+    isDone.value = true;
+  }
+
+  const res2 = await fetch(
+    `${config.public.apiUrl}/project/aggregate/by-province?agencyId=${urlParams}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res2.json();
+
+    mapDataList.value = data.provinces.filter((x) => x.totalProject != 0);
+
+    const a = mapDataList.value.map((o) => o.totalProject);
+    totalProject.value = a.reduce((partialSum, a) => partialSum + a, 0);
+    const b = mapDataList.value.map((o) => o.totalBudgetMoney);
+    totalBudget.value = b.reduce((partialSum, a) => partialSum + a, 0);
+    const c = mapDataList.value.map((o) => o.totalCorruptionProject);
+    totalCorruptProject.value = c.reduce((partialSum, a) => partialSum + a, 0);
+  }
+});
+
+const totalProjectMap = computed(() => {
+  if (mapDataList?.value != null) {
+    const b = mapDataList?.value.map((o) => o.totalBudgetMoney);
+    const c = mapDataList?.value.map((o) => o.totalCorruptionProject);
+
+    return selected.value == 'งบประมาณ'
+      ? b.reduce((partialSum, a) => partialSum + a, 0)
+      : b.reduce((partialSum, a) => partialSum + a, 0);
+  }
+});
+
+const titleChart = computed(() => {
+  if (titleChartSelected.value == 'ความเสี่ยงทุจริต') return 'ความเสี่ยงทุจริต';
+  else if (titleChartSelected.value == 'สถานะโครงการล่าสุด')
+    return 'สถานะโครงการล่าสุด';
+  else return 'วิธีการจัดหา';
+});
+
+const sectionChart = computed(() => {
+  if (titleChartSelected.value == 'ความเสี่ยงทุจริต') return 'risk';
+  else if (titleChartSelected.value == 'สถานะโครงการล่าสุด') return 'project';
+  else return 'method';
+});
+
+const barChartData = computed(() => {
+  if (titleChartSelected.value == 'ความเสี่ยงทุจริต')
+    return chartDataSet2.value;
+  else if (titleChartSelected.value == 'สถานะโครงการล่าสุด')
+    return chartDataSet4.value;
+  else return chartDataSet5.value;
+});
+
+const setChartData = (data) => {
+  const dataset_year = data.map((a) => a.budgetYear);
+  const dataset1 = data.map((a) => a.aggregateBy.budgetMoney);
+  const dataset2 = data.map((a) => a.totalProject);
+  const dataset3 = data.map((a) => a.aggregateBy.hasCorruptionRiskProject);
+
+  yearList.value = dataset_year;
+
+  chartDataSet1.value.push({
+    label: '',
+    backgroundColor: '#000000',
+    data: dataset1,
+    sum: dataset1.reduce((sum, num) => sum + num, 0),
+  });
+
+  let a = [];
+
+  dataset2.forEach((element, i) => {
+    a.push(element - dataset3[i]);
+  });
+
+  chartDataSet2.value.push(
+    {
+      label: 'พบความเสี่ยง',
+      backgroundColor: '#EC1C24',
+      data: dataset3,
+      sum: dataset3.reduce((sum, num) => sum + num, 0),
+      isChecked: true,
+    },
+    {
+      label: 'ไม่พบความเสี่ยง',
+      backgroundColor: '#000000',
+      data: a,
+      sum: a.reduce((sum, num) => sum + num, 0),
+      isChecked: true,
+    }
+  );
+
+  onSetChartData('status', data);
+  onSetChartData('contract', data);
+  onSetChartData('method', data);
+};
+
+const onSetChartData = (section: string, data) => {
+  if (section == 'status') {
+    const projectStatuses = [
+      ...new Set(
+        data.flatMap((o) => o.aggregateBy.projectStatus).map((o) => o.name)
+      ),
+    ]; // be ส่งมาเท่าข้อมูลที่มี ถ้าส่งมาหมดก็ไม่ต้อง new set
+
+    const colorProjectStatus = [
+      '#0F7979',
+      '#6DD5D5',
+      '#DADADA',
+      '#FF8888',
+      '#FF5353',
+    ];
+
+    chartDataSet3.value = projectStatuses.map((name, i) => {
+      const chartdata = data.map(
+        (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
+      );
+
+      return {
+        label: name,
+        backgroundColor: colorProjectStatus[i],
+        data: data.map(
+          (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
+        ),
+        sum: chartdata.reduce((sum, num) => sum + num, 0),
+        isChecked: true,
+      };
+    });
+  } else if (section == 'contract') {
+    const projectContractStatuses = [
+      ...new Set(
+        data.flatMap((o) => o.aggregateBy.contractStatus).map((o) => o.name)
+      ),
+    ];
+
+    const colorContracttStatus = [
+      '#054775',
+      '#0F7979',
+      '#1AA8A8',
+      '#6DD5D5',
+      '#DADADA',
+      '#FF8888',
+    ];
+
+    chartDataSet4.value = projectContractStatuses.map((name, i) => {
+      const chartdata = data.map(
+        (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
+      );
+
+      return {
+        label: name,
+        backgroundColor: colorContracttStatus[i],
+        data: data.map(
+          (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
+        ),
+        sum: chartdata.reduce((sum, num) => sum + num, 0),
+        isChecked: true,
+      };
+    });
+  } else {
+    const projectResourceMethod = [
+      ...new Set(
+        data.flatMap((o) => o.aggregateBy.resourcingMethod).map((o) => o.name)
+      ),
+    ];
+
+    const colorResourceMethod = [
+      '#CE5700',
+      '#F08C06',
+      '#F8B60E',
+      '#FEEDAF',
+      '#6DD5D5',
+      '#2EA0DF',
+      '#7051B4',
+      '#EF9CC4',
+      '#D83D88',
+      '#8A004B',
+    ];
+
+    const chartData1 = projectResourceMethod
+      .map((name, i) => {
+        const chartdata = data.map(
+          (d) =>
+            d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
+        );
+
+        return {
+          label: name,
+          backgroundColor: '',
+          sum: chartdata.reduce((sum, num) => sum + num, 0),
+          data: chartdata,
+          isChecked: true,
+        };
+      })
+      .sort((a, z) => z.sum - a.sum);
+
+    const a = chartData1.slice(0, 9);
+    a.forEach((element, i) => {
+      element.backgroundColor = colorResourceMethod[i];
+    });
+    const b = chartData1.slice(9);
+
+    const c = {
+      label: 'อื่นๆ',
+      backgroundColor: '#5E5E5E',
+      data: b.reduce((sum, years) => {
+        years.data.forEach((num, i) => {
+          sum[i] += num;
+        });
+        return sum;
+      }, new Array(b[0].data.length).fill(0)),
+      sum: 0,
+      isChecked: true,
+    };
+
+    c.sum = c.data.reduce((sum, num) => sum + num, 0);
+
+    a.forEach((element) => {
+      chartDataSet5.value.push(element);
+    });
+
+    chartDataSet5.value.push(c);
+  }
+};
+</script>
+
 <template>
   <div>
     <h4 class="font-bold text-white mb-5">ภาพรวมโครงการที่จัดทำ</h4>
 
     <BarChart
-      :title="title"
-      :data="yearlyAggregates"
-      id="chart-2"
+      v-if="isDone"
+      :yearList="yearList"
+      :data="barChartData"
       titleType="1"
-      @title="(n) => (title = n)"
+      :title="titleChart"
       @isOpen="isOpen = true"
+      :section="sectionChart"
     />
 
     <div class="rounded-10 flex flex-col-mb mb-3">
@@ -19,7 +405,7 @@
           <div class="h-[1px] w-10 bg-black"></div>
           <div>
             <p>วงเงินสัญญารวม (บาท)</p>
-            <p class="font-bold">185,000,000.00</p>
+            <p class="font-bold">{{ totalContractOverall.toLocaleString() }}</p>
           </div>
         </div>
 
@@ -27,7 +413,7 @@
           <div class="h-[1px] w-10 border border-dashed border-[#8E8E8E]"></div>
           <div>
             <p>งบประมาณรวม (บาท)</p>
-            <p class="font-bold">120,000,000.00</p>
+            <p class="font-bold">{{ totalBudgetOverall.toLocaleString() }}</p>
           </div>
         </div>
 
@@ -35,7 +421,9 @@
           <div class="h-[15px] w-10 bg-[#DADADA]"></div>
           <div>
             <p>ส่วนต่าง (บาท)</p>
-            <p class="font-bold">10,000,000.00</p>
+            <p class="font-bold">
+              {{ (totalBudgetOverall - totalContractOverall).toLocaleString() }}
+            </p>
           </div>
         </div>
 
@@ -71,15 +459,29 @@
     <div class="rounded-10 flex flex-col-mb mb-3">
       <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
         <h4 class="font-black">การกระจายตัวโครงการ</h4>
-        <p class="b1 font-bold">รวม xxx,xxx,xxx.xx บาท ใน xx จังหวัด</p>
+        <p class="b1 font-bold">
+          รวม {{ totalProjectMap?.toLocaleString() }} บาท ใน
+          {{ mapDataList?.length }} จังหวัด
+        </p>
 
         <p class="b1 mt-3">แสดงความเข้มสีตาม</p>
-        <ClientOnly fallback-tag="span" fallback="Loading...">
-          <ListBox
-            title=""
-            :selected="selected"
-            :list="['งบประมาณ', 'จำนวนโครงการ']"
-        /></ClientOnly>
+        <div class="relative">
+          <ClientOnly fallback-tag="span" fallback="Loading...">
+            <Listbox v-model="selected" as="div">
+              <ListboxButton class="dropdown-btn">
+                <span class="text-ellipsis text-nowrap overflow-hidden"
+                  >{{ selected }} </span
+                ><ChevronDownIcon
+              /></ListboxButton>
+              <ListboxOptions class="dropdown-list absolute">
+                <ListboxOption value="งบประมาณ"> งบประมาณ </ListboxOption>
+                <ListboxOption value="จำนวนโครงการ">
+                  จำนวนโครงการ
+                </ListboxOption>
+              </ListboxOptions>
+            </Listbox>
+          </ClientOnly>
+        </div>
 
         <div class="mt-3">
           <input
@@ -89,20 +491,39 @@
             class="text-black ring-0"
           />
           <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
-            >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต (xx,xxx โครงการ ใน xx
-            จังหวัด)</label
+            >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต ({{
+              totalCorruptProject.toLocaleString()
+            }}
+            โครงการ ใน {{ mapDataList?.length }} จังหวัด)</label
           >
         </div>
       </div>
       <div
         class="py-7 pr-7 pl-10 bg-[#FFFFFF] chart-wrapper sm:w-2/3 text-[#8E8E8E] relative"
       >
-        {{ selected }}
         <Map
-          class="mx-auto max-w-xs h-fit"
           :no="selected == 'งบประมาณ' ? '1' : '2'"
-          :provinces="provinces"
+          :provinces="mapDataList"
+          :total="selected == 'งบประมาณ' ? totalBudget : totalCorruptProject"
+          v-if="mapDataList != null"
         />
+
+        <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
+          <div class="flex justify-between b4">
+            <p>0</p>
+            <p>
+              {{
+                selected == 'งบประมาณ'
+                  ? totalBudget.toLocaleString()
+                  : totalCorruptProject.toLocaleString()
+              }}
+            </p>
+          </div>
+          <div
+            class="h-[10px] w-full bg-gradient-to-r from-[#F5F5F5] to-[#484848]"
+          ></div>
+          <p>หน่วย : {{ selected == 'งบประมาณ' ? 'โครงการ' : 'บาท' }}</p>
+        </div>
       </div>
     </div>
 
@@ -115,243 +536,5 @@
     <Modal v-if="isOpen2" @close="isOpen2 = false" title="กราฟนี้บ่งบอกอะไร" />
   </div>
 </template>
-
-<script setup lang="ts">
-const yearlyAggregates = [
-  {
-    budgetYear: '2555',
-    totalProject: 0,
-    totalContract: 0,
-    aggregateBy: {
-      budgetMoney: 0,
-      hasCorruptionRiskProject: 0,
-      hasNoCorruptionRiskProject: 0,
-      projectStatus: {
-        completed: 0,
-        contracted: 0,
-        inprogress: 0,
-        cancelContract: 0,
-        cancelProject: 0,
-      },
-      contractStatus: {
-        delivered: 0,
-        deliveredOnTime: 0,
-        deliveredLate: 0,
-        contracted: 0,
-        inprogress: 0,
-        cancelContract: 0,
-      },
-      resourcingMethod: {
-        bidding: 0,
-        internationalBidding: 0,
-        eBidding: 0,
-        eBiddingViaMarket: 0,
-        settlePrice: 0,
-        checkPrice: 0,
-        eMarket: 0,
-        specialMethod: 0,
-        selective: 0,
-        specific: 0,
-      },
-    },
-  },
-  {
-    budgetYear: '2556',
-    totalProject: 100,
-    totalContract: 60,
-    aggregateBy: {
-      budgetMoney: 120000000,
-      hasCorruptionRiskProject: 20,
-      hasNoCorruptionRiskProject: 10,
-      projectStatus: {
-        completed: 10,
-        contracted: 30,
-        inprogress: 20,
-        cancelContract: 20,
-        cancelProject: 20,
-      },
-      contractStatus: {
-        delivered: 10,
-        deliveredOnTime: 5,
-        deliveredLate: 5,
-        contracted: 25,
-        inprogress: 5,
-        cancelContract: 20,
-      },
-      resourcingMethod: {
-        bidding: 10,
-        internationalBidding: 20,
-        eBidding: 20,
-        eBiddingViaMarket: 5,
-        settlePrice: 10,
-        checkPrice: 8,
-        eMarket: 4,
-        specialMethod: 23,
-        selective: 32,
-        specific: 20,
-      },
-    },
-  },
-  {
-    budgetYear: '2557',
-    totalProject: 34,
-    totalContract: 5,
-    aggregateBy: {
-      budgetMoney: 65000000,
-      hasCorruptionRiskProject: 5,
-      hasNoCorruptionRiskProject: 5,
-      projectStatus: {
-        completed: 0,
-        contracted: 0,
-        inprogress: 0,
-        cancelContract: 0,
-        cancelProject: 0,
-      },
-      contractStatus: {
-        delivered: 0,
-        deliveredOnTime: 0,
-        deliveredLate: 0,
-        contracted: 0,
-        inprogress: 0,
-        cancelContract: 0,
-      },
-      resourcingMethod: {
-        bidding: 0,
-        internationalBidding: 0,
-        eBidding: 0,
-        eBiddingViaMarket: 0,
-        settlePrice: 0,
-        checkPrice: 0,
-        eMarket: 0,
-        specialMethod: 0,
-        selective: 0,
-        specific: 0,
-      },
-    },
-  },
-];
-
-import { Line } from 'vue-chartjs';
-
-const title = ref('ความเสี่ยงทุจริต');
-const selected = ref('งบประมาณ');
-const isOpen = ref(false);
-const isOpen2 = ref(false);
-
-const chartData = ref({
-  labels: ['’55', '’56', '’57'],
-  datasets: [
-    {
-      label: 'วงเงินสัญญารวม (บาท)',
-      backgroundColor: '#FFFFFF',
-      borderColor: '#000000',
-      data: [0, 110000000, 55000000],
-      fill: true,
-    },
-    {
-      label: 'งบประมาณรวม (บาท)',
-      backgroundColor: '#DADADA',
-      borderColor: '#5E5E5E',
-      borderDash: [5, 5],
-      data: [0, 120000000, 65000000],
-      fill: true,
-    },
-  ],
-});
-
-const chartOptions = ref({
-  responsive: true,
-  maintainAspectRatio: false,
-  interaction: {
-    mode: 'index',
-    intersect: false,
-  },
-  plugins: {
-    filler: {
-      propagate: false,
-    },
-    legend: {
-      display: false,
-    },
-    tooltip: {
-      titleFont: {
-        size: 20,
-        family: 'DB_Helvethaica_X',
-      },
-      bodyFont: {
-        size: 16,
-        family: 'DB_Helvethaica_X',
-      },
-      callbacks: {
-        title: function (context) {
-          return 'ปี 25' + context[0].label.replace('’', '');
-        },
-        label: function (context) {
-          return context.formattedValue;
-        },
-        footer: function (context) {
-          let a = context[0].raw - context[1].raw;
-          return a == 0
-            ? 0
-            : ((context[0].raw - context[1].raw) * -1).toLocaleString();
-        },
-      },
-    },
-  },
-  scales: {
-    x: {
-      ticks: {
-        font: {
-          size: 16,
-          family: 'DB_Helvethaica_X',
-          color: '#8E8E8E',
-        },
-      },
-    },
-    y: {
-      ticks: {
-        font: {
-          size: 16,
-          family: 'DB_Helvethaica_X',
-        },
-        callback: function (value, index, ticks) {
-          return value > 1000000 ? (value / 1000000).toLocaleString() : value;
-        },
-      },
-    },
-  },
-});
-
-const provinces = [
-  {
-    name: 'กรุงเทพมหานคร',
-    name_en: 'bangkok',
-    totalProject: 3564,
-    totalBudgetMoney: 38899482862,
-    totalCorruptionProject: 497,
-  },
-  {
-    name: 'ปทุมธานี',
-    name_en: 'pathumthani',
-    totalProject: 120,
-    totalBudgetMoney: 482865642,
-    totalCorruptionProject: 34,
-  },
-  {
-    name: 'เชียงใหม่',
-    name_en: 'chiangmai',
-    totalProject: 2000,
-    totalBudgetMoney: 6482865642,
-    totalCorruptionProject: 34,
-  },
-  {
-    name: 'แพร่',
-    name_en: 'phrae',
-    totalProject: 356,
-    totalBudgetMoney: 270443964,
-    totalCorruptionProject: 239,
-  },
-];
-</script>
 
 <style scoped></style>

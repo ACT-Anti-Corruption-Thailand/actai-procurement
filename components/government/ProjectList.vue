@@ -53,7 +53,8 @@ const setDate = (date) => {
         <h5 class="font-bold w-3/5">
           ทั้งหมด
           {{ props.data?.pagination?.totalItem.toLocaleString() }} โครงการ
-          วงเงินสัญญา xxx บาท
+          วงเงินสัญญา
+          {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
         </h5>
         <!-- <DownloadAndCopy /> -->
       </div>

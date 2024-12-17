@@ -3,23 +3,23 @@
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
       <h4 class="font-black">สัดส่วนขั้นตอนการประมูลงาน</h4>
 
-      <p class="b2">จำนวนโครงการที่ผ่านแต่ละขั้นตอน*ของการประมูลงาน รวมทุกปี</p>
+      <p class="b2">จำนวนโครงการที่ผ่านแต่ละขั้นตอนของการประมูลงานรวมทุกปี</p>
 
       <div class="flex b1 justify-between text-center mt-2 gap-1">
         <div class="border-r flex-1">
           <div class="w-3 h-3 mx-auto bg-[#DADADA]"></div>
           <p>ซื้อซอง</p>
-          <p class="font-bold">1,000</p>
+          <p class="font-bold">{{ totalAuction.toLocaleString() }}</p>
         </div>
         <div class="border-r flex-1">
           <div class="w-3 h-3 mx-auto bg-[#C0C0C0]"></div>
           <p>เสนอราคา</p>
-          <p class="font-bold">600</p>
+          <p class="font-bold">{{ totalBidding.toLocaleString() }}</p>
         </div>
         <div class="flex-1">
           <div class="w-3 h-3 mx-auto bg-[#2EA0DF]"></div>
           <p>ได้งาน</p>
-          <p class="font-bold">800</p>
+          <p class="font-bold">{{ totalWinner.toLocaleString() }}</p>
         </div>
       </div>
 
@@ -60,6 +60,9 @@ import { Bar } from 'vue-chartjs';
 const config = useRuntimeConfig();
 
 const isOpen = ref(false);
+const totalAuction = ref(0);
+const totalBidding = ref(0);
+const totalWinner = ref(0);
 
 const getChartData = async () => {
   const segments = window.location.href.split('/')[4];
@@ -76,6 +79,46 @@ const getChartData = async () => {
 
   if (res.ok) {
     const data = await res.json();
+    chartData.value = {
+      labels: data.yearlyAggregate.map((x) => x.budgetYear.toString()),
+      datasets: [
+        {
+          label: 'ซื้อซอง',
+          backgroundColor: '#DADADA',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingProcess.auction
+          ),
+        },
+        {
+          label: 'เสนอราคา',
+          backgroundColor: '#C0C0C0',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingProcess.bidding
+          ),
+        },
+        {
+          label: 'ได้งาน',
+          backgroundColor: '#2EA0DF',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingProcess.winner
+          ),
+        },
+      ],
+    };
+
+    let a = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingProcess.auction
+    );
+    let b = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingProcess.bidding
+    );
+    let w = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingProcess.winner
+    );
+
+    totalAuction.value = a.reduce((a, b) => a + b, 0);
+    totalBidding.value = b.reduce((a, b) => a + b, 0);
+    totalWinner.value = w.reduce((a, b) => a + b, 0);
   }
 };
 
@@ -84,24 +127,8 @@ onBeforeMount(async () => {
 });
 
 const chartData = ref({
-  labels: ['’54', '’55', '’56'],
-  datasets: [
-    {
-      label: 'ซื้อซอง',
-      backgroundColor: '#DADADA',
-      data: [300, 400, 300],
-    },
-    {
-      label: 'เสนอราคา',
-      backgroundColor: '#C0C0C0',
-      data: [300, 200, 100],
-    },
-    {
-      label: 'ได้งาน',
-      backgroundColor: '#2EA0DF',
-      data: [250, 250, 300],
-    },
-  ],
+  labels: [],
+  datasets: [],
 });
 
 const chartOptions = ref({
@@ -132,7 +159,7 @@ const chartOptions = ref({
       },
       callbacks: {
         title: function (context) {
-          return 'ปี 25' + context[0].label.replace('’', '');
+          return 'ปี ' + context[0].label.replace('’', '');
         },
         label: function (context) {
           return context.formattedValue;

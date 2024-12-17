@@ -117,7 +117,7 @@ const getGovList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?keyword=${urlParams}${p}`,
+    `${config.public.apiUrl}/agency/search?projectKeyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {
@@ -139,7 +139,7 @@ const getContractorList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?keyword=${urlParams}${p}`,
+    `${config.public.apiUrl}/company/search?projectKeyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {

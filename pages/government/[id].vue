@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const menu = ref('รายชื่อโครงการที่จัดทำ');
+const menu = ref('ภาพรวมโครงการที่จัดทำ');
 const config = useRuntimeConfig();
 const isShowTab = ref(true);
 
@@ -92,12 +92,28 @@ const setDate = (date) => {
     <div class="max-w-7xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
         <h3 class="font-black">{{ govData.agencyName }}</h3>
-        <p class="b1 mb-3 text-[#7F7F7F]">
+        <p
+          class="b1 mb-3 text-[#7F7F7F]"
+          v-if="govData?.agencyBelongTo != null"
+        >
           {{ govData?.agencyBelongTo }}
         </p>
-        <p class="b1">{{ govData.province }}</p>
+        <p class="b1 flex gap-1">
+          {{ govData.province }}
+          <a
+            :href="'https://www.google.com/maps/search/' + govData.agencyName"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[#0B5C90] flex gap-1"
+            >แผนที่
+            <img src="../../public/src/images/link-ggmap.svg" alt="link gg map"
+          /></a>
+        </p>
         <p class="b4 text-[#8E8E8E]">
-          หน่วยงานอัปเดตข้อมูลเมื่อ {{ setDate(govData.lastUpdatedOn) }}
+          หน่วยงานอัปเดตข้อมูลเมื่อ
+          {{
+            govData.lastUpdatedOn != null ? setDate(govData.lastUpdatedOn) : '-'
+          }}
         </p>
       </div>
       <div class="sm:w-1/5">
@@ -119,7 +135,7 @@ const setDate = (date) => {
         </div>
 
         <div class="text-white b1 cursor-pointer">
-          <!-- <div
+          <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -134,7 +150,7 @@ const setDate = (date) => {
               <li>งบประมาณโครงการ</li>
               <li>การกระจายตัวโครงการ</li>
             </ul>
-          </div> -->
+          </div>
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{

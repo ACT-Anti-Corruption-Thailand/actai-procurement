@@ -33,12 +33,7 @@
         <div
           class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
-          <Map
-            class="mx-auto max-w-xs h-fit w-fit"
-            no="1"
-            :provinces="props.data"
-            :total="totalProject"
-          />
+          <Map no="1" :provinces="props.data" :total="totalProject" />
 
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
@@ -58,12 +53,7 @@
         <div
           class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
-          <Map
-            class="mx-auto max-w-xs h-fit"
-            no="2"
-            :provinces="props.data"
-            :total="totalBudget"
-          />
+          <Map no="2" :provinces="props.data" :total="totalBudget" />
 
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
@@ -120,7 +110,6 @@
         <div
           class="flex justify-between items-center py-2 cursor-pointer"
           :class="{ 'border-b': i != searchResult.length - 1 }"
-          @click="setFill(item.name_en, 1)"
           v-for="(item, i) in searchResult"
         >
           <div class="flex gap-2 items-center">
@@ -141,7 +130,6 @@
         <div
           class="flex justify-between items-center py-2 cursor-pointer"
           :class="{ 'border-b': i != searchResult.length - 1 }"
-          @click="setFill(item.name_en, 2)"
           v-for="(item, i) in searchResult"
         >
           <div class="flex gap-2 items-center">
@@ -187,37 +175,25 @@ const searchResult = computed(() => {
           .filter((x) => x.totalProject != 0)
           .sort((a, b) => a.totalProject - b.totalProject);
 
-  setFill();
-
   return filteredData.filter((data) => {
-    if (data.name.includes(searchText.value)) {
-      if (searchText.value != '') {
-        let p = Province_data.filter((x) => x.name_th == data.name);
+    let p = Province_data.filter((x) => x.name_th == data.name);
+    nextTick(() => {
+      setStroke(p[0].name_en, 'black');
+    });
 
-        document.querySelector(
-          '.provinces-1' + '#' + p[0].name_en
-        ).style.stroke = 'red';
-        document.querySelector(
-          '.provinces-2' + '#' + p[0].name_en
-        ).style.stroke = 'red';
-      }
+    if (data.name.includes(searchText.value)) {
+      nextTick(() => {
+        if (searchText.value != '') setStroke(p[0].name_en, 'red');
+      });
 
       return data;
     }
   });
 });
 
-const setFill = () => {
-  let provinces_list = document.getElementsByClassName('provinces-1');
-  let provinces_list_2 = document.getElementsByClassName('provinces-2');
-
-  [...provinces_list].forEach((element) => {
-    element.style.stroke = 'black';
-  });
-
-  [...provinces_list_2].forEach((element) => {
-    element.style.stroke = 'black';
-  });
+const setStroke = (id, color) => {
+  document.querySelector('.provinces-1' + '#' + id).style.stroke = color;
+  document.querySelector('.provinces-2' + '#' + id).style.stroke = color;
 };
 
 onMounted(() => {

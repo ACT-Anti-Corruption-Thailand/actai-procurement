@@ -3,7 +3,16 @@
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
       <h4 class="font-black">พฤติกรรมการเสนอราคา</h4>
 
-      <p class="b1 font-bold">เสนอราคา รวมทุกปี 2,400 โครงการ</p>
+      <p class="b1 font-bold">
+        เสนอราคา รวมทุกปี
+        {{
+          totalCloseToEstimatePrice +
+          totalHigherThanEstimatePrice +
+          totalLowerThanEstimatePrice +
+          totalOther
+        }}
+        โครงการ
+      </p>
 
       <p class="b4 text-[#8E8E8E] text-right">หน่วย : โครงการ</p>
 
@@ -22,7 +31,9 @@
             </svg>
             <p>เสนอราคาสูงกว่าราคากลาง</p>
           </div>
-          <p class="font-bold text-[#7051B4]">1,000</p>
+          <p class="font-bold text-[#7051B4]">
+            {{ totalHigherThanEstimatePrice.toLocaleString() }}
+          </p>
         </div>
         <div class="flex justify-between gap-2 border-b border-[#DADADA] py-2">
           <div class="flex gap-2">
@@ -42,7 +53,9 @@
 
             <p>เสนอราคาต่ำกว่าราคากลาง 0-1% (เสนอราคาใกล้ราคากลาง)</p>
           </div>
-          <p class="font-bold text-[#EC7601]">1,000</p>
+          <p class="font-bold text-[#EC7601]">
+            {{ totalCloseToEstimatePrice.toLocaleString() }}
+          </p>
         </div>
         <div class="flex justify-between gap-2 border-b border-[#DADADA] py-2">
           <div class="flex gap-2">
@@ -62,7 +75,9 @@
 
             <p>เสนอราคาต่ำกว่าราคากลางเกิน 15%</p>
           </div>
-          <p class="font-bold text-[#CE5700]">1,000</p>
+          <p class="font-bold text-[#CE5700]">
+            {{ totalLowerThanEstimatePrice.toLocaleString() }}
+          </p>
         </div>
         <div class="flex justify-between gap-2 pt-2">
           <div class="flex gap-2">
@@ -79,7 +94,9 @@
 
             <p>อื่นๆ</p>
           </div>
-          <p class="font-bold text-[#8E8E8E]">1,000</p>
+          <p class="font-bold text-[#8E8E8E]">
+            {{ totalOther.toLocaleString() }}
+          </p>
         </div>
       </div>
     </div>
@@ -103,32 +120,17 @@
 <script setup lang="ts">
 import { Bar } from 'vue-chartjs';
 
+const config = useRuntimeConfig();
+
 const isOpen = ref(false);
+const totalCloseToEstimatePrice = ref(0);
+const totalHigherThanEstimatePrice = ref(0);
+const totalLowerThanEstimatePrice = ref(0);
+const totalOther = ref(0);
 
 const chartData = ref({
-  labels: ['’54', '’55', '’56'],
-  datasets: [
-    {
-      label: 'เสนอราคาสูงกว่าราคากลาง',
-      backgroundColor: '#7051B4',
-      data: [500, 300, 450],
-    },
-    {
-      label: 'เสนอราคาต่ำกว่าราคากลาง 0-1% (เสนอราคาใกล้ราคากลาง)',
-      backgroundColor: '#EC7601',
-      data: [100, 0, 0],
-    },
-    {
-      label: 'เสนอราคาต่ำกว่าราคากลางเกิน 15%',
-      backgroundColor: '#CE5700',
-      data: [250, 250, 300],
-    },
-    {
-      label: 'อื่นๆ',
-      backgroundColor: '#C0C0C0',
-      data: [150, 50, 100],
-    },
-  ],
+  labels: [],
+  datasets: [],
 });
 
 const chartOptions = ref({
@@ -188,6 +190,79 @@ const chartOptions = ref({
       },
     },
   },
+});
+
+const getChartData = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/company/${segments}/aggregate/by-budget-year`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    chartData.value = {
+      labels: data.yearlyAggregate.map((x) => x.budgetYear.toString()),
+      datasets: [
+        {
+          label: 'เสนอราคาสูงกว่าราคากลาง',
+          backgroundColor: '#7051B4',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingBehavior.higherThanEstimatePrice
+          ),
+        },
+        {
+          label: 'เสนอราคาต่ำกว่าราคากลาง 0-1% (เสนอราคาใกล้ราคากลาง)',
+          backgroundColor: '#EC7601',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingBehavior.closeToEstimatePrice
+          ),
+        },
+        {
+          label: 'เสนอราคาต่ำกว่าราคากลางเกิน 15%',
+          backgroundColor: '#CE5700',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingBehavior.lowerThanEstimatePrice
+          ),
+        },
+        {
+          label: 'อื่นๆ',
+          backgroundColor: '#C0C0C0',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingBehavior.other
+          ),
+        },
+      ],
+    };
+
+    let h = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingBehavior.higherThanEstimatePrice
+    );
+    let c = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingBehavior.closeToEstimatePrice
+    );
+    let l = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingBehavior.lowerThanEstimatePrice
+    );
+    let o = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingBehavior.other
+    );
+
+    totalHigherThanEstimatePrice.value = h.reduce((a, b) => a + b, 0);
+    totalCloseToEstimatePrice.value = c.reduce((a, b) => a + b, 0);
+    totalLowerThanEstimatePrice.value = l.reduce((a, b) => a + b, 0);
+    totalOther.value = o.reduce((a, b) => a + b, 0);
+  }
+};
+
+onBeforeMount(async () => {
+  await getChartData();
 });
 </script>
 

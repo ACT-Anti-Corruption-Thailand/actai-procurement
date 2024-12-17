@@ -48,7 +48,7 @@ const getContractorList = async (params: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?page=${currentPage.value}&pageSize=5&keyword=${urlParams}${p}`,
+    `${config.public.apiUrl}/company/search?page=${currentPage.value}&pageSize=5&projectKeyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {

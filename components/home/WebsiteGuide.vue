@@ -97,7 +97,10 @@ onMounted(async () => {
                       </p>
                       <p class="b4 text-[#5E5E5E]">
                         ใช้งบประมาณรวม
-                        {{ Number(item.totalBudgetMoney.toLocaleString()) }} บาท
+                        {{
+                          parseInt(item.totalBudgetMoney).toLocaleString()
+                        }}
+                        บาท
                       </p>
 
                       <GoToText

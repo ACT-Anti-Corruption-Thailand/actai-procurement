@@ -49,48 +49,98 @@ const setDate = (date) => {
               <div
                 class="flex-1 sm:border-r"
                 :class="[
-                  props.data.totalBudgetMoney < props.data.totalContractMoney
-                    ? 'text-[#7051B4]'
-                    : 'text-[#CE5700]',
+                  {
+                    'text-[#7051B4]':
+                      props.data.totalContractMoney >
+                      props.data.totalBudgetMoney,
+                    'text-[#CE5700]':
+                      props.data.totalContractMoney <
+                      props.data.totalBudgetMoney,
+                    'text-[#1F1F1F]':
+                      props.data.totalBudgetMoney ==
+                      props.data.totalContractMoney,
+                  },
                 ]"
               >
                 <p class="b2">
-                  {{
-                    props.data.totalBudgetMoney < props.data.totalEstimatePrice
-                      ? 'ต่ำกว่า'
-                      : 'สูงกว่า'
-                  }}งบประมาณรวม
+                  <span
+                    v-if="
+                      props.data.totalContractMoney >
+                      props.data.totalBudgetMoney
+                    "
+                    >สูงกว่า</span
+                  >
+                  <span
+                    v-else-if="
+                      props.data.totalContractMoney <
+                      props.data.totalBudgetMoney
+                    "
+                    >ต่ำกว่า</span
+                  >
+                  <span v-else>เท่ากับ</span>งบประมาณรวม
                 </p>
-                <p class="b1">
+                <p
+                  class="b1"
+                  v-if="
+                    props.data.totalContractMoney != props.data.totalBudgetMoney
+                  "
+                >
                   {{
-                    ((props.data.totalEstimatePrice -
-                      props.data.totalContractMoney) /
-                      props.data.totalEstimatePrice) *
-                    100
+                    (
+                      ((props.data.totalBudgetMoney -
+                        props.data.totalContractMoney) /
+                        props.data.totalBudgetMoney) *
+                      100
+                    ).toFixed(2)
                   }}%
                 </p>
               </div>
               <div
                 class="flex-1"
                 :class="[
-                  props.data.totalBudgetMoney < props.data.totalContractMoney
-                    ? 'text-[#7051B4]'
-                    : 'text-[#CE5700]',
+                  {
+                    'text-[#7051B4]':
+                      props.data.totalEstimatePrice >
+                      props.data.totalBudgetMoney,
+                    'text-[#CE5700]':
+                      props.data.totalEstimatePrice <
+                      props.data.totalBudgetMoney,
+                    'text-[#1F1F1F]':
+                      props.data.totalBudgetMoney ==
+                      props.data.totalEstimatePrice,
+                  },
                 ]"
               >
                 <p class="b2">
-                  {{
-                    props.data.totalBudgetMoney < props.data.totalEstimatePrice
-                      ? 'ต่ำกว่า'
-                      : 'สูงกว่า'
-                  }}ราคากลางรวม
+                  <span
+                    v-if="
+                      props.data.totalEstimatePrice >
+                      props.data.totalBudgetMoney
+                    "
+                    >สูงกว่า</span
+                  >
+                  <span
+                    v-else-if="
+                      props.data.totalEstimatePrice <
+                      props.data.totalBudgetMoney
+                    "
+                    >ต่ำกว่า</span
+                  >
+                  <span v-else>เท่ากับ</span>ราคากลางรวม
                 </p>
-                <p class="b1">
+                <p
+                  class="b1"
+                  v-if="
+                    props.data.totalEstimatePrice != props.data.totalBudgetMoney
+                  "
+                >
                   {{
-                    ((props.data.totalBudgetMoney -
-                      props.data.totalContractMoney) /
-                      props.data.totalBudgetMoney) *
-                    100
+                    (
+                      ((props.data.totalBudgetMoney -
+                        props.data.totalEstimatePrice) /
+                        props.data.totalBudgetMoney) *
+                      100
+                    ).toFixed(2)
                   }}%
                 </p>
               </div>
@@ -123,7 +173,13 @@ const setDate = (date) => {
           <div class="flex gap-2 mt-3">
             <div class="flex-1 border-t pt-3">
               <p class="b2 text-[#5E5E5E]">วันที่ประกาศโครงการ</p>
-              <p class="b1">{{ setDate(props.data.announcementDate) }}</p>
+              <p class="b1">
+                {{
+                  props.data.announcementDate != null
+                    ? setDate(props.data.announcementDate)
+                    : 'ไม่ระบุ'
+                }}
+              </p>
             </div>
             <div class="flex-1 border-t pt-3">
               <p class="b2 text-[#5E5E5E]">ปีงบประมาณ*</p>
@@ -143,8 +199,16 @@ const setDate = (date) => {
         <div class="flex-1">
           <div class="border-t py-3">
             <p class="b2 text-[#5E5E5E]">หน่วยงานเจ้าของโครงการ</p>
-            <p class="b1">{{ props.data?.agency?.name }}</p>
-            <p class="b3">ที่ตั้ง : {{ props.data?.agency?.province }}</p>
+            <p class="b1">
+              {{
+                props.data?.agency?.name != null
+                  ? props.data?.agency?.name
+                  : '-'
+              }}
+            </p>
+            <p class="b3" v-if="props.data?.agency?.province != null">
+              ที่ตั้ง : {{ props.data?.agency?.province }}
+            </p>
           </div>
 
           <div class="flex flex-col-mb gap-2">
@@ -182,6 +246,13 @@ const setDate = (date) => {
                 เคยมีประวัติทิ้งงาน
               </p>
             </template>
+
+            <p
+              class="b1 p-5 w-full text-center"
+              v-if="props.data?.winnerContractors?.length == 0"
+            >
+              ไม่พบข้อมูล
+            </p>
           </div>
         </div>
       </div>

@@ -431,7 +431,12 @@ onMounted(() => {
               section="method"
             />
 
-            <MapSection class="mt-5" id="maps" :data="props.mapData" />
+            <MapSection
+              class="mt-5"
+              id="maps"
+              :data="props.mapData"
+              v-if="props.mapData != null"
+            />
           </div>
 
           <div

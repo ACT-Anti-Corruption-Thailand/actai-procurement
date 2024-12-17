@@ -20,7 +20,7 @@
       @isOpen="isOpen = true"
     /> -->
 
-    <div class="rounded-10 flex flex-col-mb mb-3">
+    <!-- <div class="rounded-10 flex flex-col-mb mb-3">
       <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
         <h4 class="font-black">การกระจายตัวโครงการ</h4>
         <p class="b1 font-bold">รวม xxx,xxx,xxx.xx บาท ใน xx จังหวัด</p>
@@ -54,11 +54,11 @@
           :provinces="provinces"
         />
       </div>
-    </div>
+    </div> -->
 
-    <!-- <AuctionBarChart /> -->
+    <AuctionBarChart />
 
-    <!-- <OfferPriceBarChart /> -->
+    <OfferPriceBarChart />
 
     <Modal
       v-if="isOpen"

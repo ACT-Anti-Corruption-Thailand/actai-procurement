@@ -116,7 +116,7 @@ const getContracterRelationship = async () => {
 
   if (res.ok) {
     const data = await res.json();
-    contractorRelationship.value = data.relatedCompanies;
+    contractorRelationship.value = data;
   }
 };
 
@@ -253,7 +253,7 @@ const setDate = (date) => {
           >
             <p>ประวัติการทิ้งงาน</p>
           </div>
-          <!-- <div
+          <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
@@ -271,7 +271,7 @@ const setDate = (date) => {
             @click="menu = 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'"
           >
             <p>กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน</p>
-          </div> -->
+          </div>
           <div
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
@@ -304,10 +304,12 @@ const setDate = (date) => {
         <Relationship
           v-else-if="menu == 'ความสัมพันธ์'"
           :data="contractorRelationship"
+          :companyName="contractorData.companyName"
         />
         <Auction
           v-else-if="menu == 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'"
           :data="contractorRelatedCompanies"
+          :companyName="contractorData.companyName"
         />
         <RelatedProject
           v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'"

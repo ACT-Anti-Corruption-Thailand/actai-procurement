@@ -216,13 +216,13 @@ const chartOptions = ref({
             return (
               (value / 1000000000).toLocaleString(undefined, {
                 maximumFractionDigits: 2,
-              }) + 'b'
+              }) + 'B'
             );
-          else if (value > 1000000)
+          else if (value > 999999)
             return (
               (value / 1000000).toLocaleString(undefined, {
                 maximumFractionDigits: 2,
-              }) + ''
+              }) + 'M'
             );
           else return value.toLocaleString();
         },
