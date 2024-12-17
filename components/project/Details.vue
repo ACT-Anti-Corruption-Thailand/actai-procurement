@@ -20,7 +20,7 @@ const biddingStep = [
   { title: 'เข้าเสนอราคา', total: 0, img: 'e-bidding' },
 ];
 
-const sum = biddingStep.reduce((partialSum, a) => partialSum + a.total, 0);
+const sumBidding = ref(0);
 
 const contractorsBidding = [
   {
@@ -105,6 +105,11 @@ onBeforeMount(() => {
       b[0].total += 1;
     });
   });
+
+  sumBidding.value = biddingStep.reduce(
+    (partialSum, a) => partialSum + a.total,
+    0
+  );
 });
 </script>
 
@@ -160,12 +165,17 @@ onBeforeMount(() => {
               </div>
 
               <div class="flex gap-2" v-for="(c, i) in props.contracters">
-                <p class="text-[#8E8E8E] mt-0.5">{{ i + 1 }}</p>
+                <p
+                  :class="[
+                    c?.isWinner ? 'text-black' : 'text-[#8E8E8E]',
+                    'text-[#8E8E8E] mt-0.5',
+                  ]"
+                >
+                  {{ i + 1 }}
+                </p>
                 <div
                   :class="[
-                    c?.processInvolved.indexOf(item.name) != -1
-                      ? 'text-black'
-                      : 'text-[#8E8E8E]',
+                    c?.isWinner ? 'text-black' : 'text-[#8E8E8E]',
                     'b3 pb-3 text-left',
                   ]"
                 >
@@ -192,7 +202,8 @@ onBeforeMount(() => {
     <div class="p-5 rounded-b-md w-full">
       <div class="flex justify-between mb-3">
         <h5 class="font-bold w-3/5 sm:w-2/4">
-          ทั้งหมด {{ props.contracts.length }} ราย ทำสัญญาจ้าง x ฉบับ
+          ทั้งหมด {{ props.contracts.length }} ราย ทำสัญญาจ้าง
+          {{ props.contracts.length }} ฉบับ
         </h5>
         <!-- <DownloadAndCopy /> -->
       </div>
@@ -243,7 +254,9 @@ onBeforeMount(() => {
                 <td
                   :class="{
                     'bg-[#6DD5D5]':
-                      item.contracts[0].status == 'จัดทำสัญญา/ PO แล้ว',
+                      item.contracts[0].status == 'จัดทำสัญญา/POแล้ว',
+                    'bg-[#0F7979] text-white':
+                      item.contracts[0].status == 'ส่งงานตามกำหนด',
                   }"
                 >
                   {{ item.contracts[0].status }}
@@ -328,19 +341,28 @@ onBeforeMount(() => {
           </thead>
           <tbody class="b1" v-if="props.estimatePrice.length > 0">
             <tr>
-              <td :rowspan="4" class="w-20">
-                เครื่องวัดส่วนประกอบของร่างกายแบบความต้านทานกระแสไฟฟ้า
+              <td
+                :rowspan="props.estimatePrice[0].contractors.length"
+                class="w-20"
+              >
+                {{ props.estimatePrice[0].name }}
               </td>
 
               <td class="w-40">
-                บริษัท อิตาเลียนไทย ดีเวล๊อปเมนต์ จำกัด (มหาชน)
+                {{ props.estimatePrice[0].contractors[0].name }}
                 <div class="flex items-center gap-2">
                   <img src="../../public/src/images/contractor.svg" alt="" />
-                  <p class="b4 text-[#8E8E8E]">56015020021</p>
+                  <p class="b4 text-[#8E8E8E]">
+                    {{ props.estimatePrice[0].contractors[0].id }}
+                  </p>
                 </div>
               </td>
 
-              <td>2,790,000</td>
+              <td>
+                {{
+                  props.estimatePrice[0].contractors[0].biddingPrice.toLocaleString()
+                }}
+              </td>
               <td class="bg-[#FFFDEF] text-[#CE5700]">
                 ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
               </td>
@@ -348,64 +370,31 @@ onBeforeMount(() => {
                 ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
               </td>
             </tr>
-            <tr>
-              <td class="w-40">
-                บริษัท ซินเท็ค คอนสตรัคชั่น จำกัด (มหาชน)
-                <div class="flex items-center gap-2">
-                  <img src="../../public/src/images/contractor.svg" alt="" />
-                  <p class="b4 text-[#8E8E8E]">56015020021</p>
-                </div>
-              </td>
 
-              <td>2,921,022</td>
-              <td class="bg-[#FFFDEF] text-[#CE5700]">
-                ต่ำกว่า 2.66% <br /><span class="b4">79,778 บาท</span>
-              </td>
-              <td class="bg-[#FFFDEF] text-[#CE5700]">
-                ต่ำกว่า 2.66% <br /><span class="b4">79,778 บาท</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="w-40 font-bold">
-                <div
-                  class="rounded-full bg-black flex items-center font-bold text-white gap-1 w-fit px-1"
-                >
-                  <img src="../../public/src/images/winner.svg" alt="winner" />
-                  <p class="b5">ผู้ชนะ</p>
-                </div>
-                <a target="_blank" href="/contractor?name=ซิโน-ไทย">
-                  บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด
-                  (มหาชน)
-                </a>
-                <div class="flex items-center gap-2">
-                  <img src="../../public/src/images/contractor.svg" alt="" />
-                  <p class="b4 text-[#8E8E8E] font-normal">56015020021</p>
-                </div>
-              </td>
+            <template
+              v-for="item in props.estimatePrice[0].contractors.slice(
+                1,
+                props.estimatePrice[0].contractors.length
+              )"
+            >
+              <tr>
+                <td class="w-40">
+                  {{ item.name }}
+                  <div class="flex items-center gap-2">
+                    <img src="../../public/src/images/contractor.svg" alt="" />
+                    <p class="b4 text-[#8E8E8E]">{{ item.id }}</p>
+                  </div>
+                </td>
 
-              <td class="font-bold">3,038,800</td>
-              <td class="font-bold">0</td>
-              <td class="bg-[#F4EFFF] text-[#7051B4] font-bold">
-                สูงกว่า 1.27% <br /><span class="b4">38,000 บาท</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="w-40">
-                เพาเวอร์ไลน์ เอ็นจิเนียริ่ง
-                <div class="flex items-center gap-2">
-                  <img src="../../public/src/images/contractor.svg" alt="" />
-                  <p class="b4 text-[#8E8E8E]">56015020021</p>
-                </div>
-              </td>
-
-              <td>4,987,000</td>
-              <td class="bg-[#F4EFFF] text-[#7051B4]">
-                สูงกว่า 66.19% <br /><span class="b4">1,986,200 บาท</span>
-              </td>
-              <td class="bg-[#F4EFFF] text-[#7051B4]">
-                สูงกว่า 66.19% <br /><span class="b4">1,986,200 บาท</span>
-              </td>
-            </tr>
+                <td>{{ item.biddingPrice.toLocaleString() }}</td>
+                <td class="bg-[#FFFDEF] text-[#CE5700]">
+                  ต่ำกว่า 2.66% <br /><span class="b4">79,778 บาท</span>
+                </td>
+                <td class="bg-[#FFFDEF] text-[#CE5700]">
+                  ต่ำกว่า 2.66% <br /><span class="b4">79,778 บาท</span>
+                </td>
+              </tr>
+            </template>
           </tbody>
           <tbody class="b1 text-center" v-else>
             <tr>

@@ -114,11 +114,14 @@ const setDate = (date) => {
               </td>
               <td>{{ setDate(item.announcementDate) }}</td>
               <td
-                :class="[
-                  item.projectStatus == 'เสนอราคา'
-                    ? 'bg-[#C0C0C0]'
-                    : 'bg-[#2EA0DF]',
-                ]"
+                :class="{
+                  'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
+                  'bg-[#6DD5D5]': item.projectStatus == 'จัดทำสัญญา/PO แล้ว',
+                  'bg-[#0F7979] text-white':
+                    item.projectStatus == 'แล้วเสร็จตามสัญญา',
+                  'bg-[#FF8888]': item.projectStatus == 'ยกเลิกสัญญา',
+                  'bg-[#FF5353]': item.projectStatus == 'ยกเลิกโครงการ',
+                }"
               >
                 {{ item.projectStatus }}
               </td>

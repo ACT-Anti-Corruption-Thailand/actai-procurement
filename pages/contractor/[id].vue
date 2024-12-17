@@ -166,24 +166,24 @@ const setDate = (date) => {
       </div>
       <div class="sm:w-1/5">
         <div
-          v-if="contractorData.hasCorruptionRiskCases != 0"
+          v-if="contractorData.hasCorruptionRiskCases"
           class="bg-[#FFEFF0] hover:bg-[#FFCECE] duration-300 rounded-10 text-[#EC1C24] b2 p-2.5 mb-2"
         >
           <div class="flex items-center gap-2">
             <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-            <p class="font-bold">ตรวจพบความน่าสนใจ x กรณี</p>
+            <p class="font-bold">
+              ตรวจพบความน่าสนใจ
+              {{ contractorData?.corruptionRisk?.length }} กรณี
+            </p>
           </div>
 
           <ClientOnly fallback-tag="span" fallback="Loading...">
             <Disclosure v-slot="{ open }">
               <DisclosurePanel class="text-[#EC1C24] b4">
                 <ul class="list-disc ml-10">
-                  <li>เสนอราคาใกล้ราคากลาง</li>
-                  <li>เสนอราคาสูง</li>
-                  <li>เสนอราคาสูงกว่าราคากลาง</li>
-                  <li>เสนอราคาเกาะกลุ่ม</li>
-                  <li>เสนอราคาเท่ากัน</li>
-                  <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
+                  <li v-for="item in contractorData?.corruptionRisk">
+                    {{ item }}
+                  </li>
                 </ul>
               </DisclosurePanel>
               <DisclosureButton

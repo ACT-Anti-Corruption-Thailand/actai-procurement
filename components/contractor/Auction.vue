@@ -71,7 +71,7 @@
     <div v-else>
       <div class="bg-[#F5F5F5] rounded-t-md p-7">
         <p
-          class="b4 flex items-center gap-1 text-[#0B5C90] mb-3 cursor-pointer"
+          class="b4 flex items-center gap-1 text-[#0B5C90] mb-3 cursor-pointer w-fit"
           @click="
             isSelectFirstCompany = false;
             participatedCompany = [];
@@ -135,7 +135,7 @@
           <div class="flex gap-5 my-3" v-for="item2 in item.projects">
             <div class="b2 pt-5 text-[#8E8E8E]">1</div>
             <div class="bg-[#FFEFF0] rounded-10 text-[#9A0D13] p-5 w-full">
-              <a target="_blank" :href="`/project/0`">
+              <a target="_blank" :href="`/project/${item2.id}`">
                 <p class="b2 font-bold">{{ item2.name }}</p>
               </a>
               <p class="b4 my-1">เลขที่โครงการ: {{ item2.id }}</p>

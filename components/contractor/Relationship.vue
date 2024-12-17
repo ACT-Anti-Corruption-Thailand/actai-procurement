@@ -1,7 +1,14 @@
 <template>
   <h4 class="font-bold text-white mb-5">ความสัมพันธ์</h4>
 
-  <div v-if="props.data.length == 0" class="bg-white rounded-10 gap-2 mb-3 p-5">
+  <div
+    v-if="
+      props.data?.relationshipWith?.politicians.length == 0 &&
+      props.data?.relationshipWith?.politicalParties.length == 0 &&
+      props.data?.relationshipWith?.companies.length == 0
+    "
+    class="bg-white rounded-10 gap-2 mb-3 p-5"
+  >
     <h5 class="text-center text-[#8E8E8E]">ไม่พบข้อมูล</h5>
   </div>
 

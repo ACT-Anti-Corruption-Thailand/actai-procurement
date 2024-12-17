@@ -145,19 +145,19 @@ const setDate = (date) => {
         >
           <div class="flex items-center gap-2">
             <img src="../../public/src/images/risk-flag.svg" alt="risk" />
-            <p class="font-bold">พบความเสี่ยงทุจริต x ประเด็น</p>
+            <p class="font-bold">
+              พบความเสี่ยงทุจริต
+              {{ projectData?.corruptionRisk?.length }} ประเด็น
+            </p>
           </div>
 
           <ClientOnly fallback-tag="span" fallback="Loading...">
             <Disclosure v-slot="{ open }">
               <DisclosurePanel class="text-[#EC1C24] b4">
                 <ul class="list-disc ml-10">
-                  <li>เสนอราคาใกล้ราคากลาง</li>
-                  <li>เสนอราคาสูง</li>
-                  <li>เสนอราคาสูงกว่าราคากลาง</li>
-                  <li>เสนอราคาเกาะกลุ่ม</li>
-                  <li>เสนอราคาเท่ากัน</li>
-                  <li>เสนอราคาต่ำกว่าราคากลางผิดปกติ</li>
+                  <li v-for="item in projectData?.corruptionRisk">
+                    {{ item }}
+                  </li>
                 </ul>
               </DisclosurePanel>
               <DisclosureButton

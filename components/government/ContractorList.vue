@@ -62,7 +62,7 @@ const setDate = (date) => {
               <th>ลำดับ</th>
               <th>ผู้รับจ้าง</th>
               <th class="text-right w-24">จำนวนโครงการ</th>
-              <th class="text-right w-16">วงเงินสัญญารวม</th>
+              <th class="text-right w-24">วงเงินสัญญารวม</th>
             </tr>
           </thead>
           <tbody class="b1">
