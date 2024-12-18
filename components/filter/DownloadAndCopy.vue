@@ -1,6 +1,7 @@
 <template>
   <div class="flex items-center justify-end gap-2">
     <button
+      @click="downloadCSV()"
       type="button"
       class="p-2.5 border btn-light-3 rounded-10 ml-1 b2 link-1 flex items-center gap-2"
     >
@@ -22,11 +23,12 @@
         />
       </svg>
     </button>
-    <!-- <button
+    <button
+      @click="copyLink()"
       type="button"
-      class="p-2.5 rounded-10 b2 text-[#0B5C90] hover:text-[#1688CA] gap-1 flex items-center"
+      class="p-2.5 rounded-10 b2 text-[#0B5C90] hover:text-[#1688CA] gap-1 flex items-center tooltip"
     >
-      <span class="hidden sm:inline">คัดลอกลิงก์</span>
+      <span class="tooltiptext" id="myTooltipBtn">คัดลอกลิงก์</span>
 
       <svg
         width="16"
@@ -44,10 +46,44 @@
           fill="currentColor"
         />
       </svg>
-    </button> -->
+    </button>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps<{
+  filterList: string;
+  section: string;
+}>();
+const config = useRuntimeConfig();
+const urlLink = ref('');
+
+const downloadCSV = () => {
+  var link = document.createElement('a');
+  const urlParams = decodeURI(window.location.href).split('=')[1];
+  link.href = `${config.public.apiUrl}/${props.section}/search/download-csv?keyword=${urlParams}${props.filterList}`;
+  console.log(
+    `/${props.section}/search/download-csv?keyword=${urlParams}${props.filterList}`
+  );
+
+  link.click();
+};
+
+const copyLink = () => {
+  let url = config.public.baseUrl;
+
+  if (window.location.pathname != '/')
+    url += window.location.pathname.replace('/', '');
+  if (window.location.search != '') url += window.location.search;
+
+  urlLink.value = url;
+  if (props.filterList != '') url += '&' + props.filterList;
+
+  navigator.clipboard.writeText(url).then(function () {
+    var tooltip = document.getElementById('myTooltipBtn');
+    tooltip.innerHTML = 'คัดลอกแล้ว';
+  });
+};
+</script>
 
 <style scoped></style>

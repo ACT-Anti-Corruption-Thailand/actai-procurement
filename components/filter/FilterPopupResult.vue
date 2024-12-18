@@ -105,12 +105,12 @@
                       </div>
                     </div>
 
-                    <Combobox
+                    <!-- <Combobox
                       title="หน่วยงานรัฐเจ้าของโครงการ"
                       :list="filterListProject?.agencies"
                       defaultVal="ทุกหน่วยงาน"
                       @change="(n) => setFilter(n, 'agencies')"
-                    />
+                    /> -->
 
                     <Combobox
                       title="สังกัด"
@@ -248,6 +248,7 @@
                 class="flex items-center justify-between sm:justify-end pt-3 sm:mt-0 gap-2"
               >
                 <button
+                  @click="clearFilter"
                   type="button"
                   class="p-2.5 border border-[#0B5C90] hover:border-[#1688CA] rounded-10 b2 text-[#0B5C90] min-w-32"
                 >
@@ -288,15 +289,17 @@ import {
 const props = defineProps<{
   section: string;
 }>();
+const emit = defineEmits(['change']);
 
 import { CheckIcon } from '@heroicons/vue/24/solid';
+import qs from 'qs';
 
 const config = useRuntimeConfig();
 const isOpen = ref(false);
 const plan = ref('งบประมาณ');
 const filterCount = ref(0);
 
-const selected = {
+let selected = {
   yearFrom: '2567',
   yearTo: '2567',
   agencies: 'ทุกหน่วยงาน',
@@ -374,10 +377,42 @@ const setFilter = (val: any, section: string) => {
 };
 
 const searchByResult = () => {
-  // console.log(selected);
-  // for (const property in selected) {
-  //   console.log(`${property}: ${selected[property]}`);
-  // }
+  let filter = {
+    budgetYear: {
+      start: selected.yearFrom,
+      end: selected.yearTo,
+    },
+    agencyName: selected.agencies == 'ทุกหน่วยงาน' ? '' : selected.agencies,
+    contractorType:
+      selected.contractorType == 'ทุกประเภท' ? '' : selected.contractorType,
+    projectStatus:
+      selected.projectStatus == 'ทุกสถานะ' ? '' : selected.projectStatus,
+    province: selected.provinces == 'ทุกจังหวัด' ? '' : selected.provinces,
+    resourcingType:
+      selected.resourcingType == 'ทุกประเภท' ? '' : selected.resourcingType,
+    resourcingMethod:
+      selected.resourcingMethod == 'ทุกวิธี' ? '' : selected.resourcingMethod,
+  };
+
+  console.log(filter);
+  var str = qs.stringify(filter);
+  console.log(str);
+  isOpen.value = false;
+  emit('change', str);
+};
+
+const clearFilter = () => {
+  selected = {
+    yearFrom: '2567',
+    yearTo: '2567',
+    agencies: 'ทุกหน่วยงาน',
+    agencyBelongTo: 'ทุกหน่วยงาน',
+    contractorType: 'ทุกประเภท',
+    projectStatus: 'ทุกสถานะ',
+    provinces: 'ทุกจังหวัด',
+    resourcingType: 'ทุกประเภท',
+    resourcingMethod: 'ทุกวิธี',
+  };
 };
 </script>
 

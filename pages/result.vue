@@ -389,6 +389,7 @@ const onSetChartData = (section: string, data) => {
       <ResultProjectList
         v-else-if="menu == 'โครงการฯ'"
         @search="getProjectList"
+        @filtered="getProjectList"
         :iconGuide="iconGuide"
         :mockDataGuide="mockDataGuide"
         :data="summaryData"

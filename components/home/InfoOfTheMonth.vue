@@ -56,29 +56,54 @@ onMounted(async () => {
         <div class="flex gap-3 lg:justify-center max-w-6xl mx-auto">
           <div class="flex-1 flex flex-col">
             <p class="b1 font-bold mb-2.5">โครงการฯ ที่งบประมาณสูงที่สุด</p>
-            <ProjectData
-              :data="summary?.projectWithHighestBudgetMoney"
-              :index="0"
-              class="h-full"
-            />
+            <a
+              :href="
+                '/project/' + summary?.projectWithHighestBudgetMoney?.projectId
+              "
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ProjectData
+                :data="summary?.projectWithHighestBudgetMoney"
+                :index="0"
+                class="h-full"
+              />
+            </a>
           </div>
           <div class="flex-1 flex flex-col">
             <p class="b1 font-bold mb-2.5">หน่วยงานรัฐที่ของบประมาณมากที่สุด</p>
-            <ProjectData
-              :data="summary?.agencyWithHighestBudgetMoney"
-              :index="1"
-              class="h-full"
-            />
+            <a
+              :href="
+                '/government/' + summary?.agencyWithHighestBudgetMoney?.agencyId
+              "
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ProjectData
+                :data="summary?.agencyWithHighestBudgetMoney"
+                :index="1"
+                class="h-full"
+              />
+            </a>
           </div>
           <div class="flex-1 flex flex-col">
             <p class="b1 font-bold mb-2.5">
               ผู้รับจ้างที่มีมูลค่าสัญญารวมมากที่สุด
             </p>
-            <ProjectData
-              :data="summary?.companyWithHighestContractMoney"
-              :index="2"
-              class="h-full"
-            />
+            <a
+              :href="
+                '/contractor/' +
+                summary?.companyWithHighestContractMoney?.companyId
+              "
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ProjectData
+                :data="summary?.companyWithHighestContractMoney"
+                :index="2"
+                class="h-full"
+              />
+            </a>
           </div>
         </div>
       </div>

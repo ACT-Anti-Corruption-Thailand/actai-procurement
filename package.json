@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
+    "@neodrag/vue": "^2.2.0",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.5",
     "@stefanobartoletti/nuxt-social-share": "^1.1.0",
@@ -21,6 +22,7 @@
     "nuxt": "^3.12.4",
     "nuxt-gtag": "^3.0.1",
     "pinia": "^2.2.4",
+    "qs": "^6.13.1",
     "sass": "^1.77.8",
     "vue": "latest",
     "vue-awesome-paginate": "^1.2.0",

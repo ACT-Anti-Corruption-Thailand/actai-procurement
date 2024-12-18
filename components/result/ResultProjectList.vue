@@ -22,7 +22,7 @@ const isOpen2 = ref(false);
 const isOpenGovModal = ref(false);
 const isOpenContractorModal = ref(false);
 const params = ref('');
-const emit = defineEmits(['search']);
+const emit = defineEmits(['search', 'filtered']);
 const sort = ref('');
 const page = ref(0);
 const searchText = ref('');
@@ -59,6 +59,7 @@ const menuList = ref([
     id: 'maps',
   },
 ]);
+const filterList = ref('');
 
 function changeTab(index) {
   selectedTab.value = index;
@@ -97,6 +98,11 @@ const setParams = (type: string, val: string) => {
   emit('search', '&' + searchParams.toString(), 'details');
 };
 
+const onChangeFilter = (f: string) => {
+  filterList.value = f;
+  emit('filtered', '&' + f, 'details');
+};
+
 onMounted(() => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -133,7 +139,9 @@ onMounted(() => {
         <Tab class="tab-menu b1">รายชื่อ</Tab>
         <Tab class="tab-menu b1">ภาพรวม</Tab>
       </TabList>
-      <!-- <div><FilterPopupResult section="โครงการ" /></div> -->
+      <div>
+        <FilterPopupResult section="โครงการ" @change="onChangeFilter" />
+      </div>
     </div>
 
     <TabPanels>
@@ -262,7 +270,7 @@ onMounted(() => {
             @sortBy="setParams"
           />
 
-          <DownloadAndCopy />
+          <DownloadAndCopy :filterList="filterList" section="project" />
         </div>
 
         <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />

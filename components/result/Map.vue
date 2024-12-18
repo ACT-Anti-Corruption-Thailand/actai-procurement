@@ -38,7 +38,7 @@ onMounted(() => {
             '.provinces-' + props.no + '#' + p[0].name_en
           ).style.stroke = '#000000';
 
-          console.log(1, color(element.totalProject));
+          // console.log(1, color(element.totalProject));
         }
       } else {
         if (element.totalBudgetMoney != 0) {
@@ -49,7 +49,7 @@ onMounted(() => {
             '.provinces-' + props.no + '#' + p[0].name_en
           ).style.stroke = '#000000';
 
-          console.log(1, color(element.totalBudgetMoney));
+          // console.log(1, color(element.totalBudgetMoney));
         }
       }
     }

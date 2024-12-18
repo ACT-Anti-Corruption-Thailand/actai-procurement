@@ -60,7 +60,7 @@ onMounted(() => {
         {{ props.contractorList?.pagination?.totalItem.toLocaleString() }}
         ผู้รับจ้าง
       </h4>
-      <!-- <FilterPopupResult section="ผู้รับจ้าง" /> -->
+      <FilterPopupResult section="ผู้รับจ้าง" />
     </div>
 
     <div class="flex items-center justify-between my-3 sm:my-5">
@@ -85,7 +85,7 @@ onMounted(() => {
           @sortBy="setParams"
         />
       </div>
-      <!-- <DownloadAndCopy /> -->
+      <DownloadAndCopy section="company" filterList="" />
     </div>
 
     <ProjectIconGuide

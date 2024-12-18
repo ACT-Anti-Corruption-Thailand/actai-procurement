@@ -138,7 +138,7 @@ onMounted(async () => {
                       @sortBy="setParams"
                     />
                   </div>
-                  <!-- <DownloadAndCopy /> -->
+                  <DownloadAndCopy section="company" filterList="" />
                 </div>
 
                 <ProjectIconGuide
