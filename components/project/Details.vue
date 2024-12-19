@@ -111,6 +111,14 @@ onBeforeMount(() => {
     0
   );
 });
+
+const searchText = ref('');
+
+const searchResult = computed(() => {
+  return searchText.value != ''
+    ? props.estimatePrice.filter((x) => x.name.includes(searchText.value))
+    : props.estimatePrice;
+});
 </script>
 
 <template>
@@ -205,12 +213,25 @@ onBeforeMount(() => {
           ทั้งหมด {{ props.contracts.length }} ราย ทำสัญญาจ้าง
           {{ props.contracts.length }} ฉบับ
         </h5>
-        <!-- <DownloadAndCopy /> -->
+        <DownloadAndCopy section="project" filterList="" />
       </div>
 
       <!-- <SortBy
         text="เรียงตาม"
-        :list="['วงเงินสัญญา', 'วันที่ทำสัญญา']"
+        :list="[
+              {
+                name: 'วงเงินสัญญา',
+                value: 'relevanceScore',
+              },
+              {
+                name: 'วันที่ทำสัญญา',
+                value: 'announcementDate',
+              },
+              {
+                name: 'งบประมาณรวม',
+                value: 'budgetMoney',
+              },
+            ]"
         class="mb-3"
       /> -->
 
@@ -232,7 +253,11 @@ onBeforeMount(() => {
             <template v-for="(item, i) in props.contracts" :key="i">
               <tr>
                 <td :rowspan="item.contracts.length">
-                  <a target="_blank" :href="`/contractor/${item.id}`">
+                  <a
+                    target="_blank"
+                    :href="`/contractor/${item.id}`"
+                    class="hover:text-[#0B5C90]"
+                  >
                     <b> {{ item.name }}</b></a
                   >
                   <br />
@@ -299,9 +324,10 @@ onBeforeMount(() => {
       <p class="b2 text-[#7F7F7F]">ตัวกรอง</p>
       <div class="relative">
         <input
+          v-model="searchText"
           type="text"
           class="input-text h-full"
-          placeholder="กรองด้วยชื่อรายการ/ผู้เข้าเสนอราคา/เลขทะเบียนนิติบุคคล"
+          placeholder="กรองด้วยชื่อรายการพิจารณา"
         />
         <SearchIcon color="#000000" class="absolute inset-y-0 my-auto left-2" />
       </div>
@@ -309,14 +335,14 @@ onBeforeMount(() => {
     <div class="p-5 rounded-b-md w-full">
       <div class="flex justify-between mb-3">
         <h5 class="font-bold w-3/5">
-          แยกตามรายการพิจารณา {{ props.estimatePrice.length }} รายการ
+          แยกตามรายการพิจารณา {{ searchResult.length }} รายการ
         </h5>
-        <!-- <DownloadAndCopy /> -->
+        <DownloadAndCopy section="project" filterList="" />
       </div>
 
-      <p class="text-right" v-if="props.estimatePrice.length > 0">
+      <!-- <p class="text-right" v-if="props.estimatePrice.length > 0">
         ราคากลาง = x,xxx,xxx.xx บาท
-      </p>
+      </p> -->
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -340,58 +366,78 @@ onBeforeMount(() => {
             </tr>
           </thead>
           <tbody class="b1" v-if="props.estimatePrice.length > 0">
-            <tr>
-              <td
-                :rowspan="props.estimatePrice[0].contractors.length"
-                class="w-20"
-              >
-                {{ props.estimatePrice[0].name }}
-              </td>
-
-              <td class="w-40">
-                {{ props.estimatePrice[0].contractors[0].name }}
-                <div class="flex items-center gap-2">
-                  <img src="../../public/src/images/contractor.svg" alt="" />
-                  <p class="b4 text-[#8E8E8E]">
-                    {{ props.estimatePrice[0].contractors[0].id }}
-                  </p>
-                </div>
-              </td>
-
-              <td>
-                {{
-                  props.estimatePrice[0].contractors[0].biddingPrice.toLocaleString()
-                }}
-              </td>
-              <td class="bg-[#FFFDEF] text-[#CE5700]">
-                ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
-              </td>
-              <td class="bg-[#FFFDEF] text-[#CE5700]">
-                ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
-              </td>
-            </tr>
-
-            <template
-              v-for="item in props.estimatePrice[0].contractors.slice(
-                1,
-                props.estimatePrice[0].contractors.length
-              )"
-            >
+            <template v-for="data in searchResult">
               <tr>
+                <td :rowspan="data.contractors.length" class="w-20">
+                  {{ data.name }}
+                </td>
+
                 <td class="w-40">
-                  {{ item.name }}
+                  <a
+                    target="_blank"
+                    :href="`/contractor/${data.contractors[0].id}`"
+                    class="hover:text-[#0B5C90]"
+                  >
+                    {{ data.contractors[0].name }}
+                  </a>
+
+                  <div class="flex items-center gap-2">
+                    <img src="../../public/src/images/contractor.svg" alt="" />
+                    <p class="b4 text-[#8E8E8E]">
+                      {{ data.contractors[0].id }}
+                    </p>
+                  </div>
+                </td>
+
+                <td>
+                  {{ data.contractors[0].biddingPrice.toLocaleString() }}
+                </td>
+                <td class="text-right">
+                  <template v-if="data.estimatePrice != null">
+                    ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
+                  </template>
+                  <p v-else>0</p>
+                </td>
+                <td class="text-right">
+                  <template v-if="data.estimatePrice != null">
+                    ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
+                  </template>
+                  <p v-else>0</p>
+                </td>
+              </tr>
+
+              <tr
+                v-for="item in data.contractors.slice(
+                  1,
+                  data.contractors.length
+                )"
+              >
+                <td class="w-40">
+                  <a
+                    target="_blank"
+                    :href="`/contractor/${item.id}`"
+                    class="hover:text-[#0B5C90]"
+                  >
+                    {{ item.name }}
+                  </a>
                   <div class="flex items-center gap-2">
                     <img src="../../public/src/images/contractor.svg" alt="" />
                     <p class="b4 text-[#8E8E8E]">{{ item.id }}</p>
                   </div>
                 </td>
-
                 <td>{{ item.biddingPrice.toLocaleString() }}</td>
-                <td class="bg-[#FFFDEF] text-[#CE5700]">
-                  ต่ำกว่า 2.66% <br /><span class="b4">79,778 บาท</span>
+
+                <td class="text-right">
+                  <template v-if="data.estimatePrice != null">
+                    ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
+                  </template>
+                  <p v-else>0</p>
                 </td>
-                <td class="bg-[#FFFDEF] text-[#CE5700]">
-                  ต่ำกว่า 2.66% <br /><span class="b4">79,778 บาท</span>
+                <td class="text-right">
+                  <template v-if="data.estimatePrice != null">
+                    ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
+                  </template>
+                  <p v-else>0</p>
                 </td>
               </tr>
             </template>

@@ -28,6 +28,41 @@
           {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }}
         </p>
 
+        <RadioGroup
+          v-model="typeChart"
+          v-if="hasChooseChartData"
+          class="b1 w-full radio-btn-chart my-2"
+        >
+          <RadioGroupLabel>แบ่งสัดส่วนตาม</RadioGroupLabel>
+          <RadioGroupOption
+            v-slot="{ checked }"
+            value="ความเสี่ยงทุจริต"
+            class="radio-option option-1"
+            :class="typeChart == 'ความเสี่ยงทุจริต' ? 'bg-[#D9D9D9]' : ''"
+            @click="$emit('changeChartData', typeChart)"
+          >
+            <span>ความเสี่ยงทุจริต</span>
+          </RadioGroupOption>
+          <RadioGroupOption
+            v-slot="{ checked }"
+            value="สถานะโครงการล่าสุด"
+            class="radio-option"
+            :class="typeChart == 'สถานะโครงการล่าสุด' ? 'bg-[#D9D9D9]' : ''"
+            @click="$emit('changeChartData', typeChart)"
+          >
+            <span>สถานะโครงการล่าสุด</span>
+          </RadioGroupOption>
+          <RadioGroupOption
+            v-slot="{ checked }"
+            value="วิธีการจัดหา"
+            class="radio-option"
+            :class="typeChart == 'วิธีการจัดหา' ? 'bg-[#D9D9D9]' : ''"
+            @click="$emit('changeChartData', typeChart)"
+          >
+            <span>วิธีการจัดหา</span>
+          </RadioGroupOption>
+        </RadioGroup>
+
         <p class="b4 text-[#8E8E8E] text-right">
           หน่วย :
           {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }} (%ของ{{
@@ -115,18 +150,23 @@
 <script setup lang="ts">
 import type { ChartComponentRef } from 'vue-chartjs';
 import { Bar } from 'vue-chartjs';
+import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
+
+const emit = defineEmits(['changeChartData']);
 
 const props = defineProps<{
   data: array;
   yearList: array;
   title: string;
   section: string;
+  hasChooseChartData: boolean;
 }>();
 
 const total = ref(0);
 const totalByData = ref(0);
 const isOpen = ref(false);
 const isOpen2 = ref(false);
+const typeChart = ref('ความเสี่ยงทุจริต');
 
 const chartData = ref({
   labels: [],
@@ -263,4 +303,24 @@ const setSum = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.radio-btn-chart {
+  .radio-option {
+    padding: 5px;
+    border: 1px solid #d9d9d9;
+    cursor: pointer;
+  }
+
+  .option-1 {
+    border-top-right-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+    border-bottom: transparent !important;
+  }
+
+  .radio-option:last-child {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top: transparent !important;
+  }
+}
+</style>

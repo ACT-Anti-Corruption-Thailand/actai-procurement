@@ -40,7 +40,7 @@ const setDate = (date) => {
             >
           </p>
         </div>
-        <!-- <DownloadAndCopy /> -->
+        <DownloadAndCopy section="contractor" filterList="" />
       </div>
 
       <div class="overflow-auto">

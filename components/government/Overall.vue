@@ -389,11 +389,13 @@ const onSetChartData = (section: string, data) => {
 
     <BarChart
       v-if="isDone"
+      :hasChooseChartData="true"
       :yearList="yearList"
       :data="barChartData"
       titleType="1"
       :title="titleChart"
       @isOpen="isOpen = true"
+      @changeChartData="(n) => (titleChartSelected = n)"
       :section="sectionChart"
     />
 

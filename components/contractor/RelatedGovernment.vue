@@ -14,18 +14,29 @@ const setDate = (date) => {
 
   return new Date(date).toLocaleDateString('th-TH', options);
 };
+
+const searchText = ref('');
+
+const searchResult = computed(() => {
+  return searchText.value != ''
+    ? props.data.searchResult.filter((x) =>
+        x.agencyName.includes(searchText.value)
+      )
+    : props.data.searchResult;
+});
 </script>
 
 <template>
   <h4 class="font-bold text-white mb-5">หน่วยงานรัฐที่เป็นผู้ว่าจ้าง</h4>
 
   <div class="bg-white rounded-10 gap-2 mb-3">
-    <!-- <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
+    <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <div class="flex items-end gap-2">
         <div class="flex-1">
           <p class="b2 text-[#7F7F7F]">ค้นหาหน่วยงานรัฐ</p>
           <div class="relative">
             <input
+              v-model="searchText"
               type="text"
               class="input-text h-full"
               placeholder="พิมพ์คำในชื่อหรือเลขที่โครงการ"
@@ -38,7 +49,7 @@ const setDate = (date) => {
         </div>
         <FilterResultContractor section="หน่วยงานรัฐที่เป็นผู้ว่าจ้าง" />
       </div>
-    </div> -->
+    </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 gap-2">
         <h5 class="font-bold w-3/5">
@@ -47,7 +58,7 @@ const setDate = (date) => {
           วงเงินสัญญา
           {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
         </h5>
-        <!-- <DownloadAndCopy /> -->
+        <DownloadAndCopy section="government" filterList="" />
       </div>
 
       <!-- <SortBy
@@ -67,7 +78,7 @@ const setDate = (date) => {
             </tr>
           </thead>
           <tbody class="b1">
-            <tr v-for="(item, i) in props.data?.searchResult" :key="i">
+            <tr v-for="(item, i) in searchResult" :key="i">
               <td class="text-[#7F7F7F]">{{ i + 1 }}</td>
               <td class="font-bold">
                 <a

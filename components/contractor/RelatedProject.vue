@@ -14,18 +14,29 @@ const setDate = (date) => {
 
   return new Date(date).toLocaleDateString('th-TH', options);
 };
+
+const searchText = ref('');
+
+const searchResult = computed(() => {
+  return searchText.value != ''
+    ? props.data.searchResult.filter((x) =>
+        x.projectName.includes(searchText.value)
+      )
+    : props.data.searchResult;
+});
 </script>
 
 <template>
   <h4 class="font-bold text-white mb-5">รายชื่อโครงการที่เกี่ยวข้อง</h4>
 
   <div class="bg-white rounded-10 gap-2 mb-3">
-    <!-- <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
+    <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <div class="flex items-end gap-2">
         <div class="flex-1">
           <p class="b2 text-[#7F7F7F]">ค้นหาโครงการ</p>
           <div class="relative">
             <input
+              v-model="searchText"
               type="text"
               class="input-text h-full"
               placeholder="พิมพ์คำในชื่อหรือเลขที่โครงการ"
@@ -45,7 +56,7 @@ const setDate = (date) => {
           >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
         >
       </div>
-    </div> -->
+    </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 gap-2">
         <h5 class="font-black w-3/5">
@@ -54,7 +65,7 @@ const setDate = (date) => {
           วงเงินสัญญา
           {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
         </h5>
-        <!-- <DownloadAndCopy /> -->
+        <DownloadAndCopy section="project" filterList="" />
       </div>
 
       <!-- <SortBy
@@ -90,7 +101,7 @@ const setDate = (date) => {
             </tr>
           </thead>
           <tbody class="b1">
-            <tr v-for="(item, i) in props.data?.searchResult" :key="i">
+            <tr v-for="(item, i) in searchResult" :key="i">
               <td>
                 <a
                   :href="`/project/${item.projectId}`"
