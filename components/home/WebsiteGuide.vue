@@ -1,17 +1,19 @@
 <script setup>
 import { ChevronRightIcon } from '@heroicons/vue/24/solid';
-const keyword = ['ก่อสร้าง', 'เฉลิมพระเกียรติ', 'ถนน'];
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
 
 const config = useRuntimeConfig();
 const searchSummary = ref({});
 const d = new Date();
+const fromDate = ref('');
+const toDate = ref('');
 
 const getSearchSummary = async () => {
   const urlParams = new URLSearchParams();
   urlParams.set('page', 1);
   urlParams.set('pageSize', 10);
-  urlParams.set('budgetYearStart', 2562);
-  urlParams.set('budgetYearEnd', 2567);
+  urlParams.set('budgetYearStart', d.getFullYear() + 542);
+  urlParams.set('budgetYearEnd', d.getFullYear() + 543);
 
   const res = await fetch(
     `${config.public.apiUrl}/search/summary?${urlParams}`,
@@ -28,6 +30,17 @@ const getSearchSummary = async () => {
     searchSummary.value = data;
   }
 };
+
+onBeforeMount(async () => {
+  fromDate.value = new Date(new Date().setDate(0)).toLocaleDateString('th-TH', {
+    year: '2-digit',
+    month: 'short',
+  });
+  toDate.value = d.toLocaleDateString('th-TH', {
+    year: '2-digit',
+    month: 'short',
+  });
+});
 
 onMounted(async () => {
   await getSearchSummary();
@@ -71,49 +84,68 @@ onMounted(async () => {
 
         <div class="w-full lg:w-3/5 text-left">
           <p class="b2 text-[#DADADA]">
-            ตัวอย่างคำที่พบบ่อยในชื่อโครงการปีงบประมาณล่าสุด (2568)
+            ตัวอย่างคำที่พบบ่อยในชื่อโครงการปีงบประมาณล่าสุด ({{
+              new Date().getFullYear() + 543
+            }})
           </p>
           <p class="b4 text-[#A6A6A6]">
-            *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
-            ต.ค. 67 - ก.ย. 68
+            *ปีงบประมาณ เริ่มนับจาก {{ fromDate.split(' ')[0] }} -
+            {{ toDate.split(' ')[0] }} เช่น ปีงบประมาณ
+            {{ new Date().getFullYear() + 543 }} หมายถึง {{ fromDate }} -
+            {{ toDate }}
           </p>
 
           <div class="flex gap-2 items-center">
             <div class="overflow-auto hide-scroll mt-3">
-              <div class="flex gap-3">
-                <div v-for="(item, i) in searchSummary?.result" :key="i">
-                  <NuxtLink :to="`/result?search=${item.searchKeyword}`">
-                    <div
-                      class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left"
-                    >
-                      <p class="b1 font-bold mb-3 text-black">
-                        โครงการฯ ที่มีคำว่า
-                        <span class="text-[#74060A]"
-                          >“{{ item.searchKeyword }}”</span
-                        >
-                      </p>
-                      <p class="b4 text-[#5E5E5E]">
-                        รวม {{ item.totalProject.toLocaleString() }} โครงการ
-                      </p>
-                      <p class="b4 text-[#5E5E5E]">
-                        ใช้งบประมาณรวม
-                        {{
-                          parseInt(item.totalBudgetMoney).toLocaleString()
-                        }}
-                        บาท
-                      </p>
+              <div class="flex cursor-grab">
+                <Splide
+                  :options="{
+                    drag: 'free',
+                    gap: 5,
+                    width: '100%',
+                    fixedWidth: '18.5rem',
+                    breakpoints: {
+                      1024: {},
+                      640: {},
+                    },
+                  }"
+                >
+                  <SplideSlide
+                    v-for="(item, i) in searchSummary?.result"
+                    :key="i"
+                  >
+                    <!-- <div> -->
+                    <NuxtLink :to="`/result?search=${item.searchKeyword}`">
+                      <div
+                        class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left"
+                      >
+                        <p class="b1 font-bold mb-3 text-black">
+                          โครงการฯ ที่มีคำว่า
+                          <span class="text-[#74060A]"
+                            >“{{ item.searchKeyword }}”</span
+                          >
+                        </p>
+                        <p class="b4 text-[#5E5E5E]">
+                          รวม {{ item.totalProject.toLocaleString() }} โครงการ
+                        </p>
+                        <p class="b4 text-[#5E5E5E]">
+                          ใช้งบประมาณรวม
+                          {{ parseInt(item.totalBudgetMoney).toLocaleString() }}
+                          บาท
+                        </p>
 
-                      <GoToText
-                        color="#0B5C90"
-                        text="ดูทั้งหมด"
-                        class="mt-20 mb-0 text-[#0B5C90]"
-                      />
-                    </div>
-                  </NuxtLink>
-                </div>
+                        <GoToText
+                          color="#0B5C90"
+                          text="ดูทั้งหมด"
+                          class="mt-20 mb-0 text-[#0B5C90]"
+                        />
+                      </div>
+                    </NuxtLink>
+                    <!-- </div> -->
+                  </SplideSlide>
+                </Splide>
               </div>
             </div>
-            <ChevronRightIcon class="size-8" />
           </div>
         </div>
       </div>

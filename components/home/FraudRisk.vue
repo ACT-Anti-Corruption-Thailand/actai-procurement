@@ -6,6 +6,9 @@ const projectList = ref<Project | null>(null);
 const contractorList = ref<Contractor | null>(null);
 const random1 = ref(0);
 const random2 = ref(0);
+const d = new Date();
+const fromDate = ref('');
+const toDate = ref('');
 
 const getProjectList = async () => {
   const urlParams = new URLSearchParams();
@@ -65,6 +68,17 @@ const randomNum = (n: number) => {
   if (n == 1) random1.value = r;
   else random2.value = r;
 };
+
+onBeforeMount(async () => {
+  fromDate.value = new Date(new Date().setDate(0)).toLocaleDateString('th-TH', {
+    year: '2-digit',
+    month: 'short',
+  });
+  toDate.value = d.toLocaleDateString('th-TH', {
+    year: '2-digit',
+    month: 'short',
+  });
+});
 
 onMounted(async () => {
   await getProjectList();
@@ -136,10 +150,16 @@ onMounted(async () => {
             </div>
 
             <div v-if="projectList?.searchResult.length > 0">
-              <p class="b2">ตัวอย่างจากปีงบประมาณล่าสุด* (2568)</p>
+              <p class="b2">
+                ตัวอย่างจากปีงบประมาณล่าสุด* ({{
+                  new Date().getFullYear() + 543
+                }})
+              </p>
               <p class="b4 text-[#A6A6A6] mb-3">
-                *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
-                ต.ค. 67 - ก.ย. 68
+                *ปีงบประมาณ เริ่มนับจาก {{ fromDate.split(' ')[0] }} -
+                {{ toDate.split(' ')[0] }} เช่น ปีงบประมาณ
+                {{ new Date().getFullYear() + 543 }} หมายถึง {{ fromDate }} -
+                {{ toDate }}
               </p>
 
               <a
@@ -198,10 +218,16 @@ onMounted(async () => {
             </div>
 
             <div v-if="contractorList?.searchResult.length > 0">
-              <p class="b2">ตัวอย่างจากปีงบประมาณล่าสุด* (2568)</p>
+              <p class="b2">
+                ตัวอย่างจากปีงบประมาณล่าสุด* ({{
+                  new Date().getFullYear() + 543
+                }})
+              </p>
               <p class="b4 text-[#A6A6A6] mb-3">
-                *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
-                ต.ค. 67 - ก.ย. 68
+                *ปีงบประมาณ เริ่มนับจาก {{ fromDate.split(' ')[0] }} -
+                {{ toDate.split(' ')[0] }} เช่น ปีงบประมาณ
+                {{ new Date().getFullYear() + 543 }} หมายถึง {{ fromDate }} -
+                {{ toDate }}
               </p>
 
               <a

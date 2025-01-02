@@ -6,7 +6,12 @@
     </div>
     <div class="flex gap-0.5 items-center" v-if="props.data.year != null">
       <year :color="props.color" />
-      <p>{{ props.data.year }}</p>
+      <p>
+        {{ props.data.year }}
+        <span v-if="props.data.date != null"
+          >({{ setDate(props.data.date) }})</span
+        >
+      </p>
     </div>
     <div class="flex gap-0.5 items-center" v-if="props.data.owner != null">
       <agency :color="props.color" />
@@ -32,6 +37,16 @@ const props = defineProps<{
   data: Object;
   color: string;
 }>();
+
+const setDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  };
+
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -297,6 +297,7 @@ onMounted(() => {
                     year: item.budgetYear,
                     owner: item.agencyName,
                     no: item.projectId,
+                    date: item.announcementDate,
                   }"
                   color="#8E8E8E"
                 />

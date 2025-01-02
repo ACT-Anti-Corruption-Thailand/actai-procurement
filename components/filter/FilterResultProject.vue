@@ -1,6 +1,6 @@
 <template>
   <div class="text-[#7F7F7F] mt-5">
-    <p class="font-bold b1">ปีงบประมาณ 555</p>
+    <p class="font-bold b1">ปีงบประมาณ</p>
     <p class="b5">
       ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง ต.ค. 67 -
       ก.ย. 68

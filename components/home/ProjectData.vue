@@ -21,10 +21,12 @@
         year: props.data?.budgetYear,
         owner: props.data?.agencyName,
         no: props.data?.projectId,
+        date: props.data?.announcementDate,
       }"
       color="#5E5E5E"
       v-if="index == '0'"
     />
+
     <ProjectIconGuide
       :data="{
         province: props.data?.province,
