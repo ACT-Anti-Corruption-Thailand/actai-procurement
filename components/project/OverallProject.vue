@@ -100,29 +100,29 @@ const setDate = (date) => {
                 :class="[
                   {
                     'text-[#7051B4]':
-                      props.data.totalEstimatePrice >
-                      props.data.totalBudgetMoney,
-                    'text-[#CE5700]':
                       props.data.totalEstimatePrice <
-                      props.data.totalBudgetMoney,
+                      props.data.totalContractMoney,
+                    'text-[#CE5700]':
+                      props.data.totalEstimatePrice >
+                      props.data.totalContractMoney,
                     'text-[#1F1F1F]':
-                      props.data.totalBudgetMoney ==
-                      props.data.totalEstimatePrice,
+                      props.data.totalEstimatePrice ==
+                      props.data.totalContractMoney,
                   },
                 ]"
               >
                 <p class="b2">
                   <span
                     v-if="
-                      props.data.totalEstimatePrice >
-                      props.data.totalBudgetMoney
+                      props.data.totalEstimatePrice <
+                      props.data.totalContractMoney
                     "
                     >สูงกว่า</span
                   >
                   <span
                     v-else-if="
-                      props.data.totalEstimatePrice <
-                      props.data.totalBudgetMoney
+                      props.data.totalEstimatePrice >
+                      props.data.totalContractMoney
                     "
                     >ต่ำกว่า</span
                   >
@@ -131,14 +131,15 @@ const setDate = (date) => {
                 <p
                   class="b1"
                   v-if="
-                    props.data.totalEstimatePrice != props.data.totalBudgetMoney
+                    props.data.totalEstimatePrice !=
+                    props.data.totalContractMoney
                   "
                 >
                   {{
                     (
-                      ((props.data.totalBudgetMoney -
-                        props.data.totalEstimatePrice) /
-                        props.data.totalBudgetMoney) *
+                      ((props.data.totalEstimatePrice -
+                        props.data.totalContractMoney) /
+                        props.data.totalEstimatePrice) *
                       100
                     ).toFixed(2)
                   }}%

@@ -181,15 +181,15 @@ onMounted(async () => {
                       />
                     </div>
                     <div
-                      class="basis-3/5 flex justify-between sm:gap-10 text-right flex-col-mb"
+                      class="basis-3/5 flex justify-between sm:gap-5 text-right flex-col-mb"
                     >
-                      <div>
+                      <div class="basis-1/3">
                         <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
                         <p class="b1">
                           {{ item?.totalProject.toLocaleString() }}
                         </p>
                       </div>
-                      <div class="text-[#EC1C24]">
+                      <div class="text-[#EC1C24] basis-1/3">
                         <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
                         <p class="b1">
                           {{
@@ -206,7 +206,7 @@ onMounted(async () => {
                           }}%)
                         </p>
                       </div>
-                      <div>
+                      <div class="basis-1/3">
                         <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
                         <p class="b1">
                           {{ item?.totalBudgetMoney.toLocaleString() }}

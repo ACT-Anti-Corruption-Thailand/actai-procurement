@@ -5,6 +5,9 @@ const props = defineProps<{
   data: Government;
 }>();
 
+const emit = defineEmits(['change']);
+const pageNum = ref(1);
+
 const setDate = (date) => {
   const options = {
     year: 'numeric',
@@ -24,6 +27,18 @@ const searchResult = computed(() => {
       )
     : props.data.searchResult;
 });
+
+const setFilter = (isChangePage) => {
+  if (isChangePage) pageNum.value++;
+
+  // let filter = {
+  //   hasCorruptionRisk: isRisk.value,
+  // };
+
+  // var str = qs.stringify({ filter });
+
+  emit('change', '&' + '', pageNum.value);
+};
 </script>
 
 <template>
@@ -39,7 +54,7 @@ const searchResult = computed(() => {
               v-model="searchText"
               type="text"
               class="input-text h-full"
-              placeholder="พิมพ์คำในชื่อหรือเลขที่โครงการ"
+              placeholder="พิมพ์ชื่อหน่วยงานรัฐ"
             />
             <SearchIcon
               color="#000000"
@@ -47,7 +62,7 @@ const searchResult = computed(() => {
             />
           </div>
         </div>
-        <FilterResultContractor section="หน่วยงานรัฐที่เป็นผู้ว่าจ้าง" />
+        <!-- <FilterResultContractor section="หน่วยงานรัฐที่เป็นผู้ว่าจ้าง" /> -->
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
@@ -99,6 +114,15 @@ const searchResult = computed(() => {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="text-center mt-3">
+        <LoadMore
+          v-if="
+            props.data?.searchResult.length < props.data?.pagination?.totalItem
+          "
+          @click="setFilter(true)"
+        />
       </div>
     </div>
   </div>

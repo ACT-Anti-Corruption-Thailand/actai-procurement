@@ -15,6 +15,7 @@ const sectionChartSelected = ref('risk');
 let selected = ref('งบประมาณ');
 const isOpen = ref(false);
 const isOpen2 = ref(false);
+const isCorrupt = ref(false);
 const totalContractOverall = ref(0);
 const totalBudgetOverall = ref(0);
 const totalProject = ref(0);
@@ -92,7 +93,7 @@ const chartOptions = ref({
           family: 'DB_Helvethaica_X',
         },
         callback: function (value, index, ticks) {
-          return value > 1000000
+          return value > 999999
             ? (value / 1000000).toLocaleString() + 'M'
             : value;
         },
@@ -181,12 +182,13 @@ onBeforeMount(async () => {
 
 const totalProjectMap = computed(() => {
   if (mapDataList?.value != null) {
+    const a = mapDataList?.value.map((o) => o.totalProject);
     const b = mapDataList?.value.map((o) => o.totalBudgetMoney);
     const c = mapDataList?.value.map((o) => o.totalCorruptionProject);
 
     return selected.value == 'งบประมาณ'
       ? b.reduce((partialSum, a) => partialSum + a, 0)
-      : b.reduce((partialSum, a) => partialSum + a, 0);
+      : a.reduce((partialSum, a) => partialSum + a, 0);
   }
 });
 
@@ -462,7 +464,8 @@ const onSetChartData = (section: string, data) => {
       <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
         <h4 class="font-black">การกระจายตัวโครงการ</h4>
         <p class="b1 font-bold">
-          รวม {{ totalProjectMap?.toLocaleString() }} บาท ใน
+          รวม {{ totalProjectMap?.toLocaleString() }}
+          {{ selected == 'งบประมาณ' ? 'บาท' : 'โครงการ' }} ใน
           {{ mapDataList?.length }} จังหวัด
         </p>
 
@@ -491,6 +494,7 @@ const onSetChartData = (section: string, data) => {
             name=""
             id="isRisk"
             class="text-black ring-0"
+            v-model="isCorrupt"
           />
           <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
             >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต ({{
@@ -504,10 +508,11 @@ const onSetChartData = (section: string, data) => {
         class="py-7 pr-7 pl-10 bg-[#FFFFFF] chart-wrapper sm:w-2/3 text-[#8E8E8E] relative"
       >
         <Map
-          :no="selected == 'งบประมาณ' ? '1' : '2'"
+          :no="selected == 'งบประมาณ' ? '2' : '1'"
           :provinces="mapDataList"
-          :total="selected == 'งบประมาณ' ? totalBudget : totalCorruptProject"
+          :total="selected == 'งบประมาณ' ? totalBudget : totalProject"
           v-if="mapDataList != null"
+          :isCorrupt="isCorrupt"
         />
 
         <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
@@ -517,14 +522,14 @@ const onSetChartData = (section: string, data) => {
               {{
                 selected == 'งบประมาณ'
                   ? totalBudget.toLocaleString()
-                  : totalCorruptProject.toLocaleString()
+                  : totalProject.toLocaleString()
               }}
             </p>
           </div>
           <div
             class="h-[10px] w-full bg-gradient-to-r from-[#F5F5F5] to-[#484848]"
           ></div>
-          <p>หน่วย : {{ selected == 'งบประมาณ' ? 'โครงการ' : 'บาท' }}</p>
+          <p>หน่วย : {{ selected == 'งบประมาณ' ? 'บาท' : 'โครงการ' }}</p>
         </div>
       </div>
     </div>

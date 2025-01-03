@@ -4,6 +4,8 @@ import type { Contractor } from '../../public/src/data/search_result';
 const props = defineProps<{
   data: Contractor;
 }>();
+const emit = defineEmits(['change']);
+const pageNum = ref(1);
 
 const setDate = (date) => {
   const options = {
@@ -24,6 +26,18 @@ const searchResult = computed(() => {
       )
     : props.data.searchResult;
 });
+
+const setFilter = (isChangePage) => {
+  if (isChangePage) pageNum.value++;
+
+  // let filter = {
+  //   hasCorruptionRisk: isRisk.value,
+  // };
+
+  // var str = qs.stringify({ filter });
+
+  emit('change', '&' + '', pageNum.value);
+};
 </script>
 
 <template>
@@ -47,7 +61,7 @@ const searchResult = computed(() => {
             />
           </div>
         </div>
-        <FilterPopupGovernment section="ผู้รับจ้างที่ได้งาน" />
+        <!-- <FilterPopupGovernment section="ผู้รับจ้างที่ได้งาน" /> -->
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
@@ -98,6 +112,15 @@ const searchResult = computed(() => {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="text-center mt-3">
+        <LoadMore
+          v-if="
+            props.data?.searchResult.length < props.data?.pagination?.totalItem
+          "
+          @click="setFilter(true)"
+        />
       </div>
     </div>
   </div>

@@ -6,11 +6,31 @@ const props = defineProps<{
   no: string;
   provinces: array;
   total: number;
+  isCorrupt: boolean;
 }>();
+
+const isShowPopup = ref(false);
+const province_th = ref('');
+const totalPopup = ref(0);
 
 import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
 
 const color = d3.scaleLinear([0, props.total], ['#F5F5F5', '#484848']);
+
+function func(n) {
+  isShowPopup.value = true;
+  province_th.value = n.target.name_th;
+  totalPopup.value = n.target.total;
+
+  nextTick(() => {
+    document.getElementById('popup').style.top = n.offsetX + 'px';
+    document.getElementById('popup').style.left = n.offsetY + 'px';
+  });
+}
+
+function func1(n) {
+  //isShowPopup.value = false;
+}
 
 onMounted(() => {
   const list = document.getElementsByClassName('provinces-1');
@@ -29,8 +49,6 @@ onMounted(() => {
 
       if (props.no == '1') {
         if (element.totalProject != 0) {
-          //console.log(p[0].name_en);
-
           document.querySelector(
             '.provinces-' + props.no + '#' + p[0].name_en
           ).style.fill = color(element.totalProject);
@@ -38,7 +56,18 @@ onMounted(() => {
             '.provinces-' + props.no + '#' + p[0].name_en
           ).style.stroke = '#000000';
 
-          // console.log(1, color(element.totalProject));
+          document
+            .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+            .addEventListener('mouseover', func, false);
+          document
+            .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+            .addEventListener('mouseout', func1, false);
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).name_th = element.name;
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).total = element.totalProject;
         }
       } else {
         if (element.totalBudgetMoney != 0) {
@@ -49,7 +78,18 @@ onMounted(() => {
             '.provinces-' + props.no + '#' + p[0].name_en
           ).style.stroke = '#000000';
 
-          // console.log(1, color(element.totalBudgetMoney));
+          document
+            .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+            .addEventListener('mouseover', func, false);
+          document
+            .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+            .addEventListener('mouseout', func1, false);
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).name_th = element.name;
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).total = element.totalBudgetMoney;
         }
       }
     }
@@ -77,10 +117,39 @@ onMounted(() => {
     g.attr('transform', event.transform);
   }
 });
+
+onBeforeUnmount(() => {
+  props.provinces.forEach((element) => {
+    let p = Province_data.filter(
+      (x) => x.name_th == element.name && x.name_th != 'ไม่ระบุ'
+    );
+
+    document
+      .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+      ?.removeEventListener('mouseover', func, false);
+    document
+      .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+      .removeEventListener('mouseout', func1, false);
+  });
+});
 </script>
 
 <template>
-  <div class="mx-auto max-w-xs h-fit w-fit">
+  <div class="mx-auto max-w-xs h-fit w-fit relative">
+    <div
+      v-if="isShowPopup"
+      id="popup"
+      class="absolute bg-white rounded-md p-3 text-black"
+    >
+      <p class="b2 font-bold">
+        {{ province_th }}<br />{{ totalPopup.toLocaleString() }}
+        {{ props.no == 1 ? 'โครงการ' : 'บาท' }}
+      </p>
+      <p class="b2">
+        {{ ((totalPopup / parseInt(props.total)) * 100).toFixed(2) }}%
+        ของทั้งหมด
+      </p>
+    </div>
     <svg
       width="362"
       height="681"

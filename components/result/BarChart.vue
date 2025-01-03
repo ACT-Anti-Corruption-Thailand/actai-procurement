@@ -1,9 +1,7 @@
 <template>
   <div class="rounded-10 flex flex-col-mb mb-3">
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
-      <h4 class="font-black">
-        {{ props.title }}
-      </h4>
+      <h4 class="font-black">{{ props.title }}</h4>
       <p class="text-[#5E5E5E] b4" v-if="props.title == 'สถานะสัญญา'">
         หมายเหตุ:
         เฉพาะโครงการที่ทำการจัดซื้อจัดจ้างแล้วเท่านั้นจึงจะมีสถานะสัญญา
@@ -123,6 +121,7 @@
 
       <div>
         <Bar
+          :key="chartData.datasets.length"
           :data="chartData"
           :options="chartOptions"
           height="300"
@@ -273,10 +272,16 @@ const chartOptions = ref({
 
 const chart = ref<ChartComponentRef | null>(null);
 
+const chartDataFromAPI = toRef(props, 'title');
+
 onBeforeMount(() => {
   chartData.value.labels = props.yearList;
   chartData.value.datasets = props.data;
   setSum();
+});
+
+watch(chartDataFromAPI, (newX) => {
+  chartData.value.datasets = props.data;
 });
 
 const onChangeHideShowData = (a) => {

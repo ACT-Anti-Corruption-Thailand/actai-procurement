@@ -5,6 +5,27 @@ const config = useRuntimeConfig();
 const summary = ref({});
 const d = new Date();
 
+const act_project = [
+  {
+    name: 'ACT Ai Politics Data — ACT Ai',
+    desc: 'ร่วมเป็นส่วนหนึ่งในการค้นหาและตรวจสอบเพื่อสร้างความโปร่งใสทางการเมือง (Political Transparency) ไปกับ ACT Ai',
+    img: 'og_actai',
+    link: 'https://poldata.actai.co/',
+  },
+  {
+    name: 'โรงเรียนโปร่งใส',
+    desc: 'ขอชวนทุกคนมาแลกเปลี่ยน เพื่อพัฒนาโรงเรียนไปด้วยกัน',
+    img: 'og_school_gov',
+    link: 'https://schoolgov.actai.co/',
+  },
+  {
+    name: 'ผ่างบเมือง ให้งบประมาณเมือง…เป็นเรื่องตรวจสอบได้ ',
+    desc: 'ร่วมกันตรวจสอบงบประมาณรายจ่ายของ อบจ. บ้านเรา และทำให้งบประมาณเมืองเป็นเรื่องที่ทุกคนตรวจสอบได้',
+    img: 'og_local_budgeting',
+    link: 'https://localbudgeting.actai.co/',
+  },
+];
+
 const getOverallSummary = async () => {
   const urlParams = new URLSearchParams();
   urlParams.set('budgetYearStart', 2562);
@@ -221,29 +242,44 @@ onMounted(async () => {
 
       <div class="overflow-auto">
         <div class="flex gap-3 lg:justify-between flex-col-mb">
-          <div
-            v-for="(item, i) in 3"
-            :key="i"
-            class="border border-white rounded-10 w-full sm:w-[370px]"
+          <a
+            v-for="(item, i) in act_project"
+            :href="item.link"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <div class="mock-og rounded-t-md"></div>
+            <div
+              :key="i"
+              class="border border-white rounded-10 w-full sm:w-[370px] flex flex-col h-full"
+            >
+              <img
+                :src="`../src/images/${item.img}.png`"
+                :alt="item.name"
+                class="rounded-t-lg"
+              />
 
-            <div class="bg-white rounded-b-md p-3">
-              <p class="b1 font-bold">Build Better Lives by CoST</p>
-              <p class="b2">
-                ค้นหาโครงการหน้าบ้าน
-                และร่วมสร้างความโปร่งใสในโครงการก่อสร้างภาครัฐ
-              </p>
-            </div>
-          </div>
+              <div class="bg-white p-3 rounded-b-lg h-full">
+                <p class="b1 font-bold">{{ item.name }}</p>
+                <p class="b2">
+                  {{ item.desc }}
+                </p>
+              </div>
+            </div></a
+          >
         </div>
       </div>
 
-      <div
-        class="p-3 border border-white gap-2 justify-center b2 flex rounded-lg mt-5 text-white items-center"
+      <a
+        href="http://www.anticorruption.in.th/2016/th/"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        ดูทั้งหมด<arrow color="#FFFFFF" class="-rotate-45" />
-      </div>
+        <div
+          class="p-3 border border-white gap-2 justify-center b2 flex rounded-lg mt-5 text-white items-center"
+        >
+          ดูทั้งหมด<arrow color="#FFFFFF" class="-rotate-45" />
+        </div>
+      </a>
     </div>
   </div>
 

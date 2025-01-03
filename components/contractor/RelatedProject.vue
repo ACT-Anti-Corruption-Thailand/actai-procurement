@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import type { Project } from '../../public/src/data/search_result';
+import qs from 'qs';
 
 const props = defineProps<{
   data: Project;
 }>();
+const emit = defineEmits(['change']);
+
+const isRisk = ref(false);
+const pageNum = ref(1);
 
 const setDate = (date) => {
   const options = {
@@ -23,6 +28,25 @@ const searchResult = computed(() => {
         x.projectName.includes(searchText.value)
       )
     : props.data.searchResult;
+});
+
+const setFilter = (isChangePage) => {
+  if (isChangePage) pageNum.value++;
+
+  let filter = {
+    hasCorruptionRisk: isRisk.value,
+  };
+
+  var str = qs.stringify({ filter });
+  emit('change', '&' + str, pageNum.value);
+};
+
+watch(isRisk, (val) => {
+  pageNum.value = 1;
+
+  nextTick(() => {
+    setFilter(false);
+  });
 });
 </script>
 
@@ -47,11 +71,17 @@ const searchResult = computed(() => {
             />
           </div>
         </div>
-        <FilterResultContractor section="รายชื่อโครงการที่เกี่ยวข้อง" />
+        <!-- <FilterResultContractor section="รายชื่อโครงการที่เกี่ยวข้อง" /> -->
       </div>
 
       <div class="mt-3">
-        <input type="checkbox" name="" id="isRisk" class="text-black ring-0" />
+        <input
+          type="checkbox"
+          name=""
+          id="isRisk"
+          v-model="isRisk"
+          class="text-black ring-0"
+        />
         <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
           >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
         >
@@ -187,6 +217,16 @@ const searchResult = computed(() => {
             </tr>
           </tbody>
         </table>
+
+        <div class="text-center mt-3">
+          <LoadMore
+            v-if="
+              props.data?.searchResult.length <
+              props.data?.pagination?.totalItem
+            "
+            @click="setFilter(true)"
+          />
+        </div>
       </div>
     </div>
   </div>

@@ -8,8 +8,8 @@ import type { Project, Contractor } from '../../public/src/data/search_result';
 
 onBeforeMount(async () => {
   await getGovData();
-  await getGovProject();
-  await getGovContracter();
+  await getGovProject('', 1);
+  await getGovContracter('', 1);
 });
 
 const govData = ref<GovernmentDetails>([]);
@@ -32,20 +32,23 @@ const getGovData = async () => {
   }
 };
 
-const getGovProject = async () => {
+const getGovProject = async (q, n) => {
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
   params.set('keyword', govData.value.agencyName);
-  params.set('page', 1);
+  params.set('page', n);
   params.set('pageSize', 10);
 
-  const res = await fetch(`${config.public.apiUrl}/project/search?${params}`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res = await fetch(
+    `${config.public.apiUrl}/project/search?${params}${q}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 
   if (res.ok) {
     const data = await res.json();
@@ -53,20 +56,23 @@ const getGovProject = async () => {
   }
 };
 
-const getGovContracter = async () => {
+const getGovContracter = async (q, n) => {
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
   params.set('keyword', govData.value.agencyName);
-  params.set('page', 1);
+  params.set('page', n);
   params.set('pageSize', 10);
 
-  const res = await fetch(`${config.public.apiUrl}/company/search?${params}`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res = await fetch(
+    `${config.public.apiUrl}/company/search?${params}${q}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 
   if (res.ok) {
     const data = await res.json();
@@ -178,8 +184,13 @@ const setDate = (date) => {
         <ProjectList
           v-else-if="menu == 'รายชื่อโครงการที่จัดทำ'"
           :data="govProjectList"
+          @change="getGovProject"
         />
-        <ContractorList v-else :data="govContracterList" />
+        <ContractorList
+          v-else
+          :data="govContracterList"
+          @change="getGovContracter"
+        />
 
         <img
           src="../public/src/images/showtab-btn.svg"

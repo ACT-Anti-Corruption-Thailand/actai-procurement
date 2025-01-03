@@ -192,7 +192,7 @@ const searchResult = computed(() => {
                     class="text-[#5E5E5E] flex gap-1 items-center"
                     v-if="item.title == 'ซื้อซอง' || item.title == 'ยื่นซอง'"
                   >
-                    <year color="#5E5E5E" /> 12/08/2567
+                    <!-- <year color="#5E5E5E" /> 12/08/2567 -->
                   </p>
                 </div>
               </div>
@@ -213,7 +213,7 @@ const searchResult = computed(() => {
           ทั้งหมด {{ props.contracts.length }} ราย ทำสัญญาจ้าง
           {{ props.contracts.length }} ฉบับ
         </h5>
-        <DownloadAndCopy section="project" filterList="" />
+        <DownloadAndCopy section="bidder" filterList="" part="contract" />
       </div>
 
       <!-- <SortBy
@@ -337,7 +337,11 @@ const searchResult = computed(() => {
         <h5 class="font-bold w-3/5">
           แยกตามรายการพิจารณา {{ searchResult.length }} รายการ
         </h5>
-        <DownloadAndCopy section="project" filterList="" />
+        <DownloadAndCopy
+          section="bidder"
+          filterList=""
+          part="item-estimate-price"
+        />
       </div>
 
       <!-- <p class="text-right" v-if="props.estimatePrice.length > 0">

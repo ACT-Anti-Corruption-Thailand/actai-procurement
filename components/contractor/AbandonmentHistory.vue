@@ -40,7 +40,11 @@ const setDate = (date) => {
             >
           </p>
         </div>
-        <DownloadAndCopy section="contractor" filterList="" />
+        <DownloadAndCopy
+          section="contractor"
+          filterList=""
+          v-if="props.data?.searchResult.length != 0"
+        />
       </div>
 
       <div class="overflow-auto">
@@ -101,6 +105,10 @@ const setDate = (date) => {
               <td>
                 <b> {{ item.totalContractMoney.toLocaleString() }}</b>
               </td>
+            </tr>
+
+            <tr class="text-center" v-if="props.data?.searchResult.length == 0">
+              <td colspan="4">ไม่พบข้อมูล</td>
             </tr>
           </tbody>
         </table>

@@ -54,19 +54,48 @@
 const props = defineProps<{
   filterList: string;
   section: string;
+  part: string;
 }>();
 const config = useRuntimeConfig();
 const urlLink = ref('');
 
-const downloadCSV = () => {
-  var link = document.createElement('a');
-  const urlParams = decodeURI(window.location.href).split('=')[1];
-  link.href = `${config.public.apiUrl}/${props.section}/search/download-csv?keyword=${urlParams}${props.filterList}`;
-  console.log(
-    `/${props.section}/search/download-csv?keyword=${urlParams}${props.filterList}`
-  );
+const downloadCSV = async () => {
+  if (props.section == 'bidder') {
+    const urlParams = window.location.pathname.split('/')[2];
+    const res = await fetch(
+      `${config.public.apiUrl}/project/${urlParams}/${props.part}`,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-  link.click();
+    if (res.ok) {
+      const data = await res.json();
+
+      let csvData =
+        props.part == 'contract'
+          ? jsonToCsv(data.contractors)
+          : jsonToCsv(data.items);
+      // Create a CSV file and allow the user to download it
+      let blob = new Blob([csvData], { type: 'text/csv' });
+      let url = window.URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = `${
+        props.part == 'contract' ? 'ผู้ชนะการประมูล' : 'การเสนอราคา'
+      }-${urlParams}.csv`;
+      document.body.appendChild(a);
+      a.click();
+    }
+  } else {
+    var link = document.createElement('a');
+    const urlParams = decodeURI(window.location.href).split('=')[1];
+    link.href = `${config.public.apiUrl}/${props.section}/search/download-csv?keyword=${urlParams}${props.filterList}`;
+    link.click();
+  }
 };
 
 const copyLink = () => {
@@ -84,6 +113,19 @@ const copyLink = () => {
     tooltip.innerHTML = 'คัดลอกแล้ว';
   });
 };
+
+function jsonToCsv(jsonData) {
+  let csv = '';
+  // Get the headers
+  let headers = Object.keys(jsonData[0]);
+  csv += headers.join(',') + '\n';
+  // Add the data
+  jsonData.forEach(function (row) {
+    let data = headers.map((header) => JSON.stringify(row[header])).join(','); // Add JSON.stringify statement
+    csv += data + '\n';
+  });
+  return csv;
+}
 </script>
 
 <style scoped></style>

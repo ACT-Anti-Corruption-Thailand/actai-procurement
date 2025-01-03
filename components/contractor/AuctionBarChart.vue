@@ -57,78 +57,24 @@
 
 <script setup lang="ts">
 import { Bar } from 'vue-chartjs';
-const config = useRuntimeConfig();
 
 const isOpen = ref(false);
-const totalAuction = ref(0);
-const totalBidding = ref(0);
-const totalWinner = ref(0);
 
-const getChartData = async () => {
-  const segments = window.location.href.split('/')[4];
-
-  const res = await fetch(
-    `${config.public.apiUrl}/company/${segments}/aggregate/by-budget-year`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-
-  if (res.ok) {
-    const data = await res.json();
-    chartData.value = {
-      labels: data.yearlyAggregate.map((x) => x.budgetYear.toString()),
-      datasets: [
-        {
-          label: 'ซื้อซอง',
-          backgroundColor: '#DADADA',
-          data: data.yearlyAggregate.map(
-            (x) => x.aggregateBy.biddingProcess.auction
-          ),
-        },
-        {
-          label: 'เสนอราคา',
-          backgroundColor: '#C0C0C0',
-          data: data.yearlyAggregate.map(
-            (x) => x.aggregateBy.biddingProcess.bidding
-          ),
-        },
-        {
-          label: 'ได้งาน',
-          backgroundColor: '#2EA0DF',
-          data: data.yearlyAggregate.map(
-            (x) => x.aggregateBy.biddingProcess.winner
-          ),
-        },
-      ],
-    };
-
-    let a = data.yearlyAggregate.map(
-      (x) => x.aggregateBy.biddingProcess.auction
-    );
-    let b = data.yearlyAggregate.map(
-      (x) => x.aggregateBy.biddingProcess.bidding
-    );
-    let w = data.yearlyAggregate.map(
-      (x) => x.aggregateBy.biddingProcess.winner
-    );
-
-    totalAuction.value = a.reduce((a, b) => a + b, 0);
-    totalBidding.value = b.reduce((a, b) => a + b, 0);
-    totalWinner.value = w.reduce((a, b) => a + b, 0);
-  }
-};
-
-onBeforeMount(async () => {
-  await getChartData();
-});
+const props = defineProps<{
+  data: array;
+  totalAuction: number;
+  totalBidding: number;
+  totalWinner: number;
+}>();
 
 const chartData = ref({
   labels: [],
   datasets: [],
+});
+
+onMounted(() => {
+  chartData.value.labels = props.data.labels;
+  chartData.value.datasets = props.data.datasets;
 });
 
 const chartOptions = ref({

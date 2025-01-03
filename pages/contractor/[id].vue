@@ -12,11 +12,13 @@ import type {
   ContracterRelatedCompanies,
 } from '../../public/src/data/data_details';
 import type { Project, Government } from '../../public/src/data/search_result';
+import qs from 'qs';
 
 onBeforeMount(async () => {
   await getContracterData();
-  await getContracterProject();
-  await getContracterGov();
+  //await getContracterAuctionData();
+  await getContracterProject('', 1);
+  await getContracterGov('', 1);
   await getContracterRelationship();
   await getContracterRelatedCompany();
 });
@@ -27,6 +29,10 @@ const contractorProjectList = ref<Project>([]);
 const contractorGovList = ref<Government>([]);
 const contractorRelationship = ref<ContracterRelationship>([]);
 const contractorRelatedCompanies = ref<ContracterRelatedCompanies>([]);
+const contractorAuctionChartData = ref({});
+const totalAuction = ref(0);
+const totalBidding = ref(0);
+const totalWinner = ref(0);
 
 const getContracterData = async () => {
   const segments = window.location.href.split('/')[4];
@@ -44,23 +50,90 @@ const getContracterData = async () => {
   }
 };
 
-const getContracterProject = async () => {
+const getContracterAuctionData = async () => {
+  const segments = window.location.href.split('/')[4];
+
+  const res = await fetch(
+    `${config.public.apiUrl}/company/${segments}/aggregate/by-budget-year`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const data = await res.json();
+    contractorAuctionChartData.value = {
+      labels: data.yearlyAggregate.map((x) => x.budgetYear.toString()),
+      datasets: [
+        {
+          label: 'ซื้อซอง',
+          backgroundColor: '#DADADA',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingProcess.auction
+          ),
+        },
+        {
+          label: 'เสนอราคา',
+          backgroundColor: '#C0C0C0',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingProcess.bidding
+          ),
+        },
+        {
+          label: 'ได้งาน',
+          backgroundColor: '#2EA0DF',
+          data: data.yearlyAggregate.map(
+            (x) => x.aggregateBy.biddingProcess.winner
+          ),
+        },
+      ],
+    };
+
+    let a = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingProcess.auction
+    );
+    let b = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingProcess.bidding
+    );
+    let w = data.yearlyAggregate.map(
+      (x) => x.aggregateBy.biddingProcess.winner
+    );
+
+    totalAuction.value = a.reduce((a, b) => a + b, 0);
+    totalBidding.value = b.reduce((a, b) => a + b, 0);
+    totalWinner.value = w.reduce((a, b) => a + b, 0);
+  }
+};
+
+const getContracterProject = async (q, n) => {
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
   params.set('keyword', contractorData.value.companyName);
-  params.set('page', 1);
+  params.set('page', n);
   params.set('pageSize', 10);
 
-  const res = await fetch(`${config.public.apiUrl}/project/search?${params}`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res = await fetch(
+    `${config.public.apiUrl}/project/search?${params}${q}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  let filter = {
+    hasAbandonProject: true,
+  };
+
+  var str = qs.stringify({ filter });
 
   const res2 = await fetch(
-    `${config.public.apiUrl}/project/search?${params}&hasAbandonProject=true`,
+    `${config.public.apiUrl}/project/search?${params}&${str}`,
     {
       method: 'get',
       headers: {
@@ -80,12 +153,12 @@ const getContracterProject = async () => {
   }
 };
 
-const getContracterGov = async () => {
+const getContracterGov = async (q, n) => {
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
   params.set('keyword', contractorData.value.companyName);
-  params.set('page', 1);
+  params.set('page', n);
   params.set('pageSize', 10);
 
   const res = await fetch(`${config.public.apiUrl}/agency/search?${params}`, {
@@ -296,7 +369,13 @@ const setDate = (date) => {
       </div>
       <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
         <General v-if="menu == 'ข้อมูลทั่วไป'" :data="contractorData" />
-        <WorkWithGovernment v-else-if="menu == 'การรับงานกับหน่วยงานรัฐ'" />
+        <WorkWithGovernment
+          v-else-if="menu == 'การรับงานกับหน่วยงานรัฐ'"
+          :auctionData="contractorAuctionChartData"
+          :totalAuction="totalAuction"
+          :totalBidding="totalBidding"
+          :totalWinner="totalWinner"
+        />
         <AbandonmentHistory
           v-else-if="menu == 'ประวัติการทิ้งงาน'"
           :data="contractorAbandonProjectList"
@@ -314,10 +393,12 @@ const setDate = (date) => {
         <RelatedProject
           v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'"
           :data="contractorProjectList"
+          @change="getContracterProject"
         />
         <RelatedGovernment
           v-else-if="menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'"
           :data="contractorGovList"
+          @change="getContracterGov"
         />
 
         <img

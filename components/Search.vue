@@ -38,6 +38,8 @@ const getSearchList = async (keyword) => {
 const handleEnterOptions = () => {
   query.value = selected.value;
   setKeyword();
+  window.location.href =
+    config.public.baseUrl + 'result?search=' + selected.value;
 };
 
 const setKeyword = () => {

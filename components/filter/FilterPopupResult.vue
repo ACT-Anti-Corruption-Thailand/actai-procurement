@@ -382,21 +382,27 @@ const searchByResult = () => {
       start: selected.yearFrom,
       end: selected.yearTo,
     },
-    agencyName: selected.agencies == 'ทุกหน่วยงาน' ? '' : selected.agencies,
+    agencyName:
+      selected.agencies == 'ทุกหน่วยงาน' ? undefined : selected.agencies,
     contractorType:
-      selected.contractorType == 'ทุกประเภท' ? '' : selected.contractorType,
+      selected.contractorType == 'ทุกประเภท'
+        ? undefined
+        : selected.contractorType,
     projectStatus:
-      selected.projectStatus == 'ทุกสถานะ' ? '' : selected.projectStatus,
-    province: selected.provinces == 'ทุกจังหวัด' ? '' : selected.provinces,
+      selected.projectStatus == 'ทุกสถานะ' ? undefined : selected.projectStatus,
+    province:
+      selected.provinces == 'ทุกจังหวัด' ? undefined : selected.provinces,
     resourcingType:
-      selected.resourcingType == 'ทุกประเภท' ? '' : selected.resourcingType,
+      selected.resourcingType == 'ทุกประเภท'
+        ? undefined
+        : selected.resourcingType,
     resourcingMethod:
-      selected.resourcingMethod == 'ทุกวิธี' ? '' : selected.resourcingMethod,
+      selected.resourcingMethod == 'ทุกวิธี'
+        ? undefined
+        : selected.resourcingMethod,
   };
 
-  console.log(filter);
-  var str = qs.stringify(filter);
-  console.log(str);
+  var str = qs.stringify({ filter });
   isOpen.value = false;
   emit('change', str);
 };

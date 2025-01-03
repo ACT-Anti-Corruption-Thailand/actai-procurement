@@ -111,7 +111,7 @@ onMounted(() => {
         target="_blank"
         :href="'/government/' + item.agencyId"
       >
-        <div>
+        <div class="basis-2/5 lg:basis-3/5">
           <p
             class="b1 font-bold"
             v-html="highlight(item?.agencyName, keyword)"
@@ -123,12 +123,14 @@ onMounted(() => {
             color="#8E8E8E"
           />
         </div>
-        <div class="flex sm:gap-10 text-right flex-col-mb">
-          <div>
+        <div
+          class="flex sm:gap-10 text-right flex-col-mb basis-3/5 lg:basis-2/5"
+        >
+          <div class="basis-1/3">
             <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
             <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
           </div>
-          <div class="text-[#EC1C24]">
+          <div class="text-[#EC1C24] basis-1/3">
             <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
             <p class="b1">
               {{ item?.totalProjectHasCorruptionRisk.toLocaleString() }}
@@ -143,7 +145,7 @@ onMounted(() => {
               }}%)
             </p>
           </div>
-          <div>
+          <div class="basis-1/3">
             <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
             <p class="b1">
               {{ item?.totalBudgetMoney.toLocaleString() }}
