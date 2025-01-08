@@ -43,6 +43,7 @@
                 "
               />
               <MeaningOfChart v-else-if="title == 'กราฟนี้บ่งบอกอะไร'" />
+              <MeaningOfChart2 v-else-if="title == 'กราฟนี้บ่งบอกอะไร 2'" />
               <MeaningOfNumber v-else-if="title == 'ตัวเลขนี้บ่งบอกอะไร'" />
 
               <div v-else-if="title == 'ผู้รับจ้างที่ได้งาน'">

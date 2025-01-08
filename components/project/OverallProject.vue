@@ -47,6 +47,7 @@ const setDate = (date) => {
             </h4>
             <div class="flex gap-2">
               <div
+                v-if="props.data.totalBudgetMoney != 0"
                 class="flex-1 sm:border-r"
                 :class="[
                   {
@@ -96,6 +97,7 @@ const setDate = (date) => {
                 </p>
               </div>
               <div
+                v-if="props.data.totalEstimatePrice != 0"
                 class="flex-1"
                 :class="[
                   {
@@ -161,7 +163,7 @@ const setDate = (date) => {
             <p class="b1">
               {{
                 props.data.province == 'ไม่ระบุ'
-                  ? 'ไม่ระบุ'
+                  ? props.data?.agency?.name
                   : 'จ.' + props.data.province
               }}
             </p>

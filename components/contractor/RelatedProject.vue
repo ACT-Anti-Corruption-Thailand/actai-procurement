@@ -156,17 +156,47 @@ watch(isRisk, (val) => {
               <td>{{ setDate(item.announcementDate) }}</td>
               <td
                 :class="{
-                  'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
-                  'bg-[#6DD5D5]': item.projectStatus == 'จัดทำสัญญา/PO แล้ว',
+                  'bg-[#054775] text-white':
+                    item.projectStatus == 'ส่งงานล่าช้ากว่ากำหนด',
                   'bg-[#0F7979] text-white':
-                    item.projectStatus == 'แล้วเสร็จตามสัญญา',
-                  'bg-[#FF8888]': item.projectStatus == 'ยกเลิกสัญญา',
-                  'bg-[#FF5353]': item.projectStatus == 'ยกเลิกโครงการ',
+                    item.projectStatus == 'ส่งงานครบถ้วน',
+                  'bg-[#1AA8A8] text-white':
+                    item.projectStatus == 'ส่งงานตามกำหนด',
+                  'bg-[#6DD5D5] text-white':
+                    item.projectStatus == 'จัดทำสัญญา/POแล้ว',
+                  'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
+                  'bg-[#FF8888] text-white':
+                    item.projectStatus == 'ยกเลิกสัญญา',
+                  'bg-[#EC1C24] text-white':
+                    item.projectStatus == 'สิ้นสุดสัญญา',
                 }"
               >
                 {{ item.projectStatus }}
               </td>
-              <td>
+              <td
+                :class="{
+                  'bg-[#CE5700] text-white':
+                    item.resourcingMethod == 'ประกวดราคา',
+                  'bg-[#F08C06] text-white':
+                    item.resourcingMethod == 'ประกวดราคานานาชาติ',
+                  'bg-[#F8B60E] text-white':
+                    item.resourcingMethod ==
+                    'ประกวดราคาอิเล็กทรอนิกส์ (e-bidding)',
+                  'bg-[#FEEDAF] ':
+                    item.resourcingMethod ==
+                    'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
+                  'bg-[#6DD5D5]': item.resourcingMethod == 'ตกลงราคา',
+                  'bg-[#2EA0DF] text-white': item.resourcingMethod == 'สอบราคา',
+                  'bg-[#7051B4] text-white':
+                    item.resourcingMethod == 'ตลาดอิเล็กทรอนิกส์ (e-market)',
+                  'bg-[#EF9CC4] text-white': item.resourcingMethod == 'พิเศษ',
+                  'bg-[#D83D88] text-white':
+                    item.resourcingMethod == 'คัดเลือก',
+                  'bg-[#8A004B] text-white':
+                    item.resourcingMethod == 'เฉพาะเจาะจง',
+                  'bg-[#DADADA] ': item.resourcingMethod == 'สิ้นสุดสัญญา',
+                }"
+              >
                 {{
                   item.resourcingMethod == null ? '-' : item.resourcingMethod
                 }}

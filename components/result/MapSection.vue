@@ -130,7 +130,7 @@
         <div
           class="flex justify-between items-center py-2 cursor-pointer"
           :class="{ 'border-b': i != searchResult.length - 1 }"
-          v-for="(item, i) in searchResult"
+          v-for="(item, i) in searchResult2"
         >
           <div class="flex gap-2 items-center">
             <p class="b4">{{ i + 1 }}</p>
@@ -174,6 +174,32 @@ const searchResult = computed(() => {
       : props.data
           .filter((x) => x.totalProject != 0)
           .sort((a, b) => a.totalProject - b.totalProject);
+
+  return filteredData.filter((data) => {
+    let p = Province_data.filter((x) => x.name_th == data.name);
+    nextTick(() => {
+      setStroke(p[0].name_en, 'black');
+    });
+
+    if (data.name.includes(searchText.value)) {
+      nextTick(() => {
+        if (searchText.value != '') setStroke(p[0].name_en, 'red');
+      });
+
+      return data;
+    }
+  });
+});
+
+const searchResult2 = computed(() => {
+  let filteredData =
+    sortBy.value == 'desc'
+      ? props.data
+          .filter((x) => x.totalBudgetMoney != 0)
+          .sort((a, b) => b.totalBudgetMoney - a.totalBudgetMoney)
+      : props.data
+          .filter((x) => x.totalBudgetMoney != 0)
+          .sort((a, b) => a.totalBudgetMoney - b.totalBudgetMoney);
 
   return filteredData.filter((data) => {
     let p = Province_data.filter((x) => x.name_th == data.name);

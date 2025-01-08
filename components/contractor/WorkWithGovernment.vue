@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="font-bold text-white mb-5">ภาพรวมโครงการที่จัดทำ</h4>
+    <h4 class="font-bold text-white mb-5">การรับงานกับหน่วยงานรัฐ</h4>
 
     <BarChartSection />
 

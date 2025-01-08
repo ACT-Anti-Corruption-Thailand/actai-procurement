@@ -1,7 +1,9 @@
 <template>
   <div class="rounded-10 flex flex-col-mb mb-3">
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
-      <h4 class="font-black">{{ props.title }}</h4>
+      <h4 class="font-black">
+        {{ props.titleGov != null ? props.titleGov : props.title }}
+      </h4>
       <p class="text-[#5E5E5E] b4" v-if="props.title == 'สถานะสัญญา'">
         หมายเหตุ:
         เฉพาะโครงการที่ทำการจัดซื้อจัดจ้างแล้วเท่านั้นจึงจะมีสถานะสัญญา
@@ -140,8 +142,8 @@
 
     <Modal
       v-if="isOpen2"
-      @close="isOpen = false"
-      title="ความหมายของแต่ละวิธี"
+      @close="isOpen2 = false"
+      title="วิธีการจัดหา มีอะไรบ้าง ลักษณะเป็นอย่างไร?"
     />
   </div>
 </template>
@@ -157,6 +159,7 @@ const props = defineProps<{
   data: array;
   yearList: array;
   title: string;
+  titleGov: string;
   section: string;
   hasChooseChartData: boolean;
 }>();

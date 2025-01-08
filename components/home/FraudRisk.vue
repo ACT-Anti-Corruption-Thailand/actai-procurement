@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Project, Contractor } from '../../public/src/data/search_result';
+import qs from 'qs';
+
 const config = useRuntimeConfig();
 
 const projectList = ref<Project | null>(null);
@@ -16,8 +18,14 @@ const getProjectList = async () => {
   urlParams.set('page', 1);
   urlParams.set('pageSize', 10);
 
+  let filter = {
+    hasCorruptionRisk: true,
+  };
+
+  var str = qs.stringify({ filter });
+
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?${urlParams.toString()}`,
+    `${config.public.apiUrl}/project/search?${urlParams.toString()}&${str}`,
     {
       method: 'get',
       headers: {
@@ -128,17 +136,17 @@ onMounted(async () => {
               <p class="b2">ACT Ai ตรวจสอบอย่างไร ?</p>
               <ul class="list-disc ml-5 b2">
                 <li>
-                  <b> ตรวจสอบพฤติกรรมการเสนอราคา</b> ในตัวอย่างประเด็น เช่น
+                  <b> ตรวจสอบพฤติกรรมการเสนอราคา</b> ในประเด็นตัวอย่าง เช่น
                   เสนอราคาใกล้ราคากลาง เสนอราคาเกาะกลุ่ม มีผู้เสนอราคาน้อยกว่า 3
                   ราย เป็นต้น
                 </li>
                 <li>
                   <b>จับตาความโปร่งใสในการจัดซื้อจัดจ้างของหน่วยงานรัฐ</b>
-                  ในตัวอย่างประเด็น เช่น
+                  ในประเด็นตัวอย่าง เช่น
                   โครงการเฉพาะเจาะจงที่จัดซื้อจัดจ้างท้ายปีงบประมาณ เป็นต้น
                 </li>
                 <li>
-                  <b>เฝ้าระวังและป้องกันการทุจริต</b> ในตัวอย่างประเด็น เช่น
+                  <b>เฝ้าระวังและป้องกันการทุจริต</b> ในประเด็นตัวอย่าง เช่น
                   คู่เทียบมีกรรมการหรือที่อยู่เดียวกัน
                   ผู้เข้าเสนอราคามีประวัติทิ้งงาน เป็นต้น
                 </li>
@@ -200,7 +208,7 @@ onMounted(async () => {
                   <b
                     >ตรวจสอบความสัมพันธ์กับนักการเมืองหรือข้าราชการระดับสูงที่ยื่นบัญชีทรัพย์สิน</b
                   >
-                  ในตัวอย่างประเด็น เช่น
+                  ในประเด็นตัวอย่าง เช่น
                   ที่ตั้งนิติบุคคลตรงกับที่อยู่ของนักการเมืองหรือข้าราชการที่ยื่นบัญชีทรัพย์สิน
                   เป็นต้น
                 </li>

@@ -166,8 +166,11 @@ watch(isRisk, (val) => {
                   'bg-[#6DD5D5]': item.projectStatus == 'จัดทำสัญญา/PO แล้ว',
                   'bg-[#0F7979] text-white':
                     item.projectStatus == 'แล้วเสร็จตามสัญญา',
+                  'bg-[#EC1C24] text-white':
+                    item.projectStatus == 'สิ้นสุดสัญญา',
                   'bg-[#FF8888]': item.projectStatus == 'ยกเลิกสัญญา',
                   'bg-[#FF5353]': item.projectStatus == 'ยกเลิกโครงการ',
+                  'bg-[#FFCECE]': item.projectStatus == 'ยกเลิกประกาศเชิญชวน',
                 }"
               >
                 {{ item.projectStatus }}

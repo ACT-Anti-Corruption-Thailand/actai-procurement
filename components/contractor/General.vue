@@ -74,7 +74,8 @@ const setDate = (date) => {
           <p class="b2 text-[#5E5E5E]">ประวัติการเปลี่ยนแปลง</p>
           <ul class="b1 list-disc ml-5">
             <li v-for="item in props.data.changeHistory">
-              {{ setDate(item.date) }} {{ item.change }}
+              <span class="text-[#5E5E5E]"> {{ setDate(item.date) }}</span>
+              {{ item.change }}
               {{
                 item.change == 'เปลี่ยนแปลงทุนจดทะเบียน'
                   ? Number(item.old).toLocaleString()

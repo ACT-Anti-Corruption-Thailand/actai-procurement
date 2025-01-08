@@ -22,76 +22,6 @@ const biddingStep = [
 
 const sumBidding = ref(0);
 
-const contractorsBidding = [
-  {
-    id: '10',
-    name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
-    isWinner: true,
-    processInvolved: ['ซื้อซอง', 'ยื่นซอง', 'ผ่านคุณสมบัติ', 'เข้าเสนอราคา'],
-  },
-  {
-    id: '11',
-    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
-    isWinner: false,
-    processInvolved: ['ซื้อซอง', 'ยื่นซอง', 'ผ่านคุณสมบัติ', 'เข้าเสนอราคา'],
-  },
-  {
-    id: '12',
-    name: 'บริษัท เออาร์ดี เอ็นจิเนียริ่ง ซิสเต็มส์ จำกัด',
-    isWinner: false,
-    processInvolved: ['ซื้อซอง', 'ยื่นซอง'],
-  },
-];
-
-const contractors = [
-  {
-    id: '10',
-    name: 'บริษัท ซิโน-ไทย เอ็นจีเนียริ่ง แอนด์ คอนสตรัคชั่น จำกัด (มหาชน)',
-    contracts: [
-      {
-        id: '600906009000',
-        number: '84/2560',
-        date: '2024-08-28',
-        status: 'จัดทำสัญญา/ PO แล้ว',
-        money: 3716992.05,
-      },
-      {
-        id: '600916009002',
-        number: '85/2560',
-        date: '2024-09-28',
-        status: 'จัดทำสัญญา/ PO แล้ว',
-        money: 3716992.05,
-      },
-    ],
-  },
-  {
-    id: '11',
-    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
-    contracts: [
-      {
-        id: '60090',
-        number: '84/2560',
-        date: '2024-08-28',
-        status: 'จัดทำสัญญา/ PO แล้ว',
-        money: 3716992.05,
-      },
-    ],
-  },
-  {
-    id: '12',
-    name: 'บริษัท โกลด์ อินฟินิท จำกัด',
-    contracts: [
-      {
-        id: '60090',
-        number: '84/2560',
-        date: '2024-08-28',
-        status: 'จัดทำสัญญา/ PO แล้ว',
-        money: 3716992.05,
-      },
-    ],
-  },
-];
-
 const setDate = (date) => {
   return new Date(date).toLocaleDateString('th-TH');
 };
@@ -128,8 +58,7 @@ const searchResult = computed(() => {
       <h4 class="font-black">จำนวนนิติบุคคลที่เข้าร่วมในแต่ละขั้นตอน</h4>
     </div>
 
-    <div v-if="sum == 0" class="p-8 b1 text-center">ไม่พบข้อมูล</div>
-    <div v-else class="p-8 rounded-b-md w-full flex flex-col-mb gap-2">
+    <div class="p-8 rounded-b-md w-full flex flex-col-mb gap-2">
       <template v-for="(item, i) in biddingStep">
         <div
           class="px-3 py-5 bg-[#F5F5F5] rounded-10 w-full text-center relative"
@@ -172,10 +101,19 @@ const searchResult = computed(() => {
                 <p class="text-[#8E8E8E]">= ตกรอบ</p>
               </div>
 
-              <div class="flex gap-2" v-for="(c, i) in props.contracters">
+              <div
+                class="flex gap-2"
+                v-for="(c, i) in props.contracters.filter((x) =>
+                  x.processInvolved.includes(item.title)
+                )"
+              >
                 <p
                   :class="[
-                    c?.isWinner ? 'text-black' : 'text-[#8E8E8E]',
+                    c?.processInvolved.includes('ยื่นซอง') ||
+                    c?.processInvolved.includes('ผ่านคุณสมบัติ') ||
+                    c?.processInvolved.includes('เข้าเสนอราคา')
+                      ? 'text-black'
+                      : 'text-[#8E8E8E]',
                     'text-[#8E8E8E] mt-0.5',
                   ]"
                 >
@@ -187,7 +125,12 @@ const searchResult = computed(() => {
                     'b3 pb-3 text-left',
                   ]"
                 >
-                  <p>{{ c?.name }}</p>
+                  <a
+                    target="_blank"
+                    :href="`/contractor/${c.id}`"
+                    class="hover:text-[#0B5C90]"
+                    >{{ c?.name }}</a
+                  >
                   <p
                     class="text-[#5E5E5E] flex gap-1 items-center"
                     v-if="item.title == 'ซื้อซอง' || item.title == 'ยื่นซอง'"
@@ -278,10 +221,20 @@ const searchResult = computed(() => {
                 </td>
                 <td
                   :class="{
-                    'bg-[#6DD5D5]':
-                      item.contracts[0].status == 'จัดทำสัญญา/POแล้ว',
+                    'bg-[#054775] text-white':
+                      item.contracts[0].status == 'ส่งงานล่าช้ากว่ากำหนด',
                     'bg-[#0F7979] text-white':
+                      item.contracts[0].status == 'ส่งงานครบถ้วน',
+                    'bg-[#1AA8A8] text-white':
                       item.contracts[0].status == 'ส่งงานตามกำหนด',
+                    'bg-[#6DD5D5] text-white':
+                      item.contracts[0].status == 'จัดทำสัญญา/POแล้ว',
+                    'bg-[#DADADA]':
+                      item.contracts[0].status == 'ระหว่างดำเนินการ',
+                    'bg-[#FF8888] text-white':
+                      item.contracts[0].status == 'ยกเลิกสัญญา',
+                    'bg-[#EC1C24] text-white':
+                      item.contracts[0].status == 'สิ้นสุดสัญญา',
                   }"
                 >
                   {{ item.contracts[0].status }}
@@ -370,17 +323,28 @@ const searchResult = computed(() => {
             </tr>
           </thead>
           <tbody class="b1" v-if="props.estimatePrice.length > 0">
-            <template v-for="data in searchResult">
-              <tr>
+            <template v-for="(data, i) in searchResult">
+              <tr :class="{ 'border-b-black': data.contractors.length == 1 }">
                 <td :rowspan="data.contractors.length" class="w-20">
                   {{ data.name }}
                 </td>
 
                 <td class="w-40">
+                  <div
+                    class="bg-black b5 rounded-10 text-white py-0.5 px-2.5 w-fit font-bold"
+                    v-if="data.contractors[0].isWinner"
+                  >
+                    <img
+                      src="../../public/src/images/winner.svg"
+                      alt="winner"
+                      class="mr-1 inline-block"
+                    />ผู้ชนะ
+                  </div>
                   <a
                     target="_blank"
                     :href="`/contractor/${data.contractors[0].id}`"
                     class="hover:text-[#0B5C90]"
+                    :class="{ 'font-bold': data.contractors[0].isWinner }"
                   >
                     {{ data.contractors[0].name }}
                   </a>
@@ -393,7 +357,7 @@ const searchResult = computed(() => {
                   </div>
                 </td>
 
-                <td>
+                <td :class="{ 'font-bold': data.contractors[0].isWinner }">
                   {{ data.contractors[0].biddingPrice.toLocaleString() }}
                 </td>
                 <td class="text-right">
@@ -411,16 +375,33 @@ const searchResult = computed(() => {
               </tr>
 
               <tr
-                v-for="item in data.contractors.slice(
+                :class="{
+                  'border-b-black':
+                    j + 1 ==
+                    data.contractors.slice(1, data.contractors.length).length,
+                }"
+                v-for="(item, j) in data.contractors.slice(
                   1,
                   data.contractors.length
                 )"
               >
                 <td class="w-40">
+                  <div
+                    class="bg-black b5 rounded-10 text-white py-0.5 px-2.5 w-fit font-bold"
+                    v-if="item.isWinner"
+                  >
+                    <img
+                      src="../../public/src/images/winner.svg"
+                      alt="winner"
+                      class="mr-1 inline-block"
+                    />
+                    ผู้ชนะ
+                  </div>
                   <a
                     target="_blank"
                     :href="`/contractor/${item.id}`"
                     class="hover:text-[#0B5C90]"
+                    :class="{ 'font-bold': item.isWinner }"
                   >
                     {{ item.name }}
                   </a>
@@ -429,7 +410,9 @@ const searchResult = computed(() => {
                     <p class="b4 text-[#8E8E8E]">{{ item.id }}</p>
                   </div>
                 </td>
-                <td>{{ item.biddingPrice.toLocaleString() }}</td>
+                <td :class="{ 'font-bold': item.isWinner }">
+                  {{ item.biddingPrice.toLocaleString() }}
+                </td>
 
                 <td class="text-right">
                   <template v-if="data.estimatePrice != null">

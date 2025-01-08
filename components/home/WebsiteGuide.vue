@@ -97,7 +97,7 @@ onMounted(async () => {
 
           <div class="flex gap-2 items-center">
             <div class="overflow-auto hide-scroll mt-3">
-              <div class="flex cursor-grab">
+              <div class="flex cursor-grab pb-5">
                 <Splide
                   :options="{
                     drag: 'free',
@@ -117,22 +117,26 @@ onMounted(async () => {
                     <!-- <div> -->
                     <NuxtLink :to="`/result?search=${item.searchKeyword}`">
                       <div
-                        class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left"
+                        class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left h-full flex flex-col justify-between"
                       >
-                        <p class="b1 font-bold mb-3 text-black">
-                          โครงการฯ ที่มีคำว่า
-                          <span class="text-[#74060A]"
-                            >“{{ item.searchKeyword }}”</span
-                          >
-                        </p>
-                        <p class="b4 text-[#5E5E5E]">
-                          รวม {{ item.totalProject.toLocaleString() }} โครงการ
-                        </p>
-                        <p class="b4 text-[#5E5E5E]">
-                          ใช้งบประมาณรวม
-                          {{ parseInt(item.totalBudgetMoney).toLocaleString() }}
-                          บาท
-                        </p>
+                        <div>
+                          <p class="b1 font-bold mb-3 text-black">
+                            โครงการฯ ที่มีคำว่า
+                            <span class="text-[#74060A]"
+                              >“{{ item.searchKeyword }}”</span
+                            >
+                          </p>
+                          <p class="b4 text-[#5E5E5E]">
+                            รวม {{ item.totalProject.toLocaleString() }} โครงการ
+                          </p>
+                          <p class="b4 text-[#5E5E5E]">
+                            ใช้งบประมาณรวม
+                            {{
+                              parseInt(item.totalBudgetMoney).toLocaleString()
+                            }}
+                            บาท
+                          </p>
+                        </div>
 
                         <GoToText
                           color="#0B5C90"

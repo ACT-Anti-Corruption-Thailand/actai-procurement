@@ -396,6 +396,7 @@ const onSetChartData = (section: string, data) => {
       :data="barChartData"
       titleType="1"
       :title="titleChart"
+      titleGov="จำนวนโครงการ"
       @isOpen="isOpen = true"
       @changeChartData="(n) => (titleChartSelected = n)"
       :section="sectionChart"

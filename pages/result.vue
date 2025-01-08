@@ -227,21 +227,54 @@ const onSetChartData = (section: string, data) => {
     ]; // be ส่งมาเท่าข้อมูลที่มี ถ้าส่งมาหมดก็ไม่ต้อง new set
 
     const colorProjectStatus = [
-      '#0F7979',
-      '#6DD5D5',
-      '#DADADA',
-      '#FF8888',
-      '#FF5353',
+      {
+        name: 'แล้วเสร็จตามสัญญา',
+        color: '#0F7979',
+      },
+      {
+        name: 'จัดทำสัญญา/PO แล้ว',
+        color: '#6DD5D5',
+      },
+      {
+        name: 'ระหว่างดำเนินการ',
+        color: '#DADADA',
+      },
+      {
+        name: 'ยกเลิกประกาศเชิญชวน',
+        color: '#FFCECE',
+      },
+      {
+        name: 'ยกเลิกสัญญา',
+        color: '#FF8888',
+      },
+      {
+        name: 'ยกเลิกโครงการ',
+        color: '#FF5353',
+      },
+      {
+        name: 'สิ้นสุดสัญญา',
+        color: '#EC1C24',
+      },
     ];
 
-    chartDataSet3.value = projectStatuses.map((name, i) => {
+    const grouped = colorProjectStatus.map((c) => {
+      return c.name;
+    });
+
+    const res = projectStatuses.sort(
+      (a, b) => grouped.indexOf(a) - grouped.indexOf(b)
+    );
+
+    chartDataSet3.value = res.map((name, i) => {
       const chartdata = data.map(
         (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
       );
 
+      let c = colorProjectStatus.filter((x) => x.name == name);
+
       return {
         label: name,
-        backgroundColor: colorProjectStatus[i],
+        backgroundColor: c[0].color,
         data: data.map(
           (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
         ),
@@ -256,23 +289,55 @@ const onSetChartData = (section: string, data) => {
       ),
     ];
 
-    const colorContracttStatus = [
-      '#054775',
-      '#0F7979',
-      '#1AA8A8',
-      '#6DD5D5',
-      '#DADADA',
-      '#FF8888',
+    const colorContractStatus = [
+      {
+        name: 'ส่งงานล่าช้ากว่ากำหนด',
+        color: '#0F7979',
+      },
+      {
+        name: 'ส่งงานครบถ้วน',
+        color: '#0F7979',
+      },
+      {
+        name: 'ส่งงานตามกำหนด',
+        color: '#1AA8A8',
+      },
+      {
+        name: 'จัดทำสัญญา/POแล้ว',
+        color: '#6DD5D5',
+      },
+      {
+        name: 'ระหว่างดำเนินการ',
+        color: '#DADADA',
+      },
+      {
+        name: 'ยกเลิกสัญญา',
+        color: '#FF8888',
+      },
+      {
+        name: 'สิ้นสุดสัญญา',
+        color: '#EC1C24',
+      },
     ];
 
-    chartDataSet4.value = projectContractStatuses.map((name, i) => {
+    const grouped = colorContractStatus.map((c) => {
+      return c.name;
+    });
+
+    const res = projectContractStatuses.sort(
+      (a, b) => grouped.indexOf(a) - grouped.indexOf(b)
+    );
+
+    chartDataSet4.value = res.map((name, i) => {
       const chartdata = data.map(
         (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
       );
 
+      let c = colorContractStatus.filter((x) => x.name == name);
+
       return {
         label: name,
-        backgroundColor: colorContracttStatus[i],
+        backgroundColor: c[0].color,
         data: data.map(
           (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
         ),
@@ -288,17 +353,55 @@ const onSetChartData = (section: string, data) => {
     ];
 
     const colorResourceMethod = [
-      '#CE5700',
-      '#F08C06',
-      '#F8B60E',
-      '#FEEDAF',
-      '#6DD5D5',
-      '#2EA0DF',
-      '#7051B4',
-      '#EF9CC4',
-      '#D83D88',
-      '#8A004B',
+      {
+        name: 'ประกวดราคา',
+        color: '#CE5700',
+      },
+      {
+        name: 'ประกวดราคานานาชาติ',
+        color: '#F08C06',
+      },
+      {
+        name: 'ประกวดราคาอิเล็กทรอนิกส์ (e-bidding)',
+        color: '#F8B60E',
+      },
+      {
+        name: 'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
+        color: '#FEEDAF',
+      },
+      {
+        name: 'ตกลงราคา',
+        color: '#6DD5D5',
+      },
+      {
+        name: 'ตกลงราคา',
+        color: '#2EA0DF',
+      },
+      {
+        name: 'ตลาดอิเล็กทรอนิกส์ (e-market)',
+        color: '#7051B4',
+      },
+      {
+        name: 'พิเศษ',
+        color: '#EF9CC4',
+      },
+      {
+        name: 'คัดเลือก',
+        color: '#D83D88',
+      },
+      {
+        name: 'เฉพาะเจาะจง',
+        color: '#8A004B',
+      },
     ];
+
+    // const grouped = colorResourceMethod.map((c) => {
+    //   return c.name;
+    // });
+
+    // const res = projectResourceMethod.sort(
+    //   (a, b) => grouped.indexOf(a) - grouped.indexOf(b)
+    // );
 
     const chartData1 = projectResourceMethod
       .map((name, i) => {
@@ -319,13 +422,14 @@ const onSetChartData = (section: string, data) => {
 
     const a = chartData1.slice(0, 9);
     a.forEach((element, i) => {
-      element.backgroundColor = colorResourceMethod[i];
+      element.backgroundColor = colorResourceMethod[i].color;
     });
+
     const b = chartData1.slice(9);
 
     const c = {
       label: 'อื่นๆ',
-      backgroundColor: '#5E5E5E',
+      backgroundColor: '#DADADA',
       data: b.reduce((sum, years) => {
         years.data.forEach((num, i) => {
           sum[i] += num;

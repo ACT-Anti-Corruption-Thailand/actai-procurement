@@ -91,7 +91,7 @@ const setParams = (type: string, val: string) => {
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
 
-  searchParams.set('sortBy', type == 'sortBy' ? val : 'relevanceScore');
+  searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
   searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 

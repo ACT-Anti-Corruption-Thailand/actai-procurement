@@ -51,7 +51,7 @@
       <p class="text-center b4 font-bold yaxis-text">จำนวนโครงการ</p>
     </div>
 
-    <Modal v-if="isOpen" @close="isOpen = false" title="กราฟนี้บ่งบอกอะไร" />
+    <Modal v-if="isOpen" @close="isOpen = false" title="กราฟนี้บ่งบอกอะไร 2" />
   </div>
 </template>
 

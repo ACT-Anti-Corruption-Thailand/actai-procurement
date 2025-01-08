@@ -69,7 +69,7 @@
       <Disclosure :defaultOpen="isOpen3">
         <DisclosureButton class="disclosure-btn" id="processes">
           <ChevronDownIcon class="size-6" />
-          <h5 class="font-bold">มีกระบวนการอะไรบ้าง</h5>
+          <h5 class="font-bold">มีกระบวนการอะไรบ้าง ?</h5>
         </DisclosureButton>
         <DisclosurePanel class="disclosure-panel">
           <ul class="list-decimal ml-5">
@@ -106,7 +106,7 @@
       <Disclosure :defaultOpen="isOpen4">
         <DisclosureButton class="disclosure-btn" id="how-to-procure">
           <ChevronDownIcon class="size-6" />
-          <h5 class="font-bold">วิธีการจัดหา มีอะไรบ้าง ลักษณะเป็นอย่างไร?</h5>
+          <h5 class="font-bold">วิธีการจัดหา มีอะไรบ้าง ลักษณะเป็นอย่างไร ?</h5>
         </DisclosureButton>
         <DisclosurePanel class="disclosure-panel">
           <p class="mb-3">การจัดซื้อจ้ดจ้าง มีรูปแบบวิธีการ 3 ประเภท ดังนี้</p>
@@ -344,7 +344,7 @@
       <Disclosure :defaultOpen="isOpen5">
         <DisclosureButton class="disclosure-btn" id="how-to-report">
           <ChevronDownIcon class="size-6" />
-          <h5 class="font-bold">อยากร่วมจับโกง ต้องสังเกตจากอะไร?</h5>
+          <h5 class="font-bold">อยากร่วมจับโกง ต้องสังเกตจากอะไร ?</h5>
         </DisclosureButton>
         <DisclosurePanel class="disclosure-panel">
           <p class="mb-3">
