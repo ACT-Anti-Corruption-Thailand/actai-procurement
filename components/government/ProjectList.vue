@@ -175,7 +175,30 @@ watch(isRisk, (val) => {
               >
                 {{ item.projectStatus }}
               </td>
-              <td>
+              <td
+                :class="{
+                  'bg-[#CE5700] text-white':
+                    item.resourcingMethod == 'ประกวดราคา',
+                  'bg-[#F08C06] text-white':
+                    item.resourcingMethod == 'ประกวดราคานานาชาติ',
+                  'bg-[#F8B60E] ':
+                    item.resourcingMethod ==
+                    'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์',
+                  'bg-[#FEEDAF] ':
+                    item.resourcingMethod ==
+                    'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
+                  'bg-[#6DD5D5]': item.resourcingMethod == 'ตกลงราคา',
+                  'bg-[#2EA0DF] text-white': item.resourcingMethod == 'สอบราคา',
+                  'bg-[#7051B4] text-white':
+                    item.resourcingMethod == 'ตลาดอิเล็กทรอนิกส์ (e-market)',
+                  'bg-[#EF9CC4] text-white': item.resourcingMethod == 'พิเศษ',
+                  'bg-[#D83D88] text-white':
+                    item.resourcingMethod == 'คัดเลือก',
+                  'bg-[#8A004B] text-white':
+                    item.resourcingMethod == 'เฉพาะเจาะจง',
+                  'bg-[#DADADA] ': item.resourcingMethod == 'สิ้นสุดสัญญา',
+                }"
+              >
                 {{
                   item.resourcingMethod == null ? '-' : item.resourcingMethod
                 }}

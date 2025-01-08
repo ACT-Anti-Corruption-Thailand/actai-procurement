@@ -62,6 +62,7 @@ onMounted(async () => {
               "
               target="_blank"
               rel="noopener noreferrer"
+              class="h-full"
             >
               <ProjectData
                 :data="summary?.projectWithHighestBudgetMoney"
@@ -78,6 +79,7 @@ onMounted(async () => {
               "
               target="_blank"
               rel="noopener noreferrer"
+              class="h-full"
             >
               <ProjectData
                 :data="summary?.agencyWithHighestBudgetMoney"

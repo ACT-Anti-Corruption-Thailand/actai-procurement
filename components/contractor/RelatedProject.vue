@@ -179,9 +179,9 @@ watch(isRisk, (val) => {
                     item.resourcingMethod == 'ประกวดราคา',
                   'bg-[#F08C06] text-white':
                     item.resourcingMethod == 'ประกวดราคานานาชาติ',
-                  'bg-[#F8B60E] text-white':
+                  'bg-[#F8B60E] ':
                     item.resourcingMethod ==
-                    'ประกวดราคาอิเล็กทรอนิกส์ (e-bidding)',
+                    'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์',
                   'bg-[#FEEDAF] ':
                     item.resourcingMethod ==
                     'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
