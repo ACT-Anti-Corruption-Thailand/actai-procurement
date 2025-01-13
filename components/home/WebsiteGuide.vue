@@ -10,10 +10,13 @@ const toDate = ref('');
 
 const getSearchSummary = async () => {
   const urlParams = new URLSearchParams();
+
+  let ye = d.getMonth() > 8 ? d.getFullYear() + 544 : d.getFullYear() + 543;
+
   urlParams.set('page', 1);
   urlParams.set('pageSize', 10);
-  urlParams.set('budgetYearStart', d.getFullYear() + 542);
-  urlParams.set('budgetYearEnd', d.getFullYear() + 543);
+  urlParams.set('budgetYearStart', d.getFullYear() + 543);
+  urlParams.set('budgetYearEnd', ye);
 
   const res = await fetch(
     `${config.public.apiUrl}/search/summary?${urlParams}`,
@@ -89,10 +92,8 @@ onMounted(async () => {
             }})
           </p>
           <p class="b4 text-[#A6A6A6]">
-            *ปีงบประมาณ เริ่มนับจาก {{ fromDate.split(' ')[0] }} -
-            {{ toDate.split(' ')[0] }} เช่น ปีงบประมาณ
-            {{ new Date().getFullYear() + 543 }} หมายถึง {{ fromDate }} -
-            {{ toDate }}
+            *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
+            ต.ค. 67 - ก.ย. 68
           </p>
 
           <div class="flex gap-2 items-center">
@@ -117,7 +118,7 @@ onMounted(async () => {
                     <!-- <div> -->
                     <NuxtLink :to="`/result?search=${item.searchKeyword}`">
                       <div
-                        class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left h-full flex flex-col justify-between"
+                        class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left h-full flex flex-col justify-between max-h-[350px]"
                       >
                         <div>
                           <p class="b1 font-bold mb-3 text-black">
@@ -141,7 +142,7 @@ onMounted(async () => {
                         <GoToText
                           color="#0B5C90"
                           text="ดูทั้งหมด"
-                          class="mt-20 mb-0 text-[#0B5C90]"
+                          class="mt-0 mb-0 text-[#0B5C90]"
                         />
                       </div>
                     </NuxtLink>

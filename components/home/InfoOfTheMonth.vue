@@ -3,8 +3,8 @@ const config = useRuntimeConfig();
 const summary = ref({});
 
 var date = new Date();
-const firstDay = new Date(date.getFullYear(), date.getMonth(), 2);
-const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+const firstDay = new Date(date.getFullYear(), date.getMonth(), -29);
+const lastDay = new Date(date.getFullYear(), date.getMonth() + 0);
 
 const getSummary = async () => {
   const urlParams = new URLSearchParams();
@@ -42,10 +42,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-[#1F1F1F] py-10 px-3">
+  <div
+    class="bg-[#1F1F1F] py-10 px-3"
+    v-if="
+      summary?.totalProject != 0 &&
+      summary?.totalAgency != 0 &&
+      summary?.totalCompany != 0
+    "
+  >
     <div class="text-center text-white">
       <h5 class="font-bold">
-        ข้อมูลน่าสนใจประจำเดือน{{ setDate(new Date()) }}
+        ข้อมูลน่าสนใจประจำเดือน{{
+          setDate(firstDay.toISOString().split('T')[0])
+        }}
       </h5>
       <p class="b1 text-[#A6A6A6]">
         มีโครงการฯ ใหม่ {{ summary?.totalProject?.toLocaleString() }} โครงการ

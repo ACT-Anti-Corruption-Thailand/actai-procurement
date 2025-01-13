@@ -18,8 +18,14 @@ const getProjectList = async () => {
   urlParams.set('page', 1);
   urlParams.set('pageSize', 10);
 
+  let ye = d.getMonth() > 8 ? d.getFullYear() + 544 : d.getFullYear() + 543;
+
   let filter = {
     hasCorruptionRisk: true,
+    budgetYear: {
+      start: d.getFullYear() + 543,
+      end: ye,
+    },
   };
 
   var str = qs.stringify({ filter });
@@ -46,8 +52,16 @@ const getContractorList = async () => {
   urlParams.set('page', 1);
   urlParams.set('pageSize', 10);
 
+  let ye = d.getMonth() > 8 ? d.getFullYear() + 544 : d.getFullYear() + 543;
+
+  let filter = {
+    hasCorruptionRisk: true,
+  };
+
+  var str = qs.stringify({ filter });
+
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?${urlParams.toString()}`,
+    `${config.public.apiUrl}/company/search?${urlParams.toString()}&${str}`,
     {
       method: 'get',
       headers: {
@@ -63,11 +77,15 @@ const getContractorList = async () => {
 };
 
 const randomData = computed(() => {
-  return projectList.value?.searchResult[random1.value];
+  return projectList.value?.searchResult[random1.value] != undefined
+    ? projectList.value?.searchResult[random1.value]
+    : projectList.value?.searchResult[0];
 });
 
 const randomData2 = computed(() => {
-  return contractorList.value?.searchResult[random2.value];
+  return contractorList.value?.searchResult[random2.value] != undefined
+    ? contractorList.value?.searchResult[random2.value]
+    : contractorList.value?.searchResult[0];
 });
 
 const randomNum = (n: number) => {
@@ -164,10 +182,8 @@ onMounted(async () => {
                 }})
               </p>
               <p class="b4 text-[#A6A6A6] mb-3">
-                *ปีงบประมาณ เริ่มนับจาก {{ fromDate.split(' ')[0] }} -
-                {{ toDate.split(' ')[0] }} เช่น ปีงบประมาณ
-                {{ new Date().getFullYear() + 543 }} หมายถึง {{ fromDate }} -
-                {{ toDate }}
+                *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
+                ต.ค. 67 - ก.ย. 68 {{ random1 }}
               </p>
 
               <a
@@ -232,10 +248,8 @@ onMounted(async () => {
                 }})
               </p>
               <p class="b4 text-[#A6A6A6] mb-3">
-                *ปีงบประมาณ เริ่มนับจาก {{ fromDate.split(' ')[0] }} -
-                {{ toDate.split(' ')[0] }} เช่น ปีงบประมาณ
-                {{ new Date().getFullYear() + 543 }} หมายถึง {{ fromDate }} -
-                {{ toDate }}
+                *ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568 หมายถึง
+                ต.ค. 67 - ก.ย. 68
               </p>
 
               <a

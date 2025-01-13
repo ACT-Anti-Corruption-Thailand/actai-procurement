@@ -112,7 +112,7 @@ const getContracterProject = async (q, n) => {
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
-  params.set('keyword', contractorData.value.companyName);
+  // params.set('keyword', contractorData.value.companyName);
   params.set('page', n);
   params.set('pageSize', 10);
 
@@ -128,6 +128,7 @@ const getContracterProject = async (q, n) => {
 
   let filter = {
     hasAbandonProject: true,
+    companyId: segments,
   };
 
   var str = qs.stringify({ filter });
