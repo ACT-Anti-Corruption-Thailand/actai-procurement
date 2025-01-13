@@ -7,6 +7,8 @@ import type {
   ProjectEstimatePrice,
 } from '../../public/src/data/data_details';
 
+const emit = defineEmits(['search']);
+
 const props = defineProps<{
   contracters: ProjectContractor;
   contracts: ProjectContract;
@@ -21,6 +23,8 @@ const biddingStep = [
 ];
 
 const sumBidding = ref(0);
+const sort = ref('');
+const page = ref(0);
 
 const setDate = (date) => {
   return new Date(date).toLocaleDateString('th-TH');
@@ -49,11 +53,22 @@ const searchResult = computed(() => {
     ? props.estimatePrice.filter((x) => x.name.includes(searchText.value))
     : props.estimatePrice;
 });
+
+const setParams = (type: string, val: string) => {
+  const searchParams = new URLSearchParams();
+
+  if (type == 'sortBy') sort.value = val;
+
+  searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+
+  emit('search', searchParams.toString());
+};
 </script>
 
 <template>
   <h4 class="font-bold text-white mb-5">ข้อมูลเจาะลึก</h4>
-  <div class="bg-white rounded-10 gap-2 mb-3">
+  <div class="bg-white rounded-10 gap-2 mb-3" v-if="sumBidding != 0">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black">จำนวนนิติบุคคลที่เข้าร่วมในแต่ละขั้นตอน</h4>
     </div>
@@ -135,7 +150,12 @@ const searchResult = computed(() => {
                     class="text-[#5E5E5E] flex gap-1 items-center"
                     v-if="item.title == 'ซื้อซอง' || item.title == 'ยื่นซอง'"
                   >
-                    <!-- <year color="#5E5E5E" /> 12/08/2567 -->
+                    <template v-if="item.title == 'ซื้อซอง'">
+                      <year color="#5E5E5E" /> {{ setDate(c?.buyDocDate) }}
+                    </template>
+                    <template v-else-if="item.title == 'ยื่นซอง'">
+                      <year color="#5E5E5E" /> {{ setDate(c?.submitDocDate) }}
+                    </template>
                   </p>
                 </div>
               </div>
@@ -146,7 +166,10 @@ const searchResult = computed(() => {
     </div>
   </div>
 
-  <div class="bg-white rounded-10 gap-2 mb-3">
+  <div
+    class="bg-white rounded-10 gap-2 mb-3"
+    v-if="props.contracts.length != 0"
+  >
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black">ผู้ชนะการประมูล</h4>
     </div>
@@ -159,24 +182,22 @@ const searchResult = computed(() => {
         <DownloadAndCopy section="bidder" filterList="" part="contract" />
       </div>
 
-      <!-- <SortBy
+      <SortBy
         text="เรียงตาม"
         :list="[
-              {
-                name: 'วงเงินสัญญา',
-                value: 'relevanceScore',
-              },
-              {
-                name: 'วันที่ทำสัญญา',
-                value: 'announcementDate',
-              },
-              {
-                name: 'งบประมาณรวม',
-                value: 'budgetMoney',
-              },
-            ]"
+          {
+            name: 'วงเงินสัญญา',
+            value: 'contractMoney',
+          },
+          {
+            name: 'วันที่ทำสัญญา',
+            value: 'contractDate',
+          },
+        ]"
         class="mb-3"
-      /> -->
+        @change="setParams"
+        @sortBy="setParams"
+      />
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -270,7 +291,10 @@ const searchResult = computed(() => {
     </div>
   </div>
 
-  <div class="bg-white rounded-10 gap-2 mb-3">
+  <div
+    class="bg-white rounded-10 gap-2 mb-3"
+    v-if="props.estimatePrice.length != 0"
+  >
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black mb-3">การเสนอราคา</h4>
 

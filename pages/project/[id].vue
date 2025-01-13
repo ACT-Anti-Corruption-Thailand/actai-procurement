@@ -1,7 +1,13 @@
 <script setup lang="ts">
 const menu = ref('ภาพรวม');
+const listMenu = ref(['ภาพรวม']);
 const isShowTab = ref(true);
 const config = useRuntimeConfig();
+const projectData = ref<ProjectDetails>([]);
+const projectDocs = ref<ProjectDocuments>([]);
+const projectContractor = ref<ProjectContractor>([]);
+const projectContract = ref<ProjectContract>([]);
+const projectEstimatePrice = ref<ProjectEstimatePrice>([]);
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
@@ -17,14 +23,17 @@ import type {
 onBeforeMount(async () => {
   await getProjectDataAndDocs();
   await getProjectEstimatePrice();
-  await getProjectContractor();
-});
+  await getProjectContractor('');
 
-const projectData = ref<ProjectDetails>([]);
-const projectDocs = ref<ProjectDocuments>([]);
-const projectContractor = ref<ProjectContractor>([]);
-const projectContract = ref<ProjectContract>([]);
-const projectEstimatePrice = ref<ProjectEstimatePrice>([]);
+  if (
+    projectContractor.value.length != 0 ||
+    projectContract.value.length != 0 ||
+    projectEstimatePrice.value.length != 0
+  )
+    listMenu.value.push('ข้อมูลเจาะลึก');
+  else if (projectDocs.value.length != 0)
+    listMenu.value.push('เอกสารที่เกี่ยวข้อง');
+});
 
 const getProjectDataAndDocs = async () => {
   const segments = window.location.href.split('/')[4];
@@ -57,7 +66,7 @@ const getProjectDataAndDocs = async () => {
   }
 };
 
-const getProjectContractor = async () => {
+const getProjectContractor = async (params: string) => {
   const segments = window.location.href.split('/')[4];
 
   const res = await fetch(
@@ -76,7 +85,7 @@ const getProjectContractor = async () => {
   }
 
   const res2 = await fetch(
-    `${config.public.apiUrl}/project/${segments}/contract`,
+    `${config.public.apiUrl}/project/${segments}/contract?${params}`,
     {
       method: 'get',
       headers: {
@@ -214,6 +223,11 @@ const setDate = (date) => {
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ข้อมูลเจาะลึก',
             }"
             @click="menu = 'ข้อมูลเจาะลึก'"
+            v-if="
+              projectContractor.length != 0 ||
+              projectContract.length != 0 ||
+              projectEstimatePrice.length != 0
+            "
           >
             <p>ข้อมูลเจาะลึก</p>
             <ul class="list-disc ml-5">
@@ -229,6 +243,7 @@ const setDate = (date) => {
                 menu == 'เอกสารที่เกี่ยวข้อง',
             }"
             @click="menu = 'เอกสารที่เกี่ยวข้อง'"
+            v-if="projectDocs.length != 0"
           >
             <p>เอกสารที่เกี่ยวข้อง</p>
           </div>
@@ -241,6 +256,7 @@ const setDate = (date) => {
           :contracters="projectContractor"
           :contracts="projectContract"
           :estimatePrice="projectEstimatePrice"
+          @search="getProjectContractor"
         />
         <ProjectDocument v-else :data="projectDocs" />
 

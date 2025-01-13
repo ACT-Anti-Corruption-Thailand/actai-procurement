@@ -118,7 +118,7 @@ onMounted(async () => {
                     <!-- <div> -->
                     <NuxtLink :to="`/result?search=${item.searchKeyword}`">
                       <div
-                        class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left h-full flex flex-col justify-between max-h-[350px]"
+                        class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left h-full flex flex-col justify-between"
                       >
                         <div>
                           <p class="b1 font-bold mb-3 text-black">
