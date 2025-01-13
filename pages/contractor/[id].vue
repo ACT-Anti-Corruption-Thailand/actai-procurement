@@ -17,8 +17,8 @@ import qs from 'qs';
 onBeforeMount(async () => {
   await getContracterData();
   //await getContracterAuctionData();
-  await getContracterProject('', 1);
-  await getContracterGov('', 1);
+  await getContracterProject('', 10);
+  await getContracterGov('', 10);
   await getContracterRelationship();
   await getContracterRelatedCompany();
 });
@@ -113,8 +113,8 @@ const getContracterProject = async (q, n) => {
 
   const params = new URLSearchParams();
   // params.set('keyword', contractorData.value.companyName);
-  params.set('page', n);
-  params.set('pageSize', 10);
+  params.set('page', 1);
+  params.set('pageSize', n);
 
   const res = await fetch(
     `${config.public.apiUrl}/project/search?${params}${q}`,
@@ -159,8 +159,8 @@ const getContracterGov = async (q, n) => {
 
   const params = new URLSearchParams();
   params.set('keyword', contractorData.value.companyName);
-  params.set('page', n);
-  params.set('pageSize', 10);
+  params.set('page', 1);
+  params.set('pageSize', n);
 
   const res = await fetch(`${config.public.apiUrl}/agency/search?${params}`, {
     method: 'get',

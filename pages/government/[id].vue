@@ -8,8 +8,8 @@ import type { Project, Contractor } from '../../public/src/data/search_result';
 
 onBeforeMount(async () => {
   await getGovData();
-  await getGovProject('', 1);
-  await getGovContracter('', 1);
+  await getGovProject('', 10);
+  await getGovContracter('', 10);
 });
 
 const govData = ref<GovernmentDetails>([]);
@@ -37,8 +37,8 @@ const getGovProject = async (q, n) => {
 
   const params = new URLSearchParams();
   params.set('keyword', govData.value.agencyName);
-  params.set('page', n);
-  params.set('pageSize', 10);
+  params.set('page', 1);
+  params.set('pageSize', n);
 
   const res = await fetch(
     `${config.public.apiUrl}/project/search?${params}${q}`,
@@ -61,8 +61,8 @@ const getGovContracter = async (q, n) => {
 
   const params = new URLSearchParams();
   params.set('keyword', govData.value.agencyName);
-  params.set('page', n);
-  params.set('pageSize', 10);
+  params.set('page', 1);
+  params.set('pageSize', n);
 
   const res = await fetch(
     `${config.public.apiUrl}/company/search?${params}${q}`,

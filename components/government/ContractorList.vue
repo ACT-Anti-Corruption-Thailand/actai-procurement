@@ -5,7 +5,7 @@ const props = defineProps<{
   data: Contractor;
 }>();
 const emit = defineEmits(['change']);
-const pageNum = ref(1);
+const pageNum = ref(10);
 
 const setDate = (date) => {
   const options = {
@@ -28,7 +28,7 @@ const searchResult = computed(() => {
 });
 
 const setFilter = (isChangePage) => {
-  if (isChangePage) pageNum.value++;
+  if (isChangePage) pageNum.value += 10;
 
   // let filter = {
   //   hasCorruptionRisk: isRisk.value,

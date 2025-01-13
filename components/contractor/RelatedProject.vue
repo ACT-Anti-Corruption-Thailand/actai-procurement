@@ -8,7 +8,7 @@ const props = defineProps<{
 const emit = defineEmits(['change']);
 
 const isRisk = ref(false);
-const pageNum = ref(1);
+const pageNum = ref(10);
 
 const setDate = (date) => {
   const options = {
@@ -31,7 +31,7 @@ const searchResult = computed(() => {
 });
 
 const setFilter = (isChangePage) => {
-  if (isChangePage) pageNum.value++;
+  if (isChangePage) pageNum.value += 10;
 
   let filter = {
     hasCorruptionRisk: isRisk.value,
@@ -42,7 +42,7 @@ const setFilter = (isChangePage) => {
 };
 
 watch(isRisk, (val) => {
-  pageNum.value = 1;
+  pageNum.value = 10;
 
   nextTick(() => {
     setFilter(false);

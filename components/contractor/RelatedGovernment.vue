@@ -6,7 +6,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['change']);
-const pageNum = ref(1);
+const pageNum = ref(10);
 
 const setDate = (date) => {
   const options = {
@@ -29,7 +29,7 @@ const searchResult = computed(() => {
 });
 
 const setFilter = (isChangePage) => {
-  if (isChangePage) pageNum.value++;
+  if (isChangePage) pageNum.value += 10;
 
   // let filter = {
   //   hasCorruptionRisk: isRisk.value,
@@ -54,7 +54,7 @@ const setFilter = (isChangePage) => {
               v-model="searchText"
               type="text"
               class="input-text h-full"
-              placeholder="พิมพ์ชื่อหน่วยงานรัฐ"
+              placeholder="พิมพ์ชื่อหน่วยงาน"
             />
             <SearchIcon
               color="#000000"
@@ -87,7 +87,7 @@ const setFilter = (isChangePage) => {
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr>
               <th>ลำดับ</th>
-              <th>ผู้รับจ้าง</th>
+              <th>ผู้ว่าจ้าง</th>
               <th class="text-right">จำนวนโครงการ</th>
               <th class="text-right">วงเงินสัญญารวม</th>
             </tr>
@@ -117,6 +117,8 @@ const setFilter = (isChangePage) => {
       </div>
 
       <div class="text-center mt-3">
+        {{ props.data?.searchResult.length }}
+        {{ props.data?.pagination?.totalItem }}
         <LoadMore
           v-if="
             props.data?.searchResult.length < props.data?.pagination?.totalItem
