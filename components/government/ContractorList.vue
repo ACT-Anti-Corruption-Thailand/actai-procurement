@@ -5,7 +5,10 @@ const props = defineProps<{
   data: Contractor;
 }>();
 const emit = defineEmits(['change']);
-const pageNum = ref(10);
+const page = ref(10);
+const sort = ref('totalContractAmount ');
+
+import qs from 'qs';
 
 const setDate = (date) => {
   const options = {
@@ -20,23 +23,20 @@ const setDate = (date) => {
 const searchText = ref('');
 
 const searchResult = computed(() => {
-  return searchText.value != ''
-    ? props.data.searchResult.filter((x) =>
-        x.companyName.includes(searchText.value)
-      )
-    : props.data.searchResult;
+  return props.data.searchResult;
 });
 
-const setFilter = (isChangePage) => {
-  if (isChangePage) pageNum.value += 10;
+const setParams = (type: string, val: string) => {
+  const searchParams = new URLSearchParams();
 
-  // let filter = {
-  //   hasCorruptionRisk: isRisk.value,
-  // };
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
 
-  // var str = qs.stringify({ filter });
+  searchParams.set('keyword', searchText.value);
+  searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
 
-  emit('change', '&' + '', pageNum.value);
+  emit('change', '&' + searchParams.toString(), page.value);
 };
 </script>
 
@@ -50,10 +50,11 @@ const setFilter = (isChangePage) => {
           <p class="b2 text-[#7F7F7F]">ตัวกรอง</p>
           <div class="relative">
             <input
+              @change="setParams('keyword', searchText)"
               v-model="searchText"
               type="text"
               class="input-text h-full"
-              placeholder="กรองด้วยชื่อรายการ/ผู้เข้าเสนอราคา/เลขทะเบียนนิติบุคคล"
+              placeholder="กรองด้วยชื่อผู้รับจ้าง"
             />
             <SearchIcon
               color="#000000"
@@ -74,11 +75,22 @@ const setFilter = (isChangePage) => {
         <DownloadAndCopy section="contractor" filterList="" />
       </div>
 
-      <!-- <SortBy
+      <SortBy
         text="เรียงตาม"
-        :list="['วงเงินสัญญา', 'จำนวนโครงการ']"
+        :list="[
+          {
+            name: 'วงเงินสัญญา',
+            value: 'totalContractAmount',
+          },
+          {
+            name: 'จำนวนโครงการ',
+            value: 'totalProject',
+          },
+        ]"
         class="mb-3"
-      /> -->
+        @change="setParams"
+        @sortBy="setParams"
+      />
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -119,7 +131,7 @@ const setFilter = (isChangePage) => {
           v-if="
             props.data?.searchResult.length < props.data?.pagination?.totalItem
           "
-          @click="setFilter(true)"
+          @click="setParams('page', 10)"
         />
       </div>
     </div>

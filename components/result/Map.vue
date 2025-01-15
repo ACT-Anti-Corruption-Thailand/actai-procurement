@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-xs h-fit w-fit relative">
+  <div class="mx-auto max-w-xs h-fit relative">
     <div
       v-if="isShowPopup"
       id="popup"

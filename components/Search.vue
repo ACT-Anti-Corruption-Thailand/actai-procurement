@@ -10,10 +10,10 @@ import {
 } from '@headlessui/vue';
 
 const config = useRuntimeConfig();
-
+const router = useRouter();
 const searchList = ref([]);
 
-let selected = ref('');
+let selected = ref();
 let query = ref('');
 
 const getSearchList = async (keyword) => {
@@ -35,30 +35,25 @@ const getSearchList = async (keyword) => {
   }
 };
 
-const handleEnterOptions = () => {
-  query.value = selected.value;
-  setKeyword();
-  window.location.href =
-    config.public.baseUrl + 'result?search=' + selected.value;
-};
-
-const setKeyword = () => {
-  localStorage.setItem('keyword', selected.value);
-};
-
 onMounted(() => {
   if (window.location.pathname == '/result') {
     const kw = decodeURI(window.location.href).split('=')[1];
-    selected.value = kw;
-    query.value = kw;
+    selected.value = kw.replace('/+/g', ' ');
+    query.value = kw.replace('/+/g', ' ');
   }
 });
+
+const onEnterSearch = () => {
+  if (window.location.pathname == '/')
+    router.push('result?search=' + selected.value);
+  else router.go(0);
+};
 </script>
 
 <template>
   <ClientOnly fallback-tag="span" fallback="Loading...">
     <div class="w-full max-w-xl flex">
-      <Combobox v-model="selected" class="">
+      <Combobox v-model="selected" @change="onEnterSearch" nullable>
         <div class="w-full">
           <div
             class="relative w-full cursor-default overflow-hidden rounded-l-lg bg-white text-left b2 ring-[#C2141B]"
@@ -74,8 +69,10 @@ onMounted(() => {
               alt="close"
               class="absolute right-5 my-auto w-4 h-4 inset-y-0 cursor-pointer"
               @click="
-                query = '';
-                selected = '';
+                (e) => {
+                  e.stopPropagation();
+                  query = '';
+                }
               "
               v-if="query != ''"
             />
@@ -84,51 +81,72 @@ onMounted(() => {
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-            @after-leave="handleEnterOptions()"
           >
             <ComboboxOptions
+              v-if="query != ''"
               class="absolute z-50 mt-1 max-h-60 max-w-[85%] sm:max-w-xl w-full overflow-auto rounded-10 bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
             >
-              <div
-                v-if="searchList.length == 0 && query != ''"
-                class="relative cursor-default select-none px-4 py-2 text-black b2"
-              >
-                ไม่พบผลการค้นหา
-              </div>
-
               <ComboboxOption
-                @click="setKeyword()"
+                v-if="query"
+                :value="query"
+                v-slot="{ selected, active }"
+              >
+                <!-- <a :href="`/result?search=${query}`"> -->
+                <li
+                  class="relative cursor-default select-none py-2 px-2 text-left b2 italic"
+                  :class="{
+                    'bg-black text-white': active,
+                    'text-black': !active,
+                  }"
+                >
+                  <span
+                    class="block truncate"
+                    :class="{
+                      'font-medium': selected,
+                      'font-normal': !selected,
+                    }"
+                  >
+                    ค้นหาด้วยคำว่า "{{ query }}"
+                  </span>
+                  <span
+                    v-if="selected"
+                    class="absolute inset-y-0 left-0 flex items-center pl-3"
+                    :class="{ 'text-white': active, 'text-black': !active }"
+                  >
+                  </span>
+                </li>
+                <!-- </a> -->
+              </ComboboxOption>
+              <ComboboxOption
                 v-for="(person, i) in searchList"
                 as="template"
                 :key="i"
                 :value="person"
                 v-slot="{ selected, active }"
               >
-                <a :href="`/result?search=${person}`">
-                  <li
-                    class="relative cursor-default select-none py-2 px-2 text-left b2"
+                <li
+                  class="relative cursor-default select-none py-2 px-2 text-left b2"
+                  :class="{
+                    'bg-black text-white': active,
+                    'text-black': !active,
+                  }"
+                >
+                  <span
+                    class="block truncate"
                     :class="{
-                      'bg-black text-white': active,
-                      'text-black': !active,
+                      'font-medium': selected,
+                      'font-normal': !selected,
                     }"
                   >
-                    <span
-                      class="block truncate"
-                      :class="{
-                        'font-medium': selected,
-                        'font-normal': !selected,
-                      }"
-                    >
-                      {{ person }}
-                    </span>
-                    <span
-                      v-if="selected"
-                      class="absolute inset-y-0 left-0 flex items-center pl-3"
-                      :class="{ 'text-white': active, 'text-black': !active }"
-                    >
-                    </span>
-                  </li>
-                </a>
+                    {{ person }}
+                  </span>
+                  <span
+                    v-if="selected"
+                    class="absolute inset-y-0 left-0 flex items-center pl-3"
+                    :class="{ 'text-white': active, 'text-black': !active }"
+                  >
+                  </span>
+                </li>
               </ComboboxOption>
             </ComboboxOptions>
           </TransitionRoot>

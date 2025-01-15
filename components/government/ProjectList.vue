@@ -10,7 +10,9 @@ const props = defineProps<{
 const emit = defineEmits(['change']);
 
 const isRisk = ref(false);
-const pageNum = ref(10);
+const page = ref(10);
+const sort = ref('announcementDate');
+let searchParams = new URLSearchParams();
 
 const setDate = (date) => {
   const options = {
@@ -27,27 +29,35 @@ const searchText = ref('');
 const searchResult = computed(() => {
   let data = props.data.searchResult;
 
-  return searchText.value != ''
-    ? data.filter((x) => x.projectName.includes(searchText.value))
-    : data;
+  return data;
 });
 
-const setFilter = (isChangePage) => {
-  if (isChangePage) pageNum.value += 10;
+const setParams = (type: string, val: string) => {
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+
+  searchParams.set('keyword', searchText.value);
+  searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
 
   let filter = {
     hasCorruptionRisk: isRisk.value,
   };
 
   var str = qs.stringify({ filter });
-  emit('change', '&' + str, pageNum.value);
+
+  emit('change', '&' + searchParams.toString() + '&' + str, page.value);
 };
 
+onBeforeMount(async () => {
+  //setParams('sortBy', sort.value);
+});
+
 watch(isRisk, (val) => {
-  pageNum.value = 10;
+  page.value = 10;
 
   nextTick(() => {
-    setFilter(false);
+    setParams('risk', '');
   });
 });
 </script>
@@ -62,10 +72,11 @@ watch(isRisk, (val) => {
           <p class="b2 text-[#7F7F7F]">ตัวกรอง</p>
           <div class="relative">
             <input
+              @change="setParams('keyword', searchText)"
               v-model="searchText"
               type="text"
               class="input-text h-full"
-              placeholder="กรองด้วยชื่อโครงการ"
+              placeholder="กรองด้วยคำในชื่อหรือเลขที่โครงการ"
             />
             <SearchIcon
               color="#000000"
@@ -100,11 +111,22 @@ watch(isRisk, (val) => {
         <DownloadAndCopy section="government" filterList="" />
       </div>
 
-      <!-- <SortBy
+      <SortBy
         text="เรียงตาม"
-        :list="['วันที่ประกาศโครงการ', 'วงเงินสัญญา']"
+        :list="[
+          {
+            name: 'วันที่ประกาศโครงการ',
+            value: 'announcementDate',
+          },
+          {
+            name: 'วงเงินสัญญา',
+            value: 'totalContractAmount',
+          },
+        ]"
         class="mb-3"
-      /> -->
+        @change="setParams"
+        @sortBy="setParams"
+      />
 
       <div class="overflow-auto">
         <table class="table-auto text-left w-[800px] lg:w-full">
@@ -218,7 +240,7 @@ watch(isRisk, (val) => {
               props.data?.searchResult.length <
               props.data?.pagination?.totalItem
             "
-            @click="setFilter(true)"
+            @click="setParams('page', 10)"
           />
         </div>
       </div>

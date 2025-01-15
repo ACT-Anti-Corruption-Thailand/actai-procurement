@@ -59,7 +59,13 @@
       >
         โครงการเสี่ยงทุจริต
         {{ props.data?.totalProjectHasCorruptionRisk.toLocaleString() }} โครงการ
-        (12.2%)
+        <span v-if="props.data?.totalProjectHasCorruptionRisk != 0">
+          ({{
+            (props.data?.totalProject -
+              props.data?.totalProjectHasCorruptionRisk) *
+            100
+          }}%)</span
+        >
       </p>
       <p class="b1 text-[#5E5E5E]" v-if="props.data?.totalProject != null">
         รวม {{ props.data?.totalProject.toLocaleString() }} โครงการ

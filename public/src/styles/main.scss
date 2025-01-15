@@ -198,7 +198,7 @@ table th:last-child {
 }
 
 .dropdown-list {
-  @apply mt-1 w-full b4 text-left max-h-44 bg-white overflow-x-scroll z-10 shadow-md  pb-0;
+  @apply mt-1 w-full b4 text-left max-h-48 bg-white overflow-x-scroll z-10 shadow-md  pb-0;
 
   li {
     @apply px-2.5 py-[5px] cursor-pointer text-black hover:bg-black hover:text-white;
@@ -365,7 +365,7 @@ table th:last-child {
 }
 
 .table-wrapper {
-  @apply w-[600px] sm:w-[900px];
+  @apply w-[600px] sm:min-w-[900px] sm:w-full;
 }
 
 // pagination
@@ -412,4 +412,12 @@ table th:last-child {
 .splide__pagination {
   bottom: -20px !important ;
   z-index: 2 !important;
+}
+
+.popup-custom {
+  @apply text-[20px] bg-[#F5F5F5] rounded-10 text-black opacity-100 pointer-events-none absolute text-left min-w-[180px];
+}
+
+.popup-custom table {
+  @apply font-bold;
 }

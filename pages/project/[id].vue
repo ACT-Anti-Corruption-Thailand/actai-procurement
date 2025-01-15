@@ -8,6 +8,7 @@ const projectDocs = ref<ProjectDocuments>([]);
 const projectContractor = ref<ProjectContractor>([]);
 const projectContract = ref<ProjectContract>([]);
 const projectEstimatePrice = ref<ProjectEstimatePrice>([]);
+const projectTotalEstimatePrice = ref(0);
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
@@ -116,6 +117,7 @@ const getProjectEstimatePrice = async () => {
   if (res.ok) {
     const data = await res.json();
     projectEstimatePrice.value = data.items || [];
+    projectTotalEstimatePrice.value = data.totalEstimatePrice;
   }
 };
 
@@ -256,6 +258,7 @@ const setDate = (date) => {
           :contracters="projectContractor"
           :contracts="projectContract"
           :estimatePrice="projectEstimatePrice"
+          :total="projectTotalEstimatePrice"
           @search="getProjectContractor"
         />
         <ProjectDocument v-else :data="projectDocs" />

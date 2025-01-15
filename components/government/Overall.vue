@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { MapData } from '../../public/src/data/search_result';
-import { Line } from 'vue-chartjs';
 import type { ChartComponentRef } from 'vue-chartjs';
 import {
   Listbox,
@@ -9,6 +8,7 @@ import {
   ListboxOption,
 } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+import qs from 'qs';
 
 const titleChartSelected = ref('ความเสี่ยงทุจริต');
 const sectionChartSelected = ref('risk');
@@ -37,77 +37,18 @@ const chartData = ref({
   datasets: [],
 });
 
-const chartOptions = ref({
-  responsive: true,
-  maintainAspectRatio: false,
-  interaction: {
-    mode: 'index',
-    intersect: false,
-  },
-  plugins: {
-    filler: {
-      propagate: false,
-    },
-    legend: {
-      display: false,
-    },
-    tooltip: {
-      titleFont: {
-        size: 20,
-        family: 'DB_Helvethaica_X',
-      },
-      bodyFont: {
-        size: 16,
-        family: 'DB_Helvethaica_X',
-      },
-      callbacks: {
-        title: function (context) {
-          return 'ปี ' + context[0].label.replace('’', '');
-        },
-        label: function (context) {
-          return context.formattedValue;
-        },
-        footer: function (context) {
-          let a = context[0].raw - context[1].raw;
-          return a == 0
-            ? 0
-            : ((context[0].raw - context[1].raw) * -1).toLocaleString();
-        },
-      },
-    },
-  },
-  scales: {
-    x: {
-      ticks: {
-        font: {
-          size: 16,
-          family: 'DB_Helvethaica_X',
-          color: '#8E8E8E',
-        },
-      },
-    },
-    y: {
-      ticks: {
-        font: {
-          size: 16,
-          family: 'DB_Helvethaica_X',
-        },
-        callback: function (value, index, ticks) {
-          return value > 999999
-            ? (value / 1000000).toLocaleString() + 'M'
-            : value;
-        },
-      },
-    },
-  },
-});
-
 onBeforeMount(async () => {
   const config = useRuntimeConfig();
   const urlParams = window.location.pathname.split('/')[2];
 
+  let filter = {
+    agencyId: urlParams,
+  };
+
+  var str = qs.stringify({ filter });
+
   const res = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-budget-year?agencyId=${urlParams}`,
+    `${config.public.apiUrl}/project/aggregate/by-budget-year?${str}`,
     {
       method: 'get',
       headers: {
@@ -156,8 +97,10 @@ onBeforeMount(async () => {
     isDone.value = true;
   }
 
+  var str = qs.stringify({ filter });
+
   const res2 = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-province?agencyId=${urlParams}`,
+    `${config.public.apiUrl}/project/aggregate/by-province?${str}`,
     {
       method: 'get',
       headers: {
@@ -448,12 +391,7 @@ const onSetChartData = (section: string, data) => {
         </p>
 
         <div>
-          <Line
-            :data="chartData"
-            :options="chartOptions"
-            height="300"
-            ref="bar"
-          />
+          <LineChart :data="chartData" />
         </div>
 
         <p class="text-center b4 font-bold">ปีงบประมาณ</p>

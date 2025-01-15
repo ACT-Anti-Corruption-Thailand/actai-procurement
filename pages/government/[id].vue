@@ -5,6 +5,7 @@ const isShowTab = ref(true);
 
 import type { GovernmentDetails } from '../../public/src/data/data_details';
 import type { Project, Contractor } from '../../public/src/data/search_result';
+import qs from 'qs';
 
 onBeforeMount(async () => {
   await getGovData();
@@ -36,12 +37,17 @@ const getGovProject = async (q, n) => {
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
-  params.set('keyword', govData.value.agencyName);
   params.set('page', 1);
   params.set('pageSize', n);
 
+  let filter = {
+    agencyId: segments,
+  };
+
+  var str = qs.stringify({ filter });
+
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?${params}${q}`,
+    `${config.public.apiUrl}/project/search?${str}&${params}${q}`,
     {
       method: 'get',
       headers: {
@@ -59,13 +65,18 @@ const getGovProject = async (q, n) => {
 const getGovContracter = async (q, n) => {
   const segments = window.location.href.split('/')[4];
 
+  let filter = {
+    agencyId: segments,
+  };
+
+  var str = qs.stringify({ filter });
+
   const params = new URLSearchParams();
-  params.set('keyword', govData.value.agencyName);
   params.set('page', 1);
   params.set('pageSize', n);
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?${params}${q}`,
+    `${config.public.apiUrl}/company/search?${str}&${params}${q}`,
     {
       method: 'get',
       headers: {

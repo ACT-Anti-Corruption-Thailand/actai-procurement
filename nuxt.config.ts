@@ -99,4 +99,7 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  build: {
+    transpile: ['@headlessui/vue'],
+  },
 });

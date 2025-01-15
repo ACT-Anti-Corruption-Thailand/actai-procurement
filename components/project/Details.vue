@@ -13,6 +13,7 @@ const props = defineProps<{
   contracters: ProjectContractor;
   contracts: ProjectContract;
   estimatePrice: ProjectEstimatePrice;
+  total: number;
 }>();
 
 const biddingStep = [
@@ -49,6 +50,12 @@ onBeforeMount(() => {
 const searchText = ref('');
 
 const searchResult = computed(() => {
+  props.estimatePrice.forEach((element) => {
+    let a = element.contractors.filter((x) => x.isWinner);
+    element.winnerEstimatePrice = a.length > 0 ? a[0].biddingPrice : 0;
+    element.hasWinner = a.length > 0 ? true : false;
+  });
+
   return searchText.value != ''
     ? props.estimatePrice.filter((x) => x.name.includes(searchText.value))
     : props.estimatePrice;
@@ -321,9 +328,12 @@ const setParams = (type: string, val: string) => {
         />
       </div>
 
-      <!-- <p class="text-right" v-if="props.estimatePrice.length > 0">
-        ราคากลาง = x,xxx,xxx.xx บาท
-      </p> -->
+      <div class="text-right" v-if="props.estimatePrice.length > 0">
+        <p v-if="props.total != 0">
+          ราคากลาง = {{ props.total.toLocaleString() }} บาท
+        </p>
+        <p v-else>ไม่มีข้อมูลราคากลาง</p>
+      </div>
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -384,17 +394,109 @@ const setParams = (type: string, val: string) => {
                 <td :class="{ 'font-bold': data.contractors[0].isWinner }">
                   {{ data.contractors[0].biddingPrice.toLocaleString() }}
                 </td>
-                <td class="text-right">
-                  <template v-if="data.estimatePrice != null">
-                    ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
-                  </template>
-                  <p v-else>0</p>
+                <td
+                  class="text-right"
+                  :class="[
+                    {
+                      'font-bold': data.contractors[0].isWinner,
+                      'text-[#7051B4] bg-[#F4EFFF]':
+                        data.contractors[0].biddingPrice >
+                        data.winnerEstimatePrice,
+                      'text-[#CE5700] bg-[#FFFDEF]':
+                        data.contractors[0].biddingPrice <
+                        data.winnerEstimatePrice,
+                      'text-[#1F1F1F]':
+                        data.contractors[0].biddingPrice ==
+                        data.winnerEstimatePrice,
+                      '!bg-transparent': !data.hasWinner,
+                    },
+                  ]"
+                >
+                  <div>
+                    <p class="b2">
+                      <template v-if="data.hasWinner">
+                        <span
+                          v-if="
+                            data.contractors[0].biddingPrice >
+                            data.winnerEstimatePrice
+                          "
+                          >สูงกว่า</span
+                        >
+                        <span
+                          v-else-if="
+                            data.contractors[0].biddingPrice <
+                            data.winnerEstimatePrice
+                          "
+                          >ต่ำกว่า</span
+                        >
+                        <span v-else>เท่ากัน</span>
+                      </template>
+                      <span v-else>-</span>
+                    </p>
+                    <p
+                      class="b1"
+                      v-if="
+                        data.hasWinner &&
+                        data.contractors[0].biddingPrice !=
+                          data.winnerEstimatePrice
+                      "
+                    >
+                      {{
+                        (
+                          ((data.contractors[0].biddingPrice -
+                            data.winnerEstimatePrice) /
+                            data.contractors[0].biddingPrice) *
+                          100
+                        ).toFixed(2)
+                      }}%
+                    </p>
+                  </div>
                 </td>
-                <td class="text-right">
-                  <template v-if="data.estimatePrice != null">
-                    ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
-                  </template>
-                  <p v-else>0</p>
+                <td
+                  class="text-right"
+                  :class="[
+                    {
+                      'font-bold': data.contractors[0].isWinner,
+                      'text-[#7051B4] bg-[#F4EFFF]':
+                        data.contractors[0].biddingPrice > props.total,
+                      'text-[#CE5700] bg-[#FFFDEF]':
+                        data.contractors[0].biddingPrice < props.total,
+                      'text-[#1F1F1F]':
+                        data.contractors[0].biddingPrice == props.total,
+                      '!bg-transparent': props.total == 0,
+                    },
+                  ]"
+                >
+                  <div>
+                    <template v-if="props.total != 0">
+                      <p class="b2">
+                        <span
+                          v-if="data.contractors[0].biddingPrice > props.total"
+                          >สูงกว่า</span
+                        >
+                        <span
+                          v-else-if="
+                            data.contractors[0].biddingPrice < props.total
+                          "
+                          >ต่ำกว่า</span
+                        >
+                        <span v-else>เท่ากัน</span>
+                      </p>
+                      <p
+                        class="b1"
+                        v-if="data.contractors[0].biddingPrice != props.total"
+                      >
+                        {{
+                          (
+                            ((props.total - data.contractors[0].biddingPrice) /
+                              props.total) *
+                            100
+                          ).toFixed(2)
+                        }}%
+                      </p>
+                    </template>
+                    <template v-else>-</template>
+                  </div>
                 </td>
               </tr>
 
@@ -438,17 +540,91 @@ const setParams = (type: string, val: string) => {
                   {{ item.biddingPrice.toLocaleString() }}
                 </td>
 
-                <td class="text-right">
-                  <template v-if="data.estimatePrice != null">
-                    ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
-                  </template>
-                  <p v-else>0</p>
+                <td
+                  class="text-right"
+                  :class="[
+                    {
+                      'font-bold': item.isWinner,
+                      'text-[#7051B4] bg-[#F4EFFF]':
+                        item.biddingPrice > data.winnerEstimatePrice,
+                      'text-[#CE5700] bg-[#FFFDEF]':
+                        item.biddingPrice < data.winnerEstimatePrice,
+                      'text-[#1F1F1F]':
+                        item.biddingPrice == data.winnerEstimatePrice,
+                      '!bg-transparent': !data.hasWinner,
+                    },
+                  ]"
+                >
+                  <div>
+                    <p class="b2">
+                      <template v-if="data.hasWinner">
+                        <span
+                          v-if="item.biddingPrice > data.winnerEstimatePrice"
+                          >สูงกว่า</span
+                        >
+                        <span
+                          v-else-if="
+                            item.biddingPrice < data.winnerEstimatePrice
+                          "
+                          >ต่ำกว่า</span
+                        >
+                        <span v-else>เท่ากัน</span>
+                      </template>
+                      <span v-else>-</span>
+                    </p>
+                    <p
+                      class="b1"
+                      v-if="
+                        data.hasWinner &&
+                        item.biddingPrice != data.winnerEstimatePrice
+                      "
+                    >
+                      {{
+                        (
+                          ((item.biddingPrice - data.winnerEstimatePrice) /
+                            item.biddingPrice) *
+                          100
+                        ).toFixed(2)
+                      }}%
+                    </p>
+                  </div>
                 </td>
-                <td class="text-right">
-                  <template v-if="data.estimatePrice != null">
-                    ต่ำกว่า 7.02% <br /><span class="b4">210,800 บาท</span>
-                  </template>
-                  <p v-else>0</p>
+                <td
+                  class="text-right"
+                  :class="[
+                    {
+                      'font-bold': item.isWinner,
+                      'text-[#7051B4] bg-[#F4EFFF]':
+                        item.biddingPrice > props.total,
+                      'text-[#CE5700] bg-[#FFFDEF]':
+                        item.biddingPrice < props.total,
+                      'text-[#1F1F1F]': item.biddingPrice == props.total,
+                      '!bg-transparent': props.total == 0,
+                    },
+                  ]"
+                >
+                  <div>
+                    <template v-if="props.total != 0">
+                      <p class="b2">
+                        <span v-if="item.biddingPrice > props.total"
+                          >สูงกว่า</span
+                        >
+                        <span v-else-if="item.biddingPrice < props.total"
+                          >ต่ำกว่า</span
+                        >
+                        <span v-else>เท่ากัน</span>
+                      </p>
+                      <p class="b1" v-if="item.biddingPrice != props.total">
+                        {{
+                          (
+                            ((props.total - item.biddingPrice) / props.total) *
+                            100
+                          ).toFixed(2)
+                        }}%
+                      </p>
+                    </template>
+                    <template v-else>-</template>
+                  </div>
                 </td>
               </tr>
             </template>

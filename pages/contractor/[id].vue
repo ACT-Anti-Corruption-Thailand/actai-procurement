@@ -158,16 +158,24 @@ const getContracterGov = async (q, n) => {
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
-  params.set('keyword', contractorData.value.companyName);
   params.set('page', 1);
   params.set('pageSize', n);
 
-  const res = await fetch(`${config.public.apiUrl}/agency/search?${params}`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  let filter = {
+    companyId: segments,
+  };
+
+  var str = qs.stringify({ filter });
+
+  const res = await fetch(
+    `${config.public.apiUrl}/agency/search?${params}&${str}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 
   if (res.ok) {
     const data = await res.json();

@@ -54,7 +54,7 @@
 const props = defineProps<{
   filterList: string;
   section: string;
-  part: string;
+  part?: string;
 }>();
 const config = useRuntimeConfig();
 const urlLink = ref('');
