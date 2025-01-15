@@ -75,6 +75,7 @@
           @click="
             isSelectFirstCompany = false;
             participatedCompany = [];
+            participatedCompanyId = [];
           "
         >
           <svg
@@ -186,6 +187,7 @@ const searchText = ref('');
 const isSelectFirstCompany = ref(false);
 const firstCompany = ref('');
 const participatedCompany = ref([]);
+const participatedCompanyId = ref([]);
 const totalProject = ref(0);
 
 const result = computed(() =>
@@ -198,13 +200,15 @@ const selectCompany = (data) => {
   firstCompany.value = data.name;
   isSelectFirstCompany.value = true;
   participatedCompany.value.push(data.name);
+  participatedCompanyId.value.push(window.location.href.split('/')[4]);
+  participatedCompanyId.value.push(data.id);
   getContracterRelatedCompany(data.id);
-  getContracterParticipatedCompany(data.id);
+  getContracterParticipatedCompany(participatedCompanyId.value.toString());
 };
 
 const getContracterRelatedCompany = async (id) => {
   const res = await fetch(
-    `${config.public.apiUrl}/company/${id}/related-company`,
+    `${config.public.apiUrl}/company/${id}/related-company?budgetYearStart=2560&budgetYearEnd=2568`,
     {
       method: 'get',
       headers: {

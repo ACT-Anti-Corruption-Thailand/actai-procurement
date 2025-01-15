@@ -5,6 +5,7 @@ import type { Project, MapData } from '../../public/src/data/search_result';
 const props = defineProps<{
   iconGuide: object;
   mockDataGuide: object;
+  filterListProject: object;
   data: array;
   yearList: array;
   projectList: Project;
@@ -126,11 +127,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="props.projectList?.pagination.totalItem == 0">
-    <h5 class="text-center text-[#8E8E8E]">
-      ไม่พบโครงการจัดซื้อจัดจ้างที่มีคำค้นนี้
-    </h5>
-  </div>
   <TabGroup :selectedIndex="selectedTab" @change="changeTab" as="Component">
     <div
       class="flex justify-between items-center mx-auto max-w-6xl px-4 sm:px-0"
@@ -140,7 +136,11 @@ onMounted(() => {
         <Tab class="tab-menu b1">ภาพรวม</Tab>
       </TabList>
       <div>
-        <FilterPopupResult section="โครงการ" @change="onChangeFilter" />
+        <!-- <FilterPopupResult
+          section="โครงการ"
+          @change="onChangeFilter"
+          :list="props.filterListProject"
+        /> -->
       </div>
     </div>
 
@@ -275,7 +275,12 @@ onMounted(() => {
 
         <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />
 
-        <div class="my-3">
+        <div v-if="props.projectList?.pagination.totalItem == 0">
+          <h5 class="text-center text-[#8E8E8E] py-5">
+            ไม่พบโครงการจัดซื้อจัดจ้างที่มีคำค้นนี้
+          </h5>
+        </div>
+        <div class="my-3" v-else>
           <a
             v-for="(item, i) in props.projectList?.searchResult"
             :key="i"

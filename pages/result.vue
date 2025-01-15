@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
+const route = useRoute();
 
 const menu = ref('ทั้งหมด');
 const menuList = ref(['ทั้งหมด', 'โครงการฯ', 'หน่วยงานรัฐ', 'ผู้รับจ้าง']);
@@ -43,6 +44,7 @@ const govList = ref<Government | null>(null);
 const contractorListAll = ref<Contractor | null>(null);
 const contractorList = ref<Contractor | null>(null);
 const mapDataList = ref<MapData | null>(null);
+const filterListProject = ref({});
 
 onMounted(async () => {
   const urlParams = decodeURI(window.location.href).split('=')[1];
@@ -87,7 +89,22 @@ onBeforeMount(async () => {
   await getContractorList('', '');
   await getContractorList('', 'details');
   await getMapData();
+  //getFilter();
 });
+
+const getFilter = async () => {
+  const res = await fetch(`${config.public.apiUrl}/project/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    filterListProject.value = data;
+  }
+};
 
 const getProjectList = async (params: string, section: string) => {
   const urlParams = decodeURI(window.location.href).split('=')[1];
@@ -117,7 +134,7 @@ const getGovList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?projectKeyword=${urlParams}${p}`,
+    `${config.public.apiUrl}/agency/search?keyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {
@@ -139,7 +156,7 @@ const getContractorList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?projectKeyword=${urlParams}${p}`,
+    `${config.public.apiUrl}/company/search?keyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {
@@ -478,7 +495,7 @@ const onSetChartData = (section: string, data) => {
       </p>
     </div>
   </div>
-  <div class="bg-white pt-7">
+  <div class="bg-white py-7">
     <!-- <div class="mx-auto max-w-6xl"> -->
     <ClientOnly fallback-tag="span" fallback="Loading...">
       <ResultAll
@@ -505,6 +522,7 @@ const onSetChartData = (section: string, data) => {
         :chartDataSet4="chartDataSet4"
         :chartDataSet5="chartDataSet5"
         :mapData="mapDataList"
+        :filterListProject="filterListProject"
       />
       <ResultGovernment
         v-else-if="menu == 'หน่วยงานรัฐ'"

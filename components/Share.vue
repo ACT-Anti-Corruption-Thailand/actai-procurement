@@ -55,13 +55,16 @@ function setURL() {
         />
       </div>
 
-      <ShareNetwork network="facebook" :url="urlLink" title="">
+      <a
+        target="_blank"
+        :href="`http://www.facebook.com/sharer/sharer.php?u=${setURL()}`"
+      >
         <Facebook :color="color" />
-      </ShareNetwork>
+      </a>
 
-      <ShareNetwork network="twitter" :url="urlLink" title="">
+      <a target="_blank" :href="`https://x.com/intent/tweet?url=${setURL()}`">
         <X :color="color" />
-      </ShareNetwork>
+      </a>
     </div>
   </div>
 </template>

@@ -206,7 +206,7 @@ const getContracterRelatedCompany = async () => {
   const segments = window.location.href.split('/')[4];
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/${segments}/related-company`,
+    `${config.public.apiUrl}/company/${segments}/related-company?budgetYearStart=2560&budgetYearEnd=2568`,
     {
       method: 'get',
       headers: {

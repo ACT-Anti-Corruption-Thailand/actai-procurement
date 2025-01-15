@@ -90,7 +90,7 @@
                         <ListBox
                           title=""
                           :selected="selected.yearFrom"
-                          :list="filterListProject?.budgetYears"
+                          :list="props.list?.budgetYears"
                         />
                       </div>
 
@@ -100,58 +100,69 @@
                         <ListBox
                           title=""
                           :selected="selected.yearTo"
-                          :list="filterListProject?.budgetYears"
+                          :list="props.list?.budgetYears"
                         />
                       </div>
                     </div>
 
-                    <!-- <Combobox
-                      title="หน่วยงานรัฐเจ้าของโครงการ"
-                      :list="filterListProject?.agencies"
-                      defaultVal="ทุกหน่วยงาน"
-                      @change="(n) => setFilter(n, 'agencies')"
-                    /> -->
+                    <!-- {{ selected }}
+                    {{ test }} -->
 
                     <Combobox
+                      title="หน่วยงานรัฐเจ้าของโครงการ"
+                      :list="props.list?.agencies"
+                      defaultVal="ทุกหน่วยงาน"
+                      @change="(n) => setFilter(n, 'agencies', 'ทุกหน่วยงาน')"
+                      :selectedVal="selected.agencies"
+                      :test="test"
+                    />
+
+                    <Combobox
+                      v-if="props.list?.agencyBelongTo?.length > 0"
                       title="สังกัด"
-                      :list="filterListProject?.agencyBelongTo"
+                      :list="props.list?.agencyBelongTo"
                       defaultVal="ทุกหน่วยงาน"
                       @change="(n) => setFilter(n, 'agencyBelongTo')"
                     />
 
                     <Combobox
                       title="ที่ตั้งโครงการ"
-                      :list="filterListProject?.provinces"
+                      :list="props.list?.provinces"
                       defaultVal="ทุกจังหวัด"
                       @change="(n) => setFilter(n, 'provinces')"
+                      :selectedVal="selected.provinces"
                     />
 
                     <Combobox
                       title="สถานะโครงการ"
-                      :list="filterListProject?.projectStatus"
+                      :list="props.list?.projectStatus"
                       defaultVal="ทุกสถานะ"
                       @change="(n) => setFilter(n, 'projectStatus')"
+                      :selectedVal="selected.projectStatus"
                     />
 
                     <Combobox
                       title="วิธีการจัดหา"
-                      :list="filterListProject?.resourcingMethod"
+                      :list="props.list?.resourcingMethod"
                       defaultVal="ทุกวิธี"
                       @change="(n) => setFilter(n, 'resourcingMethod')"
+                      :selectedVal="selected.resourcingMethod"
                     />
 
                     <Combobox
                       title="ประเภทการจัดหา"
-                      :list="filterListProject?.resourcingType"
+                      :list="props.list?.resourcingType"
                       defaultVal="ทุกประเภท"
                       @change="(n) => setFilter(n, 'resourcingType')"
+                      :selectedVal="selected.resourcingType"
                     />
 
                     <Combobox
                       title="ประเภทผู้รับจ้าง"
-                      :list="filterListProject?.contractorType"
+                      :list="props.list?.contractorType"
                       defaultVal="ทุกประเภท"
                       @change="(n) => setFilter(n, 'contractorType')"
+                      :selectedVal="selected.contractorType"
                     />
 
                     <div class="text-[#7F7F7F] mt-5">
@@ -288,6 +299,7 @@ import {
 
 const props = defineProps<{
   section: string;
+  list?: object;
 }>();
 const emit = defineEmits(['change']);
 
@@ -300,8 +312,9 @@ const plan = ref('งบประมาณ');
 const filterCount = ref(0);
 
 let selected = {
-  yearFrom: '2567',
-  yearTo: '2567',
+  yearFrom: props.list?.budgetYears[0].toString(),
+  yearTo:
+    props.list?.budgetYears[props.list?.budgetYears.length - 1].toString(),
   agencies: 'ทุกหน่วยงาน',
   agencyBelongTo: 'ทุกหน่วยงาน',
   contractorType: 'ทุกประเภท',
@@ -311,7 +324,9 @@ let selected = {
   resourcingMethod: 'ทุกวิธี',
 };
 
-const filterListProject = ref({});
+const test = ref(0);
+
+const list = ref({});
 const filterListGovernment = ref({});
 const filterListContractor = ref({});
 
@@ -332,7 +347,7 @@ const getFilterListProject = async () => {
 
   if (res.ok) {
     const data = await res.json();
-    filterListProject.value = data;
+    props.list.value = data;
     selected.yearFrom = data.budgetYears[0].toString();
     selected.yearTo = data.budgetYears[data.budgetYears.length - 1].toString();
   }
@@ -367,16 +382,21 @@ const getFilterListContractor = async () => {
 };
 
 onMounted(async () => {
-  await getFilterListProject();
-  await getFilterListGovernment();
-  await getFilterListContractor();
+  //await getFilterListProject();
+  // await getFilterListGovernment();
+  // await getFilterListContractor();
 });
 
-const setFilter = (val: any, section: string) => {
-  selected[section] = val.length > 0 ? [...val] : '';
+const setFilter = (val: any, section: string, defaultVal: string) => {
+  console.log(selected[section]);
+
+  selected[section] =
+    typeof selected[section] == 'object' ? [...val] : defaultVal;
 };
 
 const searchByResult = () => {
+  // console.log(selected);
+
   let filter = {
     budgetYear: {
       start: selected.yearFrom,
@@ -401,8 +421,10 @@ const searchByResult = () => {
         ? undefined
         : selected.resourcingMethod,
   };
-
+  console.log(selected);
   var str = qs.stringify({ filter });
+  console.log(str);
+
   isOpen.value = false;
   emit('change', str);
 };
@@ -419,6 +441,8 @@ const clearFilter = () => {
     resourcingType: 'ทุกประเภท',
     resourcingMethod: 'ทุกวิธี',
   };
+
+  test.value = 1;
 };
 </script>
 

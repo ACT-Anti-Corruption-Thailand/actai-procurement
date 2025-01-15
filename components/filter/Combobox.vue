@@ -10,13 +10,14 @@
 
   <div class="flex w-full gap-2 items-center">
     <div class="flex-1 relative">
-      <Combobox v-model="selectedList" multiple v-slot="{ open }">
+      <!-- {{ selectedList }} {{ selectedChoice }} {{ test }} -->
+      <Combobox v-model="selectedList" multiple v-slot="{ open }" nullable>
         <div class="relative">
           <ComboboxInput
-            placeholder="test"
+            :placeholder="query"
             :displayValue="(person) => query"
             class="dropdown-btn border-0 hover:ring-0"
-            @change="(person) => test(person)"
+            @change="(person) => setComboboxVal(person)"
           />
           <ComboboxButton
             class="absolute inset-y-0 right-0 flex items-center pr-2 combobox-btn"
@@ -33,7 +34,7 @@
           <div v-show="open">
             <ComboboxOptions static class="dropdown-list absolutes">
               <ComboboxOption
-                v-for="(item, i) in result"
+                v-for="(item, i) in result.slice(0, 5)"
                 :key="i"
                 :value="item"
                 v-slot="{ selected, active }"
@@ -61,7 +62,9 @@
 const props = defineProps<{
   title: string;
   defaultVal: string;
+  selectedVal: array;
   list: object;
+  test?: number;
 }>();
 
 import {
@@ -77,18 +80,39 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
 const selectedList = ref([]);
 const hasChange = ref(false);
+const selectedChoice = toRef(props, 'selectedVal');
+
+watch(selectedChoice, (val) => {
+  selectedList.value = val != '' ? val : [];
+  console.log(val);
+});
 
 let query = ref(props.defaultVal);
+
+onBeforeMount(() => {
+  if (typeof selectedChoice.value != 'string') {
+    selectedList.value = selectedChoice.value;
+    setComboboxText();
+  }
+});
 
 const emit = defineEmits(['change']);
 
 const handleEnterOptions = () => {
-  let text = '';
-
   if (selectedList.value.length > 1) {
     const index = selectedList.value.indexOf(props.defaultVal);
     if (index != -1) selectedList.value.splice(index, 1);
   }
+
+  setComboboxText();
+
+  console.log(selectedList.value);
+
+  emit('change', selectedList.value);
+};
+
+const setComboboxText = () => {
+  let text = '';
 
   if (selectedList.value.length > 0) {
     if (selectedList.value.length > 1)
@@ -100,9 +124,8 @@ const handleEnterOptions = () => {
   } else {
     text = props.defaultVal;
   }
+
   query.value = text;
-  hasChange.value = false;
-  emit('change', selectedList.value);
 };
 
 const result = computed(() => {
@@ -117,7 +140,7 @@ const result = computed(() => {
     });
 });
 
-const test = (a) => {
+const setComboboxVal = (a) => {
   query.value = a.target.value;
   hasChange.value = true;
 };

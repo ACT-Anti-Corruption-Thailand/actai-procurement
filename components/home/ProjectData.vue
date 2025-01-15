@@ -70,8 +70,8 @@
       <p class="b1 text-[#5E5E5E]" v-if="props.data?.totalProject != null">
         รวม {{ props.data?.totalProject.toLocaleString() }} โครงการ
       </p>
-      <p class="b1 text-[#5E5E5E]" v-if="props.data?.totalBudgetMoney != null">
-        งบประมาณรวม {{ props.data?.totalBudgetMoney.toLocaleString() }} บาท
+      <p class="b1 text-[#5E5E5E]" v-if="props.data?.totalBudget != null">
+        งบประมาณรวม {{ props.data?.totalBudget.toLocaleString() }} บาท
       </p></template
     >
     <template v-else>
