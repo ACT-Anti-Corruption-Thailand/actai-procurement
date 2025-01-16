@@ -44,16 +44,16 @@ onMounted(() => {
 });
 
 const onEnterSearch = () => {
-  if (window.location.pathname == '/')
-    router.push('result?search=' + selected.value);
-  else router.go(0);
+  if (query.value != null) {
+    window.location.href = 'result?search=' + selected.value;
+  }
 };
 </script>
 
 <template>
   <ClientOnly fallback-tag="span" fallback="Loading...">
     <div class="w-full max-w-xl flex">
-      <Combobox v-model="selected" @change="onEnterSearch" nullable>
+      <Combobox v-model="selected" nullable>
         <div class="w-full">
           <div
             class="relative w-full cursor-default overflow-hidden rounded-l-lg bg-white text-left b2 ring-[#C2141B]"
@@ -63,6 +63,7 @@ const onEnterSearch = () => {
               id="search-input"
               class="w-full border-none py-2 px-3 text-black focus:ring-[#C2141B] b2"
               @change="getSearchList($event.target.value)"
+              @keyup.enter="onEnterSearch"
             />
             <img
               src="../public/src/images/close.svg"
