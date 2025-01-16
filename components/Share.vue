@@ -55,16 +55,18 @@ function setURL() {
         />
       </div>
 
-      <a
-        target="_blank"
-        :href="`http://www.facebook.com/sharer/sharer.php?u=${setURL()}`"
-      >
-        <Facebook :color="color" />
-      </a>
+      <ClientOnly fallback-tag="span" fallback="Loading...">
+        <a
+          target="_blank"
+          :href="`http://www.facebook.com/sharer/sharer.php?u=${setURL()}`"
+        >
+          <Facebook :color="color" />
+        </a>
 
-      <a target="_blank" :href="`https://x.com/intent/tweet?url=${setURL()}`">
-        <X :color="color" />
-      </a>
+        <a target="_blank" :href="`https://x.com/intent/tweet?url=${setURL()}`">
+          <X :color="color" />
+        </a>
+      </ClientOnly>
     </div>
   </div>
 </template>

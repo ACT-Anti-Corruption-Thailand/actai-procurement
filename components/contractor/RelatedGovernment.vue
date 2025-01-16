@@ -6,7 +6,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['change']);
-const pageNum = ref(10);
+const page = ref(10);
+const sort = ref('totalContractAmount');
 
 const setDate = (date) => {
   const options = {
@@ -28,16 +29,17 @@ const searchResult = computed(() => {
     : props.data.searchResult;
 });
 
-const setFilter = (isChangePage) => {
-  if (isChangePage) pageNum.value += 10;
+const setParams = (type: string, val: string) => {
+  const searchParams = new URLSearchParams();
 
-  // let filter = {
-  //   hasCorruptionRisk: isRisk.value,
-  // };
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
 
-  // var str = qs.stringify({ filter });
+  searchParams.set('keyword', searchText.value);
+  searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
 
-  emit('change', '&' + '', pageNum.value);
+  emit('change', '&' + searchParams.toString(), page.value);
 };
 </script>
 
@@ -76,11 +78,22 @@ const setFilter = (isChangePage) => {
         <DownloadAndCopy section="government" filterList="" />
       </div>
 
-      <!-- <SortBy
+      <SortBy
         text="เรียงตาม"
-        :list="['วงเงินสัญญา', 'จำนวนโครงการ']"
+        :list="[
+          {
+            name: 'วงเงินสัญญา',
+            value: 'totalContractAmount',
+          },
+          {
+            name: 'จำนวนโครงการ',
+            value: 'totalProject',
+          },
+        ]"
         class="mb-3"
-      /> -->
+        @change="setParams"
+        @sortBy="setParams"
+      />
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -123,7 +136,7 @@ const setFilter = (isChangePage) => {
           v-if="
             props.data?.searchResult.length < props.data?.pagination?.totalItem
           "
-          @click="setFilter(true)"
+          @click="setParams('page', 10)"
         />
       </div>
     </div>

@@ -16,11 +16,11 @@ import qs from 'qs';
 
 onBeforeMount(async () => {
   await getContracterData();
-  //await getContracterAuctionData();
+  await getContracterAuctionData();
+  await getContracterRelationship();
+  await getContracterRelatedCompany('2560', '2568');
   await getContracterProject('', 10);
   await getContracterGov('', 10);
-  await getContracterRelationship();
-  await getContracterRelatedCompany();
 });
 
 const contractorData = ref<ContractorDetails>([]);
@@ -168,7 +168,7 @@ const getContracterGov = async (q, n) => {
   var str = qs.stringify({ filter });
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?${params}&${str}`,
+    `${config.public.apiUrl}/agency/search?${params}&${str}${q}`,
     {
       method: 'get',
       headers: {
@@ -202,11 +202,11 @@ const getContracterRelationship = async () => {
   }
 };
 
-const getContracterRelatedCompany = async () => {
+const getContracterRelatedCompany = async (yf, yt) => {
   const segments = window.location.href.split('/')[4];
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/${segments}/related-company?budgetYearStart=2560&budgetYearEnd=2568`,
+    `${config.public.apiUrl}/company/${segments}/related-company?budgetYearStart=${yf}&budgetYearEnd=${yt}`,
     {
       method: 'get',
       headers: {
@@ -397,6 +397,7 @@ const setDate = (date) => {
           v-else-if="menu == 'กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน'"
           :data="contractorRelatedCompanies"
           :companyName="contractorData.companyName"
+          @change="getContracterRelatedCompany"
         />
         <RelatedProject
           v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'"

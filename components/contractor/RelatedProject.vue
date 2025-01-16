@@ -8,7 +8,9 @@ const props = defineProps<{
 const emit = defineEmits(['change']);
 
 const isRisk = ref(false);
-const pageNum = ref(10);
+const page = ref(10);
+const sort = ref('announcementDate');
+let searchParams = new URLSearchParams();
 
 const setDate = (date) => {
   const options = {
@@ -30,22 +32,28 @@ const searchResult = computed(() => {
     : props.data.searchResult;
 });
 
-const setFilter = (isChangePage) => {
-  if (isChangePage) pageNum.value += 10;
+const setParams = (type: string, val: string) => {
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+
+  searchParams.set('keyword', searchText.value);
+  searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
 
   let filter = {
     hasCorruptionRisk: isRisk.value,
   };
 
   var str = qs.stringify({ filter });
-  emit('change', '&' + str, pageNum.value);
+
+  emit('change', '&' + searchParams.toString() + '&' + str, page.value);
 };
 
 watch(isRisk, (val) => {
-  pageNum.value = 10;
+  page.value = 10;
 
   nextTick(() => {
-    setFilter(false);
+    setParams('risk', '');
   });
 });
 </script>
@@ -98,11 +106,22 @@ watch(isRisk, (val) => {
         <DownloadAndCopy section="project" filterList="" />
       </div>
 
-      <!-- <SortBy
+      <SortBy
         text="เรียงตาม"
-        :list="['วันที่ประกาศโครงการ', 'วงเงินสัญญา']"
+        :list="[
+          {
+            name: 'วันที่ประกาศโครงการ',
+            value: 'announcementDate',
+          },
+          {
+            name: 'วงเงินสัญญา',
+            value: 'totalContractAmount',
+          },
+        ]"
         class="mb-3"
-      /> -->
+        @change="setParams"
+        @sortBy="setParams"
+      />
 
       <div class="overflow-auto">
         <table class="table-auto text-left table-wrapper">
@@ -254,7 +273,7 @@ watch(isRisk, (val) => {
               props.data?.searchResult.length <
               props.data?.pagination?.totalItem
             "
-            @click="setFilter(true)"
+            @click="setParams('page', 10)"
           />
         </div>
       </div>

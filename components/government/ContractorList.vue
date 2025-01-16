@@ -6,7 +6,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['change']);
 const page = ref(10);
-const sort = ref('totalContractAmount ');
+const sort = ref('totalContractAmount');
 
 import qs from 'qs';
 

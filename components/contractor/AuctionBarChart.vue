@@ -72,7 +72,7 @@ const chartData = ref({
   datasets: [],
 });
 
-onMounted(() => {
+onBeforeMount(() => {
   chartData.value.labels = props.data.labels;
   chartData.value.datasets = props.data.datasets;
 });
