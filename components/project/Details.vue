@@ -352,12 +352,18 @@ const setParams = (type: string, val: string) => {
           </thead>
           <tbody class="b1" v-if="props.estimatePrice.length > 0">
             <template v-for="(data, i) in searchResult">
-              <tr :class="{ 'border-b-black': data.contractors.length == 1 }">
-                <td :rowspan="data.contractors.length" class="w-20">
+              <tr>
+                <td
+                  :rowspan="data.contractors.length"
+                  class="w-20 border-b-black"
+                >
                   {{ data.name }}
                 </td>
 
-                <td class="w-40">
+                <td
+                  class="w-40"
+                  :class="{ 'border-b-black': data.contractors.length == 1 }"
+                >
                   <div
                     class="bg-black b5 rounded-10 text-white py-0.5 px-2.5 w-fit font-bold"
                     v-if="data.contractors[0].isWinner"
@@ -385,13 +391,20 @@ const setParams = (type: string, val: string) => {
                   </div>
                 </td>
 
-                <td :class="{ 'font-bold': data.contractors[0].isWinner }">
+                <td
+                  :class="{
+                    'font-bold': data.contractors[0].isWinner,
+                    'border-b-black': data.contractors.length == 1,
+                  }"
+                >
                   {{ data.contractors[0].biddingPrice.toLocaleString() }}
                 </td>
+
                 <td
                   class="text-right"
                   :class="[
                     {
+                      'border-b-black': data.contractors.length == 1,
                       'font-bold': data.contractors[0].isWinner,
                       'text-[#7051B4] bg-[#F4EFFF]':
                         data.contractors[0].biddingPrice >
@@ -447,10 +460,12 @@ const setParams = (type: string, val: string) => {
                     </p>
                   </div>
                 </td>
+
                 <td
                   class="text-right"
                   :class="[
                     {
+                      'border-b-black': data.contractors.length == 1,
                       'font-bold': data.contractors[0].isWinner,
                       'text-[#7051B4] bg-[#F4EFFF]':
                         data.contractors[0].biddingPrice > props.total,
@@ -496,17 +511,19 @@ const setParams = (type: string, val: string) => {
               </tr>
 
               <tr
-                :class="{
-                  'border-b-black':
-                    j + 1 ==
-                    data.contractors.slice(1, data.contractors.length).length,
-                }"
                 v-for="(item, j) in data.contractors.slice(
                   1,
                   data.contractors.length
                 )"
               >
-                <td class="w-40">
+                <td
+                  class="w-40"
+                  :class="{
+                    'border-b-black':
+                      j + 1 ==
+                      data.contractors.slice(1, data.contractors.length).length,
+                  }"
+                >
                   <div
                     class="bg-black b5 rounded-10 text-white py-0.5 px-2.5 w-fit font-bold"
                     v-if="item.isWinner"
@@ -531,7 +548,15 @@ const setParams = (type: string, val: string) => {
                     <p class="b4 text-[#8E8E8E]">{{ item.id }}</p>
                   </div>
                 </td>
-                <td :class="{ 'font-bold': item.isWinner }">
+
+                <td
+                  :class="{
+                    'font-bold': item.isWinner,
+                    'border-b-black':
+                      j + 1 ==
+                      data.contractors.slice(1, data.contractors.length).length,
+                  }"
+                >
                   {{ item.biddingPrice.toLocaleString() }}
                 </td>
 
@@ -539,6 +564,10 @@ const setParams = (type: string, val: string) => {
                   class="text-right"
                   :class="[
                     {
+                      'border-b-black':
+                        j + 1 ==
+                        data.contractors.slice(1, data.contractors.length)
+                          .length,
                       'font-bold': item.isWinner,
                       'text-[#7051B4] bg-[#F4EFFF]':
                         item.biddingPrice > data.winnerEstimatePrice,
@@ -584,10 +613,15 @@ const setParams = (type: string, val: string) => {
                     </p>
                   </div>
                 </td>
+
                 <td
                   class="text-right"
                   :class="[
                     {
+                      'border-b-black':
+                        j + 1 ==
+                        data.contractors.slice(1, data.contractors.length)
+                          .length,
                       'font-bold': item.isWinner,
                       'text-[#7051B4] bg-[#F4EFFF]':
                         item.biddingPrice > props.total,

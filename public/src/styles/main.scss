@@ -131,8 +131,8 @@ table td {
   @apply p-1 font-normal align-baseline;
 }
 
-table tr {
-  @apply border-b;
+table td {
+  @apply border-b-[1.5px];
 }
 
 table th:first-child {
