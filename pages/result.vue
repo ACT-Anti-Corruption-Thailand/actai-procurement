@@ -45,51 +45,18 @@ const contractorListAll = ref<Contractor | null>(null);
 const contractorList = ref<Contractor | null>(null);
 const mapDataList = ref<MapData | null>(null);
 const filterListProject = ref({});
-
-onMounted(async () => {
-  const urlParams = decodeURI(window.location.href).split('=')[1];
-
-  const res = await fetch(
-    `${config.public.apiUrl}/project/search/summary?keyword=${urlParams}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-
-  if (res.ok) {
-    const data = await res.json();
-    summaryData.value = data;
-  }
-
-  const res2 = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-budget-year?keyword=${urlParams}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-
-  if (res.ok) {
-    const data = await res2.json();
-    chartData.value = data;
-    setChartData(data.yearlyAggregates);
-  }
-});
+const filterListGovernment = ref({});
+const filterListContractor = ref({});
 
 onBeforeMount(async () => {
-  await getProjectList('', '');
-  await getProjectList('', 'details');
-  await getGovList('', '');
-  await getGovList('', 'details');
-  await getContractorList('', '');
-  await getContractorList('', 'details');
-  await getMapData();
-  //getFilter();
+  // await getProjectList('', '');
+  await getProjectList('&sortBy=relevanceScore&sortOrder=desc', 'details');
+  // await getGovList('', '');
+  await getGovList('&sortBy=relevanceScore&sortOrder=desc', 'details');
+  // await getContractorList('', '');
+  await getContractorList('&sortBy=relevanceScore&sortOrder=desc', 'details');
+  // await getMapData();
+  getFilter();
 });
 
 const getFilter = async () => {
@@ -103,6 +70,30 @@ const getFilter = async () => {
   if (res.ok) {
     const data = await res.json();
     filterListProject.value = data;
+  }
+
+  const res2 = await fetch(`${config.public.apiUrl}/agency/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res2.ok) {
+    const data = await res2.json();
+    filterListGovernment.value = data;
+  }
+
+  const res3 = await fetch(`${config.public.apiUrl}/company/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res3.ok) {
+    const data = await res3.json();
+    filterListContractor.value = data;
   }
 };
 
@@ -126,6 +117,37 @@ const getProjectList = async (params: string, section: string) => {
     if (section == 'details')
       projectList.value = JSON.parse(JSON.stringify(data)) || [];
     else projectListAll.value = JSON.parse(JSON.stringify(data)) || [];
+  }
+
+  const res2 = await fetch(
+    `${config.public.apiUrl}/project/search/summary?keyword=${urlParams}${p}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res2.ok) {
+    const data = await res2.json();
+    summaryData.value = data;
+  }
+
+  const res3 = await fetch(
+    `${config.public.apiUrl}/project/aggregate/by-budget-year?keyword=${urlParams}${p}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res3.ok) {
+    const data = await res3.json();
+    chartData.value = data;
+    setChartData(data.yearlyAggregates);
   }
 };
 
@@ -193,6 +215,12 @@ const getMapData = async () => {
 };
 
 const setChartData = (data) => {
+  chartDataSet1.value = [];
+  chartDataSet2.value = [];
+  chartDataSet3.value = [];
+  chartDataSet4.value = [];
+  chartDataSet5.value = [];
+
   const dataset_year = data.map((a) => a.budgetYear);
   const dataset1 = data.map((a) => a.aggregateBy.budgetMoney);
   const dataset2 = data.map((a) => a.totalProject);
@@ -383,7 +411,7 @@ const onSetChartData = (section: string, data) => {
         color: '#F8B60E',
       },
       {
-        name: 'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
+        name: 'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์โดยผ่านผู้ให้บริการตลาดกลาง',
         color: '#FEEDAF',
       },
       {
@@ -391,7 +419,7 @@ const onSetChartData = (section: string, data) => {
         color: '#6DD5D5',
       },
       {
-        name: 'ตกลงราคา',
+        name: 'สอบราคา',
         color: '#2EA0DF',
       },
       {
@@ -412,54 +440,53 @@ const onSetChartData = (section: string, data) => {
       },
     ];
 
-    // const grouped = colorResourceMethod.map((c) => {
-    //   return c.name;
-    // });
-
-    // const res = projectResourceMethod.sort(
-    //   (a, b) => grouped.indexOf(a) - grouped.indexOf(b)
-    // );
-
-    const chartData1 = projectResourceMethod
-      .map((name, i) => {
-        const chartdata = data.map(
-          (d) =>
-            d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
-        );
-
-        return {
-          label: name,
-          backgroundColor: '',
-          sum: chartdata.reduce((sum, num) => sum + num, 0),
-          data: chartdata,
-          isChecked: true,
-        };
-      })
-      .sort((a, z) => z.sum - a.sum);
-
-    const a = chartData1.slice(0, 9);
-    a.forEach((element, i) => {
-      element.backgroundColor = colorResourceMethod[i].color;
+    const grouped = colorResourceMethod.map((c) => {
+      return c.name;
     });
 
-    const b = chartData1.slice(9);
+    let others = projectResourceMethod.filter((val) => !grouped.includes(val));
+
+    let chartData1 = grouped.map((name, i) => {
+      const chartdata = data.map(
+        (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
+      );
+
+      return {
+        label: name,
+        backgroundColor: colorResourceMethod[i].color,
+        sum: chartdata.reduce((sum, num) => sum + num, 0),
+        data: chartdata,
+        isChecked: true,
+      };
+    });
+
+    let chartData2 = others.map((name, i) => {
+      const chartdata = data.map(
+        (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
+      );
+
+      return {
+        sum: chartdata.reduce((sum, num) => sum + num, 0),
+        data: chartdata,
+      };
+    });
 
     const c = {
       label: 'อื่นๆ',
       backgroundColor: '#DADADA',
-      data: b.reduce((sum, years) => {
+      data: chartData2.reduce((sum, years) => {
         years.data.forEach((num, i) => {
           sum[i] += num;
         });
         return sum;
-      }, new Array(b[0].data.length).fill(0)),
+      }, new Array(chartData2[0].data.length).fill(0)),
       sum: 0,
       isChecked: true,
     };
 
     c.sum = c.data.reduce((sum, num) => sum + num, 0);
 
-    a.forEach((element) => {
+    chartData1.forEach((element) => {
       chartDataSet5.value.push(element);
     });
 
@@ -510,7 +537,6 @@ const onSetChartData = (section: string, data) => {
       <ResultProjectList
         v-else-if="menu == 'โครงการฯ'"
         @search="getProjectList"
-        @filtered="getProjectList"
         :iconGuide="iconGuide"
         :mockDataGuide="mockDataGuide"
         :data="summaryData"
@@ -528,11 +554,13 @@ const onSetChartData = (section: string, data) => {
         v-else-if="menu == 'หน่วยงานรัฐ'"
         :govList="govList"
         @search="getGovList"
+        :filterListGovernment="filterListGovernment"
       />
       <ResultContractor
         v-else
         :contractorList="contractorList"
         @search="getContractorList"
+        :filterListContractor="filterListContractor"
       />
     </ClientOnly>
     <!-- </div> -->

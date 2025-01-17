@@ -144,8 +144,8 @@ watch(isRisk, (val) => {
               </th>
               <th>วันที่ประกาศโครงการ</th>
               <th class="w-1/6">สถานะโครงการ</th>
-              <th class="w-1/4">วิธีการจัดหา</th>
-              <th class="w-1/4">
+              <th class="w-1/6">วิธีการจัดหา</th>
+              <th class="w-1/6">
                 ผู้รับจ้างที่ได้งาน
                 <info
                   color="#FFFFFF"
@@ -153,9 +153,7 @@ watch(isRisk, (val) => {
                   @click="isOpen = true"
                 />
               </th>
-              <th v-if="props.data?.totalBudgetMoney != null">
-                วงเงินสัญญารวม <br />งบประมาณรวม
-              </th>
+              <th class="w-1/6 text-right">วงเงินสัญญารวม <br />งบประมาณรวม</th>
             </tr>
           </thead>
           <tbody class="b1">
@@ -203,9 +201,9 @@ watch(isRisk, (val) => {
                 }}
               </td>
               <td>{{ item.agencyName }}</td>
-              <td v-if="props.data?.totalBudgetMoney != null">
-                <b> {{ props.data?.totalBudgetMoney.toLocaleString() }}</b>
-                <br />{{ props.data?.totalContractMoney.toLocaleString() }}
+              <td class="text-right">
+                <b> {{ item.totalBudget.toLocaleString() }}</b>
+                <br />{{ item.totalContractMoney.toLocaleString() }}
               </td>
             </tr>
           </tbody>

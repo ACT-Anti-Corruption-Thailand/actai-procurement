@@ -10,7 +10,8 @@
 
   <div class="flex w-full gap-2 items-center">
     <div class="flex-1 relative">
-      <!-- {{ selectedList }} {{ selectedChoice }} {{ test }} -->
+      <!-- {{ selectedList }}
+      {{ selectedChoice }} -->
       <Combobox v-model="selectedList" multiple v-slot="{ open }" nullable>
         <div class="relative">
           <ComboboxInput
@@ -64,7 +65,7 @@ const props = defineProps<{
   defaultVal: string;
   selectedVal: array;
   list: object;
-  test?: number;
+  isClear?: boolean;
 }>();
 
 import {
@@ -81,17 +82,20 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 const selectedList = ref([]);
 const hasChange = ref(false);
 const selectedChoice = toRef(props, 'selectedVal');
+const isClearFilter = toRef(props, 'isClear');
 
 watch(selectedChoice, (val) => {
-  selectedList.value = val != '' ? val : [];
-  console.log(val);
+  if (isClearFilter.value) {
+    selectedList.value = [];
+    setComboboxText();
+  }
 });
 
 let query = ref(props.defaultVal);
 
 onBeforeMount(() => {
-  if (typeof selectedChoice.value != 'string') {
-    selectedList.value = selectedChoice.value;
+  if (selectedChoice.value != props.defaultVal) {
+    selectedList.value = selectedChoice.value.split(',');
     setComboboxText();
   }
 });
@@ -105,8 +109,6 @@ const handleEnterOptions = () => {
   }
 
   setComboboxText();
-
-  console.log(selectedList.value);
 
   emit('change', selectedList.value);
 };

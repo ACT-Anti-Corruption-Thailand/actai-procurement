@@ -22,11 +22,12 @@ const isOpen = ref(false);
 const isOpen2 = ref(false);
 const isOpenGovModal = ref(false);
 const isOpenContractorModal = ref(false);
-const params = ref('');
-const emit = defineEmits(['search', 'filtered']);
-const sort = ref('');
+const emit = defineEmits(['search']);
+const sort = ref('relevanceScore');
+const sortOrder = ref('desc');
 const page = ref(0);
 const searchText = ref('');
+const queryForDownload = ref('');
 const menuList = ref([
   {
     title: 'สถานะโครงการที่พบมากที่สุด',
@@ -91,23 +92,22 @@ const setParams = (type: string, val: string) => {
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+  else if (type == 'filter') filterList.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  emit('search', '&' + searchParams.toString(), 'details');
-};
-
-const onChangeFilter = (f: string) => {
-  filterList.value = f;
-  emit('filtered', '&' + f, 'details');
+  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
 onMounted(() => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   searchText.value = urlParams.get('search');
+  queryForDownload.value = '&sortBy=relevanceScore&sortOrder=desc';
 
   menuList.value[0].desc = props.data?.maxProjectStatus?.name;
   menuList.value[0].total = props.data?.maxProjectStatus?.total;
@@ -136,11 +136,11 @@ onMounted(() => {
         <Tab class="tab-menu b1">ภาพรวม</Tab>
       </TabList>
       <div>
-        <!-- <FilterPopupResult
+        <FilterPopupResult
           section="โครงการ"
-          @change="onChangeFilter"
+          @change="setParams"
           :list="props.filterListProject"
-        /> -->
+        />
       </div>
     </div>
 
@@ -270,7 +270,7 @@ onMounted(() => {
             @sortBy="setParams"
           />
 
-          <DownloadAndCopy :filterList="filterList" section="project" />
+          <DownloadAndCopy :filterList="queryForDownload" section="project" />
         </div>
 
         <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />

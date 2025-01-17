@@ -3,7 +3,17 @@ import type { Government } from '../../public/src/data/search_result';
 
 const props = defineProps<{
   govList?: Government;
+  filterListGovernment?: object;
 }>();
+
+const emit = defineEmits(['search']);
+
+const keyword = ref('');
+const sort = ref('relevanceScore');
+const sortOrder = ref('desc');
+const page = ref(0);
+const queryForDownload = ref('');
+const filterList = ref('');
 
 function highlight(title: string, text: string) {
   var innerHTML = title;
@@ -21,46 +31,38 @@ function highlight(title: string, text: string) {
   return innerHTML;
 }
 
-const searchText = ref('');
-const keyword = ref('');
-
-const emit = defineEmits(['search']);
-
-const sort = ref('');
-const page = ref(0);
-
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+  else if (type == 'filter') filterList.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  emit('search', '&' + searchParams.toString(), 'details');
+  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
 onMounted(() => {
   keyword.value = localStorage.getItem('keyword');
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  searchText.value = urlParams.get('search');
 });
 </script>
 
 <template>
-  <div v-if="props.govList?.pagination.totalItem == 0" class="pb-7">
-    <h5 class="text-center text-[#8E8E8E]">ไม่พบหน่วยงานรัฐที่มีคำค้นนี้</h5>
-  </div>
-
-  <div class="mx-auto max-w-6xl px-4" v-else>
+  <div class="mx-auto max-w-6xl px-4">
     <div class="flex items-center justify-between">
       <h4 class="font-bold">
         {{ props.govList?.pagination?.totalItem.toLocaleString() }} หน่วยงานรัฐ
       </h4>
-      <FilterPopupResult section="หน่วยงานรัฐ" />
+      <FilterPopupResult
+        section="หน่วยงานรัฐ"
+        @change="setParams"
+        :list="props.filterListGovernment"
+      />
     </div>
 
     <div class="flex items-center justify-between my-3 sm:my-5">
@@ -93,7 +95,7 @@ onMounted(() => {
           @sortBy="setParams"
         />
       </div>
-      <DownloadAndCopy section="agency" filterList="" />
+      <DownloadAndCopy section="agency" :filterList="queryForDownload" />
     </div>
 
     <ProjectIconGuide
@@ -103,7 +105,10 @@ onMounted(() => {
       color="#8E8E8E"
     />
 
-    <div class="my-3">
+    <div v-if="props.govList?.pagination.totalItem == 0" class="pb-7">
+      <h5 class="text-center text-[#8E8E8E]">ไม่พบหน่วยงานรัฐที่มีคำค้นนี้</h5>
+    </div>
+    <div class="my-3" v-else>
       <a
         v-for="item in props.govList?.searchResult"
         class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"

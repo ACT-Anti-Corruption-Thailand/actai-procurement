@@ -9,8 +9,8 @@ import qs from 'qs';
 
 onBeforeMount(async () => {
   await getGovData();
-  await getGovProject('', 10);
-  await getGovContracter('', 10);
+  await getGovProject('&sortBy=announcementDate&sortOrder=desc', 10);
+  await getGovContracter('&sortBy=totalContractAmount&sortOrder=desc', 10);
 });
 
 const govData = ref<GovernmentDetails>([]);

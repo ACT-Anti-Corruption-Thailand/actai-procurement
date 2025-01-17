@@ -106,7 +106,7 @@ const copyLink = () => {
   if (window.location.search != '') url += window.location.search;
 
   urlLink.value = url;
-  if (props.filterList != '') url += '&' + props.filterList;
+  if (props.filterList != '') url += props.filterList;
 
   navigator.clipboard.writeText(url).then(function () {
     var tooltip = document.getElementById('myTooltipBtn');

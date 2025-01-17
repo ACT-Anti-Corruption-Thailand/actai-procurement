@@ -3,6 +3,7 @@ import type { Contractor } from '../../public/src/data/search_result';
 
 const props = defineProps<{
   contractorList?: Contractor;
+  filterListContractor?: object;
 }>();
 
 function highlight(title: string, text: string) {
@@ -25,21 +26,27 @@ const searchText = ref('');
 
 const emit = defineEmits(['search']);
 
-const sort = ref('');
+const sort = ref('relevanceScore');
+const sortOrder = ref('desc');
 const page = ref(0);
 const keyword = ref('');
+const queryForDownload = ref('');
+const filterList = ref('');
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+  else if (type == 'filter') filterList.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  emit('search', '&' + searchParams.toString(), 'details');
+  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
 onMounted(() => {
@@ -51,16 +58,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="props.contractorList?.pagination.totalItem == 0">
-    <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
-  </div>
-  <div class="mx-auto max-w-6xl px-4" v-else>
+  <div class="mx-auto max-w-6xl px-4">
     <div class="flex items-center justify-between">
       <h4 class="font-bold">
         {{ props.contractorList?.pagination?.totalItem.toLocaleString() }}
         ผู้รับจ้าง
       </h4>
-      <FilterPopupResult section="ผู้รับจ้าง" />
+      <FilterPopupResult
+        section="ผู้รับจ้าง"
+        @change="setParams"
+        :list="props.filterListContractor"
+      />
     </div>
 
     <div class="flex items-center justify-between my-3 sm:my-5">
@@ -85,7 +93,7 @@ onMounted(() => {
           @sortBy="setParams"
         />
       </div>
-      <DownloadAndCopy section="company" filterList="" />
+      <DownloadAndCopy section="company" :filterList="queryForDownload" />
     </div>
 
     <ProjectIconGuide
@@ -96,7 +104,10 @@ onMounted(() => {
       color="#8E8E8E"
     />
 
-    <div class="my-3">
+    <div v-if="props.contractorList?.pagination.totalItem == 0">
+      <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
+    </div>
+    <div class="my-3" v-else>
       <a
         v-for="item in props.contractorList?.searchResult"
         class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"

@@ -37,7 +37,9 @@ const getSearchList = async (keyword) => {
 
 onMounted(() => {
   if (window.location.pathname == '/result') {
-    const kw = decodeURI(window.location.href).split('=')[1];
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const kw = urlParams.get('search');
     selected.value = kw.replace('/+/g', ' ');
     query.value = kw.replace('/+/g', ' ');
   }
