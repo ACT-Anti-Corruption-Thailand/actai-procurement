@@ -49,13 +49,13 @@ const filterListGovernment = ref({});
 const filterListContractor = ref({});
 
 onBeforeMount(async () => {
-  // await getProjectList('', '');
+  await getProjectList('', '');
   await getProjectList('&sortBy=relevanceScore&sortOrder=desc', 'details');
-  // await getGovList('', '');
+  await getGovList('', '');
   await getGovList('&sortBy=relevanceScore&sortOrder=desc', 'details');
-  // await getContractorList('', '');
+  await getContractorList('', '');
   await getContractorList('&sortBy=relevanceScore&sortOrder=desc', 'details');
-  // await getMapData();
+  await getMapData();
   getFilter();
 });
 
