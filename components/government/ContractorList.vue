@@ -126,6 +126,11 @@ const setParams = (type: string, val: string) => {
         </table>
       </div>
 
+      <p class="b2 text-center my-3">
+        {{ props.data?.searchResult.length }} /
+        {{ props.data?.pagination?.totalItem.toLocaleString() }}
+      </p>
+
       <div class="text-center mt-3">
         <LoadMore
           v-if="

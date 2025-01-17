@@ -24,7 +24,8 @@ import type {
 onBeforeMount(async () => {
   await getProjectDataAndDocs();
   await getProjectEstimatePrice();
-  await getProjectContractor('');
+  await getProjectContracts('&sortBy=contractMoney&sortOrder=desc');
+  await getProjectContractor();
 
   if (
     projectContractor.value.length != 0 ||
@@ -67,7 +68,26 @@ const getProjectDataAndDocs = async () => {
   }
 };
 
-const getProjectContractor = async (params: string) => {
+const getProjectContracts = async (params: string) => {
+  const segments = window.location.href.split('/')[4];
+
+  const res2 = await fetch(
+    `${config.public.apiUrl}/project/${segments}/contract?${params}`,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (res2.ok) {
+    const data = await res2.json();
+    projectContract.value = data.contractors || [];
+  }
+};
+
+const getProjectContractor = async () => {
   const segments = window.location.href.split('/')[4];
 
   const res = await fetch(
@@ -83,21 +103,6 @@ const getProjectContractor = async (params: string) => {
   if (res.ok) {
     const data = await res.json();
     projectContractor.value = data.contractors || [];
-  }
-
-  const res2 = await fetch(
-    `${config.public.apiUrl}/project/${segments}/contract?${params}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-
-  if (res2.ok) {
-    const data = await res2.json();
-    projectContract.value = data.contractors || [];
   }
 };
 
@@ -134,7 +139,7 @@ const setDate = (date) => {
 
 <template>
   <Header />
-  <div class="bg-white p-5 z-10 sticky top-0">
+  <div class="bg-white p-5">
     <Breadcrumb :title="projectData.projectName" />
     <div class="max-w-7xl mx-auto flex gap-3 sm:gap-5 flex-col-mb">
       <div class="sm:w-4/5">
@@ -183,11 +188,11 @@ const setDate = (date) => {
           </ClientOnly>
         </div>
 
-        <!-- <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2" v-if="projectData?.isCost">
           <img src="../../public/src/images/checkmark.svg" alt="checkmark" />
           <p class="font-bold">เข้าร่วมโครงการ CoST</p>
         </div>
-        <div class="flex items-center gap-2">
+        <!--   <div class="flex items-center gap-2">
           <img src="../../public/src/images/checkmark.svg" alt="checkmark" />
           <p class="font-bold">เข้าร่วมโครงการ Integrity Pact</p>
         </div> -->
@@ -259,7 +264,7 @@ const setDate = (date) => {
           :contracts="projectContract"
           :estimatePrice="projectEstimatePrice"
           :total="projectTotalEstimatePrice"
-          @search="getProjectContractor"
+          @search="getProjectContracts"
         />
         <ProjectDocument v-else :data="projectDocs" />
 

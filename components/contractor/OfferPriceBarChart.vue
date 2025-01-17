@@ -180,6 +180,7 @@ const chartOptions = ref({
     y: {
       stacked: true,
       ticks: {
+        precision: 0,
         font: {
           size: 16,
           family: 'DB_Helvethaica_X',

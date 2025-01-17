@@ -249,6 +249,7 @@ const chartOptions = ref({
     y: {
       stacked: props.title == 'งบประมาณ' ? false : true,
       ticks: {
+        precision: 0,
         font: {
           size: 16,
           family: 'DB_Helvethaica_X',

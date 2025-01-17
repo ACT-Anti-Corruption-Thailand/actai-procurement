@@ -19,8 +19,9 @@ onBeforeMount(async () => {
   await getContracterAuctionData();
   await getContracterRelationship();
   await getContracterRelatedCompany('2560', '2568');
-  await getContracterProject('', 10);
-  await getContracterGov('', 10);
+  await getContracterAbandonProject('', 10);
+  await getContracterProject('&sortBy=announcementDate&sortOrder=desc', 10);
+  await getContracterGov('&sortBy=totalContractAmount&sortOrder=desc', 10);
 });
 
 const contractorData = ref<ContractorDetails>([]);
@@ -33,6 +34,8 @@ const contractorAuctionChartData = ref({});
 const totalAuction = ref(0);
 const totalBidding = ref(0);
 const totalWinner = ref(0);
+const isLoadingProject = ref(false);
+const isLoadingGov = ref(false);
 
 const getContracterData = async () => {
   const segments = window.location.href.split('/')[4];
@@ -109,6 +112,7 @@ const getContracterAuctionData = async () => {
 };
 
 const getContracterProject = async (q, n) => {
+  isLoadingProject.value = true;
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
@@ -133,6 +137,28 @@ const getContracterProject = async (q, n) => {
 
   var str = qs.stringify({ filter });
 
+  if (res.ok) {
+    const data = await res.json();
+    contractorProjectList.value = JSON.parse(JSON.stringify(data)) || [];
+    isLoadingProject.value = false;
+  }
+};
+
+const getContracterAbandonProject = async (q, n) => {
+  const segments = window.location.href.split('/')[4];
+
+  const params = new URLSearchParams();
+  // params.set('keyword', contractorData.value.companyName);
+  params.set('page', 1);
+  params.set('pageSize', n);
+
+  let filter = {
+    hasAbandonProject: true,
+    companyId: segments,
+  };
+
+  var str = qs.stringify({ filter });
+
   const res2 = await fetch(
     `${config.public.apiUrl}/project/search?${params}&${str}`,
     {
@@ -143,11 +169,6 @@ const getContracterProject = async (q, n) => {
     }
   );
 
-  if (res.ok) {
-    const data = await res.json();
-    contractorProjectList.value = JSON.parse(JSON.stringify(data)) || [];
-  }
-
   if (res2.ok) {
     const data = await res2.json();
     contractorAbandonProjectList.value = JSON.parse(JSON.stringify(data)) || [];
@@ -155,6 +176,7 @@ const getContracterProject = async (q, n) => {
 };
 
 const getContracterGov = async (q, n) => {
+  isLoadingGov.value = true;
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
@@ -180,6 +202,7 @@ const getContracterGov = async (q, n) => {
   if (res.ok) {
     const data = await res.json();
     contractorGovList.value = JSON.parse(JSON.stringify(data)) || [];
+    isLoadingGov.value = false;
   }
 };
 
@@ -234,7 +257,7 @@ const setDate = (date) => {
 
 <template>
   <Header />
-  <div class="bg-white p-5 z-10 sticky top-0">
+  <div class="bg-white p-5">
     <Breadcrumb :title="contractorData.companyName" />
     <div class="max-w-7xl mx-auto flex gap-2 flex-col-mb">
       <div class="sm:w-4/5">
@@ -403,11 +426,13 @@ const setDate = (date) => {
           v-else-if="menu == 'รายชื่อโครงการที่เกี่ยวข้อง'"
           :data="contractorProjectList"
           @change="getContracterProject"
+          :isLoading="isLoadingProject"
         />
         <RelatedGovernment
           v-else-if="menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'"
           :data="contractorGovList"
           @change="getContracterGov"
+          :isLoading="isLoadingGov"
         />
 
         <img

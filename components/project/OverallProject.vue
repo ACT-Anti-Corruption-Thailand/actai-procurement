@@ -35,7 +35,11 @@ const setDate = (date) => {
             <div class="flex-1">
               <p class="b2">ราคากลางรวม (บาท)</p>
               <p class="b1" v-if="props.data.totalEstimatePrice != null">
-                {{ props.data.totalEstimatePrice.toLocaleString() }}
+                {{
+                  props.data.totalEstimatePrice != 0
+                    ? props.data.totalEstimatePrice.toLocaleString()
+                    : '-'
+                }}
               </p>
             </div>
           </div>

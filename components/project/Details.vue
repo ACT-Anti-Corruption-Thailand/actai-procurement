@@ -128,25 +128,19 @@ const setParams = (type: string, val: string) => {
                 v-for="(c, i) in props.contracters.filter((x) =>
                   x.processInvolved.includes(item.title)
                 )"
+                :class="[
+                  c?.processInvolved.includes('ยื่นซอง') ||
+                  c?.processInvolved.includes('ผ่านคุณสมบัติ') ||
+                  c?.processInvolved.includes('เข้าเสนอราคา')
+                    ? 'text-black'
+                    : 'text-[#8E8E8E]',
+                  'text-[#8E8E8E] mt-0.5',
+                ]"
               >
-                <p
-                  :class="[
-                    c?.processInvolved.includes('ยื่นซอง') ||
-                    c?.processInvolved.includes('ผ่านคุณสมบัติ') ||
-                    c?.processInvolved.includes('เข้าเสนอราคา')
-                      ? 'text-black'
-                      : 'text-[#8E8E8E]',
-                    'text-[#8E8E8E] mt-0.5',
-                  ]"
-                >
+                <p>
                   {{ i + 1 }}
                 </p>
-                <div
-                  :class="[
-                    c?.isWinner ? 'text-black' : 'text-[#8E8E8E]',
-                    'b3 pb-3 text-left',
-                  ]"
-                >
+                <div class="b3 pb-3 text-left">
                   <a
                     target="_blank"
                     :href="`/contractor/${c.id}`"
@@ -429,10 +423,11 @@ const setParams = (type: string, val: string) => {
                           "
                           >ต่ำกว่า</span
                         >
-                        <span v-else>เท่ากัน</span>
+                        <span v-else>-</span>
                       </template>
                       <span v-else>-</span>
                     </p>
+
                     <p
                       class="b1"
                       v-if="
@@ -445,7 +440,7 @@ const setParams = (type: string, val: string) => {
                         (
                           ((data.contractors[0].biddingPrice -
                             data.winnerEstimatePrice) /
-                            data.contractors[0].biddingPrice) *
+                            data.winnerEstimatePrice) *
                           100
                         ).toFixed(2)
                       }}%
@@ -582,7 +577,7 @@ const setParams = (type: string, val: string) => {
                       {{
                         (
                           ((item.biddingPrice - data.winnerEstimatePrice) /
-                            item.biddingPrice) *
+                            data.winnerEstimatePrice) *
                           100
                         ).toFixed(2)
                       }}%

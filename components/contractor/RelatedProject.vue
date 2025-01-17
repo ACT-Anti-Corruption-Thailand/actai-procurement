@@ -4,6 +4,7 @@ import qs from 'qs';
 
 const props = defineProps<{
   data: Project;
+  isLoading: boolean;
 }>();
 const emit = defineEmits(['change']);
 
@@ -23,14 +24,6 @@ const setDate = (date) => {
 };
 
 const searchText = ref('');
-
-const searchResult = computed(() => {
-  return searchText.value != ''
-    ? props.data.searchResult.filter((x) =>
-        x.projectName.includes(searchText.value)
-      )
-    : props.data.searchResult;
-});
 
 const setParams = (type: string, val: string) => {
   if (type == 'sortBy') sort.value = val;
@@ -68,6 +61,7 @@ watch(isRisk, (val) => {
           <p class="b2 text-[#7F7F7F]">ค้นหาโครงการ</p>
           <div class="relative">
             <input
+              @change="setParams('keyword', searchText)"
               v-model="searchText"
               type="text"
               class="input-text h-full"
@@ -122,161 +116,144 @@ watch(isRisk, (val) => {
         @change="setParams"
         @sortBy="setParams"
       />
-
-      <div class="overflow-auto">
-        <table class="table-auto text-left table-wrapper">
-          <thead class="bg-[#8E8E8E] b3 text-white">
-            <tr>
-              <th>
-                ชื่อโครงการ<ProjectIconGuide
-                  :data="{
-                    province: '= ที่ตั้ง',
-                    no: '= เลขที่โครงการ',
+      <template v-if="!isLoading">
+        <div class="overflow-auto">
+          <table class="table-auto text-left table-wrapper">
+            <thead class="bg-[#8E8E8E] b3 text-white">
+              <tr>
+                <th>
+                  ชื่อโครงการ<ProjectIconGuide
+                    :data="{
+                      province: '= ที่ตั้ง',
+                      no: '= เลขที่โครงการ',
+                    }"
+                    color="#DADADA"
+                  />
+                </th>
+                <th>วันที่ประกาศโครงการ</th>
+                <th class="w-20">สถานะ</th>
+                <th class="w-20">วิธีการจัดหา</th>
+                <th class="w-20">หน่วยงานรัฐ</th>
+                <th class="w-20">ผู้ร่วมประมูล</th>
+                <th class="w-20">ผู้ชนะ</th>
+                <th>
+                  วงเงินสัญญารวมของโครงการ <br /><span class="text-[#DADADA]"
+                    >งบประมาณรวม</span
+                  >
+                </th>
+              </tr>
+            </thead>
+            <tbody class="b1">
+              <tr v-for="(item, i) in props.data.searchResult" :key="i">
+                <td>
+                  <a
+                    :href="`/project/${item.projectId}`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-[#0B5C90]"
+                  >
+                    <b>{{ item.projectName }}</b></a
+                  >
+                  <ProjectIconGuide
+                    :data="{
+                      province: item.province,
+                      no: item.projectId,
+                    }"
+                    color="#7F7F7F"
+                  />
+                  <ProjectTag
+                    text="พบความเสี่ยงทุจริต"
+                    v-if="item.hasCorruptionRisk"
+                  />
+                </td>
+                <td>{{ setDate(item.announcementDate) }}</td>
+                <td
+                  :class="{
+                    'bg-[#054775] text-white':
+                      item.projectStatus == 'ส่งงานล่าช้ากว่ากำหนด',
+                    'bg-[#0F7979] text-white':
+                      item.projectStatus == 'ส่งงานครบถ้วน',
+                    'bg-[#1AA8A8] text-white':
+                      item.projectStatus == 'ส่งงานตามกำหนด',
+                    'bg-[#6DD5D5] text-white':
+                      item.projectStatus == 'จัดทำสัญญา/PO แล้ว',
+                    'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
+                    'bg-[#FF8888] text-white':
+                      item.projectStatus == 'ยกเลิกสัญญา',
+                    'bg-[#EC1C24] text-white':
+                      item.projectStatus == 'สิ้นสุดสัญญา',
                   }"
-                  color="#DADADA"
-                />
-              </th>
-              <th>วันที่ประกาศโครงการ</th>
-              <th class="w-20">สถานะ</th>
-              <th class="w-20">วิธีการจัดหา</th>
-              <th class="w-20">หน่วยงานรัฐ</th>
-              <th class="w-20">ผู้ร่วมประมูล</th>
-              <th class="w-20">ผู้ชนะ</th>
-              <th>
-                วงเงินสัญญารวมของโครงการ <br /><span class="text-[#DADADA]"
-                  >งบประมาณรวม</span
                 >
-              </th>
-            </tr>
-          </thead>
-          <tbody class="b1">
-            <tr v-for="(item, i) in searchResult" :key="i">
-              <td>
-                <a
-                  :href="`/project/${item.projectId}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="hover:text-[#0B5C90]"
+                  {{ item.projectStatus }}
+                </td>
+                <td>
+                  {{
+                    item.resourcingMethod == null ? '-' : item.resourcingMethod
+                  }}
+                </td>
+                <td>
+                  <a
+                    v-if="item.agencyName"
+                    target="_blank"
+                    :href="`/government/${item.agencyId}`"
+                    class="hover:text-[#0B5C90]"
+                    >{{ item.agencyName }}</a
+                  >
+
+                  <p v-else>-</p>
+                </td>
+                <td>
+                  <ul class="list-decimal" v-if="item.contractors?.length > 0">
+                    <li v-for="data in item.contractors">
+                      <a
+                        target="_blank"
+                        :href="`/contractor${data.id}`"
+                        class="hover:text-[#0B5C90]"
+                        >{{ data.name }}</a
+                      >
+                    </li>
+                  </ul>
+
+                  <p v-else>-</p>
+                </td>
+                <td>
+                  <ul class="list-decimal" v-if="item.bidder?.length > 0">
+                    <li v-for="data in item.bidder">
+                      {{ data }}
+                    </li>
+                  </ul>
+
+                  <p v-else>-</p>
+                </td>
+                <td
+                  v-if="
+                    item.totalContractMoney != null ||
+                    item.totalBudgetMoney != null
+                  "
                 >
-                  <b>{{ item.projectName }}</b></a
-                >
-                <ProjectIconGuide
-                  :data="{
-                    province: item.province,
-                    no: item.projectId,
-                  }"
-                  color="#7F7F7F"
-                />
-                <ProjectTag
-                  text="พบความเสี่ยงทุจริต"
-                  v-if="item.hasCorruptionRisk"
-                />
-              </td>
-              <td>{{ setDate(item.announcementDate) }}</td>
-              <td
-                :class="{
-                  'bg-[#054775] text-white':
-                    item.projectStatus == 'ส่งงานล่าช้ากว่ากำหนด',
-                  'bg-[#0F7979] text-white':
-                    item.projectStatus == 'ส่งงานครบถ้วน',
-                  'bg-[#1AA8A8] text-white':
-                    item.projectStatus == 'ส่งงานตามกำหนด',
-                  'bg-[#6DD5D5] text-white':
-                    item.projectStatus == 'จัดทำสัญญา/POแล้ว',
-                  'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
-                  'bg-[#FF8888] text-white':
-                    item.projectStatus == 'ยกเลิกสัญญา',
-                  'bg-[#EC1C24] text-white':
-                    item.projectStatus == 'สิ้นสุดสัญญา',
-                }"
-              >
-                {{ item.projectStatus }}
-              </td>
-              <td
-                :class="{
-                  'bg-[#CE5700] text-white':
-                    item.resourcingMethod == 'ประกวดราคา',
-                  'bg-[#F08C06] text-white':
-                    item.resourcingMethod == 'ประกวดราคานานาชาติ',
-                  'bg-[#F8B60E] ':
-                    item.resourcingMethod ==
-                    'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์',
-                  'bg-[#FEEDAF] ':
-                    item.resourcingMethod ==
-                    'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์-โดยผ่านผู้ให้บริการตลาดกลาง',
-                  'bg-[#6DD5D5]': item.resourcingMethod == 'ตกลงราคา',
-                  'bg-[#2EA0DF] text-white': item.resourcingMethod == 'สอบราคา',
-                  'bg-[#7051B4] text-white':
-                    item.resourcingMethod == 'ตลาดอิเล็กทรอนิกส์ (e-market)',
-                  'bg-[#EF9CC4] text-white': item.resourcingMethod == 'พิเศษ',
-                  'bg-[#D83D88] text-white':
-                    item.resourcingMethod == 'คัดเลือก',
-                  'bg-[#8A004B] text-white':
-                    item.resourcingMethod == 'เฉพาะเจาะจง',
-                  'bg-[#DADADA] ': item.resourcingMethod == 'สิ้นสุดสัญญา',
-                }"
-              >
-                {{
-                  item.resourcingMethod == null ? '-' : item.resourcingMethod
-                }}
-              </td>
-              <td>
-                <a
-                  v-if="item.agencyName"
-                  target="_blank"
-                  :href="`/government/${item.agencyId}`"
-                  class="hover:text-[#0B5C90]"
-                  >{{ item.agencyName }}</a
-                >
+                  <b>{{ item.totalContractMoney.toLocaleString() }}</b>
+                  <br />
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-                <p v-else>-</p>
-              </td>
-              <td>
-                <ul class="list-decimal" v-if="item.contractors?.length > 0">
-                  <li v-for="data in item.contractors">
-                    <a
-                      target="_blank"
-                      :href="`/contractor${data.id}`"
-                      class="hover:text-[#0B5C90]"
-                      >{{ data.name }}</a
-                    >
-                  </li>
-                </ul>
+          <p class="b2 text-center my-3">
+            {{ props.data?.searchResult.length }} /
+            {{ props.data?.pagination?.totalItem.toLocaleString() }}
+          </p>
 
-                <p v-else>-</p>
-              </td>
-              <td>
-                <ul class="list-decimal" v-if="item.bidder?.length > 0">
-                  <li v-for="data in item.bidder">
-                    {{ data }}
-                  </li>
-                </ul>
-
-                <p v-else>-</p>
-              </td>
-              <td
-                v-if="
-                  item.totalContractMoney != null ||
-                  item.totalBudgetMoney != null
-                "
-              >
-                <b>{{ item.totalContractMoney.toLocaleString() }}</b>
-                <br />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="text-center mt-3">
-          <LoadMore
-            v-if="
-              props.data?.searchResult.length <
-              props.data?.pagination?.totalItem
-            "
-            @click="setParams('page', 10)"
-          />
-        </div>
-      </div>
+          <div class="text-center mt-3">
+            <LoadMore
+              v-if="
+                props.data?.searchResult.length <
+                props.data?.pagination?.totalItem
+              "
+              @click="setParams('page', 10)"
+            />
+          </div></div
+      ></template>
+      <template v-else><p class="p-5 text-center">Loading..</p></template>
     </div>
   </div>
 </template>
