@@ -81,11 +81,11 @@ onMounted(() => {
             },
             {
               name: 'วงเงินสัญญารวม',
-              value: 'totalProject',
+              value: 'totalContractAmount',
             },
             {
               name: 'จำนวนโครงการที่ได้งาน',
-              value: 'totalContractAmount',
+              value: 'totalProject',
             },
           ]"
           text="เรียงตาม"

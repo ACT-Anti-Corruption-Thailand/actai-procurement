@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-xs h-fit relative">
+  <div class="h-fit relative">
     <div
       v-if="isShowPopup"
       id="popup"
@@ -944,12 +944,12 @@ onBeforeUnmount(() => {
     </svg>
   </div>
 
-  <div class="absolute bottom-5 left-5 flex flex-col text-2xl">
+  <div class="absolute bottom-5 left-5 flex flex-col text-2xl z-10">
     <div class="cursor-pointer border-b p-3" :id="'zoom_in-' + props.no">
-      <PlusIcon class="size-3 text-[#0B5C90]" />
+      <PlusIcon class="!size-3 text-[#0B5C90]" />
     </div>
     <div class="cursor-pointer p-3" :id="'zoom_out-' + props.no">
-      <MinusIcon class="size-3 text-[#0B5C90]" />
+      <MinusIcon class="!size-3 text-[#0B5C90]" />
     </div>
   </div>
 </template>
