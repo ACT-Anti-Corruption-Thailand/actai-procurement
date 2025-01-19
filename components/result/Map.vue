@@ -29,7 +29,7 @@ function func(n) {
 }
 
 function func1(n) {
-  //isShowPopup.value = false;
+  isShowPopup.value = false;
 }
 
 onMounted(() => {
