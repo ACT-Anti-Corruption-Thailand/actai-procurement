@@ -11,11 +11,40 @@ onBeforeMount(async () => {
   await getGovData();
   await getGovProject('&sortBy=announcementDate&sortOrder=desc', 10);
   await getGovContracter('&sortBy=totalContractAmount&sortOrder=desc', 10);
+  getFilter();
 });
 
 const govData = ref<GovernmentDetails>([]);
 const govProjectList = ref<Project>([]);
 const govContracterList = ref<Contractor>([]);
+const filterListProject = ref({});
+const filterListContractor = ref({});
+
+const getFilter = async () => {
+  const res = await fetch(`${config.public.apiUrl}/project/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    filterListProject.value = data;
+  }
+
+  const res3 = await fetch(`${config.public.apiUrl}/company/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res3.ok) {
+    const data = await res3.json();
+    filterListContractor.value = data;
+  }
+};
 
 const getGovData = async () => {
   const segments = window.location.href.split('/')[4];
@@ -33,12 +62,11 @@ const getGovData = async () => {
   }
 };
 
-const getGovProject = async (q, n) => {
+const getGovProject = async (q) => {
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
   params.set('page', 1);
-  params.set('pageSize', n);
 
   let filter = {
     agencyId: segments,
@@ -62,7 +90,7 @@ const getGovProject = async (q, n) => {
   }
 };
 
-const getGovContracter = async (q, n) => {
+const getGovContracter = async (q) => {
   const segments = window.location.href.split('/')[4];
 
   let filter = {
@@ -73,7 +101,6 @@ const getGovContracter = async (q, n) => {
 
   const params = new URLSearchParams();
   params.set('page', 1);
-  params.set('pageSize', n);
 
   const res = await fetch(
     `${config.public.apiUrl}/company/search?${str}&${params}${q}`,
@@ -195,11 +222,13 @@ const setDate = (date) => {
           v-else-if="menu == 'รายชื่อโครงการที่จัดทำ'"
           :data="govProjectList"
           @change="getGovProject"
+          :filterListProject="filterListProject"
         />
         <ContractorList
           v-else
           :data="govContracterList"
           @change="getGovContracter"
+          :filterListContractor="filterListContractor"
         />
 
         <img

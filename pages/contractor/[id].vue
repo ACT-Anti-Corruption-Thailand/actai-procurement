@@ -22,6 +22,7 @@ onBeforeMount(async () => {
   await getContracterAbandonProject('', 10);
   await getContracterProject('&sortBy=announcementDate&sortOrder=desc', 10);
   await getContracterGov('&sortBy=totalContractAmount&sortOrder=desc', 10);
+  getFilter();
 });
 
 const contractorData = ref<ContractorDetails>([]);
@@ -36,6 +37,34 @@ const totalBidding = ref(0);
 const totalWinner = ref(0);
 const isLoadingProject = ref(false);
 const isLoadingGov = ref(false);
+const filterListProject = ref({});
+const filterListGovernment = ref({});
+
+const getFilter = async () => {
+  const res = await fetch(`${config.public.apiUrl}/project/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    filterListProject.value = data;
+  }
+
+  const res2 = await fetch(`${config.public.apiUrl}/agency/search/filters`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res2.ok) {
+    const data = await res2.json();
+    filterListGovernment.value = data;
+  }
+};
 
 const getContracterData = async () => {
   const segments = window.location.href.split('/')[4];
@@ -427,12 +456,14 @@ const setDate = (date) => {
           :data="contractorProjectList"
           @change="getContracterProject"
           :isLoading="isLoadingProject"
+          :filterListProject="filterListProject"
         />
         <RelatedGovernment
           v-else-if="menu == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'"
           :data="contractorGovList"
           @change="getContracterGov"
           :isLoading="isLoadingGov"
+          :filterListGovernment="filterListGovernment"
         />
 
         <img

@@ -389,7 +389,7 @@ onMounted(() => {
                       title="สถานะโครงการ"
                       :list="props.list?.projectStatus"
                       defaultVal="ทุกสถานะ"
-                      @change="(n) => setFilter(n, 'projectStatus')"
+                      @change="(n) => setFilter(n, 'projectStatus', 'ทุกสถานะ')"
                       :selectedVal="selected.projectStatus"
                       :isClear="isClear"
                     />
@@ -398,7 +398,9 @@ onMounted(() => {
                       title="วิธีการจัดหา"
                       :list="props.list?.resourcingMethod"
                       defaultVal="ทุกวิธี"
-                      @change="(n) => setFilter(n, 'resourcingMethod')"
+                      @change="
+                        (n) => setFilter(n, 'resourcingMethod', 'ทุกวิธี')
+                      "
                       :selectedVal="selected.resourcingMethod"
                       :isClear="isClear"
                     />
@@ -407,7 +409,9 @@ onMounted(() => {
                       title="ประเภทการจัดหา"
                       :list="props.list?.resourcingType"
                       defaultVal="ทุกประเภท"
-                      @change="(n) => setFilter(n, 'resourcingType')"
+                      @change="
+                        (n) => setFilter(n, 'resourcingType', 'ทุกประเภท')
+                      "
                       :selectedVal="selected.resourcingType"
                       :isClear="isClear"
                     />
@@ -416,7 +420,9 @@ onMounted(() => {
                       title="ประเภทผู้รับจ้าง"
                       :list="props.list?.contractorType"
                       defaultVal="ทุกประเภท"
-                      @change="(n) => setFilter(n, 'contractorType')"
+                      @change="
+                        (n) => setFilter(n, 'contractorType', 'ทุกประเภท')
+                      "
                       :selectedVal="selected.contractorType"
                       :isClear="isClear"
                     />

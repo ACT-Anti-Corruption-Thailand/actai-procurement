@@ -2,43 +2,7 @@
   <div>
     <h4 class="font-bold text-white mb-5">การรับงานกับหน่วยงานรัฐ</h4>
 
-    <BarChartSection />
-
-    <!-- <div class="rounded-10 flex flex-col-mb mb-3">
-      <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
-        <h4 class="font-black">การกระจายตัวโครงการ</h4>
-        <p class="b1 font-bold">รวม xxx,xxx,xxx.xx บาท ใน xx จังหวัด</p>
-
-        <p class="b1 mt-3">แสดงความเข้มสีตาม</p>
-        <ListBox
-          title=""
-          :selected="selected"
-          :list="['งบประมาณ', 'จำนวนโครงการ']"
-        />
-
-        <div class="mt-3">
-          <input
-            type="checkbox"
-            name=""
-            id="isRisk"
-            class="text-black ring-0"
-          />
-          <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
-            >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต (xx,xxx โครงการ ใน xx
-            จังหวัด)</label
-          >
-        </div>
-      </div>
-      <div
-        class="py-7 pr-7 pl-10 bg-[#FFFFFF] chart-wrapper sm:w-2/3 text-[#8E8E8E] relative"
-      >
-        <Map
-          class="mx-auto max-w-xs h-fit"
-          :no="selected == 'งบประมาณ' ? '1' : '2'"
-          :provinces="provinces"
-        />
-      </div>
-    </div> -->
+    <GovBarChartAndMap />
 
     <AuctionBarChart
       :data="props.auctionData"

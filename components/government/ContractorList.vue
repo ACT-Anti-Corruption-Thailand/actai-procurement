@@ -3,12 +3,14 @@ import type { Contractor } from '../../public/src/data/search_result';
 
 const props = defineProps<{
   data: Contractor;
+  filterListContractor: object;
 }>();
 const emit = defineEmits(['change']);
 const page = ref(10);
 const sort = ref('totalContractAmount');
-
-import qs from 'qs';
+const sortOrder = ref('desc');
+const queryForDownload = ref('');
+const filterList = ref('');
 
 const setDate = (date) => {
   const options = {
@@ -31,12 +33,16 @@ const setParams = (type: string, val: string) => {
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+  // else if (type == 'filter') filterList.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('keyword', searchText.value);
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
   searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  emit('change', '&' + searchParams.toString(), page.value);
+  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  emit('change', '&' + searchParams.toString() + filterList.value);
 };
 </script>
 
@@ -62,7 +68,11 @@ const setParams = (type: string, val: string) => {
             />
           </div>
         </div>
-        <!-- <FilterPopupGovernment section="ผู้รับจ้างที่ได้งาน" /> -->
+        <!-- <FilterPopupGovernment
+          section="ผู้รับจ้างที่ได้งาน"
+          @change="setParams"
+          :list="props.filterListContractor"
+        /> -->
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
@@ -72,7 +82,7 @@ const setParams = (type: string, val: string) => {
           วงเงินสัญญา
           {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
         </h5>
-        <DownloadAndCopy section="contractor" filterList="" />
+        <!-- <DownloadAndCopy section="contractor" filterList="" /> -->
       </div>
 
       <SortBy

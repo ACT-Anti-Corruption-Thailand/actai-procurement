@@ -43,7 +43,7 @@ onBeforeMount(async () => {
   const urlParams = window.location.pathname.split('/')[2];
 
   let filter = {
-    agencyId: urlParams,
+    companyId: urlParams,
   };
 
   var str = qs.stringify({ filter });
@@ -378,7 +378,18 @@ const onSetChartData = (section: string, data) => {
 
 <template>
   <div>
-    <h4 class="font-bold text-white mb-5">ภาพรวมโครงการที่จัดทำ</h4>
+    <BarChart
+      v-if="isDone"
+      :hasChooseChartData="true"
+      :yearList="yearList"
+      :data="barChartData"
+      titleType="1"
+      :title="titleChart"
+      titleGov="จำนวนโครงการที่ได้งาน"
+      @isOpen="isOpen = true"
+      @changeChartData="(n) => (titleChartSelected = n)"
+      :section="sectionChart"
+    />
 
     <BarChart
       v-if="isDone"
@@ -387,65 +398,11 @@ const onSetChartData = (section: string, data) => {
       :data="barChartData"
       titleType="1"
       :title="titleChart"
-      titleGov="จำนวนโครงการ"
+      titleGov="วงเงินสัญญา"
       @isOpen="isOpen = true"
       @changeChartData="(n) => (titleChartSelected = n)"
       :section="sectionChart"
     />
-
-    <div class="rounded-10 flex flex-col-mb mb-3">
-      <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
-        <h4 class="font-black">งบประมาณโครงการ</h4>
-
-        <div class="flex items-center b1 gap-2">
-          <div class="h-[1px] w-10 bg-black"></div>
-          <div>
-            <p>วงเงินสัญญารวม (บาท)</p>
-            <p class="font-bold">{{ totalContractOverall.toLocaleString() }}</p>
-          </div>
-        </div>
-
-        <div class="flex items-center b1 gap-2 text-[#5E5E5E]">
-          <div class="h-[1px] w-10 border border-dashed border-[#8E8E8E]"></div>
-          <div>
-            <p>งบประมาณรวม (บาท)</p>
-            <p class="font-bold">{{ totalBudgetOverall.toLocaleString() }}</p>
-          </div>
-        </div>
-
-        <div class="flex items-center b1 gap-2 text-[#8E8E8E]">
-          <div class="h-[15px] w-10 bg-[#DADADA]"></div>
-          <div>
-            <p>ส่วนต่าง (บาท)</p>
-            <p class="font-bold">
-              {{ (totalBudgetOverall - totalContractOverall).toLocaleString() }}
-            </p>
-          </div>
-        </div>
-
-        <p
-          class="b4 flex gap-1 items-center text-[#0B5C90] duration-300 cursor-pointer"
-          @click="isOpen2 = true"
-        >
-          <info color="#0B5C90" />
-          <span>กราฟนี้บ่งบอกอะไร</span>
-        </p>
-      </div>
-      <div
-        class="py-7 pr-7 pl-10 bg-[#FFFFFF] chart-wrapper sm:w-2/3 text-[#8E8E8E] relative"
-      >
-        <p class="text-center b2">
-          เปรียบเทียบวงเงินสัญญาและงบประมาณรวมในแต่ละปี
-        </p>
-
-        <div>
-          <LineChart :data="chartData" />
-        </div>
-
-        <p class="text-center b4 font-bold">ปีงบประมาณ</p>
-        <p class="text-center b4 font-bold yaxis-text">งบประมาณ (บาท)</p>
-      </div>
-    </div>
 
     <div class="rounded-10 flex flex-col-mb mb-3">
       <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">

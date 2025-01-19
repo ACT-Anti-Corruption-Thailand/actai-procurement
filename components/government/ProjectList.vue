@@ -6,12 +6,16 @@ import qs from 'qs';
 
 const props = defineProps<{
   data: Project;
+  filterListProject: object;
 }>();
 const emit = defineEmits(['change']);
 
 const isRisk = ref(false);
 const page = ref(10);
 const sort = ref('announcementDate');
+const sortOrder = ref('desc');
+const filterList = ref('');
+const queryForDownload = ref('');
 let searchParams = new URLSearchParams();
 
 const setDate = (date) => {
@@ -35,10 +39,13 @@ const searchResult = computed(() => {
 const setParams = (type: string, val: string) => {
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+  else if (type == 'filter') filterList.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('keyword', searchText.value);
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
   searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
   let filter = {
     hasCorruptionRisk: isRisk.value,
@@ -46,11 +53,12 @@ const setParams = (type: string, val: string) => {
 
   var str = qs.stringify({ filter });
 
-  emit('change', '&' + searchParams.toString() + '&' + str, page.value);
+  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  emit('change', '&' + searchParams.toString() + filterList.value + '&' + str);
 };
 
-onBeforeMount(async () => {
-  //setParams('sortBy', sort.value);
+onMounted(() => {
+  queryForDownload.value = '&sortBy=announcementDate&sortOrder=desc';
 });
 
 watch(isRisk, (val) => {
@@ -84,7 +92,11 @@ watch(isRisk, (val) => {
             />
           </div>
         </div>
-        <!-- <FilterPopupGovernment section="รายชื่อโครงการที่จัดทำ" /> -->
+        <FilterPopupGovernment
+          section="รายชื่อโครงการที่จัดทำ"
+          @change="setParams"
+          :list="props.filterListProject"
+        />
       </div>
 
       <div class="mt-3">
@@ -108,7 +120,7 @@ watch(isRisk, (val) => {
           วงเงินสัญญา
           {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
         </h5>
-        <DownloadAndCopy section="government" filterList="" />
+        <DownloadAndCopy section="project" :filterList="queryForDownload" />
       </div>
 
       <SortBy
