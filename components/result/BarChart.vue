@@ -70,7 +70,10 @@
           }}ทั้งหมด)
         </p>
 
-        <div class="flex gap-2" v-for="(item, i) in props.data">
+        <div
+          class="flex gap-2"
+          v-for="(item, i) in props.data.slice().reverse()"
+        >
           <input
             type="checkbox"
             :id="`type-${props.section}-${i + 1}`"
@@ -151,7 +154,7 @@
 <script setup lang="ts">
 import type { ChartComponentRef } from 'vue-chartjs';
 import { Bar } from 'vue-chartjs';
-import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
+import { RadioGroup, RadioGroupOption, RadioGroupLabel } from '@headlessui/vue';
 
 const emit = defineEmits(['changeChartData']);
 
@@ -159,9 +162,9 @@ const props = defineProps<{
   data: array;
   yearList: array;
   title: string;
-  titleGov: string;
+  titleGov?: string;
   section: string;
-  hasChooseChartData: boolean;
+  hasChooseChartData?: boolean;
 }>();
 
 const total = ref(0);
@@ -190,6 +193,9 @@ const chartOptions = ref({
       display: false,
     },
     tooltip: {
+      itemSort: function (a, b) {
+        return b.datasetIndex - a.datasetIndex;
+      },
       backgroundColor: '#F5F5F5',
       titleColor: '#000',
       bodyColor: '#000',
@@ -221,15 +227,15 @@ const chartOptions = ref({
             let total = 0;
             total += context.raw;
 
-            return (
-              context.formattedValue +
-              ' (' +
-              ((context.raw / totalByData.value) * 100).toLocaleString(
-                undefined,
-                { maximumFractionDigits: 2 }
-              ) +
-              '%)'
-            );
+            return context.formattedValue == 0
+              ? '0'
+              : context.formattedValue +
+                  ' (' +
+                  ((context.raw / totalByData.value) * 100).toLocaleString(
+                    undefined,
+                    { maximumFractionDigits: 2 }
+                  ) +
+                  '%)';
           }
         },
       },

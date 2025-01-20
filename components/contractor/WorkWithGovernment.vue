@@ -2,7 +2,7 @@
   <div>
     <h4 class="font-bold text-white mb-5">การรับงานกับหน่วยงานรัฐ</h4>
 
-    <GovBarChartAndMap />
+    <GovBarChartAndMap2 />
 
     <AuctionBarChart
       :data="props.auctionData"

@@ -1,26 +1,30 @@
 <script setup lang="ts">
 import * as d3 from 'd3';
 import Province_data from '../../public/src/provinces.json';
+import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
 
 const props = defineProps<{
   no: string;
+  section?: string;
   provinces: array;
   total: number;
-  isCorrupt: boolean;
+  isCorrupt?: boolean;
 }>();
 
 const isShowPopup = ref(false);
 const province_th = ref('');
 const totalPopup = ref(0);
-
-import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
-
-const color = d3.scaleLinear([0, props.total], ['#F5F5F5', '#484848']);
+const mapDataFromAPI = toRef(props, 'provinces');
+const provinceList = ref({});
+let color = d3.scaleLinear([0, props.total], ['#F5F5F5', '#484848']);
 
 function func(n) {
   isShowPopup.value = true;
   province_th.value = n.target.name_th;
-  totalPopup.value = n.target.total;
+  totalPopup.value =
+    props.section == 'งบประมาณ'
+      ? n.target.totalBudgetMoney
+      : n.target.totalProject;
 
   nextTick(() => {
     document.getElementById('popup').style.top = n.offsetX + 'px';
@@ -32,69 +36,7 @@ function func1(n) {
   isShowPopup.value = false;
 }
 
-onMounted(() => {
-  const list = document.getElementsByClassName('provinces-1');
-
-  for (let item of list) {
-    document.querySelector(
-      '.provinces-' + props.no + '#' + item.id
-    ).style.stroke = '#D9D9D9';
-  }
-
-  props.provinces.forEach((element) => {
-    if (element.name != 'ไม่ระบุ') {
-      let p = Province_data.filter(
-        (x) => x.name_th == element.name && x.name_th != 'ไม่ระบุ'
-      );
-
-      if (props.no == '1') {
-        if (element.totalProject != 0) {
-          document.querySelector(
-            '.provinces-' + props.no + '#' + p[0].name_en
-          ).style.fill = color(element.totalProject);
-          document.querySelector(
-            '.provinces-' + props.no + '#' + p[0].name_en
-          ).style.stroke = '#000000';
-
-          document
-            .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
-            .addEventListener('mouseover', func, false);
-          document
-            .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
-            .addEventListener('mouseout', func1, false);
-          document.querySelector(
-            '.provinces-' + props.no + '#' + p[0].name_en
-          ).name_th = element.name;
-          document.querySelector(
-            '.provinces-' + props.no + '#' + p[0].name_en
-          ).total = element.totalProject;
-        }
-      } else {
-        if (element.totalBudgetMoney != 0) {
-          document.querySelector(
-            '.provinces-' + props.no + '#' + p[0].name_en
-          ).style.fill = color(element.totalBudgetMoney);
-          document.querySelector(
-            '.provinces-' + props.no + '#' + p[0].name_en
-          ).style.stroke = '#000000';
-
-          document
-            .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
-            .addEventListener('mouseover', func, false);
-          document
-            .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
-            .addEventListener('mouseout', func1, false);
-          document.querySelector(
-            '.provinces-' + props.no + '#' + p[0].name_en
-          ).name_th = element.name;
-          document.querySelector(
-            '.provinces-' + props.no + '#' + p[0].name_en
-          ).total = element.totalBudgetMoney;
-        }
-      }
-    }
-  });
-
+const initMap = () => {
   const svg = d3.select<SVGElement, unknown>('svg#map-container-' + props.no);
   const g = d3.select<SVGElement, unknown>('#map-' + props.no);
 
@@ -116,21 +58,96 @@ onMounted(() => {
   function zoomed(event, d) {
     g.attr('transform', event.transform);
   }
-});
+};
 
-onBeforeUnmount(() => {
-  props.provinces.forEach((element) => {
+const initMapData = () => {
+  provinceList.value.forEach((element) => {
+    if (element.name != 'ไม่ระบุ') {
+      let p = Province_data.filter(
+        (x) => x.name_th == element.name && x.name_th != 'ไม่ระบุ'
+      );
+
+      if (props.no == '1') {
+        if (element.totalProject != 0) {
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).style.fill = color(element.totalProject);
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).style.stroke = '#000000';
+        }
+      } else {
+        if (element.totalBudgetMoney != 0) {
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).style.fill = color(element.totalBudgetMoney);
+          document.querySelector(
+            '.provinces-' + props.no + '#' + p[0].name_en
+          ).style.stroke = '#000000';
+        }
+      }
+
+      document
+        .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+        .addEventListener('mouseover', func, false);
+      document
+        .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+        .addEventListener('mouseout', func1, false);
+      document.querySelector(
+        '.provinces-' + props.no + '#' + p[0].name_en
+      ).name_th = element.name;
+      document.querySelector(
+        '.provinces-' + props.no + '#' + p[0].name_en
+      ).totalBudgetMoney = element.totalBudgetMoney;
+      document.querySelector(
+        '.provinces-' + props.no + '#' + p[0].name_en
+      ).totalProject = element.totalProject;
+    }
+  });
+};
+
+const removePopUpEventlistener = () => {
+  provinceList.value.forEach((element) => {
     let p = Province_data.filter(
       (x) => x.name_th == element.name && x.name_th != 'ไม่ระบุ'
     );
 
-    document
-      .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
-      ?.removeEventListener('mouseover', func, false);
-    document
-      .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
-      .removeEventListener('mouseout', func1, false);
+    if (p.length > 0) {
+      document
+        .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+        ?.removeEventListener('mouseover', func, false);
+      document
+        .querySelector('.provinces-' + props.no + '#' + p[0].name_en)
+        .removeEventListener('mouseout', func1, false);
+    }
   });
+};
+
+onMounted(() => {
+  const list = document.getElementsByClassName('provinces-' + props.no);
+
+  for (let item of list) {
+    document.querySelector(
+      '.provinces-' + props.no + '#' + item.id
+    ).style.stroke = '#D9D9D9';
+  }
+
+  provinceList.value = mapDataFromAPI.value;
+
+  initMapData();
+  initMap();
+});
+
+onBeforeUnmount(() => {
+  removePopUpEventlistener();
+});
+
+watch(mapDataFromAPI, (val) => {
+  provinceList.value = val;
+  color = d3.scaleLinear([0, props.total], ['#F5F5F5', '#484848']);
+
+  removePopUpEventlistener();
+  initMapData();
 });
 </script>
 

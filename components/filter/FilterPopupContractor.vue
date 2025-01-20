@@ -1,5 +1,91 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+} from '@headlessui/vue';
+
+const props = defineProps<{
+  section: string;
+  list?: object;
+}>();
+
+const emit = defineEmits(['change', 'count']);
+
+import { CheckIcon } from '@heroicons/vue/24/solid';
+import qs from 'qs';
+
+const isOpen = ref(false);
+const plan = ref('งบประมาณ');
+const filterCount = ref(0);
+const isClear = ref(false);
+
+const selected = ref({
+  agencies: 'ทุกหน่วยงาน',
+  province: 'ทุกจังหวัด',
+  resourcingMethod: 'ทุกวิธี',
+});
+
+const setFilter = (val: any, section: string, defaultVal: string) => {
+  selected.value[section] = val.length > 0 ? [...val].toString() : defaultVal;
+
+  filterCount.value =
+    val.length > 0 ? (filterCount.value += 1) : (filterCount.value -= 1);
+};
+
+const searchByResult = () => {
+  let filter = {};
+
+  filter = {
+    agencies:
+      selected.value.agencies == 'ทุกหน่วยงาน'
+        ? undefined
+        : selected.value.agencies,
+    province:
+      selected.value.province == 'ทุกจังหวัด'
+        ? undefined
+        : selected.value.province,
+    resourcingMethod:
+      selected.value.resourcingMethod == 'ทุกวิธี'
+        ? undefined
+        : selected.value.resourcingMethod,
+  };
+
+  var str = qs.stringify({ filter });
+  isOpen.value = false;
+  emit('change', 'filter', '&' + str);
+};
+
+const clearFilter = () => {
+  isClear.value = true;
+  filterCount.value = 0;
+
+  selected.value = {
+    agencies: 'ทุกหน่วยงาน',
+    province: 'ทุกจังหวัด',
+    resourcingMethod: 'ทุกวิธี',
+  };
+
+  emit('change', 'filter', '');
+
+  nextTick(() => {
+    isClear.value = false;
+  });
+};
+
+function closeModal() {
+  isOpen.value = false;
+}
+
+function openModal() {
+  isOpen.value = true;
+}
+</script>
+
 <template>
-  <div class="flex items-center">
+  <div class="flex items-center mt-3">
     <button
       type="button"
       @click="openModal"
@@ -11,8 +97,16 @@
         class="inline"
       />
       ตัวกรอง
+      <div
+        v-if="filterCount > 0"
+        class="inline-flex rounded-full w-5 h-5 justify-center items-center text-white bg-[#0B5C90]"
+      >
+        {{ filterCount }}
+      </div>
     </button>
     <button
+      @click="clearFilter"
+      v-if="filterCount > 0"
       type="button"
       class="p-2.5 border btn-light-3 link-1 rounded-10 ml-1"
     >
@@ -75,83 +169,32 @@
 
               <div class="overflow-y-scroll max-h-[80vh]">
                 <div>
-                  <div class="text-[#7F7F7F] mt-5">
-                    <p class="font-bold b1">ปีงบประมาณ</p>
-                    <p class="b5">
-                      ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568
-                      หมายถึง ต.ค. 67 - ก.ย. 68
-                    </p>
-                  </div>
-
-                  <div class="flex w-full gap-2 items-center">
-                    <div class="flex-1 relative">
-                      <ListBox
-                        title=""
-                        :selected="selected[0].yearFrom"
-                        :list="filterList.year"
-                      />
-                    </div>
-
-                    <p class="b1">-</p>
-
-                    <div class="flex-1 relative">
-                      <ListBox
-                        title=""
-                        :selected="selected[0].yearTo"
-                        :list="filterList.year"
-                      />
-                    </div>
-                  </div>
-
                   <Combobox
-                    v-if="props.section == 'รายชื่อโครงการที่เกี่ยวข้อง'"
                     title="หน่วยงานรัฐเจ้าของโครงการ"
-                    :selected="selected[0].agencies"
-                    :list="filterList.agencies"
+                    :list="props.list?.agencies"
+                    defaultVal="ทุกหน่วยงาน"
+                    @change="(n) => setFilter(n, 'agencies', 'ทุกหน่วยงาน')"
+                    :selectedVal="selected.agencies"
+                    :isClear="isClear"
                   />
 
                   <Combobox
-                    v-if="props.section == 'รายชื่อโครงการที่เกี่ยวข้อง'"
                     title="ที่ตั้งโครงการ"
-                    :selected="selected[0].provinces"
-                    :list="filterList.provinces"
+                    :list="props.list?.provinces"
+                    defaultVal="ทุกจังหวัด"
+                    @change="(n) => setFilter(n, 'province', 'ทุกจังหวัด')"
+                    :selectedVal="selected.province"
+                    :isClear="isClear"
                   />
 
                   <Combobox
-                    v-if="props.section == 'รายชื่อโครงการที่เกี่ยวข้อง'"
-                    title="สถานะการเสนอราคา"
-                    :selected="selected[0].projectStatus"
-                    :list="filterList.projectStatus"
-                  />
-
-                  <Combobox
-                    v-if="props.section == 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง'"
                     title="วิธีการจัดหา"
-                    :selected="selected[0].resoucingMethod"
-                    :list="filterList.resoucingMethod"
+                    :list="props.list?.resourcingMethod"
+                    defaultVal="ทุกวิธี"
+                    @change="(n) => setFilter(n, 'resourcingMethod', 'ทุกวิธี')"
+                    :selectedVal="selected.resourcingMethod"
+                    :isClear="isClear"
                   />
-
-                  <Combobox
-                    v-if="props.section == 'รายชื่อโครงการที่เกี่ยวข้อง'"
-                    title="ผู้ร่วมประมูลในโครงการเดียวกัน"
-                    :selected="selected[0].recourcingType"
-                    :list="filterList.recourcingType"
-                  />
-                </div>
-
-                <div
-                  class="flex items-center my-4"
-                  v-if="props.section == 'รายชื่อโครงการที่เกี่ยวข้อง'"
-                >
-                  <input
-                    id="default-checkbox"
-                    type="checkbox"
-                    value=""
-                    class="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded"
-                  />
-                  <label for="default-checkbox" class="ms-2 b4 text-[#EC1C24]"
-                    >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
-                  >
                 </div>
               </div>
 
@@ -159,6 +202,7 @@
                 class="flex items-center justify-between sm:justify-end pt-3 sm:mt-0 gap-2"
               >
                 <button
+                  @click="clearFilter"
                   type="button"
                   class="p-2.5 border border-[#0B5C90] hover:border-[#1688CA] rounded-10 b2 text-[#0B5C90] min-w-32"
                 >
@@ -171,7 +215,7 @@
                 </button>
                 <button
                   type="button"
-                  @click="isOpen = false"
+                  @click="searchByResult"
                   class="b2 rounded-10 bg-black p-2.5 min-w-32 text-white hover:bg-[#1F1F1F] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
                 >
                   ตกลง <CheckIcon class="size-4 inline" />
@@ -184,102 +228,6 @@
     </Dialog>
   </TransitionRoot>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-} from '@headlessui/vue';
-
-const props = defineProps<{
-  section: string;
-}>();
-
-import { CheckIcon } from '@heroicons/vue/24/solid';
-
-const isOpen = ref(false);
-const plan = ref('งบประมาณ');
-
-const selected = [
-  {
-    yearFrom: '2566',
-    yearTo: '2567',
-    agencies: 'ทุกหน่วยงาน',
-    agencyBelongTo: 'ทุกหน่วยงาน',
-    contractorType: 'ทุกประเภท',
-    projectStatus: 'ทุกสถานะ',
-    provinces: 'ทุกจังหวัด',
-    recourcingType: 'ทุกประเภท',
-    resoucingMethod: 'ทุกวิธี',
-  },
-];
-
-const filterList = ref({
-  year: ['2560', '2561', '2562', '2563', '2564', '2565', '2566', '2567'],
-  agencies: [
-    'ทุกหน่วยงาน',
-    'การไฟฟ้านครหลวง ฝ่ายก่อสร้าง',
-    'สำนักเลขาธิการนายกรัฐมนตรี',
-    'สำนักงบประมาณ',
-  ],
-  agencyBelongTo: [
-    'ทุกหน่วยงาน',
-    'สำนักนายกรัฐมนตรี',
-    'กระทรวงกลาโหม',
-    'กระทรวงการคลัง',
-    'กระทรวงการต่างประเทศ',
-    'กระทรวงการท่องเทียวและกีฬา',
-    'กระทรวงพัฒนาสังคมและความมั่นคงของมนุษย์',
-    'กระทรวงเกษตรและสหกรณ์',
-    'สำนักงานพิพิธภัณฑ์เกษตรเฉลิมพระเกียรติพระบาทสมเด็จพระเจ้าอยู่หัว (องค์การมหาชน)',
-    'กระทรวงคมนาคม',
-    'กระทรวงทรัพยากรธรรมชาติและสิ่งแวดล้อม',
-    'กระทรวงดิจิทัลเพื่อเศรษฐกิจและสังคม',
-    'กระทรวงพลังงาน',
-    'กระทรวงพาณิชย์',
-    'กระทรวงมหาดไทย',
-    'กระทรวงยุติธรรม',
-    'กระทรวงแรงงาน',
-    'กระทรวงวัฒนธรรม',
-    'กระทรวงการอุคมศึกษา วิทยาศาสตร์ วิจัยและนวัตกรรม',
-    'กระทรวงศึกษาธิการ',
-    'กระทรวงสาธารณสุข',
-    'กระทรวงอุตสาหกรรม',
-    'หน่วยงานของรัฐที่ไม่สังกัดสำนักนายกรัฐมนตรี กระทรวงหรือทบวง',
-    'องค์กรอิสระตามรัฐธรรมนูญ',
-    'PTT MEA LTD',
-    'ไม่สามารถระบุได้',
-  ],
-  provinces: ['ทุกจังหวัด', 'กรุงเทพมหานคร', 'ปทุมธานี', 'แพร่'],
-  projectStatus: [
-    'ทุกสถานะ',
-    'แล้วเสร็จตามสัญญา',
-    'จัดทำสัญญา / PO แล้ว',
-    'ระหว่างดำเนินการ',
-    'ยกเลิกสัญญา',
-    'ยกเลิกโครงการ',
-  ],
-  resoucingMethod: [
-    'ทุกวิธี',
-    'ประกวดราคา',
-    'ตกลงราคา',
-    'สอบราคา',
-    'เฉพาะเจาะจง',
-  ],
-  recourcingType: ['ทุกประเภท', 'จ้างก่อสร้าง'],
-  contractorType: ['ทุกประเภท', 'บริษัทจำกัด', 'ห้างหุ้นส่วน'],
-});
-
-function closeModal() {
-  isOpen.value = false;
-}
-function openModal() {
-  isOpen.value = true;
-}
-</script>
 
 <style scoped>
 .radio-btn[aria-checked='true'] {

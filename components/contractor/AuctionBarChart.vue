@@ -131,7 +131,19 @@ const chartOptions = ref({
           family: 'DB_Helvethaica_X',
         },
         callback: function (value, index, ticks) {
-          return value > 1000000 ? (value / 1000000).toLocaleString() : value;
+          if (value > 1000000000)
+            return (
+              (value / 1000000000).toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              }) + 'B'
+            );
+          else if (value > 999999)
+            return (
+              (value / 1000000).toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              }) + 'M'
+            );
+          else return value.toLocaleString();
         },
       },
     },

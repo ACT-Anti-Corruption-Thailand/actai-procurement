@@ -68,11 +68,6 @@ const setParams = (type: string, val: string) => {
             />
           </div>
         </div>
-        <!-- <FilterPopupGovernment
-          section="ผู้รับจ้างที่ได้งาน"
-          @change="setParams"
-          :list="props.filterListContractor"
-        /> -->
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
@@ -82,7 +77,7 @@ const setParams = (type: string, val: string) => {
           วงเงินสัญญา
           {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
         </h5>
-        <!-- <DownloadAndCopy section="contractor" filterList="" /> -->
+        <DownloadAndCopy section="contractor" :filterList="queryForDownload" />
       </div>
 
       <SortBy

@@ -210,7 +210,7 @@ const getMapData = async () => {
 
   if (res.ok) {
     const data = await res.json();
-    mapDataList.value = data.provinces;
+    mapDataList.value = data.provinces.filter((x) => x.totalProject != 0);
   }
 };
 
@@ -243,17 +243,17 @@ const setChartData = (data) => {
 
   chartDataSet2.value.push(
     {
-      label: 'พบความเสี่ยง',
-      backgroundColor: '#EC1C24',
-      data: dataset3,
-      sum: dataset3.reduce((sum, num) => sum + num, 0),
-      isChecked: true,
-    },
-    {
       label: 'ไม่พบความเสี่ยง',
       backgroundColor: '#000000',
       data: a,
       sum: a.reduce((sum, num) => sum + num, 0),
+      isChecked: true,
+    },
+    {
+      label: 'พบความเสี่ยง',
+      backgroundColor: '#EC1C24',
+      data: dataset3,
+      sum: dataset3.reduce((sum, num) => sum + num, 0),
       isChecked: true,
     }
   );
@@ -307,7 +307,7 @@ const onSetChartData = (section: string, data) => {
     });
 
     const res = projectStatuses.sort(
-      (a, b) => grouped.indexOf(a) - grouped.indexOf(b)
+      (a, b) => grouped.indexOf(b) - grouped.indexOf(a)
     );
 
     chartDataSet3.value = res.map((name, i) => {
@@ -337,7 +337,7 @@ const onSetChartData = (section: string, data) => {
     const colorContractStatus = [
       {
         name: 'ส่งงานล่าช้ากว่ากำหนด',
-        color: '#0F7979',
+        color: '#054775',
       },
       {
         name: 'ส่งงานครบถ้วน',
@@ -370,7 +370,7 @@ const onSetChartData = (section: string, data) => {
     });
 
     const res = projectContractStatuses.sort(
-      (a, b) => grouped.indexOf(a) - grouped.indexOf(b)
+      (a, b) => grouped.indexOf(b) - grouped.indexOf(a)
     );
 
     chartDataSet4.value = res.map((name, i) => {
@@ -444,16 +444,20 @@ const onSetChartData = (section: string, data) => {
       return c.name;
     });
 
+    const res = grouped.sort((a, b) => grouped.indexOf(b) - grouped.indexOf(a));
+
     let others = projectResourceMethod.filter((val) => !grouped.includes(val));
 
-    let chartData1 = grouped.map((name, i) => {
+    let chartData1 = res.map((name, i) => {
       const chartdata = data.map(
         (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
       );
 
+      let c = colorResourceMethod.filter((x) => x.name == name);
+
       return {
         label: name,
-        backgroundColor: colorResourceMethod[i].color,
+        backgroundColor: c[0].color,
         sum: chartdata.reduce((sum, num) => sum + num, 0),
         data: chartdata,
         isChecked: true,
@@ -486,11 +490,11 @@ const onSetChartData = (section: string, data) => {
 
     c.sum = c.data.reduce((sum, num) => sum + num, 0);
 
+    chartDataSet5.value.push(c);
+
     chartData1.forEach((element) => {
       chartDataSet5.value.push(element);
     });
-
-    chartDataSet5.value.push(c);
   }
 };
 </script>

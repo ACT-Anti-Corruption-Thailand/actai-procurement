@@ -28,7 +28,9 @@
       type="button"
       class="p-2.5 rounded-10 b2 text-[#0B5C90] hover:text-[#1688CA] gap-1 flex items-center tooltip"
     >
-      <span class="tooltiptext" id="myTooltipBtn">คัดลอกลิงก์</span>
+      <span class="tooltiptext hidden sm:inline" id="myTooltipBtn"
+        >คัดลอกลิงก์</span
+      >
 
       <svg
         width="16"

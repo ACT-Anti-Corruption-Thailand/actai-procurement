@@ -415,9 +415,45 @@ table th:last-child {
 }
 
 .popup-custom {
-  @apply text-[20px] bg-[#F5F5F5] rounded-10 text-black opacity-100 pointer-events-none absolute text-left min-w-[180px];
+  @apply text-[20px] bg-[#F5F5F5] rounded-10 text-black opacity-100 pointer-events-none absolute text-left w-auto;
 }
 
 .popup-custom table {
   @apply font-bold;
+}
+
+.popup-custom table thead tr th {
+  @apply text-nowrap p-0;
+}
+
+.popup-custom table tr {
+  @apply pt-0;
+}
+
+.popup-custom table td {
+  @apply p-0;
+}
+
+.icon1 {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url('data:image/svg+xml,<svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.7735 0.939453L11.547 10.9395H0L5.7735 0.939453Z" fill="%237051B4"/></svg>');
+}
+
+.icon2 {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url('data:image/svg+xml,<svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.55771 2.34534C1.99138 2.34534 1.52662 2.45614 1.16343 2.67775C0.806402 2.89935 0.41859 3.24715 0 3.72114V1.16343C0.387812 0.818713 0.784857 0.538627 1.19114 0.323176C1.59741 0.107725 2.06217 0 2.58541 0C3.18867 0 4.01354 0.236996 5.06002 0.710988C6.11265 1.18498 6.86365 1.42198 7.31302 1.42198C7.84241 1.42198 8.33179 1.29886 8.78116 1.05263C9.23669 0.806402 9.64297 0.470914 10 0.0461681V2.66851C9.77839 2.89012 9.49215 3.09634 9.14127 3.28717C8.56263 3.60726 7.98092 3.76731 7.39612 3.76731C6.7867 3.76731 5.95876 3.53032 4.91228 3.05632C3.87196 2.58233 3.0871 2.34534 2.55771 2.34534ZM2.55771 6.5928C1.99138 6.5928 1.53278 6.69437 1.1819 6.89751C0.831025 7.09449 0.437058 7.44537 0 7.95014V5.38319C0.412435 5.00154 0.80948 4.7153 1.19114 4.52447C1.57279 4.33364 2.03755 4.23515 2.58541 4.22899C3.19483 4.22899 4.02278 4.46599 5.06925 4.93998C6.12188 5.41397 6.86981 5.65097 7.31302 5.65097C7.98399 5.65097 8.61804 5.4386 9.21514 5.01385C9.51677 4.79224 9.77839 4.54294 10 4.26593V6.89751C9.70452 7.1622 9.37827 7.38689 9.02124 7.57156C8.47953 7.84857 7.93783 7.98707 7.39612 7.98707C6.76824 7.98707 5.94644 7.75623 4.93075 7.29455C3.92121 6.82672 3.13019 6.5928 2.55771 6.5928Z" fill="%23EC7601"/></svg>');
+}
+
+.icon3 {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url('data:image/svg+xml,<svg width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 8.66016L10 -9.82285e-05H0L5 8.66016Z" fill="%23CE5700"/></svg>');
+}
+
+.icon4 {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url('data:image/svg+xml,<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" fill="%23C0C0C0"/></svg>');
 }

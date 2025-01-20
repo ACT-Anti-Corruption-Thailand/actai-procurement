@@ -23,9 +23,6 @@ const filterCount = ref(0);
 const isClear = ref(false);
 
 const selected = ref({
-  yearFrom: '',
-  yearTo: '',
-  agencies: 'ทุกองค์กร',
   projectStatus: 'ทุกสถานะ',
   province: 'ทุกจังหวัด',
   resourcingMethod: 'ทุกวิธี',
@@ -35,61 +32,28 @@ const setFilter = (val: any, section: string, defaultVal: string) => {
   selected.value[section] = val.length > 0 ? [...val].toString() : defaultVal;
 
   filterCount.value =
-    val.length > 0 ? (filterCount.value += 1) : filterCount.value == 1;
-};
-
-const setCount = (newV, oldV) => {
-  filterCount.value =
-    newV != oldV ? (filterCount.value += 1) : (filterCount.value -= 1);
+    val.length > 0 ? (filterCount.value += 1) : (filterCount.value -= 1);
 };
 
 const searchByResult = () => {
   let filter = {};
 
-  if (props.section == 'รายชื่อโครงการที่จัดทำ') {
-    filter = {
-      budgetYear: {
-        start: selected.value.yearFrom,
-        end: selected.value.yearTo,
-      },
-      agencyName:
-        selected.value.agencies == 'ทุกหน่วยงาน'
-          ? undefined
-          : selected.value.agencies,
-
-      projectStatus:
-        selected.value.projectStatus == 'ทุกสถานะ'
-          ? undefined
-          : selected.value.projectStatus,
-      province:
-        selected.value.province == 'ทุกจังหวัด'
-          ? undefined
-          : selected.value.province,
-
-      resourcingMethod:
-        selected.value.resourcingMethod == 'ทุกวิธี'
-          ? undefined
-          : selected.value.resourcingMethod,
-
-      hasCorruptionRisk: selected.value.hasCorruptionRisk,
-    };
-  } else {
-    // filter = {
-    //   contractorType:
-    //     selectedContractor.value.contractorType == 'ทุกประเภท'
-    //       ? undefined
-    //       : selectedContractor.value.contractorType,
-    //   province:
-    //     selectedContractor.value.province == 'ทุกจังหวัด'
-    //       ? undefined
-    //       : selectedContractor.value.province,
-    //   hasCorruptionRisk: selectedContractor.value.hasCorruptionRisk,
-    // };
-  }
+  filter = {
+    projectStatus:
+      selected.value.projectStatus == 'ทุกสถานะ'
+        ? undefined
+        : selected.value.projectStatus,
+    province:
+      selected.value.province == 'ทุกจังหวัด'
+        ? undefined
+        : selected.value.province,
+    resourcingMethod:
+      selected.value.resourcingMethod == 'ทุกวิธี'
+        ? undefined
+        : selected.value.resourcingMethod,
+  };
 
   var str = qs.stringify({ filter });
-
-  console.log(str);
 
   isOpen.value = false;
   emit('change', 'filter', '&' + str);
@@ -99,16 +63,11 @@ const clearFilter = () => {
   isClear.value = true;
   filterCount.value = 0;
 
-  if (props.section == 'รายชื่อโครงการที่จัดทำ') {
-    selected.value = {
-      yearFrom: props.list?.budgetYears[0],
-      yearTo: props.list?.budgetYears[props.list?.budgetYears.length - 1],
-      agencies: 'ทุกหน่วยงาน',
-      projectStatus: 'ทุกสถานะ',
-      province: 'ทุกจังหวัด',
-      resourcingMethod: 'ทุกวิธี',
-    };
-  }
+  selected.value = {
+    projectStatus: 'ทุกสถานะ',
+    province: 'ทุกจังหวัด',
+    resourcingMethod: 'ทุกวิธี',
+  };
 
   emit('change', 'filter', '');
 
@@ -124,15 +83,6 @@ function closeModal() {
 function openModal() {
   isOpen.value = true;
 }
-
-onMounted(() => {
-  // if (props.section == 'รายชื่อโครงการที่จัดทำ') {
-
-  selected.value.yearFrom = props.list?.budgetYears[0]?.toString();
-  selected.value.yearTo =
-    props.list?.budgetYears[props.list?.budgetYears?.length - 1].toString();
-  // }
-});
 </script>
 
 <template>
@@ -220,62 +170,7 @@ onMounted(() => {
 
               <div class="overflow-y-scroll max-h-[80vh]">
                 <div>
-                  <div class="text-[#7F7F7F] mt-5">
-                    <p class="font-bold b1">ปีงบประมาณ</p>
-                    <p class="b5">
-                      ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568
-                      หมายถึง ต.ค. 67 - ก.ย. 68
-                    </p>
-                  </div>
-
-                  <div class="flex w-full gap-2 items-center">
-                    <div class="flex-1 relative">
-                      <select
-                        @change="
-                          setCount(
-                            selected.yearFrom,
-                            props.list?.budgetYears[0]
-                          )
-                        "
-                        v-model="selected.yearFrom"
-                        class="w-full rounded-10 border-0"
-                      >
-                        <option
-                          v-for="item in props.list?.budgetYears"
-                          :value="item"
-                        >
-                          {{ item }}
-                        </option>
-                      </select>
-                    </div>
-
-                    <p class="b1">-</p>
-
-                    <div class="flex-1 relative">
-                      <select
-                        @change="
-                          setCount(
-                            selected.yearTo,
-                            props.list?.budgetYears[
-                              props.list?.budgetYears.length - 1
-                            ]
-                          )
-                        "
-                        v-model="selected.yearTo"
-                        class="w-full rounded-10 border-0"
-                      >
-                        <option
-                          v-for="item in props.list?.budgetYears"
-                          :value="item"
-                        >
-                          {{ item }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
                   <Combobox
-                    v-if="props.section == 'รายชื่อโครงการที่จัดทำ'"
                     title="ที่ตั้งโครงการ"
                     :list="props.list?.provinces"
                     defaultVal="ทุกจังหวัด"
@@ -285,7 +180,6 @@ onMounted(() => {
                   />
 
                   <Combobox
-                    v-if="props.section == 'รายชื่อโครงการที่จัดทำ'"
                     title="สถานะโครงการ"
                     :list="props.list?.projectStatus"
                     defaultVal="ทุกสถานะ"
@@ -300,16 +194,6 @@ onMounted(() => {
                     defaultVal="ทุกวิธี"
                     @change="(n) => setFilter(n, 'resourcingMethod', 'ทุกวิธี')"
                     :selectedVal="selected.resourcingMethod"
-                    :isClear="isClear"
-                  />
-
-                  <Combobox
-                    v-if="props.section == 'รายชื่อโครงการที่จัดทำ'"
-                    title="ผู้รับจ้างที่ได้งาน"
-                    :list="props.list?.agencies"
-                    defaultVal="ทุกองค์กร"
-                    @change="(n) => setFilter(n, 'agencies', 'ทุกองค์กร')"
-                    :selectedVal="selected.agencies"
                     :isClear="isClear"
                   />
                 </div>

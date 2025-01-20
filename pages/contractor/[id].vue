@@ -140,17 +140,22 @@ const getContracterAuctionData = async () => {
   }
 };
 
-const getContracterProject = async (q, n) => {
+const getContracterProject = async (q) => {
   isLoadingProject.value = true;
   const segments = window.location.href.split('/')[4];
 
   const params = new URLSearchParams();
   // params.set('keyword', contractorData.value.companyName);
   params.set('page', 1);
-  params.set('pageSize', n);
+
+  let filter = {
+    companyId: segments,
+  };
+
+  var str = qs.stringify({ filter });
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?${params}${q}`,
+    `${config.public.apiUrl}/project/search?${params}&${str}${q}`,
     {
       method: 'get',
       headers: {
@@ -158,13 +163,6 @@ const getContracterProject = async (q, n) => {
       },
     }
   );
-
-  let filter = {
-    hasAbandonProject: true,
-    companyId: segments,
-  };
-
-  var str = qs.stringify({ filter });
 
   if (res.ok) {
     const data = await res.json();
@@ -370,8 +368,8 @@ const setDate = (date) => {
             <p>การรับงานกับหน่วยงานรัฐ</p>
             <ul class="list-disc ml-5">
               <li>จำนวนโครงการ</li>
-              <li>การกระจายตัวโครงการ</li>
               <li>วงเงินสัญญา</li>
+              <li>การกระจายตัวโครงการ</li>
               <li>สัดส่วนวิธีการประมูลงาน</li>
               <li>พฤติกรรมการเสนอราคา</li>
             </ul>

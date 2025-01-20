@@ -6,10 +6,12 @@
       <p class="b1 font-bold">
         เสนอราคา รวมทุกปี
         {{
-          totalCloseToEstimatePrice +
-          totalHigherThanEstimatePrice +
-          totalLowerThanEstimatePrice +
-          totalOther
+          (
+            totalCloseToEstimatePrice +
+            totalHigherThanEstimatePrice +
+            totalLowerThanEstimatePrice +
+            totalOther
+          ).toLocaleString()
         }}
         โครงการ
       </p>
@@ -105,7 +107,7 @@
     >
       <p class="text-center b2">จำนวนโครงการที่เสนอราคาในแต่ละปีงบประมาณ</p>
 
-      <div>
+      <div class="max-h-[300px]">
         <Bar :data="chartData" :options="chartOptions" height="300" ref="bar" />
       </div>
 
@@ -133,64 +135,195 @@ const chartData = ref({
   datasets: [],
 });
 
-const chartOptions = ref({
-  responsive: true,
-  maintainAspectRatio: false,
-  interaction: {
-    mode: 'index',
-    intersect: false,
-  },
-  plugins: {
-    filler: {
-      propagate: false,
+const chartOptions = ref({});
+
+const getOrCreateTooltip = (chart) => {
+  let tooltipEl = chart.canvas.parentNode.querySelector('div');
+
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div');
+    tooltipEl.style.fontFamily = 'DB_Helvethaica_X';
+    tooltipEl.style.zIndex = '1';
+    tooltipEl.style.transform = 'translate(-50%, 0)';
+    tooltipEl.style.transition = 'all .1s ease';
+    tooltipEl.className = 'popup-custom';
+
+    const table = document.createElement('table');
+    table.style.margin = '0px';
+
+    tooltipEl.appendChild(table);
+    chart.canvas.parentNode.appendChild(tooltipEl);
+  }
+
+  return tooltipEl;
+};
+
+const externalTooltipHandler = (context) => {
+  // Tooltip Element
+  const { chart, tooltip } = context;
+  const tooltipEl = getOrCreateTooltip(chart);
+
+  // Hide if no tooltip
+  if (tooltip.opacity === 0) {
+    tooltipEl.style.opacity = 1;
+    return;
+  }
+
+  // Set Text
+  if (tooltip.body) {
+    const titleLines = tooltip.title || [];
+    const bodyLines = tooltip.body.map((b) => b.lines);
+
+    const tableHead = document.createElement('thead');
+
+    titleLines.forEach((title) => {
+      const tr = document.createElement('tr');
+      tr.style.borderWidth = 0;
+      tr.style.padding = 0;
+
+      const th = document.createElement('th');
+      th.style.borderWidth = 0;
+
+      const text = document.createTextNode('ปี ' + title);
+
+      th.appendChild(text);
+      tr.appendChild(th);
+      tableHead.appendChild(tr);
+    });
+
+    const tableBody = document.createElement('tbody');
+
+    let x = 0;
+
+    bodyLines.forEach((body, i) => {
+      let bodyText = body.toString().split(': ')[1];
+      x += parseInt(bodyText);
+    });
+
+    const tr2 = document.createElement('tr');
+    tr2.style.backgroundColor = 'inherit';
+    tr2.style.borderWidth = 0;
+
+    const td2 = document.createElement('td');
+    td2.style.borderWidth = 0;
+    td2.style.whiteSpace = 'nowrap';
+
+    const text2 = document.createTextNode(
+      x.toLocaleString().toString() + ' โครงการ'
+    );
+
+    td2.appendChild(text2);
+    tr2.appendChild(td2);
+    tableBody.appendChild(tr2);
+
+    bodyLines.forEach((body, i) => {
+      const span = document.createElement('div');
+      span.style.width = '10px';
+      span.style.height = '10px';
+      span.classList.add('icon' + (i + 1));
+      span.style.marginRight = '5px';
+      span.style.display = 'inline-block';
+
+      const tr = document.createElement('tr');
+      tr.style.backgroundColor = 'inherit';
+      tr.style.borderWidth = 0;
+
+      const td = document.createElement('td');
+      td.style.borderWidth = 0;
+      td.style.color = i == 0 ? '#000000' : '#7F7F7F';
+
+      let bodyText = body.toString().split(': ')[1];
+      const text = document.createTextNode(bodyText);
+      x += parseInt(bodyText);
+
+      td.appendChild(span);
+      td.appendChild(text);
+      tr.appendChild(td);
+      tableBody.appendChild(tr);
+    });
+
+    const tableRoot = tooltipEl.querySelector('table');
+
+    // Remove old children
+    while (tableRoot.firstChild) {
+      tableRoot.firstChild.remove();
+    }
+
+    // Add new children
+    tableRoot.appendChild(tableHead);
+    tableRoot.appendChild(tableBody);
+  }
+
+  const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
+
+  // Display, position, and set styles for font
+  tooltipEl.style.opacity = 1;
+  tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+  tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+  tooltipEl.style.font = tooltip.options.bodyFont.string;
+  tooltipEl.style.padding =
+    tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
+};
+
+onMounted(async () => {
+  chartOptions.value = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
     },
-    legend: {
-      display: false,
-    },
-    tooltip: {
-      titleFont: {
-        size: 20,
-        family: 'DB_Helvethaica_X',
+    plugins: {
+      filler: {
+        propagate: false,
       },
-      bodyFont: {
-        size: 16,
-        family: 'DB_Helvethaica_X',
+      legend: {
+        display: false,
       },
-      callbacks: {
-        title: function (context) {
-          return 'ปี 25' + context[0].label.replace('’', '');
-        },
-        label: function (context) {
-          return context.formattedValue;
-        },
+      tooltip: {
+        enabled: false,
+        position: 'nearest',
+        external: externalTooltipHandler,
       },
     },
-  },
-  scales: {
-    x: {
-      stacked: true,
-      ticks: {
-        font: {
-          size: 16,
-          family: 'DB_Helvethaica_X',
-          color: '#8E8E8E',
+    scales: {
+      x: {
+        stacked: true,
+        ticks: {
+          font: {
+            size: 16,
+            family: 'DB_Helvethaica_X',
+            color: '#8E8E8E',
+          },
+        },
+      },
+      y: {
+        stacked: true,
+        ticks: {
+          precision: 0,
+          font: {
+            size: 16,
+            family: 'DB_Helvethaica_X',
+          },
+          callback: function (value, index, ticks) {
+            if (value > 1000000000)
+              return (
+                (value / 1000000000).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                }) + 'B'
+              );
+            else if (value > 999999)
+              return (
+                (value / 1000000).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                }) + 'M'
+              );
+            else return value.toLocaleString();
+          },
         },
       },
     },
-    y: {
-      stacked: true,
-      ticks: {
-        precision: 0,
-        font: {
-          size: 16,
-          family: 'DB_Helvethaica_X',
-        },
-        callback: function (value, index, ticks) {
-          return value > 1000000 ? (value / 1000000).toLocaleString() : value;
-        },
-      },
-    },
-  },
+  };
 });
 
 const getChartData = async () => {

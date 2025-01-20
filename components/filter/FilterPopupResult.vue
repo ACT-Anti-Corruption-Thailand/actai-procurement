@@ -69,7 +69,7 @@ const setFilter = (val: any, section: string, defaultVal: string) => {
       val.length > 0 ? [...val].toString() : defaultVal;
   }
   filterCount.value =
-    val.length > 0 ? (filterCount.value += 1) : filterCount.value == 1;
+    val.length > 0 ? (filterCount.value += 1) : (filterCount.value -= 1);
 };
 
 const searchByResult = () => {
