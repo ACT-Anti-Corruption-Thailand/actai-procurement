@@ -47,7 +47,7 @@ onMounted(() => {
 
 const onEnterSearch = () => {
   if (query.value != null) {
-    window.location.href = 'result?search=' + selected.value;
+    window.location.href = '../result?search=' + selected.value;
   }
 };
 </script>
@@ -75,6 +75,7 @@ const onEnterSearch = () => {
                 (e) => {
                   e.stopPropagation();
                   query = '';
+                  selected = '';
                 }
               "
               v-if="query != ''"
@@ -133,6 +134,7 @@ const onEnterSearch = () => {
                     'bg-black text-white': active,
                     'text-black': !active,
                   }"
+                  @click="query = person"
                 >
                   <span
                     class="block truncate"

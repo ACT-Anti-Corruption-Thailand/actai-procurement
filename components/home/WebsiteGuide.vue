@@ -1,17 +1,18 @@
 <script setup>
 import { ChevronRightIcon } from '@heroicons/vue/24/solid';
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import qs from 'qs';
 
 const config = useRuntimeConfig();
 const searchSummary = ref({});
 const d = new Date();
 const fromDate = ref('');
 const toDate = ref('');
+const queryParams = ref('');
+const ye = d.getMonth() > 8 ? d.getFullYear() + 544 : d.getFullYear() + 543;
 
 const getSearchSummary = async () => {
   const urlParams = new URLSearchParams();
-
-  let ye = d.getMonth() > 8 ? d.getFullYear() + 544 : d.getFullYear() + 543;
 
   urlParams.set('page', 1);
   urlParams.set('pageSize', 10);
@@ -47,6 +48,17 @@ onBeforeMount(async () => {
 
 onMounted(async () => {
   await getSearchSummary();
+
+  let filter = {
+    budgetYear: {
+      start: d.getFullYear() + 543,
+      end: ye,
+    },
+  };
+
+  let str = qs.stringify({ filter });
+
+  queryParams.value = str;
 });
 </script>
 
@@ -116,7 +128,9 @@ onMounted(async () => {
                     :key="i"
                   >
                     <!-- <div> -->
-                    <NuxtLink :to="`/result?search=${item.searchKeyword}`">
+                    <NuxtLink
+                      :to="`/result?search=${item.searchKeyword}&${queryParams}`"
+                    >
                       <div
                         class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left h-full flex flex-col justify-between"
                       >
