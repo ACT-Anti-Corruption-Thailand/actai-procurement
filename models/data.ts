@@ -11,6 +11,17 @@ export interface ProjectListSummaryData {
   totalCompany: number;
 }
 
+export interface FilterListProject {
+  budgetYears: number[];
+  agencies: unknown[];
+  agencyBelongTo: unknown[];
+  provinces: string[];
+  projectStatus: string[];
+  resourcingMethod: string[];
+  resourcingType: string[];
+  contractorType: string[];
+}
+
 export interface ChartDataSet<T = unknown> {
   label: string;
   backgroundColor: string;

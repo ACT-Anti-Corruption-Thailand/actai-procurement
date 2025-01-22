@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import type { Project, MapData } from '../../public/src/data/search_result';
-import type { ChartDataSet, ProjectListSummaryData } from '~/models/data';
+import type {
+  ChartDataSet,
+  FilterListProject,
+  ProjectListSummaryData,
+} from '~/models/data';
 
 const props = defineProps<{
   iconGuide: object;
   mockDataGuide: object;
-  filterListProject: object;
+  filterListProject?: FilterListProject;
   data: ProjectListSummaryData;
   yearList: unknown[];
   projectList: Project;
@@ -139,6 +143,7 @@ onMounted(() => {
       </TabList>
       <div>
         <FilterPopupResult
+          v-if="props.filterListProject"
           section="โครงการ"
           @change="setParams"
           :list="props.filterListProject"
