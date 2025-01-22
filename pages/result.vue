@@ -5,7 +5,11 @@ const route = useRoute();
 const menu = ref('ทั้งหมด');
 const menuList = ref(['ทั้งหมด', 'โครงการฯ', 'หน่วยงานรัฐ', 'ผู้รับจ้าง']);
 
-import type { ChartDataSet, ProjectListSummaryData } from '~/models/data';
+import type {
+  ChartDataSet,
+  FilterListProject,
+  ProjectListSummaryData,
+} from '~/models/data';
 import type {
   Government,
   Project,
@@ -37,7 +41,6 @@ const chartDataSet2 = ref<ChartDataSet[]>([]);
 const chartDataSet3 = ref<ChartDataSet[]>([]);
 const chartDataSet4 = ref<ChartDataSet[]>([]);
 const chartDataSet5 = ref<ChartDataSet[]>([]);
-const keyword = ref(null);
 const projectListAll = ref<Project | null>(null);
 const projectList = ref<Project | null>(null);
 const govListAll = ref<Government | null>(null);
@@ -45,7 +48,7 @@ const govList = ref<Government | null>(null);
 const contractorListAll = ref<Contractor | null>(null);
 const contractorList = ref<Contractor | null>(null);
 const mapDataList = ref<MapData | null>(null);
-const filterListProject = ref({});
+const filterListProject = ref<FilterListProject>();
 const filterListGovernment = ref({});
 const filterListContractor = ref({});
 

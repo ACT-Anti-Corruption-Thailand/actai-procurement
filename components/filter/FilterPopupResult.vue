@@ -11,14 +11,14 @@ import {
 
 const props = defineProps<{
   section: string;
-  list?: object;
+  list: FilterListProject;
 }>();
 const emit = defineEmits(['change', 'count']);
 
 import { CheckIcon } from '@heroicons/vue/24/solid';
 import qs from 'qs';
+import type { FilterListProject } from '~/models/data';
 
-const config = useRuntimeConfig();
 const isOpen = ref(false);
 const plan = ref('งบประมาณ');
 const filterCount = ref(0);
@@ -58,7 +58,9 @@ function openModal() {
   isOpen.value = true;
 }
 
-const setFilter = (val: any, section: string, defaultVal: string) => {
+watch(selected.value, (v) => console.log(v));
+
+const setFilter = (val: unknown[], section: string, defaultVal: string) => {
   if (props.section == 'โครงการ') {
     selected.value[section] = val.length > 0 ? [...val].toString() : defaultVal;
   } else if (props.section == 'หน่วยงานรัฐ') {
@@ -162,7 +164,7 @@ const searchByResult = () => {
   emit('change', 'filter', '&' + str);
 };
 
-const setCount = (newV, oldV) => {
+const setCount = (newV: unknown, oldV: unknown) => {
   filterCount.value =
     newV != oldV ? (filterCount.value += 1) : (filterCount.value -= 1);
 };
@@ -173,8 +175,8 @@ const clearFilter = () => {
 
   if (props.section == 'โครงการ') {
     selected.value = {
-      yearFrom: props.list?.budgetYears[0],
-      yearTo: props.list?.budgetYears[props.list?.budgetYears.length - 1],
+      yearFrom: props.list.budgetYears[0].toString(),
+      yearTo: props.list.budgetYears.at(-1)!.toString(),
       agencies: 'ทุกหน่วยงาน',
       agencyBelongTo: 'ทุกหน่วยงาน',
       contractorType: 'ทุกประเภท',
@@ -208,9 +210,8 @@ const clearFilter = () => {
 
 onMounted(() => {
   if (props.section == 'โครงการ') {
-    selected.value.yearFrom = props.list?.budgetYears[0]?.toString();
-    selected.value.yearTo =
-      props.list?.budgetYears[props.list?.budgetYears?.length - 1].toString();
+    selected.value.yearFrom = props.list.budgetYears[0].toString();
+    selected.value.yearTo = props.list.budgetYears.at(-1)!.toString();
   }
 });
 </script>
@@ -315,7 +316,7 @@ onMounted(() => {
                           @change="
                             setCount(
                               selected.yearFrom,
-                              props.list?.budgetYears[0]
+                              props.list.budgetYears[0]
                             )
                           "
                           v-model="selected.yearFrom"
@@ -337,9 +338,7 @@ onMounted(() => {
                           @change="
                             setCount(
                               selected.yearTo,
-                              props.list?.budgetYears[
-                                props.list?.budgetYears.length - 1
-                              ]
+                              props.list.budgetYears.at(-1)!
                             )
                           "
                           v-model="selected.yearTo"
@@ -357,7 +356,7 @@ onMounted(() => {
 
                     <Combobox
                       title="หน่วยงานรัฐเจ้าของโครงการ"
-                      :list="props.list?.agencies"
+                      :list="props.list.agencies"
                       defaultVal="ทุกหน่วยงาน"
                       @change="(n) => setFilter(n, 'agencies', 'ทุกหน่วยงาน')"
                       :selectedVal="selected.agencies"
@@ -365,9 +364,9 @@ onMounted(() => {
                     />
 
                     <Combobox
-                      v-if="props.list?.agencyBelongTo?.length > 0"
+                      v-if="props.list.agencyBelongTo.length > 0"
                       title="สังกัด"
-                      :list="props.list?.agencyBelongTo"
+                      :list="props.list.agencyBelongTo"
                       defaultVal="ทุกหน่วยงาน"
                       @change="
                         (n) => setFilter(n, 'agencyBelongTo', 'ทุกหน่วยงาน')
@@ -378,16 +377,16 @@ onMounted(() => {
 
                     <Combobox
                       title="ที่ตั้งโครงการ"
-                      :list="props.list?.provinces"
+                      :list="props.list.provinces"
                       defaultVal="ทุกจังหวัด"
-                      @change="(n) => setFilter(n, 'provinces', 'ทุกจังหวัด')"
+                      @change="(n) => setFilter(n, 'province', 'ทุกจังหวัด')"
                       :selectedVal="selected.province"
                       :isClear="isClear"
                     />
 
                     <Combobox
                       title="สถานะโครงการ"
-                      :list="props.list?.projectStatus"
+                      :list="props.list.projectStatus"
                       defaultVal="ทุกสถานะ"
                       @change="(n) => setFilter(n, 'projectStatus', 'ทุกสถานะ')"
                       :selectedVal="selected.projectStatus"
@@ -396,7 +395,7 @@ onMounted(() => {
 
                     <Combobox
                       title="วิธีการจัดหา"
-                      :list="props.list?.resourcingMethod"
+                      :list="props.list.resourcingMethod"
                       defaultVal="ทุกวิธี"
                       @change="
                         (n) => setFilter(n, 'resourcingMethod', 'ทุกวิธี')
@@ -407,7 +406,7 @@ onMounted(() => {
 
                     <Combobox
                       title="ประเภทการจัดหา"
-                      :list="props.list?.resourcingType"
+                      :list="props.list.resourcingType"
                       defaultVal="ทุกประเภท"
                       @change="
                         (n) => setFilter(n, 'resourcingType', 'ทุกประเภท')
@@ -418,7 +417,7 @@ onMounted(() => {
 
                     <Combobox
                       title="ประเภทผู้รับจ้าง"
-                      :list="props.list?.contractorType"
+                      :list="props.list.contractorType"
                       defaultVal="ทุกประเภท"
                       @change="
                         (n) => setFilter(n, 'contractorType', 'ทุกประเภท')
@@ -433,14 +432,12 @@ onMounted(() => {
 
                     <RadioGroup v-model="plan" class="flex">
                       <RadioGroupOption
-                        v-slot="{ checked }"
                         class="flex-1 radio-btn b1"
                         value="งบประมาณ"
                       >
                         <span>งบประมาณ</span>
                       </RadioGroupOption>
                       <RadioGroupOption
-                        v-slot="{ checked }"
                         class="flex-1 radio-btn b1"
                         value="วงเงินสัญญา"
                       >
@@ -476,9 +473,9 @@ onMounted(() => {
                 <template v-else-if="props.section == 'หน่วยงานรัฐ'">
                   <div>
                     <Combobox
-                      v-if="props.list?.agencyBelongTo?.length > 0"
+                      v-if="props.list.agencyBelongTo?.length > 0"
                       title="สังกัด"
-                      :list="props.list?.agencyBelongTo"
+                      :list="props.list.agencyBelongTo"
                       defaultVal="ทุกหน่วยงาน"
                       @change="
                         (n) => setFilter(n, 'agencyBelongTo', 'ทุกหน่วยงาน')
@@ -489,7 +486,7 @@ onMounted(() => {
 
                     <Combobox
                       title="ที่ตั้งหน่วยงาน"
-                      :list="props.list?.provinces"
+                      :list="props.list.provinces"
                       defaultVal="ทุกจังหวัด"
                       @change="(n) => setFilter(n, 'province', 'ทุกจังหวัด')"
                       :selectedVal="selectedGov.province"
@@ -499,7 +496,7 @@ onMounted(() => {
                 <template v-else>
                   <Combobox
                     title="ที่ตั้งผู้รับจ้าง"
-                    :list="props.list?.provinces"
+                    :list="props.list.provinces"
                     defaultVal="ทุกจังหวัด"
                     @change="(n) => setFilter(n, 'province', 'ทุกจังหวัด')"
                     :selectedVal="selectedContractor.province"
@@ -508,7 +505,7 @@ onMounted(() => {
 
                   <Combobox
                     title="ประเภทผู้รับจ้าง"
-                    :list="props.list?.contractorType"
+                    :list="props.list.contractorType"
                     defaultVal="ทุกประเภท"
                     @change="(n) => setFilter(n, 'contractorType', 'ทุกประเภท')"
                     :selectedVal="selectedContractor.contractorType"
