@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Project } from '../../public/src/data/search_result';
 import qs from 'qs';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 
 const props = defineProps<{
   data: Project;
@@ -185,19 +186,15 @@ watch(isRisk, (val) => {
                 <td>{{ setDate(item.announcementDate) }}</td>
                 <td
                   :class="{
-                    'bg-[#054775] text-white':
-                      item.projectStatus == 'ส่งงานล่าช้ากว่ากำหนด',
+                    'bg-[#FFCECE] ':
+                      item.projectStatus == 'ยกเลิกประกาศเชิญชวน',
                     'bg-[#0F7979] text-white':
-                      item.projectStatus == 'ส่งงานครบถ้วน',
-                    'bg-[#1AA8A8] text-white':
-                      item.projectStatus == 'ส่งงานตามกำหนด',
-                    'bg-[#6DD5D5] text-white':
-                      item.projectStatus == 'จัดทำสัญญา/PO แล้ว',
+                      item.projectStatus == 'แล้วเสร็จตามสัญญา',
+                    'bg-[#FF5353] ': item.projectStatus == 'ยกเลิกโครงการ',
+                    'bg-[#6DD5D5]': item.projectStatus == 'จัดทำสัญญา/PO แล้ว',
                     'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
-                    'bg-[#FF8888] text-white':
-                      item.projectStatus == 'ยกเลิกสัญญา',
-                    'bg-[#EC1C24] text-white':
-                      item.projectStatus == 'สิ้นสุดสัญญา',
+                    'bg-[#FF8888] ': item.projectStatus == 'ยกเลิกสัญญา',
+                    'bg-[#EC1C24] ': item.projectStatus == 'สิ้นสุดสัญญา',
                   }"
                 >
                   {{ item.projectStatus }}
@@ -219,25 +216,50 @@ watch(isRisk, (val) => {
                   <p v-else>-</p>
                 </td>
                 <td>
-                  <ul class="list-decimal" v-if="item.contractors?.length > 0">
-                    <li v-for="data in item.contractors">
-                      <a
-                        target="_blank"
-                        :href="`/contractor${data.id}`"
-                        class="hover:text-[#0B5C90]"
-                        >{{ data.name }}</a
-                      >
-                    </li>
-                  </ul>
+                  <template v-if="item.contractors?.length > 0">
+                    <p>1. {{ item.contractors[0].name }}</p>
+                    <Disclosure
+                      v-if="item.contractors?.length > 1"
+                      v-slot="{ open }"
+                    >
+                      <DisclosurePanel>
+                        <p v-for="(data, i) in item.contractors">
+                          {{ i + 2 }}. {{ data?.name }}
+                        </p>
+                      </DisclosurePanel>
+                      <DisclosureButton class="b4 text-[#0B5C90] text-left">
+                        {{
+                          open
+                            ? ' ..ดูน้อยลง'
+                            : `..ดูเพิ่ม (${item.contractors?.length} องค์กร)`
+                        }}
+                      </DisclosureButton>
+                    </Disclosure></template
+                  >
 
                   <p v-else>-</p>
                 </td>
                 <td>
-                  <ul class="list-decimal" v-if="item.bidder?.length > 0">
-                    <li v-for="data in item.bidder">
-                      {{ data }}
-                    </li>
-                  </ul>
+                  <template v-if="item.bidder?.length > 0">
+                    <p>1. {{ item.bidder[0] }}</p>
+                    <Disclosure
+                      v-if="item.bidder?.length > 1"
+                      v-slot="{ open }"
+                    >
+                      <DisclosurePanel>
+                        <p v-for="(data, i) in item.bidder">
+                          {{ i + 2 }}. {{ data }}
+                        </p>
+                      </DisclosurePanel>
+                      <DisclosureButton class="b4 text-[#0B5C90] text-left">
+                        {{
+                          open
+                            ? ' ..ดูน้อยลง'
+                            : `..ดูเพิ่ม (${item.bidder?.length} องค์กร)`
+                        }}
+                      </DisclosureButton>
+                    </Disclosure></template
+                  >
 
                   <p v-else>-</p>
                 </td>
@@ -246,9 +268,20 @@ watch(isRisk, (val) => {
                     item.totalContractMoney != null ||
                     item.totalBudgetMoney != null
                   "
+                  class="text-right"
                 >
-                  <b>{{ item.totalContractMoney.toLocaleString() }}</b>
-                  <br />
+                  <b>{{
+                    item.totalContractMoney.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  }}</b>
+                  <br />{{
+                    item.totalBudget.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  }}
                 </td>
               </tr>
             </tbody>

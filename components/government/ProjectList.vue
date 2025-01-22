@@ -194,15 +194,14 @@ watch(isRisk, (val) => {
               <td>{{ setDate(item.announcementDate) }}</td>
               <td
                 :class="{
-                  'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
-                  'bg-[#6DD5D5]': item.projectStatus == 'จัดทำสัญญา/PO แล้ว',
+                  'bg-[#FFCECE] ': item.projectStatus == 'ยกเลิกประกาศเชิญชวน',
                   'bg-[#0F7979] text-white':
                     item.projectStatus == 'แล้วเสร็จตามสัญญา',
-                  'bg-[#EC1C24] text-white':
-                    item.projectStatus == 'สิ้นสุดสัญญา',
-                  'bg-[#FF8888]': item.projectStatus == 'ยกเลิกสัญญา',
-                  'bg-[#FF5353]': item.projectStatus == 'ยกเลิกโครงการ',
-                  'bg-[#FFCECE]': item.projectStatus == 'ยกเลิกประกาศเชิญชวน',
+                  'bg-[#FF5353] ': item.projectStatus == 'ยกเลิกโครงการ',
+                  'bg-[#6DD5D5]': item.projectStatus == 'จัดทำสัญญา/PO แล้ว',
+                  'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
+                  'bg-[#FF8888] ': item.projectStatus == 'ยกเลิกสัญญา',
+                  'bg-[#EC1C24] ': item.projectStatus == 'สิ้นสุดสัญญา',
                 }"
               >
                 {{ item.projectStatus }}

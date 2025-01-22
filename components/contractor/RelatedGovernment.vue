@@ -122,10 +122,19 @@ const setParams = (type: string, val: string) => {
                   </a>
                 </td>
                 <td class="text-right">
-                  {{ item.totalProject.toLocaleString() }}
+                  {{
+                    item.totalProject.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })
+                  }}
                 </td>
                 <td class="text-right">
-                  {{ item.totalBudgetMoney.toLocaleString() }}
+                  {{
+                    item.totalBudgetMoney.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  }}
                 </td>
               </tr>
             </tbody>
