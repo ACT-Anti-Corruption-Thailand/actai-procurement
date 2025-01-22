@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import type { Project, MapData } from '../../public/src/data/search_result';
+import type { ChartDataSet, ProjectListSummaryData } from '~/models/data';
 
 const props = defineProps<{
   iconGuide: object;
   mockDataGuide: object;
   filterListProject: object;
-  data: array;
-  yearList: array;
+  data: ProjectListSummaryData;
+  yearList: unknown[];
   projectList: Project;
-  chartDataSet1: array;
-  chartDataSet2: array;
-  chartDataSet3: array;
-  chartDataSet4: array;
-  chartDataSet5: array;
+  chartDataSet1: ChartDataSet[];
+  chartDataSet2: ChartDataSet[];
+  chartDataSet3: ChartDataSet[];
+  chartDataSet4: ChartDataSet[];
+  chartDataSet5: ChartDataSet[];
   mapData: MapData;
 }>();
 
@@ -63,7 +64,7 @@ const menuList = ref([
 ]);
 const filterList = ref('');
 
-function changeTab(index) {
+function changeTab(index: number) {
   selectedTab.value = index;
 }
 
@@ -71,7 +72,7 @@ function scrollToTop() {
   window.scrollTo(0, 0);
 }
 
-function highlight(title: string, text: string) {
+function highlight(title: string) {
   var innerHTML = title;
   const urlParams = decodeURI(window.location.href).split('=')[1];
   var index = innerHTML.indexOf(urlParams);
@@ -91,13 +92,14 @@ const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
 
   if (type == 'sortBy') sort.value = val;
-  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+  else if (type == 'page')
+    page.value = page.value == 0 ? 20 : page.value + +val;
   else if (type == 'filter') filterList.value = val;
   else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
   searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
-  searchParams.set('pageSize', type == 'page' ? page.value : 10);
+  searchParams.set('pageSize', `${type == 'page' ? page.value : 10}`);
 
   queryForDownload.value = '&' + searchParams.toString() + filterList.value;
   emit('search', '&' + searchParams.toString() + filterList.value, 'details');
@@ -106,23 +108,23 @@ const setParams = (type: string, val: string) => {
 onMounted(() => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  searchText.value = urlParams.get('search');
+  searchText.value = urlParams.get('search') || '';
   queryForDownload.value = '&sortBy=relevanceScore&sortOrder=desc';
 
-  menuList.value[0].desc = props.data?.maxProjectStatus?.name;
-  menuList.value[0].total = props.data?.maxProjectStatus?.total;
+  menuList.value[0].desc = props.data.maxProjectStatus.name;
+  menuList.value[0].total = props.data.maxProjectStatus.total;
   menuList.value[0].percent =
-    (props.data?.maxProjectStatus?.total / props.data?.totalProject) * 100;
-  menuList.value[1].desc = props.data?.maxContractStatus?.name;
-  menuList.value[1].total = props.data?.maxContractStatus?.total;
+    (props.data.maxProjectStatus.total / props.data.totalProject) * 100;
+  menuList.value[1].desc = props.data.maxContractStatus.name;
+  menuList.value[1].total = props.data.maxContractStatus.total;
   menuList.value[1].percent =
-    (props.data?.maxContractStatus?.total / props.data?.totalProject) * 100;
-  menuList.value[2].desc = props.data?.maxResourcingMethod?.name;
-  menuList.value[2].total = props.data?.maxResourcingMethod?.total;
+    (props.data.maxContractStatus.total / props.data.totalProject) * 100;
+  menuList.value[2].desc = props.data.maxResourcingMethod.name;
+  menuList.value[2].total = props.data.maxResourcingMethod.total;
   menuList.value[2].percent =
-    (props.data?.maxResourcingMethod?.total / props.data?.totalProject) * 100;
-  menuList.value[3].desc = props.data?.provinceWithHighestBudgetMoney;
-  menuList.value[4].desc = props.data?.provinceWithHighestProjects;
+    (props.data.maxResourcingMethod.total / props.data.totalProject) * 100;
+  menuList.value[3].desc = props.data.provinceWithHighestBudgetMoney;
+  menuList.value[4].desc = props.data.provinceWithHighestProjects;
 });
 </script>
 
@@ -152,7 +154,7 @@ onMounted(() => {
               จำนวนโครงการจัดซื้อจัดจ้างตามเงื่อนไขที่ค้นหา
             </p>
             <h2 class="font-black">
-              {{ props.data?.totalProject.toLocaleString() }} โครงการ
+              {{ props.data.totalProject.toLocaleString() }} โครงการ
             </h2>
             <hr />
             <div class="flex gap-2">
@@ -160,9 +162,9 @@ onMounted(() => {
                 <p class="b2">งบประมาณรวม (บาท)</p>
                 <h5
                   class="font-bold"
-                  v-if="props.data?.totalBudgetMoney != null"
+                  v-if="props.data.totalBudgetMoney != null"
                 >
-                  {{ props.data?.totalBudgetMoney.toLocaleString() }}
+                  {{ props.data.totalBudgetMoney.toLocaleString() }}
                 </h5>
               </div>
               <div class="flex-1 text-[#EC1C24]">
@@ -170,8 +172,8 @@ onMounted(() => {
                 <h5 class="font-bold">
                   {{
                     (
-                      (props.data?.totalProjectHasCorruption /
-                        props.data?.totalProject) *
+                      (props.data.totalProjectHasCorruption /
+                        props.data.totalProject) *
                       100
                     ).toFixed(2)
                   }}%
@@ -191,12 +193,12 @@ onMounted(() => {
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black mb-3">
               <p class="b1">หน่วยงานรัฐเจ้าของโครงการ</p>
               <h5 class="font-bold">
-                {{ props.data?.totalAgency.toLocaleString() }} หน่วยงาน
+                {{ props.data.totalAgency.toLocaleString() }} หน่วยงาน
               </h5>
               <p
                 @click="isOpenGovModal = true"
                 class="b2 link-1 flex items-center gap-1"
-                v-if="props.data?.totalAgency != 0"
+                v-if="props.data.totalAgency != 0"
               >
                 ดูรายชื่อ
                 <svg
@@ -220,12 +222,12 @@ onMounted(() => {
             <div class="rounded-10 bg-[#F5F5F5] p-5 text-black">
               <p class="b1">ผู้รับจ้าง</p>
               <h5 class="font-bold">
-                {{ props.data?.totalCompany.toLocaleString() }} ราย
+                {{ props.data.totalCompany.toLocaleString() }} ราย
               </h5>
               <p
                 @click="isOpenContractorModal = true"
                 class="b2 link-1 flex items-center gap-1"
-                v-if="props.data?.totalCompany != 0"
+                v-if="props.data.totalCompany != 0"
               >
                 ดูรายชื่อ
                 <svg
@@ -326,7 +328,7 @@ onMounted(() => {
                 props.projectList?.searchResult.length <
                 props.projectList?.pagination?.totalItem
               "
-              @click="setParams('page', 10)"
+              @click="setParams('page', '10')"
             />
           </div>
         </div>
@@ -343,7 +345,7 @@ onMounted(() => {
       <TabPanel>
         <div class="mx-auto max-w-6xl px-4 lg:px-0">
           <h5 class="font-bold my-5">
-            {{ props.data?.totalProject.toLocaleString() }}
+            {{ props.data.totalProject.toLocaleString() }}
             โครงการจัดซื้อจัดจ้าง
           </h5>
           <div class="flex flex-col-mb gap-2">
@@ -351,7 +353,7 @@ onMounted(() => {
               <div class="rounded-10 btn-chart p-5 text-white relative">
                 <p class="b1">งบประมาณรวม (บาท)</p>
                 <h4 class="font-black" v-if="data != null">
-                  {{ props.data?.totalBudgetMoney.toLocaleString() }}
+                  {{ props.data.totalBudgetMoney.toLocaleString() }}
                 </h4>
                 <arrow
                   color="#FFFFFF"
@@ -364,8 +366,8 @@ onMounted(() => {
                 <h4 class="font-black text-[#EC1C24]">
                   {{
                     (
-                      (props.data?.totalProjectHasCorruption /
-                        props.data?.totalProject) *
+                      (props.data.totalProjectHasCorruption /
+                        props.data.totalProject) *
                       100
                     ).toFixed(2)
                   }}%

@@ -3,25 +3,24 @@ export interface Project {
     totalItem: number;
     totalPage: number;
   };
-  searchResult: [
-    {
-      projectId: string;
-      projectName: string;
-      projectStatus: string;
-      budgetYear: string;
-      totalBudget: number;
-      totalBudgetMoney: number;
-      agencyId: string;
-      agencyName: string;
-      province: string;
-      hasCorruptionRisk: boolean;
-      totalContractMoney: number;
-      resourcingMethod: string;
-      resourcingType: string;
-      contractors?: [];
-      bidder?: [];
-    }
-  ];
+  searchResult: {
+    projectId: string;
+    projectName: string;
+    projectStatus: string;
+    budgetYear: string;
+    totalBudget: number;
+    totalBudgetMoney: number;
+    agencyId: string;
+    agencyName: string;
+    province: string;
+    hasCorruptionRisk: boolean;
+    totalContractMoney: number;
+    resourcingMethod: string;
+    resourcingType: string;
+    contractors?: [];
+    bidder?: [];
+    announcementDate: Date;
+  }[];
 }
 
 export interface Government {

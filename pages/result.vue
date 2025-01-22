@@ -5,6 +5,7 @@ const route = useRoute();
 const menu = ref('ทั้งหมด');
 const menuList = ref(['ทั้งหมด', 'โครงการฯ', 'หน่วยงานรัฐ', 'ผู้รับจ้าง']);
 
+import type { ChartDataSet, ProjectListSummaryData } from '~/models/data';
 import type {
   Government,
   Project,
@@ -28,14 +29,14 @@ const mockDataGuide = ref({
   no: '56015020021',
 });
 
-const summaryData = ref(null);
+const summaryData = ref<ProjectListSummaryData>();
 const chartData = ref(null);
 const yearList = ref([]);
-const chartDataSet1 = ref([]);
-const chartDataSet2 = ref([]);
-const chartDataSet3 = ref([]);
-const chartDataSet4 = ref([]);
-const chartDataSet5 = ref([]);
+const chartDataSet1 = ref<ChartDataSet[]>([]);
+const chartDataSet2 = ref<ChartDataSet[]>([]);
+const chartDataSet3 = ref<ChartDataSet[]>([]);
+const chartDataSet4 = ref<ChartDataSet[]>([]);
+const chartDataSet5 = ref<ChartDataSet[]>([]);
 const keyword = ref(null);
 const projectListAll = ref<Project | null>(null);
 const projectList = ref<Project | null>(null);
@@ -267,7 +268,7 @@ const onSetChartData = (section: string, data) => {
       let c = colorProjectStatus.filter((x) => x.name == name);
 
       return {
-        label: name,
+        label: name as string,
         backgroundColor: c[0].color,
         data: data.map(
           (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
@@ -330,7 +331,7 @@ const onSetChartData = (section: string, data) => {
       let c = colorContractStatus.filter((x) => x.name == name);
 
       return {
-        label: name,
+        label: name as string,
         backgroundColor: c[0].color,
         data: data.map(
           (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
@@ -487,22 +488,24 @@ const onSetChartData = (section: string, data) => {
         :govList="govListAll"
         :contractorList="contractorListAll"
       />
-      <ResultProjectList
-        v-else-if="menu == 'โครงการฯ'"
-        @search="getProjectList"
-        :iconGuide="iconGuide"
-        :mockDataGuide="mockDataGuide"
-        :data="summaryData"
-        :projectList="projectList"
-        :yearList="yearList"
-        :chartDataSet1="chartDataSet1"
-        :chartDataSet2="chartDataSet2"
-        :chartDataSet3="chartDataSet3"
-        :chartDataSet4="chartDataSet4"
-        :chartDataSet5="chartDataSet5"
-        :mapData="mapDataList"
-        :filterListProject="filterListProject"
-      />
+      <template v-else-if="menu == 'โครงการฯ'">
+        <ResultProjectList
+          v-if="summaryData && projectList && mapDataList"
+          @search="getProjectList"
+          :iconGuide="iconGuide"
+          :mockDataGuide="mockDataGuide"
+          :data="summaryData"
+          :projectList="projectList"
+          :yearList="yearList"
+          :chartDataSet1="chartDataSet1"
+          :chartDataSet2="chartDataSet2"
+          :chartDataSet3="chartDataSet3"
+          :chartDataSet4="chartDataSet4"
+          :chartDataSet5="chartDataSet5"
+          :mapData="mapDataList"
+          :filterListProject="filterListProject"
+        />
+      </template>
       <ResultGovernment
         v-else-if="menu == 'หน่วยงานรัฐ'"
         :govList="govList"
