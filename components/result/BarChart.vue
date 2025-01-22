@@ -76,15 +76,15 @@
         >
           <input
             type="checkbox"
-            :id="`type-${props.section}-${i + 1}`"
+            :id="`type-${props.section}-${props.data.length - 1 - i}`"
             class="size-5"
             :value="item.isChecked"
             v-model="item.isChecked"
             :style="{ color: item.backgroundColor }"
-            @click="onChangeHideShowData(i)"
+            @click="onChangeHideShowData(props.data.length - 1 - i)"
           />
           <label
-            :for="`type-${props.section}-${i + 1}`"
+            :for="`type-${props.section}-${props.data.length - 1 - i}`"
             class="b1 flex justify-between w-full"
             ><span class="w-3/5">{{ item.label }}</span>
             <span class="text-[#5E5E5E] text-right"
@@ -295,9 +295,11 @@ watch(chartDataFromAPI, (newX) => {
 });
 
 const onChangeHideShowData = (a) => {
-  const aa = chart.value?.chart?.isDatasetVisible(a);
+  console.log(a);
 
-  if (!aa) chart.value?.chart?.show(a);
+  const isShow = chart.value?.chart?.isDatasetVisible(a);
+
+  if (!isShow) chart.value?.chart?.show(a);
   else chart.value?.chart?.hide(a);
 };
 

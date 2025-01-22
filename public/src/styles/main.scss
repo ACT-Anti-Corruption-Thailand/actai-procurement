@@ -415,14 +415,20 @@ table th:last-child {
 }
 
 .popup-custom {
-  @apply text-[20px] bg-[#F5F5F5] rounded-10 text-black opacity-100 pointer-events-none absolute text-left w-auto;
+  @apply text-[20px] bg-[#F5F5F5] rounded-10 text-black opacity-100 pointer-events-none absolute text-left min-w-32;
+
+  th,
+  td {
+    @apply font-bold;
+  }
 }
 
 .popup-custom table {
   @apply font-bold;
 }
 
-.popup-custom table thead tr th {
+.popup-custom table thead tr th,
+.popup-custom table tbody tr th {
   @apply text-nowrap p-0;
 }
 

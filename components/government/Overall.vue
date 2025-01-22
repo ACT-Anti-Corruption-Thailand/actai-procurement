@@ -61,6 +61,9 @@ onBeforeMount(async () => {
   if (res.ok) {
     const data = await res.json();
     let q = data.yearlyAggregates.map((x) => x.aggregateBy.budgetMoney);
+    let contractMoney = data.yearlyAggregates.map(
+      (x) => x.aggregateBy.contractMoney
+    );
 
     chartData.value = {
       labels: data.yearlyAggregates.map((x) => x.budgetYear.toString()),
@@ -69,7 +72,7 @@ onBeforeMount(async () => {
           label: 'วงเงินสัญญารวม (บาท)',
           backgroundColor: '#FFFFFF',
           borderColor: '#000000',
-          data: data.yearlyAggregates.map((x) => x.totalContract),
+          data: contractMoney,
           fill: true,
         },
         {
@@ -83,10 +86,7 @@ onBeforeMount(async () => {
       ],
     };
 
-    totalContractOverall.value = data.yearlyAggregates.reduce(
-      (a, b) => a + b.totalContract,
-      0
-    );
+    totalContractOverall.value = contractMoney.reduce((a, b) => a + b, 0);
 
     totalBudgetOverall.value = q.reduce((a, b) => a + b, 0);
 

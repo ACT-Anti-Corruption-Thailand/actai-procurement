@@ -96,7 +96,7 @@ const externalTooltipHandler = (context) => {
 
   // Hide if no tooltip
   if (tooltip.opacity === 0) {
-    tooltipEl.style.opacity = 0;
+    tooltipEl.style.opacity = 1;
     return;
   }
 
@@ -141,8 +141,15 @@ const externalTooltipHandler = (context) => {
       td.style.borderWidth = 0;
       td.style.color = i == 0 ? '#000000' : '#7F7F7F';
 
-      let bodyText = body.toString().split(': ')[1];
-      const text = document.createTextNode(bodyText);
+      let bodyText = parseInt(body.toString().split(': ')[1].replace(/,/g, ''));
+
+      const text = document.createTextNode(
+        bodyText
+          .toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+          })
+          .toString()
+      );
 
       td.appendChild(span);
       td.appendChild(text);
@@ -171,7 +178,11 @@ const externalTooltipHandler = (context) => {
       parseInt(bodyLines[0].toString().split(': ')[1].replace(/,/g, ''));
 
     const text2 = document.createTextNode(
-      bodyText1.toLocaleString().toString()
+      bodyText1
+        .toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+        })
+        .toString()
     );
 
     td2.appendChild(span2);

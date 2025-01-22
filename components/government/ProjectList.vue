@@ -191,7 +191,7 @@ watch(isRisk, (val) => {
                   v-if="item.hasCorruptionRisk"
                 />
               </td>
-              <td>11/10/2567</td>
+              <td>{{ setDate(item.announcementDate) }}</td>
               <td
                 :class="{
                   'bg-[#DADADA]': item.projectStatus == 'ระหว่างดำเนินการ',
@@ -214,8 +214,18 @@ watch(isRisk, (val) => {
               </td>
               <td>{{ item.agencyName }}</td>
               <td class="text-right">
-                <b> {{ item.totalBudget.toLocaleString() }}</b>
-                <br />{{ item.totalContractMoney.toLocaleString() }}
+                <b>
+                  {{
+                    item.totalBudget.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                    })
+                  }}</b
+                >
+                <br />{{
+                  item.totalContractMoney.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })
+                }}
               </td>
             </tr>
           </tbody>
