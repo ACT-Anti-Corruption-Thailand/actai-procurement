@@ -8,24 +8,20 @@ import {
   RadioGroup,
   RadioGroupOption,
 } from '@headlessui/vue';
+import { CheckIcon } from '@heroicons/vue/24/solid';
+import qs from 'qs';
+import type { FilterListProject } from '~/models/data';
 
 const props = defineProps<{
   section: string;
   list: FilterListProject;
 }>();
+
 const emit = defineEmits(['change', 'count']);
 
-import { CheckIcon } from '@heroicons/vue/24/solid';
-import qs from 'qs';
-import type { FilterListProject } from '~/models/data';
-
-const isOpen = ref(false);
-const plan = ref('งบประมาณ');
-const filterCount = ref(0);
-
-const selected = ref({
-  yearFrom: '',
-  yearTo: '',
+const defaultSelected = computed(() => ({
+  yearFrom: props.list.budgetYears[0].toString(),
+  yearTo: props.list.budgetYears.at(-1)!.toString(),
   agencies: 'ทุกหน่วยงาน',
   agencyBelongTo: 'ทุกหน่วยงาน',
   contractorType: 'ทุกประเภท',
@@ -36,20 +32,46 @@ const selected = ref({
   moneyStart: '',
   moneyEnd: '',
   hasCorruptionRisk: false,
-});
+}));
 
-const selectedGov = ref({
+const defaultSelectedGov = {
   agencyBelongTo: 'ทุกหน่วยงาน',
   province: 'ทุกจังหวัด',
-});
+};
 
-const selectedContractor = ref({
+const defaultSelectedContractor = {
   province: 'ทุกจังหวัด',
   contractorType: 'ทุกประเภท',
   hasCorruptionRisk: false,
+};
+
+const isOpen = ref(false);
+const plan = ref('งบประมาณ');
+const selected = ref({ ...defaultSelected.value });
+const selectedGov = ref({ ...defaultSelectedGov });
+const selectedContractor = ref({ ...defaultSelectedContractor });
+const isClear = ref(false);
+
+const filterCount = computed(() => {
+  switch (props.section) {
+    case 'โครงการ':
+      console.log(defaultSelected.value, selected.value);
+      return countPropertyDiff(defaultSelected.value, selected.value);
+    case 'หน่วยงานรัฐ':
+      return countPropertyDiff(defaultSelectedGov, selectedGov.value);
+    default:
+      return countPropertyDiff(
+        defaultSelectedContractor,
+        selectedContractor.value
+      );
+  }
 });
 
-const isClear = ref(false);
+function countPropertyDiff(objA: Object, objB: Object) {
+  return Object.entries(objA).filter(
+    ([key, value]) => objB[key as keyof typeof objB] != value
+  ).length;
+}
 
 function closeModal() {
   isOpen.value = false;
@@ -57,8 +79,6 @@ function closeModal() {
 function openModal() {
   isOpen.value = true;
 }
-
-watch(selected.value, (v) => console.log(v));
 
 const setFilter = (val: unknown[], section: string, defaultVal: string) => {
   if (props.section == 'โครงการ') {
@@ -70,8 +90,6 @@ const setFilter = (val: unknown[], section: string, defaultVal: string) => {
     selectedContractor.value[section] =
       val.length > 0 ? [...val].toString() : defaultVal;
   }
-  filterCount.value =
-    val.length > 0 ? (filterCount.value += 1) : (filterCount.value -= 1);
 };
 
 const searchByResult = () => {
@@ -164,41 +182,15 @@ const searchByResult = () => {
   emit('change', 'filter', '&' + str);
 };
 
-const setCount = (newV: unknown, oldV: unknown) => {
-  filterCount.value =
-    newV != oldV ? (filterCount.value += 1) : (filterCount.value -= 1);
-};
-
 const clearFilter = () => {
   isClear.value = true;
-  filterCount.value = 0;
 
   if (props.section == 'โครงการ') {
-    selected.value = {
-      yearFrom: props.list.budgetYears[0].toString(),
-      yearTo: props.list.budgetYears.at(-1)!.toString(),
-      agencies: 'ทุกหน่วยงาน',
-      agencyBelongTo: 'ทุกหน่วยงาน',
-      contractorType: 'ทุกประเภท',
-      projectStatus: 'ทุกสถานะ',
-      province: 'ทุกจังหวัด',
-      resourcingType: 'ทุกประเภท',
-      resourcingMethod: 'ทุกวิธี',
-      moneyStart: '',
-      moneyEnd: '',
-      hasCorruptionRisk: false,
-    };
+    selected.value = { ...defaultSelected.value };
   } else if (props.section == 'หน่วยงานรัฐ') {
-    selectedGov.value = {
-      agencyBelongTo: 'ทุกหน่วยงาน',
-      province: 'ทุกจังหวัด',
-    };
+    selectedGov.value = { ...defaultSelectedGov };
   } else {
-    selectedContractor.value = {
-      province: 'ทุกจังหวัด',
-      contractorType: 'ทุกประเภท',
-      hasCorruptionRisk: false,
-    };
+    selectedContractor.value = { ...defaultSelectedContractor };
   }
 
   emit('change', 'filter', '');
@@ -313,12 +305,6 @@ onMounted(() => {
                     <div class="flex w-full gap-2 items-center">
                       <div class="flex-1 relative">
                         <select
-                          @change="
-                            setCount(
-                              selected.yearFrom,
-                              props.list.budgetYears[0]
-                            )
-                          "
                           v-model="selected.yearFrom"
                           class="w-full rounded-10 border-0"
                         >
@@ -335,17 +321,11 @@ onMounted(() => {
 
                       <div class="flex-1 relative">
                         <select
-                          @change="
-                            setCount(
-                              selected.yearTo,
-                              props.list.budgetYears.at(-1)!
-                            )
-                          "
                           v-model="selected.yearTo"
                           class="w-full rounded-10 border-0"
                         >
                           <option
-                            v-for="item in props.list?.budgetYears"
+                            v-for="item in props.list.budgetYears"
                             :value="item"
                           >
                             {{ item }}
@@ -360,7 +340,7 @@ onMounted(() => {
                       defaultVal="ทุกหน่วยงาน"
                       @change="(n) => setFilter(n, 'agencies', 'ทุกหน่วยงาน')"
                       :selectedVal="selected.agencies"
-                      :isClear="isClear"
+                      :isClear
                     />
 
                     <Combobox
@@ -372,7 +352,7 @@ onMounted(() => {
                         (n) => setFilter(n, 'agencyBelongTo', 'ทุกหน่วยงาน')
                       "
                       :selectedVal="selected.agencyBelongTo"
-                      :isClear="isClear"
+                      :isClear
                     />
 
                     <Combobox
@@ -381,7 +361,7 @@ onMounted(() => {
                       defaultVal="ทุกจังหวัด"
                       @change="(n) => setFilter(n, 'province', 'ทุกจังหวัด')"
                       :selectedVal="selected.province"
-                      :isClear="isClear"
+                      :isClear
                     />
 
                     <Combobox
@@ -390,7 +370,7 @@ onMounted(() => {
                       defaultVal="ทุกสถานะ"
                       @change="(n) => setFilter(n, 'projectStatus', 'ทุกสถานะ')"
                       :selectedVal="selected.projectStatus"
-                      :isClear="isClear"
+                      :isClear
                     />
 
                     <Combobox
@@ -401,7 +381,7 @@ onMounted(() => {
                         (n) => setFilter(n, 'resourcingMethod', 'ทุกวิธี')
                       "
                       :selectedVal="selected.resourcingMethod"
-                      :isClear="isClear"
+                      :isClear
                     />
 
                     <Combobox
@@ -412,7 +392,7 @@ onMounted(() => {
                         (n) => setFilter(n, 'resourcingType', 'ทุกประเภท')
                       "
                       :selectedVal="selected.resourcingType"
-                      :isClear="isClear"
+                      :isClear
                     />
 
                     <Combobox
@@ -423,7 +403,7 @@ onMounted(() => {
                         (n) => setFilter(n, 'contractorType', 'ทุกประเภท')
                       "
                       :selectedVal="selected.contractorType"
-                      :isClear="isClear"
+                      :isClear
                     />
 
                     <div class="text-[#7F7F7F] mt-5">
@@ -448,7 +428,6 @@ onMounted(() => {
                     <div class="flex w-full gap-2 items-center my-3">
                       <div class="flex-1 relative">
                         <input
-                          @change="setCount(selected.moneyStart, '')"
                           v-model="selected.moneyStart"
                           type="text"
                           class="dropdown-btn border-0"
@@ -460,7 +439,6 @@ onMounted(() => {
 
                       <div class="flex-1 relative">
                         <input
-                          @change="setCount(selected.moneyEnd, '')"
                           v-model="selected.moneyEnd"
                           type="text"
                           class="dropdown-btn border-0"
@@ -481,7 +459,7 @@ onMounted(() => {
                         (n) => setFilter(n, 'agencyBelongTo', 'ทุกหน่วยงาน')
                       "
                       :selectedVal="selectedGov.agencyBelongTo"
-                      :isClear="isClear"
+                      :isClear
                     />
 
                     <Combobox
@@ -490,7 +468,7 @@ onMounted(() => {
                       defaultVal="ทุกจังหวัด"
                       @change="(n) => setFilter(n, 'province', 'ทุกจังหวัด')"
                       :selectedVal="selectedGov.province"
-                      :isClear="isClear"
+                      :isClear
                     /></div
                 ></template>
                 <template v-else>
@@ -500,7 +478,7 @@ onMounted(() => {
                     defaultVal="ทุกจังหวัด"
                     @change="(n) => setFilter(n, 'province', 'ทุกจังหวัด')"
                     :selectedVal="selectedContractor.province"
-                    :isClear="isClear"
+                    :isClear
                   />
 
                   <Combobox
@@ -509,7 +487,7 @@ onMounted(() => {
                     defaultVal="ทุกประเภท"
                     @change="(n) => setFilter(n, 'contractorType', 'ทุกประเภท')"
                     :selectedVal="selectedContractor.contractorType"
-                    :isClear="isClear"
+                    :isClear
                   />
                 </template>
 
@@ -518,7 +496,6 @@ onMounted(() => {
                   v-if="props.section != 'หน่วยงานรัฐ'"
                 >
                   <input
-                    @change="setCount(selected.hasCorruptionRisk, false)"
                     v-model="selected.hasCorruptionRisk"
                     id="default-checkbox"
                     type="checkbox"

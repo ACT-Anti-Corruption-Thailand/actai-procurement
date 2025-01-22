@@ -13,8 +13,8 @@ export interface ProjectListSummaryData {
 
 export interface FilterListProject {
   budgetYears: number[];
-  agencies: unknown[];
-  agencyBelongTo: unknown[];
+  agencies: string[];
+  agencyBelongTo: string[];
   provinces: string[];
   projectStatus: string[];
   resourcingMethod: string[];

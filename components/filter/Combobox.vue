@@ -10,16 +10,13 @@
 
   <div class="flex w-full gap-2 items-center">
     <div class="flex-1 relative">
-      <!-- {{ selectedList }}
-      {{ selectedChoice }} -->
       <Combobox v-model="selectedList" multiple v-slot="{ open }" nullable>
         <div class="relative">
           <ComboboxInput
-            :placeholder="query"
-            :displayValue="(person) => query"
+            :displayValue="getComboboxText"
             class="dropdown-btn border-0 hover:ring-0"
-            @change="(person) => setComboboxVal(person)"
-          />
+          >
+          </ComboboxInput>
           <ComboboxButton
             class="absolute inset-y-0 right-0 flex items-center pr-2 combobox-btn"
           >
@@ -30,20 +27,17 @@
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          @after-leave="handleEnterOptions()"
         >
           <div v-show="open">
-            <ComboboxOptions static class="dropdown-list absolutes">
+            <ComboboxOptions static class="dropdown-list absolute">
               <ComboboxOption
-                v-for="(item, i) in result.slice(0, 5)"
+                v-for="(item, i) in list.slice(0, 5)"
                 :key="i"
                 :value="item"
-                v-slot="{ selected, active }"
+                v-slot="{ selected }"
               >
                 <input
                   type="checkbox"
-                  name=""
-                  id=""
                   :checked="selected"
                   class="text-black mb-1"
                 />
@@ -60,14 +54,6 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{
-  title: string;
-  defaultVal: string;
-  selectedVal: array;
-  list: object;
-  isClear?: boolean;
-}>();
-
 import {
   Combobox,
   ComboboxInput,
@@ -79,73 +65,43 @@ import {
 
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
-const selectedList = ref([]);
-const hasChange = ref(false);
-const selectedChoice = toRef(props, 'selectedVal');
+const props = defineProps<{
+  title: string;
+  defaultVal: string;
+  selectedVal: string;
+  list: string[];
+  isClear?: boolean;
+}>();
+
+const selectedList = ref<string[]>([]);
 const isClearFilter = toRef(props, 'isClear');
-
-watch(selectedChoice, (val) => {
-  if (isClearFilter.value) {
-    selectedList.value = [];
-    setComboboxText();
-  }
-});
-
-let query = ref(props.defaultVal);
-
-onBeforeMount(() => {
-  if (selectedChoice.value != props.defaultVal) {
-    selectedList.value = selectedChoice.value.split(',');
-    setComboboxText();
-  }
-});
 
 const emit = defineEmits(['change']);
 
-const handleEnterOptions = () => {
-  if (selectedList.value.length > 1) {
-    const index = selectedList.value.indexOf(props.defaultVal);
-    if (index != -1) selectedList.value.splice(index, 1);
+watch(isClearFilter, (val) => {
+  if (val) {
+    selectedList.value = [];
   }
-
-  setComboboxText();
-
-  emit('change', selectedList.value);
-};
-
-const setComboboxText = () => {
-  let text = '';
-
-  if (selectedList.value.length > 0) {
-    if (selectedList.value.length > 1)
-      text =
-        [...selectedList.value][0] +
-        ', +' +
-        (selectedList.value.length - 1).toString();
-    else text = [...selectedList.value][0];
-  } else {
-    text = props.defaultVal;
-  }
-
-  query.value = text;
-};
-
-const result = computed(() => {
-  const data = [...props.list];
-
-  if (!hasChange.value) return [...props.list];
-  else
-    return data.filter((data) => {
-      if (data.includes(query.value)) {
-        return data;
-      }
-    });
 });
 
-const setComboboxVal = (a) => {
-  query.value = a.target.value;
-  hasChange.value = true;
-};
-</script>
+watch(selectedList, (val) => {
+  emit('change', val.length > 0 ? val : [props.defaultVal]);
+});
 
-<style lang="scss" scoped></style>
+onBeforeMount(() => {
+  if (props.selectedVal != props.defaultVal) {
+    selectedList.value = props.selectedVal.split(',');
+  }
+});
+
+function getComboboxText() {
+  switch (selectedList.value.length) {
+    case 0:
+      return props.defaultVal;
+    case 1:
+      return selectedList.value;
+    default:
+      return `${selectedList.value[0]}, +${selectedList.value.length - 1}`;
+  }
+}
+</script>
