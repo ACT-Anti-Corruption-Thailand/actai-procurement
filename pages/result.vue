@@ -60,36 +60,21 @@ onBeforeMount(async () => {
 });
 
 const getFilter = async () => {
-  const res = await fetch(`${config.public.apiUrl}/project/search/filters`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res = await fetch(`${config.public.apiUrl}/project/search/filters`);
 
   if (res.ok) {
     const data = await res.json();
     filterListProject.value = data;
   }
 
-  const res2 = await fetch(`${config.public.apiUrl}/agency/search/filters`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res2 = await fetch(`${config.public.apiUrl}/agency/search/filters`);
 
   if (res2.ok) {
     const data = await res2.json();
     filterListGovernment.value = data;
   }
 
-  const res3 = await fetch(`${config.public.apiUrl}/company/search/filters`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res3 = await fetch(`${config.public.apiUrl}/company/search/filters`);
 
   if (res3.ok) {
     const data = await res3.json();
@@ -102,13 +87,7 @@ const getProjectList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?keyword=${urlParams}${p}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+    `${config.public.apiUrl}/project/search?keyword=${urlParams}${p}`
   );
 
   if (res.ok) {
@@ -120,13 +99,7 @@ const getProjectList = async (params: string, section: string) => {
   }
 
   const res2 = await fetch(
-    `${config.public.apiUrl}/project/search/summary?keyword=${urlParams}${p}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+    `${config.public.apiUrl}/project/search/summary?keyword=${urlParams}${p}`
   );
 
   if (res2.ok) {
@@ -135,13 +108,7 @@ const getProjectList = async (params: string, section: string) => {
   }
 
   const res3 = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-budget-year?keyword=${urlParams}${p}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+    `${config.public.apiUrl}/project/aggregate/by-budget-year?keyword=${urlParams}${p}`
   );
 
   if (res3.ok) {
@@ -156,13 +123,7 @@ const getGovList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?keyword=${urlParams}${p}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+    `${config.public.apiUrl}/agency/search?keyword=${urlParams}${p}`
   );
 
   if (res.ok) {
@@ -178,13 +139,7 @@ const getContractorList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?keyword=${urlParams}${p}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+    `${config.public.apiUrl}/company/search?keyword=${urlParams}${p}`
   );
 
   if (res.ok) {
@@ -199,13 +154,7 @@ const getMapData = async () => {
   const urlParams = decodeURI(window.location.href).split('=')[1];
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-province?keyword=${urlParams}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+    `${config.public.apiUrl}/project/aggregate/by-province?keyword=${urlParams}`
   );
 
   if (res.ok) {
