@@ -32,18 +32,16 @@
                 class="w-8 h-8 rounded-full border-2 border-black"
               />
             </div>
-            <a
+            <SafeExternalLink
+              class="b1 font-bold flex items-center gap-2 h-fit"
+              linkClass="link-1"
               :href="`https://poldata.actai.co/info/${item.name.replace(
                 ' ',
                 '-'
               )}/`"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="b1 link-1 font-bold flex items-center gap-2 h-fit"
               >{{ item.name }}
-              <arrow color="#0B5C90" class="-rotate-45 mt-1 mb-2"
-            /></a>
-
+              <arrow color="#0B5C90" class="-rotate-45 mt-1 mb-1"
+            /></SafeExternalLink>
             <div
               class="w-full h-[1px] bg-[#EC1C24] flex-1 mt-3 hidden sm:block"
             ></div>
@@ -179,24 +177,27 @@
             <p class="b1 font-bold">{{ item }}</p>
           </div>
         </div>
-
-        <a
+        <SafeExternalLink
+          class="b1 flex items-center gap-1 h-fit mt-1"
+          linkClass="link-1"
           :href="`https://poldata.actai.co/info/${props.companyName.replace(
             ' ',
             '-'
           )}`"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="b1 link-1 flex items-center gap-1 h-fit mt-1"
-          >ดูประวัติการบริจาคเงิน
-          <arrow color="#0B5C90" class="-rotate-45 mt-1 mb-1"
-        /></a>
+          ><template v-slot="{ isLinkValid }">
+            <template v-if="isLinkValid">
+              ดูประวัติการบริจาคเงิน
+              <arrow color="#0B5C90" class="-rotate-45 mt-1 mb-1" />
+            </template>
+          </template>
+        </SafeExternalLink>
       </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import SafeExternalLink from '../SafeExternalLink.vue';
 import type { ContracterRelationship } from '../../public/src/data/data_details';
 
 const props = defineProps<{
