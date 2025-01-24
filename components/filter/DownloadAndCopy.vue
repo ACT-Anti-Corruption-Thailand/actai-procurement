@@ -53,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+import { csvFormat } from 'd3';
+
 const props = defineProps<{
   filterList: string;
   section: string;
@@ -77,11 +79,31 @@ const downloadCSV = async () => {
     if (res.ok) {
       const data = await res.json();
 
-      let csvData =
+      let csvData = csvFormat(
         props.part == 'contract'
-          ? jsonToCsv(data.contractors)
-          : jsonToCsv(data.items);
-      // Create a CSV file and allow the user to download it
+          ? data.contractors.flatMap((contractor) =>
+              contractor.contracts.map((contract) => ({
+                id: contractor.id,
+                name: contractor.name,
+                contract_number: contract.number,
+                contract_date: contract.date,
+                contract_money: contract.money,
+                contract_id: contract.id,
+                contract_status: contract.status,
+              }))
+            )
+          : data.items.flatMap((item) =>
+              item.contractors.map((contractor) => ({
+                name: item.name,
+                estimatePrice: item.estimatePrice,
+                contractor_id: contractor.id,
+                contractor_isWinner: contractor.isWinner,
+                contractor_name: contractor.name,
+                contractor_bidding_price: contractor.biddingPrice,
+              }))
+            )
+      );
+
       let blob = new Blob([csvData], { type: 'text/csv' });
       let url = window.URL.createObjectURL(blob);
       let a = document.createElement('a');
@@ -115,19 +137,6 @@ const copyLink = () => {
     tooltip.innerHTML = 'คัดลอกแล้ว';
   });
 };
-
-function jsonToCsv(jsonData) {
-  let csv = '';
-  // Get the headers
-  let headers = Object.keys(jsonData[0]);
-  csv += headers.join(',') + '\n';
-  // Add the data
-  jsonData.forEach(function (row) {
-    let data = headers.map((header) => JSON.stringify(row[header])).join(','); // Add JSON.stringify statement
-    csv += data + '\n';
-  });
-  return csv;
-}
 </script>
 
 <style scoped></style>

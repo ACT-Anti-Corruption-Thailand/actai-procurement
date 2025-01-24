@@ -78,6 +78,9 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
     },
   },
+  // devServer: {
+  //   host: '0.0.0.0',
+  // },
   css: [
     '~/public/src/styles/main.scss', // you should add main.scss somewhere in your app
     '@wevisdemo/ui/styles/index.css',

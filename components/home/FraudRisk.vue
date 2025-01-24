@@ -170,9 +170,9 @@ onMounted(async () => {
                 </li>
               </ul>
 
-              <NuxtLink to="/learn#how-to-report">
+              <a href="/learn#how-to-report">
                 <GoToText color="#8DCCF0" text="อ่านเกณฑ์แบบละเอียด" />
-              </NuxtLink>
+              </a>
             </div>
 
             <div v-if="projectList?.searchResult.length > 0">
@@ -236,9 +236,9 @@ onMounted(async () => {
                 </li>
               </ul>
 
-              <NuxtLink to="/learn#how-to-report">
+              <a href="/learn#how-to-report">
                 <GoToText color="#8DCCF0" text="อ่านเกณฑ์แบบละเอียด" />
-              </NuxtLink>
+              </a>
             </div>
 
             <div v-if="contractorList?.searchResult.length > 0">

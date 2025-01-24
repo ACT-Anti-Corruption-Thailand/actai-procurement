@@ -1,20 +1,20 @@
 <template>
   <div class="flex flex-wrap justify-between items-center bg-black p-3">
     <div>
-      <NuxtLink to="/">
+      <a href="/">
         <img
           src="../public/src/images/act-logo.svg"
           alt="ACT Logo"
           class="mx-auto w-14"
-      /></NuxtLink>
+      /></a>
     </div>
     <div class="order-1 md:order-0 w-full mt-3 md:mt-0 max-w-xl">
       <Search />
     </div>
     <div class="flex items-center gap-2 order-0 lg:order-1">
-      <NuxtLink to="/learn">
+      <a href="/learn">
         <p class="b1 text-[#D9D9D9]">เข้าใจการจัดซื้อจัดจ้าง</p>
-      </NuxtLink>
+      </a>
       <a
         href="https://line.me/R/ti/p/@206vpscc"
         target="_blank"

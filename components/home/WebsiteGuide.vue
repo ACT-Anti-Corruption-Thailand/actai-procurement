@@ -58,7 +58,7 @@ onMounted(async () => {
 
   let str = qs.stringify({ filter });
 
-  queryParams.value = str;
+  //queryParams.value = '&' + str;
 });
 </script>
 
@@ -128,8 +128,8 @@ onMounted(async () => {
                     :key="i"
                   >
                     <!-- <div> -->
-                    <NuxtLink
-                      :to="`/result?search=${item.searchKeyword}&${queryParams}`"
+                    <a
+                      :href="`/result?search=${item.searchKeyword}${queryParams}`"
                     >
                       <div
                         class="p-5 btn-dark-1 duration-300 rounded-10 w-[288px] text-left h-full flex flex-col justify-between"
@@ -159,7 +159,7 @@ onMounted(async () => {
                           class="mt-0 mb-0 text-[#0B5C90]"
                         />
                       </div>
-                    </NuxtLink>
+                    </a>
                     <!-- </div> -->
                   </SplideSlide>
                 </Splide>
