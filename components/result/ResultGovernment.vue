@@ -138,7 +138,11 @@ onMounted(() => {
           <div class="text-[#EC1C24] basis-1/3">
             <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
             <p class="b1">
-              {{ item?.totalProjectHasCorruptionRisk.toLocaleString() }}
+              {{
+                item?.totalProjectHasCorruptionRisk.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })
+              }}
               ({{
                 item?.totalProject == 0
                   ? 0

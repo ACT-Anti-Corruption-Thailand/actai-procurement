@@ -295,8 +295,6 @@ watch(chartDataFromAPI, (newX) => {
 });
 
 const onChangeHideShowData = (a) => {
-  console.log(a);
-
   const isShow = chart.value?.chart?.isDatasetVisible(a);
 
   if (!isShow) chart.value?.chart?.show(a);

@@ -9,6 +9,7 @@ import {
 } from '@headlessui/vue';
 
 const config = useRuntimeConfig();
+const route = useRoute();
 const isOpen = ref(true);
 const keyword = ref('');
 const currentPage = ref(1);
@@ -44,7 +45,7 @@ const setParams = async (type: string, val: string) => {
 };
 
 const getContractorList = async (params: string) => {
-  const urlParams = decodeURI(window.location.href).split('=')[1];
+  const urlParams = route.query?.search?.toString();
   const p = params != null ? params : '';
 
   const res = await fetch(
@@ -64,7 +65,7 @@ const getContractorList = async (params: string) => {
 };
 
 onMounted(async () => {
-  keyword.value = decodeURI(window.location.href).split('=')[1];
+  keyword.value = route.query?.search?.toString();
   await getContractorList('');
 });
 </script>

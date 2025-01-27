@@ -61,6 +61,7 @@ const props = defineProps<{
   part?: string;
 }>();
 const config = useRuntimeConfig();
+const route = useRoute();
 const urlLink = ref('');
 
 const downloadCSV = async () => {
@@ -124,15 +125,21 @@ const downloadCSV = async () => {
 
 const copyLink = () => {
   let url = config.public.baseUrl;
+  let hashtag = '';
 
-  if (window.location.pathname != '/')
-    url += window.location.pathname.replace('/', '');
-  if (window.location.search != '') url += window.location.search;
+  if (route.path != '/') url += route.path.replace('/', '');
+  if (route.query.search != '') url += window.location.search;
 
-  urlLink.value = url;
+  if (route.name == 'result') {
+    if (props.section.includes('project')) hashtag = '#project';
+    else if (props.section.includes('agency')) hashtag = '#government';
+    else if (props.section.includes('company')) hashtag = '#contractor';
+  }
+
   if (props.filterList != '') url += props.filterList;
+  urlLink.value = url + hashtag;
 
-  navigator.clipboard.writeText(url).then(function () {
+  navigator.clipboard.writeText(urlLink.value).then(function () {
     var tooltip = document.getElementById('myTooltipBtn');
     tooltip.innerHTML = 'คัดลอกแล้ว';
   });

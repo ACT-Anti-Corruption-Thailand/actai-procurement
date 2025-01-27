@@ -104,7 +104,7 @@ onMounted(() => {
       color="#8E8E8E"
     />
 
-    <div v-if="props.contractorList?.pagination.totalItem == 0">
+    <div v-if="props.contractorList?.pagination.totalItem == 0" class="pb-7">
       <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
     </div>
     <div class="my-3" v-else>

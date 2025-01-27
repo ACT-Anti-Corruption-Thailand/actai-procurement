@@ -4,6 +4,7 @@ const route = useRoute();
 
 const menu = ref('ทั้งหมด');
 const menuList = ref(['ทั้งหมด', 'โครงการฯ', 'หน่วยงานรัฐ', 'ผู้รับจ้าง']);
+import qs from 'qs';
 
 import type {
   ChartDataSet,
@@ -16,6 +17,15 @@ import type {
   Contractor,
   MapData,
 } from '../public/src/data/search_result';
+import { useRoute } from 'vue-router';
+import {
+  defaultSelected,
+  defaultSelectedContractor,
+  defaultSelectedGov,
+  selected,
+  selectedContractor,
+  selectedGov,
+} from '~/store/filter';
 
 const iconGuide = ref({
   name: '',
@@ -53,14 +63,27 @@ const filterListGovernment = ref({});
 const filterListContractor = ref({});
 
 onBeforeMount(async () => {
-  await getProjectList('', '');
-  await getProjectList('&sortBy=relevanceScore&sortOrder=desc', 'details');
-  await getGovList('', '');
-  await getGovList('&sortBy=relevanceScore&sortOrder=desc', 'details');
-  await getContractorList('', '');
-  await getContractorList('&sortBy=relevanceScore&sortOrder=desc', 'details');
-  await getMapData();
+  const { ...filter_query } = route.query;
+  delete filter_query.search;
+  let str = qs.stringify(filter_query);
+  let filter_query_text = '&' + str;
+
   getFilter();
+
+  await getProjectList('', '');
+  await getProjectList(filter_query_text, 'details');
+  await getGovList('', '');
+  await getGovList(filter_query_text, 'details');
+  await getContractorList('', '');
+  await getContractorList(filter_query_text, 'details');
+
+  //console.log(selected.value);
+});
+
+onMounted(async () => {
+  if (route.hash.includes('project')) menu.value = 'โครงการฯ';
+  else if (route.hash.includes('government')) menu.value = 'หน่วยงานรัฐ';
+  else if (route.hash.includes('contractor')) menu.value = 'ผู้รับจ้าง';
 });
 
 const getFilter = async () => {
@@ -84,14 +107,74 @@ const getFilter = async () => {
     const data = await res3.json();
     filterListContractor.value = data;
   }
+
+  if (route.hash.includes('project')) {
+    selected.value = {
+      yearFrom:
+        route.query['filter[budgetYear][start]']?.toString() ||
+        filterListProject.value!.budgetYears.at(0)!.toString(),
+      yearTo:
+        route.query['filter[budgetYear][end]']?.toString() ||
+        filterListProject.value!.budgetYears.at(-1)!.toString(),
+      agencies:
+        route.query['filter[agencyName]']?.toString() ||
+        defaultSelected.agencies,
+      agencyBelongTo:
+        route.query['filter[agencyBelongTo]']?.toString() ||
+        defaultSelected.agencyBelongTo,
+      contractorType:
+        route.query['filter[contractorType]']?.toString() ||
+        defaultSelected.contractorType,
+      projectStatus:
+        route.query['filter[projectStatus]']?.toString() ||
+        defaultSelected.projectStatus,
+      province:
+        route.query['filter[province]']?.toString() || defaultSelected.province,
+      resourcingType:
+        route.query['filter[resourcingType]']?.toString() ||
+        defaultSelected.resourcingType,
+      resourcingMethod:
+        route.query['filter[resourcingMethod]']?.toString() ||
+        defaultSelected.resourcingMethod,
+      moneyStart:
+        route.query['filter[budgetMoney][start]']?.toString() ||
+        defaultSelected.moneyStart,
+      moneyEnd:
+        route.query['filter[budgetMoney][end]']?.toString() ||
+        defaultSelected.moneyEnd,
+      hasCorruptionRisk:
+        route.query['filter[hasCorruptionRisk]'] === 'true' ||
+        defaultSelected.hasCorruptionRisk,
+    };
+  } else if (route.hash.includes('government')) {
+    selectedGov.value = {
+      agencyBelongTo:
+        route.query['filter[agencyBelongTo]']?.toString() ||
+        defaultSelectedGov.agencyBelongTo,
+      province:
+        route.query['filter[province]']?.toString() ||
+        defaultSelectedGov.province,
+    };
+  } else if (route.hash.includes('contractor')) {
+    selectedContractor.value = {
+      province:
+        route.query['filter[province]']?.toString() ||
+        defaultSelectedContractor.province,
+      contractorType:
+        route.query['filter[contractorType]']?.toString() ||
+        defaultSelectedContractor.contractorType,
+      hasCorruptionRisk:
+        route.query['filter[hasCorruptionRisk]'] === 'true' ||
+        defaultSelectedContractor.hasCorruptionRisk,
+    };
+  }
 };
 
 const getProjectList = async (params: string, section: string) => {
-  const urlParams = decodeURI(window.location.href).split('=')[1];
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?keyword=${urlParams}${p}`
+    `${config.public.apiUrl}/project/search?keyword=${route.query.search}${p}`
   );
 
   if (res.ok) {
@@ -102,23 +185,28 @@ const getProjectList = async (params: string, section: string) => {
     else projectListAll.value = JSON.parse(JSON.stringify(data)) || [];
   }
 
-  const res2 = await fetch(
-    `${config.public.apiUrl}/project/search/summary?keyword=${urlParams}${p}`
-  );
+  if (section == 'details') {
+    const res2 = await fetch(
+      `${config.public.apiUrl}/project/search/summary?keyword=${route.query.search}${p}`
+    );
 
-  if (res2.ok) {
-    const data = await res2.json();
-    summaryData.value = data;
-  }
+    if (res2.ok) {
+      const data = await res2.json();
+      summaryData.value = data;
+    }
 
-  const res3 = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-budget-year?keyword=${urlParams}${p}`
-  );
+    const res3 = await fetch(
+      `${config.public.apiUrl}/project/aggregate/by-budget-year?keyword=${route.query.search}${p}`
+    );
 
-  if (res3.ok) {
-    const data = await res3.json();
-    chartData.value = data;
-    setChartData(data.yearlyAggregates);
+    if (res3.ok) {
+      const data = await res3.json();
+      chartData.value = data;
+
+      if (data.yearlyAggregates.length > 0) setChartData(data.yearlyAggregates);
+    }
+
+    getMapData(p);
   }
 };
 
@@ -127,7 +215,7 @@ const getGovList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?keyword=${urlParams}${p}`
+    `${config.public.apiUrl}/agency/search?keyword=${route.query.search}${p}`
   );
 
   if (res.ok) {
@@ -143,7 +231,7 @@ const getContractorList = async (params: string, section: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?keyword=${urlParams}${p}`
+    `${config.public.apiUrl}/company/search?keyword=${route.query.search}${p}`
   );
 
   if (res.ok) {
@@ -154,11 +242,11 @@ const getContractorList = async (params: string, section: string) => {
   }
 };
 
-const getMapData = async () => {
-  const urlParams = decodeURI(window.location.href).split('=')[1];
+const getMapData = async (params: string) => {
+  const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-province?keyword=${urlParams}`
+    `${config.public.apiUrl}/project/aggregate/by-province?keyword=${route.query.search}${p}`
   );
 
   if (res.ok) {
@@ -479,7 +567,7 @@ const onSetChartData = (section: string, data) => {
       </p>
     </div>
   </div>
-  <div class="bg-white py-7">
+  <div class="bg-white pt-7">
     <!-- <div class="mx-auto max-w-6xl"> -->
     <ClientOnly fallback-tag="span" fallback="Loading...">
       <ResultAll

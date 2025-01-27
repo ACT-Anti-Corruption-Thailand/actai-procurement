@@ -58,7 +58,7 @@ onMounted(async () => {
 
   let str = qs.stringify({ filter });
 
-  //queryParams.value = '&' + str;
+  queryParams.value = '&' + str + '#project';
 });
 </script>
 

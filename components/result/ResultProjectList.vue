@@ -109,26 +109,41 @@ const setParams = (type: string, val: string) => {
   emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
+const setSumData = () => {
+  menuList.value[0].desc = props.data.maxProjectStatus?.name;
+  menuList.value[0].total = props.data.maxProjectStatus?.total;
+  menuList.value[0].percent =
+    props.data.totalProject != 0
+      ? (props.data.maxProjectStatus?.total / props.data.totalProject) * 100
+      : 0;
+  menuList.value[1].desc = props.data.maxContractStatus?.name;
+  menuList.value[1].total = props.data.maxContractStatus?.total;
+  menuList.value[1].percent =
+    props.data.totalProject != 0
+      ? (props.data.maxContractStatus?.total / props.data.totalProject) * 100
+      : 0;
+  menuList.value[2].desc = props.data.maxResourcingMethod?.name;
+  menuList.value[2].total = props.data.maxResourcingMethod?.total;
+  menuList.value[2].percent =
+    props.data.totalProject != 0
+      ? (props.data.maxResourcingMethod?.total / props.data.totalProject) * 100
+      : 0;
+  menuList.value[3].desc = props.data.provinceWithHighestBudgetMoney;
+  menuList.value[4].desc = props.data.provinceWithHighestProjects;
+};
+
+const sumDataFromAPI = toRef(props, 'data');
+
+watch(sumDataFromAPI, (newX) => {
+  setSumData();
+});
+
 onMounted(() => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   searchText.value = urlParams.get('search') || '';
   queryForDownload.value = '&sortBy=relevanceScore&sortOrder=desc';
-
-  menuList.value[0].desc = props.data.maxProjectStatus.name;
-  menuList.value[0].total = props.data.maxProjectStatus.total;
-  menuList.value[0].percent =
-    (props.data.maxProjectStatus.total / props.data.totalProject) * 100;
-  menuList.value[1].desc = props.data.maxContractStatus.name;
-  menuList.value[1].total = props.data.maxContractStatus.total;
-  menuList.value[1].percent =
-    (props.data.maxContractStatus.total / props.data.totalProject) * 100;
-  menuList.value[2].desc = props.data.maxResourcingMethod.name;
-  menuList.value[2].total = props.data.maxResourcingMethod.total;
-  menuList.value[2].percent =
-    (props.data.maxResourcingMethod.total / props.data.totalProject) * 100;
-  menuList.value[3].desc = props.data.provinceWithHighestBudgetMoney;
-  menuList.value[4].desc = props.data.provinceWithHighestProjects;
+  setSumData();
 });
 </script>
 
@@ -176,11 +191,15 @@ onMounted(() => {
                 <p class="b2">เป็นโครงการเสี่ยงทุจริต</p>
                 <h5 class="font-bold">
                   {{
-                    (
-                      (props.data.totalProjectHasCorruption /
-                        props.data.totalProject) *
-                      100
-                    ).toFixed(2)
+                    props.data.totalProject != 0
+                      ? (
+                          (props.data.totalProjectHasCorruption /
+                            props.data.totalProject) *
+                          100
+                        ).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })
+                      : 0
                   }}%
                 </h5>
               </div>
@@ -370,11 +389,15 @@ onMounted(() => {
                 <p class="b1 text-[#EC1C24]">โครงการเสี่ยงทุจริต</p>
                 <h4 class="font-black text-[#EC1C24]">
                   {{
-                    (
-                      (props.data.totalProjectHasCorruption /
-                        props.data.totalProject) *
-                      100
-                    ).toFixed(2)
+                    props.data.totalProject != 0
+                      ? (
+                          (props.data.totalProjectHasCorruption /
+                            props.data.totalProject) *
+                          100
+                        ).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })
+                      : 0
                   }}%
                 </h4>
                 <arrow
@@ -396,11 +419,17 @@ onMounted(() => {
               <div class="rounded-10 btn-chart p-5 text-white h-full relative">
                 <p class="b2 w-[90%] text-[#DADADA]">
                   {{ item.title }}
-                  <span v-if="item.percent != null"
-                    >({{ item.percent?.toFixed(2) }}%)</span
+                  <span v-if="item.id.includes('chart') && item.percent != 0"
+                    >({{
+                      item.percent?.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })
+                    }}%)</span
                   >
                 </p>
-                <p class="b1 font-bold">{{ item.desc }}</p>
+                <p class="b1 font-bold">
+                  {{ item.desc != null ? item.desc : '-' }}
+                </p>
                 <arrow
                   color="#FFFFFF"
                   class="absolute right-5 top-6 rotate-90"
@@ -418,6 +447,7 @@ onMounted(() => {
               title="งบประมาณ"
               id="chart-1"
               section="budget"
+              v-if="props.chartDataSet1.length > 0"
             />
 
             <BarChart
@@ -426,6 +456,7 @@ onMounted(() => {
               title="ความเสี่ยงทุจริต"
               id="chart-2"
               section="risk"
+              v-if="props.chartDataSet2.length > 0"
             />
 
             <BarChart
@@ -434,6 +465,7 @@ onMounted(() => {
               title="สถานะโครงการ"
               id="chart-3"
               section="project"
+              v-if="props.chartDataSet3.length > 0"
             />
 
             <BarChart
@@ -442,6 +474,7 @@ onMounted(() => {
               title="สถานะสัญญา"
               id="chart-4"
               section="contract"
+              v-if="props.chartDataSet4.length > 0"
             />
 
             <BarChart
@@ -450,13 +483,14 @@ onMounted(() => {
               title="วิธีการจัดหา"
               id="chart-5"
               section="method"
+              v-if="props.chartDataSet5.length > 0"
             />
 
             <MapSection
               class="mt-5"
               id="maps"
               :data="props.mapData"
-              v-if="props.mapData != null"
+              v-if="props.mapData != null && props.data.totalProject != 0"
             />
           </div>
 

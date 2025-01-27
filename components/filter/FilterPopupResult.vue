@@ -11,6 +11,14 @@ import {
 import { CheckIcon } from '@heroicons/vue/24/solid';
 import qs from 'qs';
 import type { FilterListProject } from '~/models/data';
+import {
+  defaultSelected,
+  defaultSelectedContractor,
+  defaultSelectedGov,
+  selected,
+  selectedContractor,
+  selectedGov,
+} from '~/store/filter';
 
 const props = defineProps<{
   section: string;
@@ -19,44 +27,20 @@ const props = defineProps<{
 
 const emit = defineEmits(['change', 'count']);
 
-const defaultSelected = computed(() => ({
+const defaultSelectedWithYear = computed(() => ({
+  ...defaultSelected,
   yearFrom: props.list.budgetYears[0].toString(),
   yearTo: props.list.budgetYears.at(-1)!.toString(),
-  agencies: 'ทุกหน่วยงาน',
-  agencyBelongTo: 'ทุกหน่วยงาน',
-  contractorType: 'ทุกประเภท',
-  projectStatus: 'ทุกสถานะ',
-  province: 'ทุกจังหวัด',
-  resourcingType: 'ทุกประเภท',
-  resourcingMethod: 'ทุกวิธี',
-  moneyStart: '',
-  moneyEnd: '',
-  hasCorruptionRisk: false,
 }));
-
-const defaultSelectedGov = {
-  agencyBelongTo: 'ทุกหน่วยงาน',
-  province: 'ทุกจังหวัด',
-};
-
-const defaultSelectedContractor = {
-  province: 'ทุกจังหวัด',
-  contractorType: 'ทุกประเภท',
-  hasCorruptionRisk: false,
-};
 
 const isOpen = ref(false);
 const plan = ref('งบประมาณ');
-const selected = ref({ ...defaultSelected.value });
-const selectedGov = ref({ ...defaultSelectedGov });
-const selectedContractor = ref({ ...defaultSelectedContractor });
 const isClear = ref(false);
 
 const filterCount = computed(() => {
   switch (props.section) {
     case 'โครงการ':
-      console.log(defaultSelected.value, selected.value);
-      return countPropertyDiff(defaultSelected.value, selected.value);
+      return countPropertyDiff(defaultSelectedWithYear.value, selected.value);
     case 'หน่วยงานรัฐ':
       return countPropertyDiff(defaultSelectedGov, selectedGov.value);
     default:
@@ -186,7 +170,7 @@ const clearFilter = () => {
   isClear.value = true;
 
   if (props.section == 'โครงการ') {
-    selected.value = { ...defaultSelected.value };
+    selected.value = { ...defaultSelectedWithYear.value };
   } else if (props.section == 'หน่วยงานรัฐ') {
     selectedGov.value = { ...defaultSelectedGov };
   } else {
@@ -199,13 +183,6 @@ const clearFilter = () => {
     isClear.value = false;
   });
 };
-
-onMounted(() => {
-  if (props.section == 'โครงการ') {
-    selected.value.yearFrom = props.list.budgetYears[0].toString();
-    selected.value.yearTo = props.list.budgetYears.at(-1)!.toString();
-  }
-});
 </script>
 
 <template>
@@ -276,7 +253,7 @@ onMounted(() => {
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-[500px] transform overflow-hidden rounded-10 bg-[#F5F5F5] p-6 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-[500px] transform rounded-10 bg-[#F5F5F5] p-6 text-left align-middle shadow-xl transition-all"
             >
               <div class="flex justify-between items-center">
                 <div class="text-[#7F7F7F] flex gap-2 b2 font-bold">
@@ -291,7 +268,7 @@ onMounted(() => {
                 />
               </div>
 
-              <div class="overflow-y-scroll max-h-[80vh]">
+              <div class="max-h-[80vh]">
                 <template v-if="props.section == 'โครงการ'">
                   <div>
                     <div class="text-[#7F7F7F] mt-5">

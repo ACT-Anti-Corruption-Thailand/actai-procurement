@@ -9,6 +9,7 @@ import {
 } from '@headlessui/vue';
 
 const config = useRuntimeConfig();
+const route = useRoute();
 const isOpen = ref(true);
 const keyword = ref('');
 const currentPage = ref(1);
@@ -45,7 +46,7 @@ const setParams = async (type: string, val: string) => {
 };
 
 const getGovList = async (params: string) => {
-  const urlParams = decodeURI(window.location.href).split('=')[1];
+  const urlParams = route.query?.search?.toString();
   const p = params != null ? params : '';
 
   const res = await fetch(
@@ -68,7 +69,7 @@ const getGovList = async (params: string) => {
 };
 
 onMounted(async () => {
-  keyword.value = decodeURI(window.location.href).split('=')[1];
+  keyword.value = route.query?.search?.toString();
   await getGovList('');
 });
 </script>

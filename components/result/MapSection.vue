@@ -222,6 +222,17 @@ const setStroke = (id, color) => {
   document.querySelector('.provinces-2' + '#' + id).style.stroke = color;
 };
 
+const mapDataFromAPI = toRef(props, 'data');
+
+watch(mapDataFromAPI, (newX) => {
+  provinces.value = props.data.filter((x) => x.totalProject != 0);
+
+  const a = provinces.value.map((o) => o.totalProject);
+  totalProject.value = a.reduce((partialSum, a) => partialSum + a, 0);
+  const b = provinces.value.map((o) => o.totalBudgetMoney);
+  totalBudget.value = b.reduce((partialSum, a) => partialSum + a, 0);
+});
+
 onMounted(() => {
   plan.value = window.innerWidth > 1024 ? 'all' : 'จำนวนโครงการ';
 

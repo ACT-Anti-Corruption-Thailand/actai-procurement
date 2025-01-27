@@ -151,7 +151,14 @@ onMounted(() => {
             <div class="text-[#EC1C24] basis-1/3">
               <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
               <p class="b1">
-                {{ item?.totalProjectHasCorruptionRisk.toLocaleString() }}
+                {{
+                  item?.totalProjectHasCorruptionRisk.toLocaleString(
+                    undefined,
+                    {
+                      maximumFractionDigits: 2,
+                    }
+                  )
+                }}
                 ({{
                   item?.totalProject == 0
                     ? 0
@@ -159,14 +166,20 @@ onMounted(() => {
                         (item?.totalProjectHasCorruptionRisk /
                           item?.totalProject) *
                         100
-                      ).toFixed(2)
+                      ).toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })
                 }}%)
               </p>
             </div>
             <div class="basis-1/3">
               <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
               <p class="b1">
-                {{ item?.totalBudgetMoney.toLocaleString() }}
+                {{
+                  item?.totalBudgetMoney.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })
+                }}
               </p>
             </div>
           </div>

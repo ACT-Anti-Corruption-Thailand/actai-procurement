@@ -233,9 +233,9 @@ const setParams = (type: string, val: string) => {
                 </td>
 
                 <td>
-                  {{ item.contracts[0].id }} <br />
+                  {{ item.contracts[0].number }} <br />
                   <span class="text-[#5E5E5E]">
-                    {{ item.contracts[0].number }}</span
+                    {{ item.contracts[0].id }}</span
                   >
                 </td>
                 <td>
