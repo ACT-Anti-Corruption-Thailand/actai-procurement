@@ -371,6 +371,7 @@ onMounted(() => {
                       @change="(n) => setFilter(n, 'projectStatus', 'ทุกสถานะ')"
                       :selectedVal="selected.projectStatus"
                       :isClear
+                      isShowAllItems
                     />
 
                     <Combobox
@@ -382,6 +383,7 @@ onMounted(() => {
                       "
                       :selectedVal="selected.resourcingMethod"
                       :isClear
+                      isShowAllItems
                     />
 
                     <Combobox
@@ -393,6 +395,7 @@ onMounted(() => {
                       "
                       :selectedVal="selected.resourcingType"
                       :isClear
+                      isShowAllItems
                     />
 
                     <Combobox
@@ -404,6 +407,7 @@ onMounted(() => {
                       "
                       :selectedVal="selected.contractorType"
                       :isClear
+                      isShowAllItems
                     />
 
                     <div class="text-[#7F7F7F] mt-5">
