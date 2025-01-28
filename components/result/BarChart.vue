@@ -24,7 +24,9 @@
       <template v-else>
         <p class="b1 font-bold">
           รวม
-          {{ total.toLocaleString(undefined, { maximumFractionDigits: 2 }) }}
+          {{
+            totalChart.toLocaleString(undefined, { maximumFractionDigits: 2 })
+          }}
           {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }}
         </p>
 
@@ -311,6 +313,11 @@ const setChartTitle = computed(() => {
   else if (props.title == 'สถานะสัญญา')
     return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะโครงการล่าสุด*';
   else return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามวิธีการจัดหา';
+});
+
+const totalChart = computed(() => {
+  let b = props.data.filter((data) => data.isChecked);
+  return b.reduce((sum, num) => sum + num.sum, 0);
 });
 
 const setSum = () => {
