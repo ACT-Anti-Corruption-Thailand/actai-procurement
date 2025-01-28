@@ -4,16 +4,6 @@ import type { Project } from '../../public/src/data/search_result';
 const props = defineProps<{
   data: Project;
 }>();
-
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
-
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
 </script>
 
 <template>
@@ -27,7 +17,7 @@ const setDate = (date) => {
             ทั้งหมด
             {{ props.data?.pagination?.totalItem.toLocaleString() }} โครงการ
             วงเงินสัญญา
-            {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
+            {{ setNumber(props.data?.summary?.totalContractMoney) }} บาท
           </h5>
           <p class="b4 text-[#8E8E8E]">
             หมายเหตุ: การขึ้นบัญชีผู้ทิ้งงานนี้ จะมีผลตามกฎหมายโดยทั่วไป
@@ -103,7 +93,7 @@ const setDate = (date) => {
                 <p v-if="item.agencyName == null">-</p>
               </td>
               <td>
-                <b> {{ item.totalContractMoney.toLocaleString() }}</b>
+                <b> {{ setNumber(item.totalContractMoney) }}</b>
               </td>
             </tr>
 

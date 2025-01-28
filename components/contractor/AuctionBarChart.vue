@@ -132,17 +132,9 @@ const chartOptions = ref({
         },
         callback: function (value, index, ticks) {
           if (value > 1000000000)
-            return (
-              (value / 1000000000).toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              }) + 'B'
-            );
+            return (value / 1000000000).toLocaleString() + 'B';
           else if (value > 999999)
-            return (
-              (value / 1000000).toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              }) + 'M'
-            );
+            return (value / 1000000).toLocaleString() + 'M';
           else return value.toLocaleString();
         },
       },

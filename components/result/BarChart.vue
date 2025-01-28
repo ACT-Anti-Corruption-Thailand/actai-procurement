@@ -12,7 +12,7 @@
       <template v-if="props.title == 'งบประมาณ'">
         <p class="b1 font-bold">
           รวมทุกปีงบประมาณ*
-          {{ total.toLocaleString(undefined, { maximumFractionDigits: 2 }) }}
+          {{ setNumber(total) }}
           บาท
         </p>
         <p class="b4 text-[#5E5E5E]">
@@ -24,9 +24,7 @@
       <template v-else>
         <p class="b1 font-bold">
           รวม
-          {{
-            totalChart.toLocaleString(undefined, { maximumFractionDigits: 2 })
-          }}
+          {{ totalChart.toLocaleString() }}
           {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }}
         </p>
 
@@ -91,9 +89,7 @@
             ><span class="w-3/5">{{ item.label }}</span>
             <span class="text-[#5E5E5E] text-right"
               >{{ item.sum.toLocaleString() }} ({{
-                ((item.sum / total) * 100).toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })
+                setNumber((item.sum / total) * 100)
               }}%)</span
             ></label
           >

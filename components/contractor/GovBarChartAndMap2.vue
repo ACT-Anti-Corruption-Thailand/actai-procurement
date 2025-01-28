@@ -471,7 +471,7 @@ const onSetChartData = (section: string, data) => {
             <p>
               {{
                 selected == 'งบประมาณ'
-                  ? totalBudget.toLocaleString()
+                  ? setNumber(totalBudget)
                   : totalProject.toLocaleString()
               }}
             </p>

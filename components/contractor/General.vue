@@ -4,16 +4,6 @@ import type { ContractorDetails } from '../../public/src/data/data_details';
 const props = defineProps<{
   data: ContractorDetails;
 }>();
-
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
-
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
 </script>
 
 <template>
@@ -43,7 +33,7 @@ const setDate = (date) => {
           <div class="flex-1 border-t pt-3">
             <p class="b2 text-[#5E5E5E]">ทุนจดทะเบียน</p>
             <p class="b1" v-if="props.data.registeredBudget != null">
-              {{ props.data.registeredBudget.toLocaleString() }} บาท
+              {{ setNumber(props.data.registeredBudget) }} บาท
             </p>
           </div>
           <div class="flex-1 border-t pt-3">
@@ -78,13 +68,13 @@ const setDate = (date) => {
               {{ item.change }}
               {{
                 item.change == 'เปลี่ยนแปลงทุนจดทะเบียน'
-                  ? Number(item.old).toLocaleString()
+                  ? setNumber(Number(item.old))
                   : item.old
               }}
               เป็น
               {{
                 item.change == 'เปลี่ยนแปลงทุนจดทะเบียน'
-                  ? Number(item.new).toLocaleString()
+                  ? setNumber(Number(item.new))
                   : item.new
               }}
             </li>

@@ -27,15 +27,6 @@ const getSummary = async () => {
   }
 };
 
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: 'long',
-  };
-
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
-
 onMounted(async () => {
   await getSummary();
 });

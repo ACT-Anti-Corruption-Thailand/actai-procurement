@@ -60,7 +60,7 @@ onMounted(async () => {
           callback: function (value, index, ticks) {
             return value > 999999
               ? (value / 1000000).toLocaleString() + 'M'
-              : value;
+              : value.toLocaleString();
           },
         },
       },
@@ -143,13 +143,7 @@ const externalTooltipHandler = (context) => {
 
       let bodyText = parseInt(body.toString().split(': ')[1].replace(/,/g, ''));
 
-      const text = document.createTextNode(
-        bodyText
-          .toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-          })
-          .toString()
-      );
+      const text = document.createTextNode(setNumber(bodyText).toString());
 
       td.appendChild(span);
       td.appendChild(text);
@@ -177,13 +171,7 @@ const externalTooltipHandler = (context) => {
       parseInt(bodyLines[1].toString().split(': ')[1].replace(/,/g, '')) -
       parseInt(bodyLines[0].toString().split(': ')[1].replace(/,/g, ''));
 
-    const text2 = document.createTextNode(
-      bodyText1
-        .toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-        })
-        .toString()
-    );
+    const text2 = document.createTextNode(setNumber(bodyText1).toString());
 
     td2.appendChild(span2);
     td2.appendChild(text2);

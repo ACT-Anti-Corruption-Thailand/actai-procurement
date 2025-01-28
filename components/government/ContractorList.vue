@@ -4,6 +4,7 @@ import type { Contractor } from '../../public/src/data/search_result';
 const props = defineProps<{
   data: Contractor;
   filterListContractor: object;
+  agencyName?: string;
 }>();
 const emit = defineEmits(['change']);
 const page = ref(10);
@@ -11,16 +12,6 @@ const sort = ref('totalContractAmount');
 const sortOrder = ref('desc');
 const queryForDownload = ref('');
 const filterList = ref('');
-
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
-
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
 
 const searchText = ref('');
 
@@ -41,7 +32,7 @@ const setParams = (type: string, val: string) => {
   searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  queryForDownload.value = '?' + searchParams.toString() + filterList.value;
   emit('change', '&' + searchParams.toString() + filterList.value);
 };
 </script>
@@ -73,11 +64,19 @@ const setParams = (type: string, val: string) => {
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3">
         <h5 class="font-bold w-3/5">
-          ทั้งหมด {{ props.data?.pagination.totalItem.toLocaleString() }} ราย
+          ทั้งหมด {{ props.data?.pagination?.totalItem?.toLocaleString() }} ราย
           วงเงินสัญญา
-          {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
+
+          <span v-if="props.data?.summary != null">
+            {{ setNumber(props.data?.summary?.totalContractMoney) }}</span
+          >
+          บาท
         </h5>
-        <DownloadAndCopy section="contractor" :filterList="queryForDownload" />
+        <DownloadAndCopy
+          section="company"
+          :filterList="queryForDownload"
+          :keyword="props.agencyName"
+        />
       </div>
 
       <SortBy
@@ -121,18 +120,10 @@ const setParams = (type: string, val: string) => {
                 </a>
               </td>
               <td class="text-right">
-                {{
-                  item.totalProject.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })
-                }}
+                {{ item.totalProject.toLocaleString() }}
               </td>
               <td class="text-right">
-                {{
-                  item.totalContractMoney.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })
-                }}
+                {{ setNumber(item.totalContractMoney) }}
               </td>
             </tr>
           </tbody>
@@ -140,14 +131,14 @@ const setParams = (type: string, val: string) => {
       </div>
 
       <p class="b2 text-center my-3">
-        {{ props.data?.searchResult.length }} /
-        {{ props.data?.pagination?.totalItem.toLocaleString() }}
+        {{ props.data?.searchResult?.length }} /
+        {{ props.data?.pagination?.totalItem?.toLocaleString() }}
       </p>
 
       <div class="text-center mt-3">
         <LoadMore
           v-if="
-            props.data?.searchResult.length < props.data?.pagination?.totalItem
+            props.data?.searchResult?.length < props.data?.pagination?.totalItem
           "
           @click="setParams('page', 10)"
         />

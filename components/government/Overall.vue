@@ -428,7 +428,7 @@ const onSetChartData = (section: string, data) => {
           <div class="h-[1px] w-10 bg-black"></div>
           <div>
             <p>วงเงินสัญญารวม (บาท)</p>
-            <p class="font-bold">{{ totalContractOverall.toLocaleString() }}</p>
+            <p class="font-bold">{{ setNumber(totalContractOverall) }}</p>
           </div>
         </div>
 
@@ -436,7 +436,7 @@ const onSetChartData = (section: string, data) => {
           <div class="h-[1px] w-10 border border-dashed border-[#8E8E8E]"></div>
           <div>
             <p>งบประมาณรวม (บาท)</p>
-            <p class="font-bold">{{ totalBudgetOverall.toLocaleString() }}</p>
+            <p class="font-bold">{{ setNumber(totalBudgetOverall) }}</p>
           </div>
         </div>
 
@@ -445,7 +445,7 @@ const onSetChartData = (section: string, data) => {
           <div>
             <p>ส่วนต่าง (บาท)</p>
             <p class="font-bold">
-              {{ (totalBudgetOverall - totalContractOverall).toLocaleString() }}
+              {{ setNumber(totalBudgetOverall - totalContractOverall) }}
             </p>
           </div>
         </div>

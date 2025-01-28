@@ -49,7 +49,7 @@
         v-if="props.data?.hasCorruptionRisk"
       />
       <p class="b1 text-[#5E5E5E]" v-if="props.data?.totalBudget != null">
-        งบประมาณรวม {{ props.data?.totalBudget.toLocaleString() }} บาท
+        งบประมาณรวม {{ setNumber(props.data?.totalBudget) }} บาท
       </p></template
     >
     <template v-else-if="index == 1"
@@ -71,7 +71,7 @@
         รวม {{ props.data?.totalProject.toLocaleString() }} โครงการ
       </p>
       <p class="b1 text-[#5E5E5E]" v-if="props.data?.totalBudget != null">
-        งบประมาณรวม {{ props.data?.totalBudget.toLocaleString() }} บาท
+        งบประมาณรวม {{ setNumber(props.data?.totalBudget) }} บาท
       </p></template
     >
     <template v-else>
@@ -86,7 +86,7 @@
         class="b1 text-[#5E5E5E]"
         v-if="props.data?.totalContractMoney != null"
       >
-        วงเงินสัญญารวม {{ props.data?.totalContractMoney.toLocaleString() }} บาท
+        วงเงินสัญญารวม {{ setNumber(props.data?.totalContractMoney) }} บาท
       </p></template
     >
   </div>

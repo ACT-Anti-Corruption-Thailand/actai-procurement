@@ -96,7 +96,7 @@ onMounted(() => {
             >
               <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
               <p class="b1" v-if="item?.totalBudget != null">
-                {{ item?.totalBudget.toLocaleString() }}
+                {{ setNumber(item?.totalBudget) }}
               </p>
             </div>
           </div>
@@ -151,35 +151,22 @@ onMounted(() => {
             <div class="text-[#EC1C24] basis-1/3">
               <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
               <p class="b1">
-                {{
-                  item?.totalProjectHasCorruptionRisk.toLocaleString(
-                    undefined,
-                    {
-                      maximumFractionDigits: 2,
-                    }
-                  )
-                }}
+                {{ item?.totalProjectHasCorruptionRisk.toLocaleString() }}
                 ({{
                   item?.totalProject == 0
                     ? 0
-                    : (
+                    : setNumber(
                         (item?.totalProjectHasCorruptionRisk /
                           item?.totalProject) *
-                        100
-                      ).toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })
+                          100
+                      )
                 }}%)
               </p>
             </div>
             <div class="basis-1/3">
               <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
               <p class="b1">
-                {{
-                  item?.totalBudgetMoney.toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
-                  })
-                }}
+                {{ setNumber(item?.totalBudgetMoney) }}
               </p>
             </div>
           </div>
@@ -237,7 +224,7 @@ onMounted(() => {
             </div>
             <div class="basis-1/3">
               <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
-              <p class="b1">{{ item?.totalContractMoney.toLocaleString() }}</p>
+              <p class="b1">{{ setNumber(item?.totalContractMoney) }}</p>
             </div>
           </div>
         </a>

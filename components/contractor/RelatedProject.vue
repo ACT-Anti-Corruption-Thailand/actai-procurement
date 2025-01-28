@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { Project } from '../../public/src/data/search_result';
+import type { FilterListProject } from '~/models/data';
 import qs from 'qs';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 
 const props = defineProps<{
   data: Project;
   isLoading: boolean;
-  filterListProject: object;
+  filterListProject: FilterListProject;
 }>();
 const emit = defineEmits(['change']);
 
@@ -17,16 +18,6 @@ const sortOrder = ref('desc');
 const filterList = ref('');
 const queryForDownload = ref('');
 let searchParams = new URLSearchParams();
-
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
-
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
 
 const searchText = ref('');
 
@@ -87,7 +78,7 @@ watch(isRisk, (val) => {
           </div>
         </div>
         <FilterPopupContractor
-          section="รายชื่อโครงการที่จัดทำ"
+          section="รายชื่อโครงการที่เกี่ยวข้อง"
           @change="setParams"
           :list="props.filterListProject"
         />
@@ -112,7 +103,11 @@ watch(isRisk, (val) => {
           ทั้งหมด
           {{ props.data?.pagination?.totalItem.toLocaleString() }} โครงการ
           วงเงินสัญญา
-          {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
+
+          <span v-if="props.data?.summary != null">
+            {{ setNumber(props.data?.summary?.totalContractMoney) }}</span
+          >
+          บาท
         </h5>
         <DownloadAndCopy section="project" filterList="" />
       </div>
@@ -270,32 +265,22 @@ watch(isRisk, (val) => {
                   "
                   class="text-right"
                 >
-                  <b>{{
-                    item.totalContractMoney.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  }}</b>
-                  <br />{{
-                    item.totalBudget.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  }}
+                  <b>{{ setNumber(item.totalContractMoney) }}</b>
+                  <br />{{ setNumber(item.totalBudget) }}
                 </td>
               </tr>
             </tbody>
           </table>
 
           <p class="b2 text-center my-3">
-            {{ props.data?.searchResult.length }} /
+            {{ props.data?.searchResult?.length }} /
             {{ props.data?.pagination?.totalItem.toLocaleString() }}
           </p>
 
           <div class="text-center mt-3">
             <LoadMore
               v-if="
-                props.data?.searchResult.length <
+                props.data?.searchResult?.length <
                 props.data?.pagination?.totalItem
               "
               @click="setParams('page', 10)"

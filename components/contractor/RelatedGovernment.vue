@@ -10,25 +10,7 @@ const emit = defineEmits(['change']);
 const page = ref(10);
 const sort = ref('totalContractAmount');
 
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
-
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
-
 const searchText = ref('');
-
-const searchResult = computed(() => {
-  return searchText.value != ''
-    ? props.data.searchResult.filter((x) =>
-        x.agencyName.includes(searchText.value)
-      )
-    : props.data.searchResult;
-});
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
@@ -75,7 +57,9 @@ const setParams = (type: string, val: string) => {
           ทั้งหมด
           {{ props.data?.pagination?.totalItem.toLocaleString() }} หน่วยงาน
           วงเงินสัญญา
-          {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
+          <span v-if="props.data?.summary != null">
+            {{ setNumber(props.data?.summary?.totalContractMoney) }}</span
+          >บาท
         </h5>
         <DownloadAndCopy section="government" filterList="" />
       </div>
@@ -122,19 +106,10 @@ const setParams = (type: string, val: string) => {
                   </a>
                 </td>
                 <td class="text-right">
-                  {{
-                    item.totalProject.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })
-                  }}
+                  {{ item.totalProject.toLocaleString() }}
                 </td>
                 <td class="text-right">
-                  {{
-                    item.totalBudgetMoney.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  }}
+                  {{ setNumber(item.totalBudgetMoney) }}
                 </td>
               </tr>
             </tbody>
@@ -144,14 +119,14 @@ const setParams = (type: string, val: string) => {
       <template v-else><p class="p-5 text-center">Loading..</p></template>
 
       <p class="b2 text-center my-3">
-        {{ props.data?.searchResult.length }} /
+        {{ props.data?.searchResult?.length }} /
         {{ props.data?.pagination?.totalItem.toLocaleString() }}
       </p>
 
       <div class="text-center mt-3">
         <LoadMore
           v-if="
-            props.data?.searchResult.length < props.data?.pagination?.totalItem
+            props.data?.searchResult?.length < props.data?.pagination?.totalItem
           "
           @click="setParams('page', 10)"
         />

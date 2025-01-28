@@ -27,10 +27,6 @@ const sumBidding = ref(0);
 const sort = ref('');
 const page = ref(0);
 
-const setDate = (date) => {
-  return new Date(date).toLocaleDateString('th-TH');
-};
-
 onBeforeMount(() => {
   const contracter = props.contracters.map((data) => data.processInvolved);
 
@@ -261,7 +257,7 @@ const setParams = (type: string, val: string) => {
                 >
                   {{ item.contracts[0].status }}
                 </td>
-                <td>{{ item.contracts[0].money.toLocaleString() }}</td>
+                <td>{{ setNumber(item.contracts[0].money) }}</td>
               </tr>
               <template v-if="item.contracts.length > 1">
                 <tr v-for="(item2, j) in item.contracts.slice(1)" :key="j">
@@ -277,7 +273,7 @@ const setParams = (type: string, val: string) => {
                   >
                     {{ item2.status }}
                   </td>
-                  <td>{{ item2.money.toLocaleString() }}</td>
+                  <td>{{ setNumber(item2.money) }}</td>
                 </tr>
               </template>
             </template>
@@ -324,7 +320,7 @@ const setParams = (type: string, val: string) => {
 
       <div class="text-right" v-if="props.estimatePrice.length > 0">
         <p v-if="props.total != 0">
-          ราคากลาง = {{ props.total.toLocaleString() }} บาท
+          ราคากลาง = {{ setNumber(props.total) }} บาท
         </p>
         <p v-else>ไม่มีข้อมูลราคากลาง</p>
       </div>
@@ -397,7 +393,7 @@ const setParams = (type: string, val: string) => {
                     'border-b-black': data.contractors.length == 1,
                   }"
                 >
-                  {{ data.contractors[0].biddingPrice.toLocaleString() }}
+                  {{ setNumber(data.contractors[0].biddingPrice) }}
                 </td>
 
                 <td
@@ -450,12 +446,12 @@ const setParams = (type: string, val: string) => {
                       "
                     >
                       {{
-                        (
+                        setNumber(
                           ((data.contractors[0].biddingPrice -
                             data.winnerEstimatePrice) /
                             data.winnerEstimatePrice) *
-                          100
-                        ).toFixed(2)
+                            100
+                        )
                       }}%
                     </p>
                   </div>
@@ -497,11 +493,11 @@ const setParams = (type: string, val: string) => {
                         v-if="data.contractors[0].biddingPrice != props.total"
                       >
                         {{
-                          (
+                          setNumber(
                             ((props.total - data.contractors[0].biddingPrice) /
                               props.total) *
-                            100
-                          ).toFixed(2)
+                              100
+                          )
                         }}%
                       </p>
                     </template>
@@ -557,7 +553,7 @@ const setParams = (type: string, val: string) => {
                       data.contractors.slice(1, data.contractors.length).length,
                   }"
                 >
-                  {{ item.biddingPrice.toLocaleString() }}
+                  {{ setNumber(item.biddingPrice) }}
                 </td>
 
                 <td
@@ -604,11 +600,11 @@ const setParams = (type: string, val: string) => {
                       "
                     >
                       {{
-                        (
+                        setNumber(
                           ((item.biddingPrice - data.winnerEstimatePrice) /
                             data.winnerEstimatePrice) *
-                          100
-                        ).toFixed(2)
+                            100
+                        )
                       }}%
                     </p>
                   </div>
@@ -645,10 +641,10 @@ const setParams = (type: string, val: string) => {
                       </p>
                       <p class="b1" v-if="item.biddingPrice != props.total">
                         {{
-                          (
+                          setNumber(
                             ((props.total - item.biddingPrice) / props.total) *
-                            100
-                          ).toFixed(2)
+                              100
+                          )
                         }}%
                       </p>
                     </template>

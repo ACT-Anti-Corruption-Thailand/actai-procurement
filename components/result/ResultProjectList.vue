@@ -184,7 +184,7 @@ onMounted(() => {
                   class="font-bold"
                   v-if="props.data.totalBudgetMoney != null"
                 >
-                  {{ props.data.totalBudgetMoney.toLocaleString() }}
+                  {{ setNumber(props.data.totalBudgetMoney) }}
                 </h5>
               </div>
               <div class="flex-1 text-[#EC1C24]">
@@ -192,13 +192,11 @@ onMounted(() => {
                 <h5 class="font-bold">
                   {{
                     props.data.totalProject != 0
-                      ? (
+                      ? setNumber(
                           (props.data.totalProjectHasCorruption /
                             props.data.totalProject) *
-                          100
-                        ).toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })
+                            100
+                        )
                       : 0
                   }}%
                 </h5>
@@ -341,7 +339,7 @@ onMounted(() => {
                 class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
               >
                 <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-                <p class="b1">{{ item.totalBudget.toLocaleString() }}</p>
+                <p class="b1">{{ setNumber(item.totalBudget) }}</p>
               </div>
             </div>
           </a>
@@ -377,7 +375,7 @@ onMounted(() => {
               <div class="rounded-10 btn-chart p-5 text-white relative">
                 <p class="b1">งบประมาณรวม (บาท)</p>
                 <h4 class="font-black" v-if="data != null">
-                  {{ props.data.totalBudgetMoney.toLocaleString() }}
+                  {{ setNumber(props.data.totalBudgetMoney) }}
                 </h4>
                 <arrow
                   color="#FFFFFF"
@@ -390,13 +388,11 @@ onMounted(() => {
                 <h4 class="font-black text-[#EC1C24]">
                   {{
                     props.data.totalProject != 0
-                      ? (
+                      ? setNumber(
                           (props.data.totalProjectHasCorruption /
                             props.data.totalProject) *
-                          100
-                        ).toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })
+                            100
+                        )
                       : 0
                   }}%
                 </h4>
@@ -420,11 +416,7 @@ onMounted(() => {
                 <p class="b2 w-[90%] text-[#DADADA]">
                   {{ item.title }}
                   <span v-if="item.id.includes('chart') && item.percent != 0"
-                    >({{
-                      item.percent?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })
-                    }}%)</span
+                    >({{ setNumber(item.percent) }}%)</span
                   >
                 </p>
                 <p class="b1 font-bold">

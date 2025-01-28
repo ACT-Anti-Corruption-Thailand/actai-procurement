@@ -1,12 +1,14 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 
+import type { FilterListProject } from '~/models/data';
 import type { Project } from '../../public/src/data/search_result';
 import qs from 'qs';
 
 const props = defineProps<{
   data: Project;
-  filterListProject: object;
+  filterListProject: FilterListProject;
+  agencyName?: string;
 }>();
 const emit = defineEmits(['change']);
 
@@ -17,16 +19,6 @@ const sortOrder = ref('desc');
 const filterList = ref('');
 const queryForDownload = ref('');
 let searchParams = new URLSearchParams();
-
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
-
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
 
 const searchText = ref('');
 
@@ -53,13 +45,9 @@ const setParams = (type: string, val: string) => {
 
   var str = qs.stringify({ filter });
 
-  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  queryForDownload.value = searchParams.toString() + filterList.value;
   emit('change', '&' + searchParams.toString() + filterList.value + '&' + str);
 };
-
-onMounted(() => {
-  queryForDownload.value = '&sortBy=announcementDate&sortOrder=desc';
-});
 
 watch(isRisk, (val) => {
   page.value = 10;
@@ -118,9 +106,16 @@ watch(isRisk, (val) => {
           ทั้งหมด
           {{ props.data?.pagination?.totalItem.toLocaleString() }} โครงการ
           วงเงินสัญญา
-          {{ props.data?.summary?.totalContractMoney.toLocaleString() }} บาท
+          <span v-if="props.data?.summary != null">
+            {{ setNumber(props.data?.summary?.totalContractMoney) }}</span
+          >
+          บาท
         </h5>
-        <DownloadAndCopy section="project" :filterList="queryForDownload" />
+        <DownloadAndCopy
+          section="project"
+          :filterList="queryForDownload"
+          :keyword="props.agencyName"
+        />
       </div>
 
       <SortBy
@@ -213,32 +208,22 @@ watch(isRisk, (val) => {
               </td>
               <td>{{ item.agencyName }}</td>
               <td class="text-right">
-                <b>
-                  {{
-                    item.totalBudget.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                    })
-                  }}</b
-                >
-                <br />{{
-                  item.totalContractMoney.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })
-                }}
+                <b> {{ setNumber(item.totalBudget) }}</b>
+                <br />{{ setNumber(item.totalContractMoney) }}
               </td>
             </tr>
           </tbody>
         </table>
 
         <p class="b2 text-center my-3">
-          {{ props.data?.searchResult.length }} /
+          {{ props.data?.searchResult?.length }} /
           {{ props.data?.pagination?.totalItem.toLocaleString() }}
         </p>
 
         <div class="text-center mt-3">
           <LoadMore
             v-if="
-              props.data?.searchResult.length <
+              props.data?.searchResult?.length <
               props.data?.pagination?.totalItem
             "
             @click="setParams('page', 10)"

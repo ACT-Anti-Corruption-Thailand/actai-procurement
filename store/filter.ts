@@ -24,6 +24,40 @@ export const defaultSelectedContractor = {
   hasCorruptionRisk: false,
 };
 
+export const defaultSelectedGovProject = {
+  yearFrom: '',
+  yearTo: '',
+  province: 'ทุกจังหวัด',
+  projectStatus: 'ทุกสถานะ',
+  resourcingMethod: 'ทุกวิธี',
+};
+
+export const defaultSelectedGovContractor = {
+  yearFrom: '',
+  yearTo: '',
+  resourcingMethod: 'ทุกวิธี',
+};
+
+export const defaultSelectedContractorProject = {
+  yearFrom: '',
+  yearTo: '',
+  agencies: 'ทุกหน่วยงาน',
+  province: 'ทุกจังหวัด',
+  resourcingMethod: 'ทุกวิธี',
+};
+
+export const defaultSelectedContractorGov = {
+  yearFrom: '',
+  yearTo: '',
+  resourcingMethod: 'ทุกวิธี',
+};
+
 export const selected = ref({ ...defaultSelected });
 export const selectedGov = ref({ ...defaultSelectedGov });
 export const selectedContractor = ref({ ...defaultSelectedContractor });
+export const selectedGovProject = ref({ ...defaultSelectedGovProject });
+export const selectedGovContractor = ref({ ...defaultSelectedGovContractor });
+export const selectedContractorProject = ref({
+  ...defaultSelectedContractorProject,
+});
+export const selectedContractorGov = ref({ ...defaultSelectedContractorGov });

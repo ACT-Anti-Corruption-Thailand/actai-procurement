@@ -146,18 +146,18 @@ onMounted(() => {
               ({{
                 item?.totalProject == 0
                   ? 0
-                  : (
+                  : setNumber(
                       (item?.totalProjectHasCorruptionRisk /
                         item?.totalProject) *
-                      100
-                    ).toFixed(2)
+                        100
+                    )
               }}%)
             </p>
           </div>
           <div class="basis-1/3">
             <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
             <p class="b1">
-              {{ item?.totalBudgetMoney.toLocaleString() }}
+              {{ setNumber(item?.totalBudgetMoney) }}
             </p>
           </div>
         </div>

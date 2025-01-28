@@ -7,16 +7,6 @@ import type { ProjectDetails } from '../../public/src/data/data_details';
 const props = defineProps<{
   data: ProjectDetails;
 }>();
-
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
-
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
 </script>
 
 <template>
@@ -29,7 +19,7 @@ const setDate = (date) => {
             <div class="flex-1 border-r">
               <p class="b2">งบประมาณรวม (บาท)</p>
               <p class="b1" v-if="props.data.totalBudgetMoney != null">
-                {{ props.data.totalBudgetMoney.toLocaleString() }}
+                {{ setNumber(props.data.totalBudgetMoney) }}
               </p>
             </div>
             <div class="flex-1">
@@ -37,7 +27,7 @@ const setDate = (date) => {
               <p class="b1" v-if="props.data.totalEstimatePrice != null">
                 {{
                   props.data.totalEstimatePrice != 0
-                    ? props.data.totalEstimatePrice.toLocaleString()
+                    ? setNumber(props.data.totalEstimatePrice)
                     : '-'
                 }}
               </p>
@@ -47,7 +37,7 @@ const setDate = (date) => {
           <div class="bg-[#F5F5F5] p-2 rounded-10">
             <p class="b2 text-[#7F7F7F]">วงเงินสัญญารวม (บาท)</p>
             <h4 class="font-black" v-if="props.data.totalContractMoney != null">
-              {{ props.data.totalContractMoney.toLocaleString() }}
+              {{ setNumber(props.data.totalContractMoney) }}
             </h4>
             <div class="flex gap-2">
               <div
@@ -91,12 +81,12 @@ const setDate = (date) => {
                   "
                 >
                   {{
-                    (
+                    setNumber(
                       ((props.data.totalBudgetMoney -
                         props.data.totalContractMoney) /
                         props.data.totalBudgetMoney) *
-                      100
-                    ).toFixed(2)
+                        100
+                    )
                   }}%
                 </p>
               </div>
@@ -142,12 +132,12 @@ const setDate = (date) => {
                   "
                 >
                   {{
-                    (
+                    setNumber(
                       ((props.data.totalEstimatePrice -
                         props.data.totalContractMoney) /
                         props.data.totalEstimatePrice) *
-                      100
-                    ).toFixed(2)
+                        100
+                    )
                   }}%
                 </p>
               </div>

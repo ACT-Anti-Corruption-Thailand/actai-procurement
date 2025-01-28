@@ -2,6 +2,7 @@
 const menu = ref('ข้อมูลทั่วไป');
 const isShowTab = ref(true);
 const config = useRuntimeConfig();
+const route = useRoute();
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
@@ -13,17 +14,7 @@ import type {
 } from '../../public/src/data/data_details';
 import type { Project, Government } from '../../public/src/data/search_result';
 import qs from 'qs';
-
-onBeforeMount(async () => {
-  await getContracterData();
-  await getContracterAuctionData();
-  await getContracterRelationship();
-  await getContracterRelatedCompany('2560', '2568');
-  await getContracterAbandonProject('', 10);
-  await getContracterProject('&sortBy=announcementDate&sortOrder=desc', 10);
-  await getContracterGov('&sortBy=totalContractAmount&sortOrder=desc', 10);
-  getFilter();
-});
+import type { FilterListProject } from '~/models/data';
 
 const contractorData = ref<ContractorDetails>([]);
 const contractorAbandonProjectList = ref<Project>([]);
@@ -37,37 +28,11 @@ const totalBidding = ref(0);
 const totalWinner = ref(0);
 const isLoadingProject = ref(false);
 const isLoadingGov = ref(false);
-const filterListProject = ref({});
+const filterListProject = ref<FilterListProject>();
 const filterListGovernment = ref({});
 
-const getFilter = async () => {
-  const res = await fetch(`${config.public.apiUrl}/project/search/filters`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (res.ok) {
-    const data = await res.json();
-    filterListProject.value = data;
-  }
-
-  const res2 = await fetch(`${config.public.apiUrl}/agency/search/filters`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (res2.ok) {
-    const data = await res2.json();
-    filterListGovernment.value = data;
-  }
-};
-
 const getContracterData = async () => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res = await fetch(`${config.public.apiUrl}/company/${segments}`, {
     method: 'get',
@@ -83,7 +48,7 @@ const getContracterData = async () => {
 };
 
 const getContracterAuctionData = async () => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res = await fetch(
     `${config.public.apiUrl}/company/${segments}/aggregate/by-budget-year`,
@@ -97,6 +62,7 @@ const getContracterAuctionData = async () => {
 
   if (res.ok) {
     const data = await res.json();
+
     contractorAuctionChartData.value = {
       labels: data.yearlyAggregate.map((x) => x.budgetYear.toString()),
       datasets: [
@@ -142,7 +108,7 @@ const getContracterAuctionData = async () => {
 
 const getContracterProject = async (q) => {
   isLoadingProject.value = true;
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const params = new URLSearchParams();
   // params.set('keyword', contractorData.value.companyName);
@@ -172,7 +138,7 @@ const getContracterProject = async (q) => {
 };
 
 const getContracterAbandonProject = async (q, n) => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const params = new URLSearchParams();
   // params.set('keyword', contractorData.value.companyName);
@@ -204,7 +170,7 @@ const getContracterAbandonProject = async (q, n) => {
 
 const getContracterGov = async (q, n) => {
   isLoadingGov.value = true;
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const params = new URLSearchParams();
   params.set('page', 1);
@@ -234,7 +200,7 @@ const getContracterGov = async (q, n) => {
 };
 
 const getContracterRelationship = async () => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res = await fetch(
     `${config.public.apiUrl}/company/${segments}/relationship`,
@@ -253,7 +219,7 @@ const getContracterRelationship = async () => {
 };
 
 const getContracterRelatedCompany = async (yf, yt) => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res = await fetch(
     `${config.public.apiUrl}/company/${segments}/related-company?budgetYearStart=${yf}&budgetYearEnd=${yt}`,
@@ -271,15 +237,25 @@ const getContracterRelatedCompany = async (yf, yt) => {
   }
 };
 
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
+onBeforeMount(async () => {
+  await getContracterData();
+  await getContracterAuctionData();
+  await getContracterRelationship();
+  await getContracterRelatedCompany('2560', '2568');
+  await getContracterAbandonProject('', 10);
+  await getContracterProject('&sortBy=announcementDate&sortOrder=desc', 10);
+  await getContracterGov('&sortBy=totalContractAmount&sortOrder=desc', 10);
+  let filter = await getFilter(config.public.apiUrl);
+  filterListProject.value = filter[0];
+  filterListGovernment.value = filter[1];
+});
 
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
+onMounted(async () => {
+  if (route.hash.includes('project'))
+    menu.value = 'รายชื่อโครงการที่เกี่ยวข้อง';
+  else if (route.hash.includes('government'))
+    menu.value = 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง';
+});
 </script>
 
 <template>

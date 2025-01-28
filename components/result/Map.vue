@@ -163,8 +163,7 @@ watch(mapDataFromAPI, (val) => {
         {{ props.no == 1 ? 'โครงการ' : 'บาท' }}
       </p>
       <p class="b2">
-        {{ ((totalPopup / parseInt(props.total)) * 100).toFixed(2) }}%
-        ของทั้งหมด
+        {{ setNumber((totalPopup / parseInt(props.total)) * 100) }}% ของทั้งหมด
       </p>
     </div>
     <svg

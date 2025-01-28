@@ -1,53 +1,22 @@
 <script setup lang="ts">
 const menu = ref('ภาพรวมโครงการที่จัดทำ');
 const config = useRuntimeConfig();
+const route = useRoute();
 const isShowTab = ref(true);
 
+import type { FilterListProject } from '~/models/data';
 import type { GovernmentDetails } from '../../public/src/data/data_details';
 import type { Project, Contractor } from '../../public/src/data/search_result';
 import qs from 'qs';
 
-onBeforeMount(async () => {
-  await getGovData();
-  await getGovProject('&sortBy=announcementDate&sortOrder=desc', 10);
-  await getGovContracter('&sortBy=totalContractAmount&sortOrder=desc', 10);
-  getFilter();
-});
-
 const govData = ref<GovernmentDetails>([]);
 const govProjectList = ref<Project>([]);
 const govContracterList = ref<Contractor>([]);
-const filterListProject = ref({});
+const filterListProject = ref<FilterListProject>();
 const filterListContractor = ref({});
 
-const getFilter = async () => {
-  const res = await fetch(`${config.public.apiUrl}/project/search/filters`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (res.ok) {
-    const data = await res.json();
-    filterListProject.value = data;
-  }
-
-  const res3 = await fetch(`${config.public.apiUrl}/company/search/filters`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (res3.ok) {
-    const data = await res3.json();
-    filterListContractor.value = data;
-  }
-};
-
 const getGovData = async () => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res = await fetch(`${config.public.apiUrl}/agency/${segments}`, {
     method: 'get',
@@ -63,7 +32,7 @@ const getGovData = async () => {
 };
 
 const getGovProject = async (q) => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const params = new URLSearchParams();
   params.set('page', 1);
@@ -91,7 +60,7 @@ const getGovProject = async (q) => {
 };
 
 const getGovContracter = async (q) => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   let filter = {
     agencyId: segments,
@@ -118,15 +87,20 @@ const getGovContracter = async (q) => {
   }
 };
 
-const setDate = (date) => {
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
+onBeforeMount(async () => {
+  await getGovData();
+  await getGovProject('&sortBy=announcementDate&sortOrder=desc', 10);
+  await getGovContracter('&sortBy=totalContractAmount&sortOrder=desc', 10);
+  let filter = await getFilter(config.public.apiUrl);
+  filterListProject.value = filter[0];
+  filterListContractor.value = filter[2];
+});
 
-  return new Date(date).toLocaleDateString('th-TH', options);
-};
+onMounted(async () => {
+  if (route.hash.includes('project')) menu.value = 'รายชื่อโครงการที่จัดทำ';
+  else if (route.hash.includes('contractor'))
+    menu.value = 'ผู้รับจ้างที่ได้งาน';
+});
 </script>
 
 <template>
@@ -221,12 +195,14 @@ const setDate = (date) => {
         <ProjectList
           v-else-if="menu == 'รายชื่อโครงการที่จัดทำ'"
           :data="govProjectList"
+          :agencyName="govData?.agencyName"
           @change="getGovProject"
           :filterListProject="filterListProject"
         />
         <ContractorList
           v-else
           :data="govContracterList"
+          :agencyName="govData?.agencyName"
           @change="getGovContracter"
           :filterListContractor="filterListContractor"
         />

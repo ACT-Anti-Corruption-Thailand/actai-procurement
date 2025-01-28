@@ -54,11 +54,13 @@
 
 <script setup lang="ts">
 import { csvFormat } from 'd3';
+import qs from 'qs';
 
 const props = defineProps<{
   filterList: string;
   section: string;
   part?: string;
+  keyword?: string;
 }>();
 const config = useRuntimeConfig();
 const route = useRoute();
@@ -117,8 +119,10 @@ const downloadCSV = async () => {
     }
   } else {
     var link = document.createElement('a');
-    const urlParams = decodeURI(window.location.href).split('=')[1];
-    link.href = `${config.public.apiUrl}/${props.section}/search/download-csv?keyword=${urlParams}${props.filterList}`;
+    let str = qs.stringify(route.query);
+    let filter_query_text = str;
+    link.href = `${config.public.apiUrl}/${props.section}/search/download-csv?${filter_query_text}${props.filterList}`;
+    document.body.appendChild(link);
     link.click();
   }
 };
@@ -130,11 +134,15 @@ const copyLink = () => {
   if (route.path != '/') url += route.path.replace('/', '');
   if (route.query.search != '') url += window.location.search;
 
-  if (route.name == 'result') {
-    if (props.section.includes('project')) hashtag = '#project';
-    else if (props.section.includes('agency')) hashtag = '#government';
-    else if (props.section.includes('company')) hashtag = '#contractor';
-  }
+  // if (route.name?.includes('result')) {
+  if (props.section.includes('project')) hashtag = '#project';
+  else if (props.section.includes('agency')) hashtag = '#government';
+  else if (props.section.includes('company')) hashtag = '#contractor';
+  // } else {
+  //   if (props.section.includes('project')) hashtag = '#project';
+  //   else if (props.section.includes('agency')) hashtag = '#government';
+  //   else if (props.section.includes('company')) hashtag = '#contractor';
+  // }
 
   if (props.filterList != '') url += props.filterList;
   urlLink.value = url + hashtag;

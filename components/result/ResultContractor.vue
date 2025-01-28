@@ -138,7 +138,7 @@ onMounted(() => {
           </div>
           <div class="basis-1/3">
             <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
-            <p class="b1">{{ item?.totalContractMoney.toLocaleString() }}</p>
+            <p class="b1">{{ setNumber(item?.totalContractMoney) }}</p>
           </div>
         </div>
       </a>

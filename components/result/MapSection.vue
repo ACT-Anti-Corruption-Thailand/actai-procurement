@@ -49,7 +49,7 @@
       </div>
       <div class="flex-1" v-if="plan == 'all' || plan == 'งบประมาณ'">
         <h5 class="font-bold hidden lg:block">งบประมาณ</h5>
-        <p class="b1 font-bold">รวม {{ totalBudget.toLocaleString() }} บาท</p>
+        <p class="b1 font-bold">รวม {{ setNumber(totalBudget) }} บาท</p>
         <div
           class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
@@ -61,8 +61,8 @@
               <p>
                 {{
                   totalBudget > 1000000
-                    ? (totalBudget / 1000000).toLocaleString() + 'K'
-                    : totalBudget.toLocaleString()
+                    ? setNumber(totalBudget / 1000000) + 'K'
+                    : setNumber(totalBudget)
                 }}
               </p>
             </div>
@@ -137,7 +137,7 @@
             <p class="b1 font-bold">{{ item.name }}</p>
           </div>
           <div>
-            <p class="b1">{{ item.totalBudgetMoney.toLocaleString() }}</p>
+            <p class="b1">{{ setNumber(item.totalBudgetMoney) }}</p>
           </div>
         </div>
 
