@@ -1,29 +1,13 @@
 <script setup lang="ts">
-import type { MapData } from '../../public/src/data/search_result';
-import type { ChartComponentRef } from 'vue-chartjs';
-import {
-  Listbox,
-  ListboxButton,
-  ListboxOptions,
-  ListboxOption,
-} from '@headlessui/vue';
-import { ChevronDownIcon } from '@heroicons/vue/24/solid';
-import qs from 'qs';
+import { chartdata } from '~/store/chartData';
 
+const config = useRuntimeConfig();
+const route = useRoute();
 const titleChartSelected = ref('ความเสี่ยงทุจริต');
-const sectionChartSelected = ref('risk');
-let selected = ref('งบประมาณ');
 const isOpen = ref(false);
 const isOpen2 = ref(false);
-const isCorrupt = ref(false);
 const totalContractOverall = ref(0);
 const totalBudgetOverall = ref(0);
-const totalProject = ref(0);
-const totalCorruptProject = ref(0);
-const totalProjectMapOverall = ref(0);
-const totalBudget = ref(0);
-const mapDataList = ref<MapData | null>(null);
-const bar = ref<ChartComponentRef | null>(null);
 const data = ref([]);
 const yearList = ref([]);
 const chartDataSet1 = ref([]);
@@ -39,107 +23,48 @@ const chartData = ref({
 });
 
 onBeforeMount(async () => {
-  const config = useRuntimeConfig();
-  const urlParams = window.location.pathname.split('/')[2];
-
-  let filter = {
-    companyId: urlParams,
-  };
-
-  var str = qs.stringify({ filter });
-
-  const res = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-budget-year?${str}`,
-    {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+  let q = chartdata.value.yearlyAggregates.map(
+    (x) => x.aggregateBy.budgetMoney
   );
 
-  if (res.ok) {
-    const data = await res.json();
-    let q = data.yearlyAggregates.map((x) => x.aggregateBy.budgetMoney);
+  chartData.value = {
+    labels: chartdata.value.yearlyAggregates.map((x) =>
+      x.budgetYear.toString()
+    ),
+    datasets: [
+      {
+        label: 'วงเงินสัญญารวม (บาท)',
+        backgroundColor: '#FFFFFF',
+        borderColor: '#000000',
+        data: chartdata.value.yearlyAggregates.map((x) => x.totalContract),
+        fill: true,
+      },
+      {
+        label: 'งบประมาณรวม (บาท)',
+        backgroundColor: '#DADADA',
+        borderColor: '#5E5E5E',
+        borderDash: [5, 5],
+        data: q,
+        fill: true,
+      },
+    ],
+  };
 
-    chartData.value = {
-      labels: data.yearlyAggregates.map((x) => x.budgetYear.toString()),
-      datasets: [
-        {
-          label: 'วงเงินสัญญารวม (บาท)',
-          backgroundColor: '#FFFFFF',
-          borderColor: '#000000',
-          data: data.yearlyAggregates.map((x) => x.totalContract),
-          fill: true,
-        },
-        {
-          label: 'งบประมาณรวม (บาท)',
-          backgroundColor: '#DADADA',
-          borderColor: '#5E5E5E',
-          borderDash: [5, 5],
-          data: q,
-          fill: true,
-        },
-      ],
-    };
+  totalContractOverall.value = chartdata.value.yearlyAggregates.reduce(
+    (a, b) => a + b.totalContract,
+    0
+  );
 
-    totalContractOverall.value = data.yearlyAggregates.reduce(
-      (a, b) => a + b.totalContract,
-      0
-    );
+  totalBudgetOverall.value = q.reduce((a, b) => a + b, 0);
 
-    totalBudgetOverall.value = q.reduce((a, b) => a + b, 0);
+  data.value = chartdata.value.yearlyAggregates;
+  yearList.value = chartdata.value.yearlyAggregates.map((x) =>
+    x.budgetYear.toString()
+  );
 
-    data.value = data.yearlyAggregates;
-    yearList.value = data.yearlyAggregates.map((x) => x.budgetYear.toString());
+  setChartData(chartdata.value.yearlyAggregates);
 
-    setChartData(data.yearlyAggregates);
-
-    isDone.value = true;
-  }
-});
-
-const totalProjectMap = computed(() => {
-  if (mapDataList?.value != null) {
-    let x = 0;
-
-    const a = mapDataList?.value.map((o) => o.totalProject);
-    const b = mapDataList?.value.map((o) => o.totalBudgetMoney);
-    const c = mapDataList?.value.map((o) => o.totalCorruptionProject);
-    const d = mapDataList?.value.map((o) => o.totalCorruptionProjectBudget);
-
-    if (!isCorrupt.value) {
-      x =
-        selected.value == 'งบประมาณ'
-          ? b.reduce((partialSum, a) => partialSum + a, 0)
-          : a.reduce((partialSum, a) => partialSum + a, 0);
-    } else {
-      x =
-        selected.value == 'งบประมาณ'
-          ? d.reduce((partialSum, a) => partialSum + a, 0)
-          : c.reduce((partialSum, a) => partialSum + a, 0);
-    }
-
-    totalProjectMapOverall.value = x;
-
-    return x;
-  }
-});
-
-const mapData = computed(() => {
-  if (!isCorrupt.value) {
-    return mapDataList.value.map((o) => ({
-      name: o.name,
-      totalProject: o.totalProject,
-      totalBudgetMoney: o.totalBudgetMoney,
-    }));
-  } else {
-    return mapDataList.value.map((o) => ({
-      name: o.name,
-      totalProject: o.totalCorruptionProject,
-      totalBudgetMoney: o.totalCorruptionProjectBudget,
-    }));
-  }
+  isDone.value = true;
 });
 
 const titleChart = computed(() => {
@@ -215,21 +140,54 @@ const onSetChartData = (section: string, data) => {
     ]; // be ส่งมาเท่าข้อมูลที่มี ถ้าส่งมาหมดก็ไม่ต้อง new set
 
     const colorProjectStatus = [
-      '#0F7979',
-      '#6DD5D5',
-      '#DADADA',
-      '#FF8888',
-      '#FF5353',
+      {
+        name: 'แล้วเสร็จตามสัญญา',
+        color: '#0F7979',
+      },
+      {
+        name: 'จัดทำสัญญา/PO แล้ว',
+        color: '#6DD5D5',
+      },
+      {
+        name: 'ระหว่างดำเนินการ',
+        color: '#DADADA',
+      },
+      {
+        name: 'ยกเลิกประกาศเชิญชวน',
+        color: '#FFCECE',
+      },
+      {
+        name: 'ยกเลิกสัญญา',
+        color: '#FF8888',
+      },
+      {
+        name: 'ยกเลิกโครงการ',
+        color: '#FF5353',
+      },
+      {
+        name: 'สิ้นสุดสัญญา',
+        color: '#EC1C24',
+      },
     ];
 
-    chartDataSet3.value = projectStatuses.map((name, i) => {
+    const grouped = colorProjectStatus.map((c) => {
+      return c.name;
+    });
+
+    const res = projectStatuses.sort(
+      (a, b) => grouped.indexOf(b) - grouped.indexOf(a)
+    );
+
+    chartDataSet3.value = res.map((name, i) => {
       const chartdata = data.map(
         (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
       );
 
+      let c = colorProjectStatus.filter((x) => x.name == name);
+
       return {
-        label: name,
-        backgroundColor: colorProjectStatus[i],
+        label: name as string,
+        backgroundColor: c[0].color,
         data: data.map(
           (d) => d.aggregateBy.projectStatus.find((d) => d.name == name).total
         ),
@@ -244,23 +202,55 @@ const onSetChartData = (section: string, data) => {
       ),
     ];
 
-    const colorContracttStatus = [
-      '#054775',
-      '#0F7979',
-      '#1AA8A8',
-      '#6DD5D5',
-      '#DADADA',
-      '#FF8888',
+    const colorContractStatus = [
+      {
+        name: 'ส่งงานล่าช้ากว่ากำหนด',
+        color: '#054775',
+      },
+      {
+        name: 'ส่งงานครบถ้วน',
+        color: '#0F7979',
+      },
+      {
+        name: 'ส่งงานตามกำหนด',
+        color: '#1AA8A8',
+      },
+      {
+        name: 'จัดทำสัญญา/POแล้ว',
+        color: '#6DD5D5',
+      },
+      {
+        name: 'ระหว่างดำเนินการ',
+        color: '#DADADA',
+      },
+      {
+        name: 'ยกเลิกสัญญา',
+        color: '#FF8888',
+      },
+      {
+        name: 'สิ้นสุดสัญญา',
+        color: '#EC1C24',
+      },
     ];
 
-    chartDataSet4.value = projectContractStatuses.map((name, i) => {
+    const grouped = colorContractStatus.map((c) => {
+      return c.name;
+    });
+
+    const res = projectContractStatuses.sort(
+      (a, b) => grouped.indexOf(b) - grouped.indexOf(a)
+    );
+
+    chartDataSet4.value = res.map((name, i) => {
       const chartdata = data.map(
         (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
       );
 
+      let c = colorContractStatus.filter((x) => x.name == name);
+
       return {
-        label: name,
-        backgroundColor: colorContracttStatus[i],
+        label: name as string,
+        backgroundColor: c[0].color,
         data: data.map(
           (d) => d.aggregateBy.contractStatus.find((d) => d.name == name).total
         ),

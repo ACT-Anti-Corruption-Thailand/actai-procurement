@@ -65,6 +65,19 @@ export interface MapData {
       totalProject: number;
       totalBudgetMoney: number;
       totalCorruptionProject: number;
+      totalCorruptionProjectBudget: number;
+    }
+  ];
+}
+
+export interface ChartData {
+  yearlyAggregates: [
+    {
+      budgetYear: number;
+      totalProject: number;
+      totalContract: number;
+      aggregateBy: string[];
+      contractMoneyAggregateBy: string[];
     }
   ];
 }

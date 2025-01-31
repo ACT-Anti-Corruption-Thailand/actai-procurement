@@ -174,7 +174,7 @@ const setParams = (type: string, val: string) => {
       <div class="flex justify-between mb-3">
         <h5 class="font-bold w-3/5 sm:w-2/4">
           ทั้งหมด {{ props.contracts.length }} ราย ทำสัญญาจ้าง
-          {{ props.contracts.length }} ฉบับ
+          {{ props.contracts.flatMap((o) => o.contracts).length }} ฉบับ
         </h5>
         <DownloadAndCopy section="bidder" filterList="" part="contract" />
       </div>

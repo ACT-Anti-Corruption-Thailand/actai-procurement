@@ -12,9 +12,15 @@ import type {
   ContracterRelationship,
   ContracterRelatedCompanies,
 } from '../../public/src/data/data_details';
-import type { Project, Government } from '../../public/src/data/search_result';
+import type {
+  Project,
+  Government,
+  ChartData,
+} from '../../public/src/data/search_result';
 import qs from 'qs';
 import type { FilterListProject } from '~/models/data';
+
+import { chartdata } from '~/store/chartData';
 
 const contractorData = ref<ContractorDetails>([]);
 const contractorAbandonProjectList = ref<Project>([]);
@@ -23,6 +29,7 @@ const contractorGovList = ref<Government>([]);
 const contractorRelationship = ref<ContracterRelationship>([]);
 const contractorRelatedCompanies = ref<ContracterRelatedCompanies>([]);
 const contractorAuctionChartData = ref({});
+const contractorBudgetYearChartData = ref<ChartData>();
 const totalAuction = ref(0);
 const totalBidding = ref(0);
 const totalWinner = ref(0);
@@ -238,6 +245,20 @@ const getContracterRelatedCompany = async (yf, yt) => {
 };
 
 onBeforeMount(async () => {
+  const segments = route.path.split('/')[2];
+
+  let company = {
+    companyId: segments,
+  };
+
+  var str = qs.stringify({ company });
+
+  contractorBudgetYearChartData.value = await getChartData(
+    config.public.apiUrl,
+    str
+  );
+  chartdata.value = contractorBudgetYearChartData.value;
+
   await getContracterData();
   await getContracterAuctionData();
   await getContracterRelationship();

@@ -2,7 +2,11 @@
   <div>
     <h4 class="font-bold text-white mb-5">การรับงานกับหน่วยงานรัฐ</h4>
 
-    <GovBarChartAndMap2 />
+    <ChartDataTotalProject />
+
+    <ChartDataTotalContract />
+
+    <MapSectionCompany />
 
     <AuctionBarChart
       :data="props.auctionData"
