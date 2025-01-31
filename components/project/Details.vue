@@ -243,16 +243,14 @@ const setParams = (type: string, val: string) => {
                       item.contracts[0].status == 'ส่งงานล่าช้ากว่ากำหนด',
                     'bg-[#0F7979] text-white':
                       item.contracts[0].status == 'ส่งงานครบถ้วน',
-                    'bg-[#1AA8A8] text-white':
+                    'bg-[#1AA8A8] ':
                       item.contracts[0].status == 'ส่งงานตามกำหนด',
-                    'bg-[#6DD5D5] text-white':
-                      item.contracts[0].status == 'จัดทำสัญญา/POแล้ว',
+                    'bg-[#6DD5D5] ':
+                      item.contracts[0].status == 'จัดทำสัญญา/ PO แล้ว',
                     'bg-[#DADADA]':
                       item.contracts[0].status == 'ระหว่างดำเนินการ',
-                    'bg-[#FF8888] text-white':
-                      item.contracts[0].status == 'ยกเลิกสัญญา',
-                    'bg-[#EC1C24] text-white':
-                      item.contracts[0].status == 'สิ้นสุดสัญญา',
+                    'bg-[#FF8888] ': item.contracts[0].status == 'ยกเลิกสัญญา',
+                    'bg-[#EC1C24] ': item.contracts[0].status == 'สิ้นสุดสัญญา',
                   }"
                 >
                   {{ item.contracts[0].status }}
@@ -268,7 +266,15 @@ const setParams = (type: string, val: string) => {
                   <td>{{ setDate(item2.date) }}</td>
                   <td
                     :class="{
-                      'bg-[#6DD5D5]': item2.status == 'จัดทำสัญญา/ PO แล้ว',
+                      'bg-[#054775] text-white':
+                        item2.status == 'ส่งงานล่าช้ากว่ากำหนด',
+                      'bg-[#0F7979] text-white':
+                        item2.status == 'ส่งงานครบถ้วน',
+                      'bg-[#1AA8A8] ': item2.status == 'ส่งงานตามกำหนด',
+                      'bg-[#6DD5D5] ': item2.status == 'จัดทำสัญญา/ PO แล้ว',
+                      'bg-[#DADADA]': item2.status == 'ระหว่างดำเนินการ',
+                      'bg-[#FF8888] ': item2.status == 'ยกเลิกสัญญา',
+                      'bg-[#EC1C24] ': item2.status == 'สิ้นสุดสัญญา',
                     }"
                   >
                     {{ item2.status }}

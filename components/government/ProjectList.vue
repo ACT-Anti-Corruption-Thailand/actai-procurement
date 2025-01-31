@@ -206,7 +206,30 @@ watch(isRisk, (val) => {
                   item.resourcingMethod == null ? '-' : item.resourcingMethod
                 }}
               </td>
-              <td>{{ item.agencyName }}</td>
+              <td>
+                <template v-if="item.contractors?.length > 0">
+                  <p>1. {{ item.contractors[0].name }}</p>
+                  <Disclosure
+                    v-if="item.contractors?.length > 1"
+                    v-slot="{ open }"
+                  >
+                    <DisclosurePanel>
+                      <p v-for="(data, i) in item.contractors">
+                        {{ i + 2 }}. {{ data?.name }}
+                      </p>
+                    </DisclosurePanel>
+                    <DisclosureButton class="b4 text-[#0B5C90] text-left">
+                      {{
+                        open
+                          ? ' ..ดูน้อยลง'
+                          : `..ดูเพิ่ม (${item.contractors?.length} องค์กร)`
+                      }}
+                    </DisclosureButton>
+                  </Disclosure></template
+                >
+
+                <p v-else>-</p>
+              </td>
               <td class="text-right">
                 <b> {{ setNumber(item.totalBudget) }}</b>
                 <br />{{ setNumber(item.totalContractMoney) }}
