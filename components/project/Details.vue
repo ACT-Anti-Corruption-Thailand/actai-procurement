@@ -23,11 +23,10 @@ const biddingStep = [
   { title: 'เข้าเสนอราคา', total: 0, img: 'e-bidding' },
 ];
 
-const sumBidding = ref(0);
 const sort = ref('');
 const page = ref(0);
 
-onBeforeMount(() => {
+const sumBiddingTotal = computed(() => {
   const contracter = props.contracters.map((data) => data.processInvolved);
 
   contracter.forEach((element) => {
@@ -37,10 +36,7 @@ onBeforeMount(() => {
     });
   });
 
-  sumBidding.value = biddingStep.reduce(
-    (partialSum, a) => partialSum + a.total,
-    0
-  );
+  return biddingStep.reduce((partialSum, a) => partialSum + a.total, 0);
 });
 
 const searchText = ref('');
@@ -71,7 +67,7 @@ const setParams = (type: string, val: string) => {
 
 <template>
   <h4 class="font-bold text-white mb-5">ข้อมูลเจาะลึก</h4>
-  <div class="bg-white rounded-10 gap-2 mb-3" v-if="sumBidding != 0">
+  <div class="bg-white rounded-10 gap-2 mb-3" v-if="sumBiddingTotal != 0">
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black">จำนวนนิติบุคคลที่เข้าร่วมในแต่ละขั้นตอน</h4>
     </div>
@@ -176,7 +172,12 @@ const setParams = (type: string, val: string) => {
           ทั้งหมด {{ props.contracts.length }} ราย ทำสัญญาจ้าง
           {{ props.contracts.flatMap((o) => o.contracts).length }} ฉบับ
         </h5>
-        <DownloadAndCopy section="bidder" filterList="" part="contract" />
+        <DownloadAndCopy
+          section="bidder"
+          filterList=""
+          part="contract"
+          isShowCopyBtn
+        />
       </div>
 
       <SortBy
@@ -194,6 +195,8 @@ const setParams = (type: string, val: string) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
+        selectedSortBy=""
+        selectedSortOrder=""
       />
 
       <div class="overflow-auto">
@@ -318,6 +321,7 @@ const setParams = (type: string, val: string) => {
           แยกตามรายการพิจารณา {{ searchResult.length }} รายการ
         </h5>
         <DownloadAndCopy
+          isShowCopyBtn
           section="bidder"
           filterList=""
           part="item-estimate-price"

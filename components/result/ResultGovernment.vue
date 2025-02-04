@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Government } from '../../public/src/data/search_result';
+import { sortByResultGov, sortOrderResultGov } from '~/store/filter';
+import { isLoadingResultGov } from '~/store/loading';
 
 const props = defineProps<{
   govList?: Government;
@@ -93,9 +95,15 @@ onMounted(() => {
           text="เรียงตาม"
           @change="setParams"
           @sortBy="setParams"
+          :selectedSortBy="sortByResultGov"
+          :selectedSortOrder="sortOrderResultGov"
         />
       </div>
-      <DownloadAndCopy section="agency" :filterList="queryForDownload" />
+      <DownloadAndCopy
+        section="agency"
+        :filterList="queryForDownload"
+        isShowCopyBtn
+      />
     </div>
 
     <ProjectIconGuide
@@ -105,74 +113,85 @@ onMounted(() => {
       color="#8E8E8E"
     />
 
-    <div v-if="props.govList?.pagination.totalItem == 0" class="pb-7">
-      <h5 class="text-center text-[#8E8E8E]">ไม่พบหน่วยงานรัฐที่มีคำค้นนี้</h5>
-    </div>
-    <div class="my-3" v-else>
-      <a
-        v-for="item in props.govList?.searchResult"
-        class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
-        :key="'gov-' + item.agencyId"
-        target="_blank"
-        :href="'/government/' + item.agencyId"
-      >
-        <div class="basis-2/5 lg:basis-3/5">
-          <p
-            class="b1 font-bold"
-            v-html="highlight(item?.agencyName, keyword)"
-          ></p>
-          <ProjectIconGuide
-            :data="{
-              province: item.province,
-            }"
-            color="#8E8E8E"
+    <template v-if="isLoadingResultGov">
+      <div class="p-5 b1 text-center">Loading...</div>
+    </template>
+
+    <template v-else>
+      <div v-if="props.govList?.pagination.totalItem == 0" class="pb-7">
+        <h5 class="text-center text-[#8E8E8E]">
+          ไม่พบหน่วยงานรัฐที่มีคำค้นนี้
+        </h5>
+      </div>
+      <div class="my-3" v-else>
+        <a
+          v-for="item in props.govList?.searchResult"
+          class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
+          :key="'gov-' + item.agencyId"
+          target="_blank"
+          :href="'/government/' + item.agencyId"
+        >
+          <div class="basis-2/5 lg:basis-3/5">
+            <p
+              class="b1 font-bold"
+              v-html="highlight(item?.agencyName, keyword)"
+            ></p>
+            <ProjectIconGuide
+              :data="{
+                province: item.province,
+              }"
+              color="#8E8E8E"
+            />
+          </div>
+          <div
+            class="flex sm:gap-10 text-right flex-col-mb basis-3/5 lg:basis-2/5"
+          >
+            <div class="basis-1/3">
+              <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
+              <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
+            </div>
+            <div class="text-[#EC1C24] basis-1/3">
+              <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
+              <p class="b1">
+                {{
+                  item?.totalProjectHasCorruptionRisk.toLocaleString(
+                    undefined,
+                    {
+                      maximumFractionDigits: 2,
+                    }
+                  )
+                }}
+                ({{
+                  item?.totalProject == 0
+                    ? 0
+                    : setNumber(
+                        (item?.totalProjectHasCorruptionRisk /
+                          item?.totalProject) *
+                          100
+                      )
+                }}%)
+              </p>
+            </div>
+            <div class="basis-1/3">
+              <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+              <p class="b1">
+                {{ setNumber(item?.totalBudgetMoney) }}
+              </p>
+            </div>
+          </div>
+        </a>
+
+        <div class="text-center">
+          <LoadMore
+            v-if="
+              props.govList?.searchResult.length <
+              props.govList?.pagination?.totalItem
+            "
+            @click="setParams('page', 10)"
           />
         </div>
-        <div
-          class="flex sm:gap-10 text-right flex-col-mb basis-3/5 lg:basis-2/5"
-        >
-          <div class="basis-1/3">
-            <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-            <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
-          </div>
-          <div class="text-[#EC1C24] basis-1/3">
-            <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
-            <p class="b1">
-              {{
-                item?.totalProjectHasCorruptionRisk.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })
-              }}
-              ({{
-                item?.totalProject == 0
-                  ? 0
-                  : setNumber(
-                      (item?.totalProjectHasCorruptionRisk /
-                        item?.totalProject) *
-                        100
-                    )
-              }}%)
-            </p>
-          </div>
-          <div class="basis-1/3">
-            <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-            <p class="b1">
-              {{ setNumber(item?.totalBudgetMoney) }}
-            </p>
-          </div>
-        </div>
-      </a>
-
-      <div class="text-center">
-        <LoadMore
-          v-if="
-            props.govList?.searchResult.length <
-            props.govList?.pagination?.totalItem
-          "
-          @click="setParams('page', 10)"
-        />
       </div>
-    </div>
+    </template>
   </div>
 </template>
 

@@ -59,6 +59,11 @@ const setParams = (type: string, val: string) => {
             />
           </div>
         </div>
+        <!-- <FilterPopupGovernment
+          section="ผู้รับจ้างที่ได้งาน"
+          @change="setParams"
+          :list="props.filterListContractor"
+        /> -->
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
@@ -73,6 +78,7 @@ const setParams = (type: string, val: string) => {
           บาท
         </h5>
         <DownloadAndCopy
+          isShowCopyBtn
           section="company"
           :filterList="queryForDownload"
           :keyword="props.agencyName"
@@ -94,6 +100,8 @@ const setParams = (type: string, val: string) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
+        selectedSortBy=""
+        selectedSortOrder=""
       />
 
       <div class="overflow-auto">

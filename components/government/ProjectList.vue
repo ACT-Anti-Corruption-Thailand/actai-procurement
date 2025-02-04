@@ -3,6 +3,7 @@ const isOpen = ref(false);
 
 import type { FilterListProject } from '~/models/data';
 import type { Project } from '../../public/src/data/search_result';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import qs from 'qs';
 
 const props = defineProps<{
@@ -45,7 +46,7 @@ const setParams = (type: string, val: string) => {
 
   var str = qs.stringify({ filter });
 
-  queryForDownload.value = searchParams.toString() + filterList.value;
+  queryForDownload.value = '?' + searchParams.toString() + filterList.value;
   emit('change', '&' + searchParams.toString() + filterList.value + '&' + str);
 };
 
@@ -80,11 +81,11 @@ watch(isRisk, (val) => {
             />
           </div>
         </div>
-        <FilterPopupGovernment
+        <!-- <FilterPopupGovernment
           section="รายชื่อโครงการที่จัดทำ"
           @change="setParams"
           :list="props.filterListProject"
-        />
+        /> -->
       </div>
 
       <div class="mt-3">
@@ -112,6 +113,7 @@ watch(isRisk, (val) => {
           บาท
         </h5>
         <DownloadAndCopy
+          isShowCopyBtn
           section="project"
           :filterList="queryForDownload"
           :keyword="props.agencyName"
@@ -133,6 +135,8 @@ watch(isRisk, (val) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
+        selectedSortBy=""
+        selectedSortOrder=""
       />
 
       <div class="overflow-auto">

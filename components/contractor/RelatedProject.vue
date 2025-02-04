@@ -109,7 +109,7 @@ watch(isRisk, (val) => {
           >
           บาท
         </h5>
-        <DownloadAndCopy section="project" filterList="" />
+        <DownloadAndCopy section="project" filterList="" isShowCopyBtn />
       </div>
 
       <SortBy
@@ -127,6 +127,8 @@ watch(isRisk, (val) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
+        selectedSortBy=""
+        selectedSortOrder=""
       />
       <template v-if="!isLoading">
         <div class="overflow-auto">

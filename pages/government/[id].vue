@@ -8,6 +8,12 @@ import type { FilterListProject } from '~/models/data';
 import type { GovernmentDetails } from '../../public/src/data/data_details';
 import type { Project, Contractor } from '../../public/src/data/search_result';
 import qs from 'qs';
+import {
+  defaultSelectedGovProject,
+  defaultSelectedGovContractor,
+  selectedGovProject,
+  selectedGovContractor,
+} from '~/store/filter';
 
 const govData = ref<GovernmentDetails>([]);
 const govProjectList = ref<Project>([]);
@@ -91,14 +97,54 @@ onBeforeMount(async () => {
   await getGovData();
   await getGovProject('&sortBy=announcementDate&sortOrder=desc', 10);
   await getGovContracter('&sortBy=totalContractAmount&sortOrder=desc', 10);
-  let filter = await getFilter(config.public.apiUrl);
+
+  const segments = route.path.split('/')[2];
+  let filter = await getFilter(config.public.apiUrl, '?agencyId=' + segments);
   filterListProject.value = filter[0];
   filterListContractor.value = filter[2];
+
+  if (Object.keys(route.query).length == 0) {
+    selectedGovProject.value.yearFrom = filterListProject
+      .value!.budgetYears.at(0)!
+      .toString();
+    selectedGovProject.value.yearTo = filterListProject
+      .value!.budgetYears.at(-1)!
+      .toString();
+    selectedGovContractor.value.yearFrom = filterListProject
+      .value!.budgetYears.at(0)!
+      .toString();
+    selectedGovContractor.value.yearTo = filterListProject
+      .value!.budgetYears.at(-1)!
+      .toString();
+  }
 });
 
 onMounted(async () => {
-  if (route.hash.includes('project')) menu.value = 'รายชื่อโครงการที่จัดทำ';
-  else if (route.hash.includes('contractor'))
+  if (route.hash.includes('project')) {
+    menu.value = 'รายชื่อโครงการที่จัดทำ';
+    console.log(route.query['filter[budgetYear][start]']?.toString());
+
+    selectedGovProject.value = {
+      yearFrom:
+        route.query['filter[budgetYear][start]']?.toString() ||
+        filterListProject.value!.budgetYears.at(0)!.toString(),
+      yearTo:
+        route.query['filter[budgetYear][end]']?.toString() ||
+        filterListProject.value!.budgetYears.at(-1)!.toString(),
+      projectStatus:
+        route.query['filter[projectStatus]']?.toString() ||
+        defaultSelectedGovProject.projectStatus,
+      province:
+        route.query['filter[province]']?.toString() ||
+        defaultSelectedGovProject.province,
+      resourcingMethod:
+        route.query['filter[resourcingMethod]']?.toString() ||
+        defaultSelectedGovProject.resourcingMethod,
+      agencies:
+        route.query['filter[agencies]']?.toString() ||
+        defaultSelectedGovProject.agencies,
+    };
+  } else if (route.hash.includes('contractor'))
     menu.value = 'ผู้รับจ้างที่ได้งาน';
 });
 </script>
@@ -175,6 +221,7 @@ onMounted(async () => {
                 menu == 'รายชื่อโครงการที่จัดทำ',
             }"
             @click="menu = 'รายชื่อโครงการที่จัดทำ'"
+            v-if="govProjectList.pagination?.totalItem > 0"
           >
             <p>รายชื่อโครงการที่จัดทำ</p>
           </div>
@@ -185,6 +232,7 @@ onMounted(async () => {
                 menu == 'ผู้รับจ้างที่ได้งาน',
             }"
             @click="menu = 'ผู้รับจ้างที่ได้งาน'"
+            v-if="govContracterList.pagination?.totalItem > 0"
           >
             <p>ผู้รับจ้างที่ได้งาน</p>
           </div>
@@ -192,6 +240,7 @@ onMounted(async () => {
       </div>
       <div :class="[isShowTab ? 'sm:w-3/4' : 'w-full', 'relative']">
         <Overall v-if="menu == 'ภาพรวมโครงการที่จัดทำ'" />
+
         <ProjectList
           v-else-if="menu == 'รายชื่อโครงการที่จัดทำ'"
           :data="govProjectList"

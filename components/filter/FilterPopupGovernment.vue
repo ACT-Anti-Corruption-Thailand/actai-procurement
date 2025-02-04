@@ -82,7 +82,6 @@ const searchByResult = () => {
         start: selectedGovProject.value.yearFrom,
         end: selectedGovProject.value.yearTo,
       },
-
       projectStatus:
         selectedGovProject.value.projectStatus == 'ทุกสถานะ'
           ? undefined
@@ -91,14 +90,21 @@ const searchByResult = () => {
         selectedGovProject.value.province == 'ทุกจังหวัด'
           ? undefined
           : selectedGovProject.value.province,
-
       resourcingMethod:
         selectedGovProject.value.resourcingMethod == 'ทุกวิธี'
           ? undefined
           : selectedGovProject.value.resourcingMethod,
+      agencies:
+        selectedGovProject.value.agencies == 'ทุกองค์กร'
+          ? undefined
+          : selectedGovProject.value.agencies,
     };
   } else {
     filter = {
+      budgetYear: {
+        start: selectedGovContractor.value.yearFrom,
+        end: selectedGovContractor.value.yearTo,
+      },
       resourcingMethod:
         selectedGovContractor.value.resourcingMethod == 'ทุกวิธี'
           ? undefined
@@ -285,9 +291,58 @@ const clearFilter = () => {
                       :isClear
                       isShowAllItems
                     />
+
+                    <Combobox
+                      title="ผู้รับจ้างที่ได้งาน"
+                      :list="props.list.relatedCompanies"
+                      defaultVal="ทุกองค์กร"
+                      @change="(n) => setFilter(n, 'agencies', 'ทุกองค์กร')"
+                      :selectedVal="selectedGovProject.agencies"
+                      :isClear
+                    />
                   </div>
                 </template>
                 <template v-else>
+                  <div class="text-[#7F7F7F] mt-5">
+                    <p class="font-bold b1">ปีงบประมาณ</p>
+                    <p class="b5">
+                      ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568
+                      หมายถึง ต.ค. 67 - ก.ย. 68
+                    </p>
+                  </div>
+
+                  <div class="flex w-full gap-2 items-center">
+                    <div class="flex-1 relative">
+                      <select
+                        v-model="selectedGovContractor.yearFrom"
+                        class="w-full rounded-10 border-0"
+                      >
+                        <option
+                          v-for="item in props.list?.budgetYears"
+                          :value="item"
+                        >
+                          {{ item }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <p class="b1">-</p>
+
+                    <div class="flex-1 relative">
+                      <select
+                        v-model="selectedGovContractor.yearTo"
+                        class="w-full rounded-10 border-0"
+                      >
+                        <option
+                          v-for="item in props.list.budgetYears"
+                          :value="item"
+                        >
+                          {{ item }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
                   <Combobox
                     title="วิธีการจัดหา"
                     :list="props.list.resourcingMethod"

@@ -21,6 +21,10 @@ import qs from 'qs';
 import type { FilterListProject } from '~/models/data';
 
 import { chartdata } from '~/store/chartData';
+import {
+  selectedContractorGov,
+  selectedContractorProject,
+} from '~/store/filter';
 
 const contractorData = ref<ContractorDetails>([]);
 const contractorAbandonProjectList = ref<Project>([]);
@@ -253,22 +257,37 @@ onBeforeMount(async () => {
 
   var str = qs.stringify({ company });
 
-  contractorBudgetYearChartData.value = await getChartData(
-    config.public.apiUrl,
-    str
-  );
-  chartdata.value = contractorBudgetYearChartData.value;
+  // contractorBudgetYearChartData.value = await getChartData(
+  //   config.public.apiUrl,
+  //   str
+  // );
+  // chartdata.value = contractorBudgetYearChartData.value;
 
   await getContracterData();
-  await getContracterAuctionData();
+  // await getContracterAuctionData();
   await getContracterRelationship();
   await getContracterRelatedCompany('2560', '2568');
   await getContracterAbandonProject('', 10);
   await getContracterProject('&sortBy=announcementDate&sortOrder=desc', 10);
   await getContracterGov('&sortBy=totalContractAmount&sortOrder=desc', 10);
-  let filter = await getFilter(config.public.apiUrl);
+  let filter = await getFilter(config.public.apiUrl, '?companyId=' + segments);
   filterListProject.value = filter[0];
   filterListGovernment.value = filter[1];
+
+  if (Object.keys(route.query).length == 0) {
+    selectedContractorGov.value.yearFrom = filterListProject
+      .value!.budgetYears.at(0)!
+      .toString();
+    selectedContractorGov.value.yearTo = filterListProject
+      .value!.budgetYears.at(-1)!
+      .toString();
+    selectedContractorProject.value.yearFrom = filterListProject
+      .value!.budgetYears.at(0)!
+      .toString();
+    selectedContractorProject.value.yearTo = filterListProject
+      .value!.budgetYears.at(-1)!
+      .toString();
+  }
 });
 
 onMounted(async () => {
@@ -378,6 +397,7 @@ onMounted(async () => {
                 menu == 'ประวัติการทิ้งงาน',
             }"
             @click="menu = 'ประวัติการทิ้งงาน'"
+            v-if="contractorAbandonProjectList.pagination?.totalItem > 0"
           >
             <p>ประวัติการทิ้งงาน</p>
           </div>
@@ -387,6 +407,11 @@ onMounted(async () => {
               'border-l-4 border-l-[#EC1C24] bg-black': menu == 'ความสัมพันธ์',
             }"
             @click="menu = 'ความสัมพันธ์'"
+            v-if="
+              contractorRelationship.relationshipWith?.companies > 0 ||
+              contractorRelationship.relationshipWith?.politicalParties > 0 ||
+              contractorRelationship.relationshipWith?.politicians > 0
+            "
           >
             <p>ความสัมพันธ์</p>
           </div>

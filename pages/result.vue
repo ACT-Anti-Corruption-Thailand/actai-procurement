@@ -25,7 +25,18 @@ import {
   selected,
   selectedContractor,
   selectedGov,
+  sortByResultProject,
+  sortOrderResultProject,
+  sortByResultGov,
+  sortOrderResultGov,
+  sortByResultContractor,
+  sortOrderResultContractor,
 } from '~/store/filter';
+import {
+  isLoadingResultProject,
+  isLoadingResultGov,
+  isLoadingResultContractor,
+} from '~/store/loading';
 
 const iconGuide = ref({
   name: '',
@@ -69,15 +80,12 @@ onBeforeMount(async () => {
   let filter_query_text = '&' + str;
 
   getFilter();
-
   await getProjectList('', '');
   await getProjectList(filter_query_text, 'details');
   await getGovList('', '');
   await getGovList(filter_query_text, 'details');
   await getContractorList('', '');
   await getContractorList(filter_query_text, 'details');
-
-  //console.log(selected.value);
 });
 
 onMounted(async () => {
@@ -106,6 +114,15 @@ const getFilter = async () => {
   if (res3.ok) {
     const data = await res3.json();
     filterListContractor.value = data;
+  }
+
+  if (Object.keys(route.query).length <= 1) {
+    selected.value.yearFrom = filterListProject
+      .value!.budgetYears.at(0)!
+      .toString();
+    selected.value.yearTo = filterListProject
+      .value!.budgetYears.at(-1)!
+      .toString();
   }
 
   if (route.hash.includes('project')) {
@@ -146,6 +163,10 @@ const getFilter = async () => {
         route.query['filter[hasCorruptionRisk]'] === 'true' ||
         defaultSelected.hasCorruptionRisk,
     };
+
+    sortByResultProject.value =
+      route.query.sortBy?.toString() || 'relevanceScore';
+    sortOrderResultProject.value = route.query.sortOrder?.toString() || 'desc';
   } else if (route.hash.includes('government')) {
     selectedGov.value = {
       agencyBelongTo:
@@ -155,6 +176,9 @@ const getFilter = async () => {
         route.query['filter[province]']?.toString() ||
         defaultSelectedGov.province,
     };
+
+    sortByResultGov.value = route.query.sortBy?.toString() || 'relevanceScore';
+    sortOrderResultGov.value = route.query.sortOrder?.toString() || 'desc';
   } else if (route.hash.includes('contractor')) {
     selectedContractor.value = {
       province:
@@ -167,10 +191,16 @@ const getFilter = async () => {
         route.query['filter[hasCorruptionRisk]'] === 'true' ||
         defaultSelectedContractor.hasCorruptionRisk,
     };
+
+    sortByResultContractor.value =
+      route.query.sortBy?.toString() || 'relevanceScore';
+    sortOrderResultContractor.value =
+      route.query.sortOrder?.toString() || 'desc';
   }
 };
 
 const getProjectList = async (params: string, section: string) => {
+  isLoadingResultProject.value = true;
   const p = params != null ? params : '';
 
   const res = await fetch(
@@ -208,9 +238,11 @@ const getProjectList = async (params: string, section: string) => {
 
     getMapData(p);
   }
+  isLoadingResultProject.value = false;
 };
 
 const getGovList = async (params: string, section: string) => {
+  isLoadingResultGov.value = true;
   const urlParams = decodeURI(window.location.href).split('=')[1];
   const p = params != null ? params : '';
 
@@ -224,9 +256,11 @@ const getGovList = async (params: string, section: string) => {
       govList.value = JSON.parse(JSON.stringify(data)) || [];
     else govListAll.value = JSON.parse(JSON.stringify(data)) || [];
   }
+  isLoadingResultGov.value = false;
 };
 
 const getContractorList = async (params: string, section: string) => {
+  isLoadingResultContractor.value = true;
   const urlParams = decodeURI(window.location.href).split('=')[1];
   const p = params != null ? params : '';
 
@@ -240,6 +274,7 @@ const getContractorList = async (params: string, section: string) => {
       contractorList.value = JSON.parse(JSON.stringify(data)) || [];
     else contractorListAll.value = JSON.parse(JSON.stringify(data)) || [];
   }
+  isLoadingResultContractor.value = false;
 };
 
 const getMapData = async (params: string) => {

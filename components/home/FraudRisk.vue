@@ -56,6 +56,10 @@ const getContractorList = async () => {
 
   let filter = {
     hasCorruptionRisk: true,
+    budgetYear: {
+      start: d.getFullYear() + 543,
+      end: ye,
+    },
   };
 
   var str = qs.stringify({ filter });

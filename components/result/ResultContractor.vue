@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import type { Contractor } from '../../public/src/data/search_result';
+import {
+  sortByResultContractor,
+  sortOrderResultContractor,
+} from '~/store/filter';
+import { isLoadingResultContractor } from '~/store/loading';
 
 const props = defineProps<{
   contractorList?: Contractor;
@@ -91,9 +96,15 @@ onMounted(() => {
           text="เรียงตาม"
           @change="setParams"
           @sortBy="setParams"
+          :selectedSortBy="sortByResultContractor"
+          :selectedSortOrder="sortOrderResultContractor"
         />
       </div>
-      <DownloadAndCopy section="company" :filterList="queryForDownload" />
+      <DownloadAndCopy
+        section="company"
+        :filterList="queryForDownload"
+        isShowCopyBtn
+      />
     </div>
 
     <ProjectIconGuide
@@ -104,55 +115,64 @@ onMounted(() => {
       color="#8E8E8E"
     />
 
-    <div v-if="props.contractorList?.pagination.totalItem == 0" class="pb-7">
-      <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
-    </div>
-    <div class="my-3" v-else>
-      <a
-        v-for="item in props.contractorList?.searchResult"
-        class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
-        :key="'contractor-' + item.companyId"
-        target="_blank"
-        :href="'/contractor/' + item.companyId"
-      >
-        <div class="basis-3/5">
-          <p
-            class="b1 font-bold"
-            v-html="highlight(item?.companyName, keyword)"
-          ></p>
-          <ProjectIconGuide
-            :data="{
-              province: item.province,
-              entityNo: item.companyId,
-            }"
-            color="#8E8E8E"
-          />
-          <ProjectTag text="ตรวจพบความน่าสนใจ" v-if="item.hasCorruptionRisk" />
-        </div>
-        <div
-          class="flex sm:gap-10 text-right flex-col-mb basis-2/5 justify-end"
-        >
-          <div class="basis-1/3">
-            <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
-            <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
-          </div>
-          <div class="basis-1/3">
-            <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
-            <p class="b1">{{ setNumber(item?.totalContractMoney) }}</p>
-          </div>
-        </div>
-      </a>
+    <template v-if="isLoadingResultContractor">
+      <div class="p-5 b1 text-center">Loading...</div>
+    </template>
 
-      <div class="text-center">
-        <LoadMore
-          v-if="
-            props.contractorList?.searchResult.length <
-            props.contractorList?.pagination?.totalItem
-          "
-          @click="setParams('page', 10)"
-        />
+    <template v-else>
+      <div v-if="props.contractorList?.pagination.totalItem == 0" class="pb-7">
+        <h5 class="text-center text-[#8E8E8E]">ไม่พบผู้รับจ้างที่มีคำค้นนี้</h5>
       </div>
-    </div>
+      <div class="my-3" v-else>
+        <a
+          v-for="item in props.contractorList?.searchResult"
+          class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
+          :key="'contractor-' + item.companyId"
+          target="_blank"
+          :href="'/contractor/' + item.companyId"
+        >
+          <div class="basis-3/5">
+            <p
+              class="b1 font-bold"
+              v-html="highlight(item?.companyName, keyword)"
+            ></p>
+            <ProjectIconGuide
+              :data="{
+                province: item.province,
+                entityNo: item.companyId,
+              }"
+              color="#8E8E8E"
+            />
+            <ProjectTag
+              text="ตรวจพบความน่าสนใจ"
+              v-if="item.hasCorruptionRisk"
+            />
+          </div>
+          <div
+            class="flex sm:gap-10 text-right flex-col-mb basis-2/5 justify-end"
+          >
+            <div class="basis-1/3">
+              <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
+              <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
+            </div>
+            <div class="basis-1/3">
+              <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
+              <p class="b1">{{ setNumber(item?.totalContractMoney) }}</p>
+            </div>
+          </div>
+        </a>
+
+        <div class="text-center">
+          <LoadMore
+            v-if="
+              props.contractorList?.searchResult.length <
+              props.contractorList?.pagination?.totalItem
+            "
+            @click="setParams('page', 10)"
+          />
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 

@@ -11,6 +11,7 @@ import {
 const config = useRuntimeConfig();
 const route = useRoute();
 const isOpen = ref(true);
+const isLoading = ref(false);
 const keyword = ref('');
 const currentPage = ref(1);
 const contractorList = ref<Contractor | null>(null);
@@ -45,6 +46,7 @@ const setParams = async (type: string, val: string) => {
 };
 
 const getContractorList = async (params: string) => {
+  isLoading.value = true;
   const urlParams = route.query?.search?.toString();
   const p = params != null ? params : '';
 
@@ -62,6 +64,7 @@ const getContractorList = async (params: string) => {
     const data = await res.json();
     contractorList.value = JSON.parse(JSON.stringify(data)) || [];
   }
+  isLoading.value = false;
 };
 
 onMounted(async () => {
@@ -137,9 +140,15 @@ onMounted(async () => {
                       text="เรียงตาม"
                       @change="setParams"
                       @sortBy="setParams"
+                      selectedSortBy=""
+                      selectedSortOrder=""
                     />
                   </div>
-                  <DownloadAndCopy section="company" filterList="" />
+                  <DownloadAndCopy
+                    section="company"
+                    filterList=""
+                    :isShowCopyBtn="false"
+                  />
                 </div>
 
                 <ProjectIconGuide
@@ -150,59 +159,64 @@ onMounted(async () => {
                   color="#8E8E8E"
                 />
 
-                <div class="my-3">
-                  <a
-                    v-for="item in contractorList?.searchResult"
-                    class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
-                    :key="'contractor-' + item.companyId"
-                    target="_blank"
-                    :href="'/contractor/' + item.companyId"
-                  >
-                    <div class="basis-2/4">
-                      <p
-                        class="b1 font-bold"
-                        v-html="highlight(item?.companyName, keyword)"
-                      ></p>
-                      <ProjectIconGuide
-                        :data="{
-                          province: item.province,
-                          entityNo: item.companyId,
-                        }"
-                        color="#8E8E8E"
-                      />
-                      <ProjectTag
-                        text="ตรวจพบความน่าสนใจ"
-                        v-if="item.hasCorruptionRisk"
-                      />
-                    </div>
-                    <div
-                      class="flex sm:gap-10 text-right flex-col-mb basis-2/4 justify-end"
+                <template v-if="isLoading">
+                  <div class="p-5 b1 text-center">Loading...</div>
+                </template>
+                <template v-else>
+                  <div class="my-3">
+                    <a
+                      v-for="item in contractorList?.searchResult"
+                      class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4"
+                      :key="'contractor-' + item.companyId"
+                      target="_blank"
+                      :href="'/contractor/' + item.companyId"
                     >
-                      <div class="basis-1/3">
-                        <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
-                        <p class="b1">
-                          {{ item?.totalProject.toLocaleString() }}
-                        </p>
+                      <div class="basis-2/4">
+                        <p
+                          class="b1 font-bold"
+                          v-html="highlight(item?.companyName, keyword)"
+                        ></p>
+                        <ProjectIconGuide
+                          :data="{
+                            province: item.province,
+                            entityNo: item.companyId,
+                          }"
+                          color="#8E8E8E"
+                        />
+                        <ProjectTag
+                          text="ตรวจพบความน่าสนใจ"
+                          v-if="item.hasCorruptionRisk"
+                        />
                       </div>
-                      <div class="basis-1/3">
-                        <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
-                        <p class="b1">
-                          {{ setNumber(item?.totalContractMoney) }}
-                        </p>
+                      <div
+                        class="flex sm:gap-10 text-right flex-col-mb basis-2/4 justify-end"
+                      >
+                        <div class="basis-1/3">
+                          <p class="b4 text-[#5E5E5E]">โครงการที่ได้งาน</p>
+                          <p class="b1">
+                            {{ item?.totalProject.toLocaleString() }}
+                          </p>
+                        </div>
+                        <div class="basis-1/3">
+                          <p class="b4 text-[#5E5E5E]">วงเงินสัญญารวม (บาท)</p>
+                          <p class="b1">
+                            {{ setNumber(item?.totalContractMoney) }}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </a>
+                    </a>
 
-                  <div class="text-center">
-                    <vue-awesome-paginate
-                      :total-items="contractorList?.pagination?.totalItem"
-                      :items-per-page="5"
-                      :max-pages-shown="5"
-                      v-model="currentPage"
-                      @click="onClickHandler"
-                    />
+                    <div class="text-center">
+                      <vue-awesome-paginate
+                        :total-items="contractorList?.pagination?.totalItem"
+                        :items-per-page="5"
+                        :max-pages-shown="5"
+                        v-model="currentPage"
+                        @click="onClickHandler"
+                      />
+                    </div>
                   </div>
-                </div>
+                </template>
               </div>
             </DialogPanel>
           </TransitionChild>

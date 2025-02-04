@@ -6,6 +6,8 @@ import type {
   FilterListProject,
   ProjectListSummaryData,
 } from '~/models/data';
+import { sortByResultProject, sortOrderResultProject } from '~/store/filter';
+import { isLoadingResultProject } from '~/store/loading';
 
 const props = defineProps<{
   iconGuide: object;
@@ -292,68 +294,78 @@ onMounted(() => {
             ]"
             @change="setParams"
             @sortBy="setParams"
+            :selectedSortBy="sortByResultProject"
+            :selectedSortOrder="sortOrderResultProject"
           />
 
-          <DownloadAndCopy :filterList="queryForDownload" section="project" />
+          <DownloadAndCopy
+            :filterList="queryForDownload"
+            section="project"
+            isShowCopyBtn
+          />
         </div>
 
         <ProjectIconGuide :data="props.iconGuide" color="#8E8E8E" />
 
-        <div v-if="props.projectList?.pagination.totalItem == 0">
-          <h5 class="text-center text-[#8E8E8E] py-5">
-            ไม่พบโครงการจัดซื้อจัดจ้างที่มีคำค้นนี้
-          </h5>
-        </div>
-        <div class="my-3" v-else>
-          <a
-            v-for="(item, i) in props.projectList?.searchResult"
-            :key="i"
-            target="_blank"
-            :href="'/project/' + item.projectId"
-          >
-            <div
-              class="flex justify-between flex-col-mb p-2.5 sm:p-5 rounded-10 btn-light-4"
-            >
-              <div class="w-3/4">
-                <p
-                  class="b1 font-bold"
-                  v-html="highlight(item.projectName)"
-                ></p>
-                <ProjectIconGuide
-                  :data="{
-                    name: '',
-                    province: item.province,
-                    year: item.budgetYear,
-                    owner: item.agencyName,
-                    no: item.projectId,
-                    date: item.announcementDate,
-                  }"
-                  color="#8E8E8E"
-                />
-                <ProjectTag
-                  text="พบความเสี่ยงทุจริต"
-                  v-if="item.hasCorruptionRisk"
-                />
-              </div>
-              <div
-                class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
-              >
-                <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-                <p class="b1">{{ setNumber(item.totalBudget) }}</p>
-              </div>
-            </div>
-          </a>
-
-          <div class="text-center">
-            <LoadMore
-              v-if="
-                props.projectList?.searchResult.length <
-                props.projectList?.pagination?.totalItem
-              "
-              @click="setParams('page', '10')"
-            />
+        <template v-if="isLoadingResultProject">
+          <div class="p-5 b1 text-center">Loading...</div>
+        </template>
+        <template v-else>
+          <div v-if="props.projectList?.pagination.totalItem == 0">
+            <h5 class="text-center text-[#8E8E8E] py-5">
+              ไม่พบโครงการจัดซื้อจัดจ้างที่มีคำค้นนี้
+            </h5>
           </div>
-        </div>
+          <div class="my-3" v-else>
+            <a
+              v-for="(item, i) in props.projectList?.searchResult"
+              :key="i"
+              target="_blank"
+              :href="'/project/' + item.projectId"
+            >
+              <div
+                class="flex justify-between flex-col-mb p-2.5 sm:p-5 rounded-10 btn-light-4"
+              >
+                <div class="w-3/4">
+                  <p
+                    class="b1 font-bold"
+                    v-html="highlight(item.projectName)"
+                  ></p>
+                  <ProjectIconGuide
+                    :data="{
+                      name: '',
+                      province: item.province,
+                      year: item.budgetYear,
+                      owner: item.agencyName,
+                      no: item.projectId,
+                      date: item.announcementDate,
+                    }"
+                    color="#8E8E8E"
+                  />
+                  <ProjectTag
+                    text="พบความเสี่ยงทุจริต"
+                    v-if="item.hasCorruptionRisk"
+                  />
+                </div>
+                <div
+                  class="text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-normal"
+                >
+                  <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+                  <p class="b1">{{ setNumber(item.totalBudget) }}</p>
+                </div>
+              </div>
+            </a>
+
+            <div class="text-center">
+              <LoadMore
+                v-if="
+                  props.projectList?.searchResult.length <
+                  props.projectList?.pagination?.totalItem
+                "
+                @click="setParams('page', '10')"
+              />
+            </div></div
+        ></template>
 
         <GovernmentPopup
           v-if="isOpenGovModal"
@@ -432,59 +444,65 @@ onMounted(() => {
         </div>
 
         <div class="bg-[#1F1F1F] p-4 sm:p-10 mt-10">
-          <div class="max-w-6xl mx-auto">
-            <BarChart
-              :data="props.chartDataSet1"
-              :yearList="props.yearList"
-              title="งบประมาณ"
-              id="chart-1"
-              section="budget"
-              v-if="props.chartDataSet1.length > 0"
-            />
+          <template v-if="isLoadingResultProject">
+            <div class="p-5 b1 text-center text-white">Loading...</div>
+          </template>
 
-            <BarChart
-              :data="props.chartDataSet2"
-              :yearList="props.yearList"
-              title="ความเสี่ยงทุจริต"
-              id="chart-2"
-              section="risk"
-              v-if="props.chartDataSet2.length > 0"
-            />
+          <template v-else>
+            <div class="max-w-6xl mx-auto">
+              <BarChart
+                :data="props.chartDataSet1"
+                :yearList="props.yearList"
+                title="งบประมาณ"
+                id="chart-1"
+                section="budget"
+                v-if="props.chartDataSet1.length > 0"
+              />
 
-            <BarChart
-              :data="props.chartDataSet3"
-              :yearList="props.yearList"
-              title="สถานะโครงการ"
-              id="chart-3"
-              section="project"
-              v-if="props.chartDataSet3.length > 0"
-            />
+              <BarChart
+                :data="props.chartDataSet2"
+                :yearList="props.yearList"
+                title="ความเสี่ยงทุจริต"
+                id="chart-2"
+                section="risk"
+                v-if="props.chartDataSet2.length > 0"
+              />
 
-            <BarChart
-              :data="props.chartDataSet4"
-              :yearList="props.yearList"
-              title="สถานะสัญญา"
-              id="chart-4"
-              section="contract"
-              v-if="props.chartDataSet4.length > 0"
-            />
+              <BarChart
+                :data="props.chartDataSet3"
+                :yearList="props.yearList"
+                title="สถานะโครงการ"
+                id="chart-3"
+                section="project"
+                v-if="props.chartDataSet3.length > 0"
+              />
 
-            <BarChart
-              :data="props.chartDataSet5"
-              :yearList="props.yearList"
-              title="วิธีการจัดหา"
-              id="chart-5"
-              section="method"
-              v-if="props.chartDataSet5.length > 0"
-            />
+              <BarChart
+                :data="props.chartDataSet4"
+                :yearList="props.yearList"
+                title="สถานะสัญญา"
+                id="chart-4"
+                section="contract"
+                v-if="props.chartDataSet4.length > 0"
+              />
 
-            <MapSection
-              class="mt-5"
-              id="maps"
-              :data="props.mapData"
-              v-if="props.mapData != null && props.data.totalProject != 0"
-            />
-          </div>
+              <BarChart
+                :data="props.chartDataSet5"
+                :yearList="props.yearList"
+                title="วิธีการจัดหา"
+                id="chart-5"
+                section="method"
+                v-if="props.chartDataSet5.length > 0"
+              />
+
+              <MapSection
+                class="mt-5"
+                id="maps"
+                :data="props.mapData"
+                v-if="props.mapData != null && props.data.totalProject != 0"
+              />
+            </div>
+          </template>
 
           <div
             @click="scrollToTop()"

@@ -31,6 +31,7 @@ const props = defineProps<{
           </p>
         </div>
         <DownloadAndCopy
+          isShowCopyBtn
           section="contractor"
           filterList=""
           v-if="props.data?.searchResult.length != 0"

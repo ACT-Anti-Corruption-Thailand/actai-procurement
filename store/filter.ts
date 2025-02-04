@@ -30,6 +30,7 @@ export const defaultSelectedGovProject = {
   province: 'ทุกจังหวัด',
   projectStatus: 'ทุกสถานะ',
   resourcingMethod: 'ทุกวิธี',
+  relatedCompanies: 'ทุกองค์กร',
 };
 
 export const defaultSelectedGovContractor = {
@@ -61,3 +62,20 @@ export const selectedContractorProject = ref({
   ...defaultSelectedContractorProject,
 });
 export const selectedContractorGov = ref({ ...defaultSelectedContractorGov });
+
+// sort by + order
+
+export const sortByResultProject = ref('');
+export const sortOrderResultProject = ref('');
+export const sortByResultGov = ref('');
+export const sortOrderResultGov = ref('');
+export const sortByResultContractor = ref('');
+export const sortOrderResultContractor = ref('');
+
+export const sortByWinner = ref('');
+export const sortOrderWinner = ref('');
+
+export const sortByGovProject = ref('');
+export const sortOrderGovContractor = ref('');
+export const sortByContractorProject = ref('');
+export const sortOrderContractorGov = ref('');

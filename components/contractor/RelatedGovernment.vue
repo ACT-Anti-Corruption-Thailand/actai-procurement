@@ -61,7 +61,7 @@ const setParams = (type: string, val: string) => {
             {{ setNumber(props.data?.summary?.totalContractMoney) }}</span
           >บาท
         </h5>
-        <DownloadAndCopy section="government" filterList="" />
+        <DownloadAndCopy section="government" filterList="" isShowCopyBtn />
       </div>
 
       <SortBy
@@ -79,6 +79,8 @@ const setParams = (type: string, val: string) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
+        selectedSortBy=""
+        selectedSortOrder=""
       />
 
       <template v-if="!isLoading">
@@ -109,7 +111,7 @@ const setParams = (type: string, val: string) => {
                   {{ item.totalProject.toLocaleString() }}
                 </td>
                 <td class="text-right">
-                  {{ setNumber(item.totalBudgetMoney) }}
+                  {{ setNumber(item.totalContractMoney) }}
                 </td>
               </tr>
             </tbody>

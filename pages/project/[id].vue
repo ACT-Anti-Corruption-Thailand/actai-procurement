@@ -3,6 +3,7 @@ const menu = ref('ภาพรวม');
 const listMenu = ref(['ภาพรวม']);
 const isShowTab = ref(true);
 const config = useRuntimeConfig();
+const route = useRoute();
 const projectData = ref<ProjectDetails>([]);
 const projectDocs = ref<ProjectDocuments>([]);
 const projectContractor = ref<ProjectContractor>([]);
@@ -22,10 +23,10 @@ import type {
 } from '../../public/src/data/data_details';
 
 onBeforeMount(async () => {
-  await getProjectDataAndDocs();
-  await getProjectEstimatePrice();
-  await getProjectContracts('&sortBy=contractMoney&sortOrder=desc');
   await getProjectContractor();
+  await getProjectContracts('&sortBy=contractMoney&sortOrder=desc');
+  await getProjectEstimatePrice();
+  await getProjectDataAndDocs();
 
   if (
     projectContractor.value.length != 0 ||
@@ -38,7 +39,7 @@ onBeforeMount(async () => {
 });
 
 const getProjectDataAndDocs = async () => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res = await fetch(`${config.public.apiUrl}/project/${segments}`, {
     method: 'get',
@@ -69,7 +70,7 @@ const getProjectDataAndDocs = async () => {
 };
 
 const getProjectContracts = async (params: string) => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res2 = await fetch(
     `${config.public.apiUrl}/project/${segments}/contract?${params}`,
@@ -88,7 +89,7 @@ const getProjectContracts = async (params: string) => {
 };
 
 const getProjectContractor = async () => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res = await fetch(
     `${config.public.apiUrl}/project/${segments}/contractor`,
@@ -107,7 +108,7 @@ const getProjectContractor = async () => {
 };
 
 const getProjectEstimatePrice = async () => {
-  const segments = window.location.href.split('/')[4];
+  const segments = route.path.split('/')[2];
 
   const res = await fetch(
     `${config.public.apiUrl}/project/${segments}/item-estimate-price`,
@@ -125,6 +126,10 @@ const getProjectEstimatePrice = async () => {
     projectTotalEstimatePrice.value = data.totalEstimatePrice;
   }
 };
+
+onMounted(async () => {
+  if (route.hash.includes('bidder')) menu.value = 'ข้อมูลเจาะลึก';
+});
 </script>
 
 <template>

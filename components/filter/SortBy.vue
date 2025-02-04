@@ -1,7 +1,6 @@
 <template>
   <div class="flex gap-2 items-center">
     <p class="b1">{{ props.text }}</p>
-
     <div class="relative">
       <Listbox
         v-model="selected"
@@ -49,6 +48,8 @@
 const props = defineProps<{
   list: array;
   text: string;
+  selectedSortBy?: string;
+  selectedSortOrder?: string;
 }>();
 
 import { ref } from 'vue';
@@ -65,6 +66,15 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
 const selected = ref(props.list[0]);
 const sortBy = ref('desc');
+
+onBeforeMount(() => {
+  selected.value =
+    props.selectedSortBy != ''
+      ? props.list.filter((x) => x.value == props.selectedSortBy)[0]
+      : props.list[0];
+  sortBy.value =
+    props.selectedSortOrder != '' ? props.selectedSortOrder : 'desc';
+});
 </script>
 
 <style scoped lang="scss">

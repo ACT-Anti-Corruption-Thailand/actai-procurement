@@ -11,6 +11,7 @@ import {
 const config = useRuntimeConfig();
 const route = useRoute();
 const isOpen = ref(true);
+const isLoading = ref(false);
 const keyword = ref('');
 const currentPage = ref(1);
 const govList = ref<Government | null>(null);
@@ -46,6 +47,7 @@ const setParams = async (type: string, val: string) => {
 };
 
 const getGovList = async (params: string) => {
+  isLoading.value = true;
   const urlParams = route.query?.search?.toString();
   const p = params != null ? params : '';
 
@@ -66,6 +68,7 @@ const getGovList = async (params: string) => {
       x.agencyName.includes(keyword.value)
     );
   }
+  isLoading.value = false;
 };
 
 onMounted(async () => {
@@ -149,9 +152,15 @@ onMounted(async () => {
                       text="เรียงตาม"
                       @change="setParams"
                       @sortBy="setParams"
+                      selectedSortBy=""
+                      selectedSortOrder=""
                     />
                   </div>
-                  <DownloadAndCopy section="agency" filterList="" />
+                  <DownloadAndCopy
+                    section="agency"
+                    filterList=""
+                    :isShowCopyBtn="false"
+                  />
                 </div>
 
                 <ProjectIconGuide
@@ -161,71 +170,76 @@ onMounted(async () => {
                   color="#8E8E8E"
                 />
 
-                <div class="my-3">
-                  <a
-                    v-for="item in govList?.searchResult"
-                    class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4 gap-2"
-                    :key="'gov-' + item.agencyId"
-                    target="_blank"
-                    :href="'/government/' + item.agencyId"
-                  >
-                    <div class="basis-2/5">
-                      <p
-                        class="b1 font-bold"
-                        v-html="highlight(item?.agencyName, keyword)"
-                      ></p>
-                      <ProjectIconGuide
-                        :data="{
-                          province: item.province,
-                        }"
-                        color="#8E8E8E"
+                <template v-if="isLoading">
+                  <div class="p-5 b1 text-center">Loading...</div>
+                </template>
+                <template v-else>
+                  <div class="my-3">
+                    <a
+                      v-for="item in govList?.searchResult"
+                      class="flex justify-between p-2.5 sm:p-5 rounded-10 btn-light-4 gap-2"
+                      :key="'gov-' + item.agencyId"
+                      target="_blank"
+                      :href="'/government/' + item.agencyId"
+                    >
+                      <div class="basis-2/5">
+                        <p
+                          class="b1 font-bold"
+                          v-html="highlight(item?.agencyName, keyword)"
+                        ></p>
+                        <ProjectIconGuide
+                          :data="{
+                            province: item.province,
+                          }"
+                          color="#8E8E8E"
+                        />
+                      </div>
+                      <div
+                        class="basis-3/5 flex justify-between sm:gap-5 text-right flex-col-mb"
+                      >
+                        <div class="basis-1/3">
+                          <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
+                          <p class="b1">
+                            {{ item?.totalProject.toLocaleString() }}
+                          </p>
+                        </div>
+                        <div class="text-[#EC1C24] basis-1/3">
+                          <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
+                          <p class="b1">
+                            {{
+                              item?.totalProjectHasCorruptionRisk.toLocaleString()
+                            }}
+                            ({{
+                              item?.totalProject == 0
+                                ? 0
+                                : setNumber(
+                                    (item?.totalProjectHasCorruptionRisk /
+                                      item?.totalProject) *
+                                      100
+                                  )
+                            }}%)
+                          </p>
+                        </div>
+                        <div class="basis-1/3">
+                          <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
+                          <p class="b1">
+                            {{ setNumber(item?.totalBudgetMoney) }}
+                          </p>
+                        </div>
+                      </div>
+                    </a>
+
+                    <div class="text-center">
+                      <vue-awesome-paginate
+                        :total-items="govList?.pagination?.totalItem"
+                        :items-per-page="5"
+                        :max-pages-shown="5"
+                        v-model="currentPage"
+                        @click="onClickHandler"
                       />
                     </div>
-                    <div
-                      class="basis-3/5 flex justify-between sm:gap-5 text-right flex-col-mb"
-                    >
-                      <div class="basis-1/3">
-                        <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
-                        <p class="b1">
-                          {{ item?.totalProject.toLocaleString() }}
-                        </p>
-                      </div>
-                      <div class="text-[#EC1C24] basis-1/3">
-                        <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
-                        <p class="b1">
-                          {{
-                            item?.totalProjectHasCorruptionRisk.toLocaleString()
-                          }}
-                          ({{
-                            item?.totalProject == 0
-                              ? 0
-                              : setNumber(
-                                  (item?.totalProjectHasCorruptionRisk /
-                                    item?.totalProject) *
-                                    100
-                                )
-                          }}%)
-                        </p>
-                      </div>
-                      <div class="basis-1/3">
-                        <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
-                        <p class="b1">
-                          {{ setNumber(item?.totalBudgetMoney) }}
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-
-                  <div class="text-center">
-                    <vue-awesome-paginate
-                      :total-items="govList?.pagination?.totalItem"
-                      :items-per-page="5"
-                      :max-pages-shown="5"
-                      v-model="currentPage"
-                      @click="onClickHandler"
-                    />
                   </div>
-                </div>
+                </template>
               </div>
             </DialogPanel>
           </TransitionChild>

@@ -24,6 +24,7 @@
       </svg>
     </button>
     <button
+      v-if="isShowCopyBtn"
       @click="copyLink()"
       type="button"
       class="p-2.5 rounded-10 b2 text-[#0B5C90] hover:text-[#1688CA] gap-1 flex items-center tooltip"
@@ -61,6 +62,7 @@ const props = defineProps<{
   section: string;
   part?: string;
   keyword?: string;
+  isShowCopyBtn?: boolean;
 }>();
 const config = useRuntimeConfig();
 const route = useRoute();
@@ -138,6 +140,7 @@ const copyLink = () => {
   if (props.section.includes('project')) hashtag = '#project';
   else if (props.section.includes('agency')) hashtag = '#government';
   else if (props.section.includes('company')) hashtag = '#contractor';
+  else if (props.section.includes('bidder')) hashtag = '#bidder';
   // } else {
   //   if (props.section.includes('project')) hashtag = '#project';
   //   else if (props.section.includes('agency')) hashtag = '#government';

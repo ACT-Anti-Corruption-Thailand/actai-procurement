@@ -37,6 +37,7 @@ export interface Government {
       totalProject: number;
       totalProjectHasCorruptionRisk: number;
       totalBudgetMoney: number;
+      totalContractMoney: number;
     }
   ];
 }
