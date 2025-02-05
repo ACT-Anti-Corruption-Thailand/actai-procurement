@@ -1,5 +1,6 @@
 <script setup>
 const config = useRuntimeConfig();
+const route = useRoute();
 
 defineProps({
   color: String,
@@ -13,7 +14,6 @@ function copyURL() {
 
   if (window.location.pathname != '/')
     url += window.location.pathname.replace('/', '');
-  if (window.location.search != '') url += window.location.search;
 
   urlLink.value = url;
 
