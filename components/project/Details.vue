@@ -6,6 +6,9 @@ import type {
   ProjectContract,
   ProjectEstimatePrice,
 } from '../../public/src/data/data_details';
+import { isLoadingBidder } from '~/store/loading';
+import { sortByWinner, sortOrderWinner } from '~/store/filter';
+import qs from 'qs';
 
 const emit = defineEmits(['search']);
 
@@ -23,8 +26,10 @@ const biddingStep = [
   { title: 'เข้าเสนอราคา', total: 0, img: 'e-bidding' },
 ];
 
-const sort = ref('');
-const page = ref(0);
+const route = useRoute();
+const sort = ref('contractMoney');
+const sortOrder = ref('desc');
+const queryForDownload = ref('');
 
 const sumBiddingTotal = computed(() => {
   const contracter = props.contracters.map((data) => data.processInvolved);
@@ -57,12 +62,19 @@ const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
 
   if (type == 'sortBy') sort.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
+
+  queryForDownload.value = '?' + searchParams.toString();
 
   emit('search', searchParams.toString());
 };
+
+onMounted(() => {
+  queryForDownload.value = '?' + qs.stringify(route.query);
+});
 </script>
 
 <template>
@@ -162,6 +174,7 @@ const setParams = (type: string, val: string) => {
   <div
     class="bg-white rounded-10 gap-2 mb-3"
     v-if="props.contracts.length != 0"
+    id="bidder"
   >
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black">ผู้ชนะการประมูล</h4>
@@ -174,7 +187,7 @@ const setParams = (type: string, val: string) => {
         </h5>
         <DownloadAndCopy
           section="bidder"
-          filterList=""
+          :filterList="queryForDownload"
           part="contract"
           isShowCopyBtn
         />
@@ -195,111 +208,122 @@ const setParams = (type: string, val: string) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
-        selectedSortBy=""
-        selectedSortOrder=""
+        :selectedSortBy="sortByWinner"
+        :selectedSortOrder="sortOrderWinner"
       />
 
-      <div class="overflow-auto">
-        <table class="table-auto text-left table-wrapper">
-          <thead class="bg-[#8E8E8E] b3 text-white">
-            <tr class="b3">
-              <th>ผู้รับจ้าง</th>
-              <th class="w-20">
-                เลขคุมสัญญา <br />
-                <span class="b4 text-[#DADADA]">เลขที่สัญญา</span>
-              </th>
-              <th>วันที่ทำสัญญา</th>
-              <th class="w-24">สถานะสัญญา</th>
-              <th>วงเงินสัญญา (บาท)</th>
-            </tr>
-          </thead>
-          <tbody class="b1" v-if="props.contracts.length > 0">
-            <template v-for="(item, i) in props.contracts" :key="i">
-              <tr>
-                <td :rowspan="item.contracts.length">
-                  <a
-                    target="_blank"
-                    :href="`/contractor/${item.id}`"
-                    class="hover:text-[#0B5C90]"
-                  >
-                    <b> {{ item.name }}</b></a
-                  >
-                  <br />
-                  <div class="flex items-center gap-2">
-                    <img src="../../public/src/images/contractor.svg" alt="" />
-                    <p class="b4 text-[#8E8E8E]">{{ item.id }}</p>
-                  </div>
-                </td>
-
-                <td>
-                  {{ item.contracts[0].number }} <br />
-                  <span class="text-[#5E5E5E]">
-                    {{ item.contracts[0].id }}</span
-                  >
-                </td>
-                <td>
-                  {{ setDate(item.contracts[0].date) }}
-                </td>
-                <td
-                  :class="{
-                    'bg-[#054775] text-white':
-                      item.contracts[0].status == 'ส่งงานล่าช้ากว่ากำหนด',
-                    'bg-[#0F7979] text-white':
-                      item.contracts[0].status == 'ส่งงานครบถ้วน',
-                    'bg-[#1AA8A8] ':
-                      item.contracts[0].status == 'ส่งงานตามกำหนด',
-                    'bg-[#6DD5D5] ':
-                      item.contracts[0].status == 'จัดทำสัญญา/ PO แล้ว',
-                    'bg-[#DADADA]':
-                      item.contracts[0].status == 'ระหว่างดำเนินการ',
-                    'bg-[#FF8888] ': item.contracts[0].status == 'ยกเลิกสัญญา',
-                    'bg-[#EC1C24] ': item.contracts[0].status == 'สิ้นสุดสัญญา',
-                  }"
-                >
-                  {{ item.contracts[0].status }}
-                </td>
-                <td>{{ setNumber(item.contracts[0].money) }}</td>
+      <template v-if="isLoadingBidder">
+        <div class="p-5 b1 text-center">Loading...</div>
+      </template>
+      <template v-else>
+        <div class="overflow-auto">
+          <table class="table-auto text-left table-wrapper">
+            <thead class="bg-[#8E8E8E] b3 text-white">
+              <tr class="b3">
+                <th>ผู้รับจ้าง</th>
+                <th class="w-20">
+                  เลขคุมสัญญา <br />
+                  <span class="b4 text-[#DADADA]">เลขที่สัญญา</span>
+                </th>
+                <th>วันที่ทำสัญญา</th>
+                <th class="w-24">สถานะสัญญา</th>
+                <th>วงเงินสัญญา (บาท)</th>
               </tr>
-              <template v-if="item.contracts.length > 1">
-                <tr v-for="(item2, j) in item.contracts.slice(1)" :key="j">
-                  <td>
-                    {{ item2.id }} <br />
-                    <span class="text-[#5E5E5E]"> {{ item2.number }}</span>
+            </thead>
+            <tbody class="b1" v-if="props.contracts.length > 0">
+              <template v-for="(item, i) in props.contracts" :key="i">
+                <tr>
+                  <td :rowspan="item.contracts.length">
+                    <a
+                      target="_blank"
+                      :href="`/contractor/${item.id}`"
+                      class="hover:text-[#0B5C90]"
+                    >
+                      <b> {{ item.name }}</b></a
+                    >
+                    <br />
+                    <div class="flex items-center gap-2">
+                      <img
+                        src="../../public/src/images/contractor.svg"
+                        alt=""
+                      />
+                      <p class="b4 text-[#8E8E8E]">{{ item.id }}</p>
+                    </div>
                   </td>
-                  <td>{{ setDate(item2.date) }}</td>
+
+                  <td>
+                    {{ item.contracts[0].number }} <br />
+                    <span class="text-[#5E5E5E]">
+                      {{ item.contracts[0].id }}</span
+                    >
+                  </td>
+                  <td>
+                    {{ setDate(item.contracts[0].date) }}
+                  </td>
                   <td
                     :class="{
                       'bg-[#054775] text-white':
-                        item2.status == 'ส่งงานล่าช้ากว่ากำหนด',
+                        item.contracts[0].status == 'ส่งงานล่าช้ากว่ากำหนด',
                       'bg-[#0F7979] text-white':
-                        item2.status == 'ส่งงานครบถ้วน',
-                      'bg-[#1AA8A8] ': item2.status == 'ส่งงานตามกำหนด',
-                      'bg-[#6DD5D5] ': item2.status == 'จัดทำสัญญา/ PO แล้ว',
-                      'bg-[#DADADA]': item2.status == 'ระหว่างดำเนินการ',
-                      'bg-[#FF8888] ': item2.status == 'ยกเลิกสัญญา',
-                      'bg-[#EC1C24] ': item2.status == 'สิ้นสุดสัญญา',
+                        item.contracts[0].status == 'ส่งงานครบถ้วน',
+                      'bg-[#1AA8A8] ':
+                        item.contracts[0].status == 'ส่งงานตามกำหนด',
+                      'bg-[#6DD5D5] ':
+                        item.contracts[0].status == 'จัดทำสัญญา/ PO แล้ว',
+                      'bg-[#DADADA]':
+                        item.contracts[0].status == 'ระหว่างดำเนินการ',
+                      'bg-[#FF8888] ':
+                        item.contracts[0].status == 'ยกเลิกสัญญา',
+                      'bg-[#EC1C24] ':
+                        item.contracts[0].status == 'สิ้นสุดสัญญา',
                     }"
                   >
-                    {{ item2.status }}
+                    {{ item.contracts[0].status }}
                   </td>
-                  <td>{{ setNumber(item2.money) }}</td>
+                  <td>{{ setNumber(item.contracts[0].money) }}</td>
                 </tr>
+                <template v-if="item.contracts.length > 1">
+                  <tr v-for="(item2, j) in item.contracts.slice(1)" :key="j">
+                    <td>
+                      {{ item2.id }} <br />
+                      <span class="text-[#5E5E5E]"> {{ item2.number }}</span>
+                    </td>
+                    <td>{{ setDate(item2.date) }}</td>
+                    <td
+                      :class="{
+                        'bg-[#054775] text-white':
+                          item2.status == 'ส่งงานล่าช้ากว่ากำหนด',
+                        'bg-[#0F7979] text-white':
+                          item2.status == 'ส่งงานครบถ้วน',
+                        'bg-[#1AA8A8] ': item2.status == 'ส่งงานตามกำหนด',
+                        'bg-[#6DD5D5] ': item2.status == 'จัดทำสัญญา/ PO แล้ว',
+                        'bg-[#DADADA]': item2.status == 'ระหว่างดำเนินการ',
+                        'bg-[#FF8888] ': item2.status == 'ยกเลิกสัญญา',
+                        'bg-[#EC1C24] ': item2.status == 'สิ้นสุดสัญญา',
+                      }"
+                    >
+                      {{ item2.status }}
+                    </td>
+                    <td>{{ setNumber(item2.money) }}</td>
+                  </tr>
+                </template>
               </template>
-            </template>
-          </tbody>
-          <tbody class="b1 text-center" v-else>
-            <tr>
-              <td colspan="5">ไม่พบข้อมูล</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+            <tbody class="b1 text-center" v-else>
+              <tr>
+                <td colspan="5">ไม่พบข้อมูล</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
     </div>
   </div>
 
   <div
     class="bg-white rounded-10 gap-2 mb-3"
     v-if="props.estimatePrice.length != 0"
+    id="estimateprice"
   >
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black mb-3">การเสนอราคา</h4>

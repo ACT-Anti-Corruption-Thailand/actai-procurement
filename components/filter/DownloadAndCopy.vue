@@ -152,6 +152,8 @@ const copyLink = () => {
   else if (props.section.includes('company')) hashtag = '#contractor';
   else if (props.section.includes('bidder')) hashtag = '#bidder';
 
+  if (props.part == 'item-estimate-price') hashtag = '#estimateprice';
+
   //if (props.filterList != '') url += props.filterList;
   urlLink.value = url + hashtag;
 

@@ -1,4 +1,17 @@
 <script setup lang="ts">
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+import { isLoadingBidder } from '~/store/loading';
+
+import type {
+  ProjectDetails,
+  ProjectDocuments,
+  ProjectContractor,
+  ProjectContract,
+  ProjectEstimatePrice,
+} from '../../public/src/data/data_details';
+import { sortByWinner, sortOrderWinner } from '~/store/filter';
+
 const menu = ref('ภาพรวม');
 const listMenu = ref(['ภาพรวม']);
 const isShowTab = ref(true);
@@ -10,17 +23,6 @@ const projectContractor = ref<ProjectContractor>([]);
 const projectContract = ref<ProjectContract>([]);
 const projectEstimatePrice = ref<ProjectEstimatePrice>([]);
 const projectTotalEstimatePrice = ref(0);
-
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-import { ChevronDownIcon } from '@heroicons/vue/24/solid';
-
-import type {
-  ProjectDetails,
-  ProjectDocuments,
-  ProjectContractor,
-  ProjectContract,
-  ProjectEstimatePrice,
-} from '../../public/src/data/data_details';
 
 onBeforeMount(async () => {
   await getProjectContractor();
@@ -70,6 +72,7 @@ const getProjectDataAndDocs = async () => {
 };
 
 const getProjectContracts = async (params: string) => {
+  isLoadingBidder.value = true;
   const segments = route.path.split('/')[2];
 
   const res2 = await fetch(
@@ -86,6 +89,7 @@ const getProjectContracts = async (params: string) => {
     const data = await res2.json();
     projectContract.value = data.contractors || [];
   }
+  isLoadingBidder.value = false;
 };
 
 const getProjectContractor = async () => {
@@ -128,7 +132,21 @@ const getProjectEstimatePrice = async () => {
 };
 
 onMounted(async () => {
-  if (route.hash.includes('bidder')) menu.value = 'ข้อมูลเจาะลึก';
+  if (route.hash != null) {
+    if (route.hash.includes('bidder')) {
+      menu.value = 'ข้อมูลเจาะลึก';
+      sortByWinner.value = route.query.sortBy?.toString() || 'contractMoney';
+      sortOrderWinner.value = route.query.sortOrder?.toString() || 'desc';
+      setTimeout(() => {
+        document.getElementById(route.hash.replace('#', ''))?.scrollIntoView();
+      }, 1000);
+    } else {
+      menu.value = 'ข้อมูลเจาะลึก';
+      setTimeout(() => {
+        document.getElementById('estimateprice')?.scrollIntoView();
+      }, 1000);
+    }
+  }
 });
 </script>
 
