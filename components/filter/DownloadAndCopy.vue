@@ -62,6 +62,7 @@ const props = defineProps<{
   section: string;
   part?: string;
   keyword?: string;
+  resultSection?: string;
   isShowCopyBtn?: boolean;
 }>();
 const config = useRuntimeConfig();
@@ -120,34 +121,38 @@ const downloadCSV = async () => {
       a.click();
     }
   } else {
+    let str = '';
+    let filter_query_text = '';
+
     var link = document.createElement('a');
-    let str = qs.stringify(route.query);
-    let filter_query_text = str;
-    link.href = `${config.public.apiUrl}/${props.section}/search/download-csv?${filter_query_text}${props.filterList}`;
+    str = qs.stringify(route.query);
+    filter_query_text =
+      props.resultSection != ''
+        ? props.filterList.replace('search', props.resultSection)
+        : props.filterList;
+
+    link.href = `${config.public.apiUrl}/${props.section}/search/download-csv${filter_query_text}`;
     document.body.appendChild(link);
     link.click();
   }
 };
 
 const copyLink = () => {
-  let url = config.public.baseUrl;
+  let url = '';
   let hashtag = '';
 
-  if (route.path != '/') url += route.path.replace('/', '');
-  if (route.query.search != '') url += window.location.search;
+  url = config.public.baseUrl;
 
-  // if (route.name?.includes('result')) {
+  if (route.path != '/') url += route.path.replace('/', '');
+
+  if (route.query.search != '') url += props.filterList;
+
   if (props.section.includes('project')) hashtag = '#project';
   else if (props.section.includes('agency')) hashtag = '#government';
   else if (props.section.includes('company')) hashtag = '#contractor';
   else if (props.section.includes('bidder')) hashtag = '#bidder';
-  // } else {
-  //   if (props.section.includes('project')) hashtag = '#project';
-  //   else if (props.section.includes('agency')) hashtag = '#government';
-  //   else if (props.section.includes('company')) hashtag = '#contractor';
-  // }
 
-  if (props.filterList != '') url += props.filterList;
+  //if (props.filterList != '') url += props.filterList;
   urlLink.value = url + hashtag;
 
   navigator.clipboard.writeText(urlLink.value).then(function () {

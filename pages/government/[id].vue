@@ -122,7 +122,6 @@ onBeforeMount(async () => {
 onMounted(async () => {
   if (route.hash.includes('project')) {
     menu.value = 'รายชื่อโครงการที่จัดทำ';
-    console.log(route.query['filter[budgetYear][start]']?.toString());
 
     selectedGovProject.value = {
       yearFrom:

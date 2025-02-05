@@ -77,15 +77,24 @@ onBeforeMount(async () => {
   const { ...filter_query } = route.query;
   delete filter_query.search;
   let str = qs.stringify(filter_query);
-  let filter_query_text = '&' + str;
+  let filter_query_text_project = route.hash.includes('project')
+    ? '&' + str
+    : '';
+  let filter_query_text_gov = route.hash.includes('government')
+    ? '&' + str
+    : '';
+  let filter_query_text_contractor = route.hash.includes('contractor')
+    ? '&' + str
+    : '';
 
   getFilter();
+
   await getProjectList('', '');
-  await getProjectList(filter_query_text, 'details');
+  await getProjectList(filter_query_text_project, 'details');
   await getGovList('', '');
-  await getGovList(filter_query_text, 'details');
+  await getGovList(filter_query_text_gov, 'details');
   await getContractorList('', '');
-  await getContractorList(filter_query_text, 'details');
+  await getContractorList(filter_query_text_contractor, 'details');
 });
 
 onMounted(async () => {
@@ -116,7 +125,10 @@ const getFilter = async () => {
     filterListContractor.value = data;
   }
 
-  if (Object.keys(route.query).length <= 1) {
+  if (
+    route.query['filter[budgetYear][start]'] == null ||
+    route.query['filter[budgetYear][end]'] == null
+  ) {
     selected.value.yearFrom = filterListProject
       .value!.budgetYears.at(0)!
       .toString();
@@ -126,6 +138,33 @@ const getFilter = async () => {
   }
 
   if (route.hash.includes('project')) {
+    let moneyMenu = '';
+
+    if (
+      route.query['filter[budgetMoney][start]'] != null ||
+      route.query['filter[budgetMoney][end]'] != null
+    ) {
+      moneyMenu = 'งบประมาณ';
+    } else if (
+      route.query['filter[contractMoney][start]'] != null ||
+      route.query['filter[contractMoney][end]'] != null
+    ) {
+      moneyMenu = 'วงเงินสัญญา';
+    }
+
+    let moneyBudgetStart =
+      route.query['filter[budgetMoney][start]']?.toString() ||
+      defaultSelected.moneyStart;
+    let moneyBudgetEnd =
+      route.query['filter[budgetMoney][end]']?.toString() ||
+      defaultSelected.moneyEnd;
+    let moneyContractStart =
+      route.query['filter[contractMoney][start]']?.toString() ||
+      defaultSelected.moneyStart;
+    let moneyContractEnd =
+      route.query['filter[contractMoney][end]']?.toString() ||
+      defaultSelected.moneyEnd;
+
     selected.value = {
       yearFrom:
         route.query['filter[budgetYear][start]']?.toString() ||
@@ -154,11 +193,8 @@ const getFilter = async () => {
         route.query['filter[resourcingMethod]']?.toString() ||
         defaultSelected.resourcingMethod,
       moneyStart:
-        route.query['filter[budgetMoney][start]']?.toString() ||
-        defaultSelected.moneyStart,
-      moneyEnd:
-        route.query['filter[budgetMoney][end]']?.toString() ||
-        defaultSelected.moneyEnd,
+        moneyMenu == 'งบประมาณ' ? moneyBudgetStart : moneyContractStart,
+      moneyEnd: moneyMenu == 'งบประมาณ' ? moneyBudgetEnd : moneyContractEnd,
       hasCorruptionRisk:
         route.query['filter[hasCorruptionRisk]'] === 'true' ||
         defaultSelected.hasCorruptionRisk,

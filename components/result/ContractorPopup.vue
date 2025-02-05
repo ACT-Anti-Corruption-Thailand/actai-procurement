@@ -15,6 +15,9 @@ const isLoading = ref(false);
 const keyword = ref('');
 const currentPage = ref(1);
 const contractorList = ref<Contractor | null>(null);
+const sort = ref('relevanceScore');
+const sortOrder = ref('desc');
+const queryForDownload = ref('');
 
 function highlight(title: string, text: string) {
   var innerHTML = title;
@@ -39,8 +42,14 @@ const onClickHandler = async (page: number) => {
 const setParams = async (type: string, val: string) => {
   const searchParams = new URLSearchParams();
 
-  searchParams.set('sortBy', type == 'sortBy' ? val : 'relevanceScore');
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
+
+  searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
+
+  queryForDownload.value =
+    '&' + searchParams.toString().replace('search', 'projectKeyword');
 
   await getContractorList('&' + searchParams.toString());
 };
@@ -130,11 +139,11 @@ onMounted(async () => {
                         },
                         {
                           name: 'วงเงินสัญญารวม',
-                          value: 'totalProject',
+                          value: 'totalContractAmount',
                         },
                         {
                           name: 'จำนวนโครงการที่ได้งาน',
-                          value: 'totalContractAmount',
+                          value: 'totalProject',
                         },
                       ]"
                       text="เรียงตาม"
@@ -146,8 +155,9 @@ onMounted(async () => {
                   </div>
                   <DownloadAndCopy
                     section="company"
-                    filterList=""
+                    :filterList="queryForDownload"
                     :isShowCopyBtn="false"
+                    resultSection="projectKeyword"
                   />
                 </div>
 

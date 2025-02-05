@@ -27,6 +27,14 @@ const getSummary = async () => {
   }
 };
 
+const setMonth = (date) => {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+  };
+  return new Date(date).toLocaleDateString('th-TH', options);
+};
+
 onMounted(async () => {
   await getSummary();
 });
@@ -44,7 +52,7 @@ onMounted(async () => {
     <div class="text-center text-white">
       <h5 class="font-bold">
         ข้อมูลน่าสนใจประจำเดือน{{
-          setDate(firstDay.toISOString().split('T')[0])
+          setMonth(firstDay.toISOString().split('T')[0])
         }}
       </h5>
       <p class="b1 text-[#A6A6A6]">

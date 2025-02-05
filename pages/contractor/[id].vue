@@ -257,14 +257,14 @@ onBeforeMount(async () => {
 
   var str = qs.stringify({ company });
 
-  // contractorBudgetYearChartData.value = await getChartData(
-  //   config.public.apiUrl,
-  //   str
-  // );
-  // chartdata.value = contractorBudgetYearChartData.value;
+  contractorBudgetYearChartData.value = await getChartData(
+    config.public.apiUrl,
+    str
+  );
+  chartdata.value = contractorBudgetYearChartData.value;
 
   await getContracterData();
-  // await getContracterAuctionData();
+  await getContracterAuctionData();
   await getContracterRelationship();
   await getContracterRelatedCompany('2560', '2568');
   await getContracterAbandonProject('', 10);

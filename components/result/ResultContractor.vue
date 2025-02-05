@@ -5,6 +5,7 @@ import {
   sortOrderResultContractor,
 } from '~/store/filter';
 import { isLoadingResultContractor } from '~/store/loading';
+import qs from 'qs';
 
 const props = defineProps<{
   contractorList?: Contractor;
@@ -31,6 +32,7 @@ const searchText = ref('');
 
 const emit = defineEmits(['search']);
 
+const route = useRoute();
 const sort = ref('relevanceScore');
 const sortOrder = ref('desc');
 const page = ref(0);
@@ -40,6 +42,7 @@ const filterList = ref('');
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
+  queryForDownload.value = '';
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
@@ -50,15 +53,17 @@ const setParams = (type: string, val: string) => {
   searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  queryForDownload.value =
+    '?search=' +
+    route.query.search +
+    '&' +
+    searchParams.toString() +
+    filterList.value;
   emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
 onMounted(() => {
-  keyword.value = localStorage.getItem('keyword');
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  searchText.value = urlParams.get('search');
+  queryForDownload.value = '?' + qs.stringify(route.query);
 });
 </script>
 
@@ -104,6 +109,7 @@ onMounted(() => {
         section="company"
         :filterList="queryForDownload"
         isShowCopyBtn
+        resultSection="keyword"
       />
     </div>
 

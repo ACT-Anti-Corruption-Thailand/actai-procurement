@@ -61,9 +61,14 @@
         {{ props.data?.totalProjectHasCorruptionRisk.toLocaleString() }} โครงการ
         <span v-if="props.data?.totalProjectHasCorruptionRisk != 0">
           ({{
-            (props.data?.totalProject -
-              props.data?.totalProjectHasCorruptionRisk) *
-            100
+            props.data?.totalProjectHasCorruptionRisk == 1
+              ? 100
+              : setNumber(
+                  ((props.data?.totalProject -
+                    props.data?.totalProjectHasCorruptionRisk) /
+                    props.data?.totalProject) *
+                    100
+                )
           }}%)</span
         >
       </p>

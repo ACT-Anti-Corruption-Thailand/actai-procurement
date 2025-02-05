@@ -8,6 +8,7 @@ import type {
 } from '~/models/data';
 import { sortByResultProject, sortOrderResultProject } from '~/store/filter';
 import { isLoadingResultProject } from '~/store/loading';
+import qs from 'qs';
 
 const props = defineProps<{
   iconGuide: object;
@@ -24,6 +25,7 @@ const props = defineProps<{
   mapData: MapData;
 }>();
 
+const route = useRoute();
 const selectedTab = ref(0);
 const isOpen = ref(false);
 const isOpen2 = ref(false);
@@ -96,6 +98,7 @@ function highlight(title: string) {
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
+  queryForDownload.value = '';
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page')
@@ -107,7 +110,13 @@ const setParams = (type: string, val: string) => {
   searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', `${type == 'page' ? page.value : 10}`);
 
-  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  queryForDownload.value =
+    '?search=' +
+    route.query.search +
+    '&' +
+    searchParams.toString() +
+    filterList.value;
+
   emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
@@ -141,10 +150,7 @@ watch(sumDataFromAPI, (newX) => {
 });
 
 onMounted(() => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  searchText.value = urlParams.get('search') || '';
-  queryForDownload.value = '&sortBy=relevanceScore&sortOrder=desc';
+  queryForDownload.value = '?' + qs.stringify(route.query);
   setSumData();
 });
 </script>
@@ -302,6 +308,7 @@ onMounted(() => {
             :filterList="queryForDownload"
             section="project"
             isShowCopyBtn
+            resultSection="keyword"
           />
         </div>
 

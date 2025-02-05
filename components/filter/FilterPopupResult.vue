@@ -130,7 +130,7 @@ const searchByResult = () => {
             : undefined,
         end:
           plan.value == 'วงเงินสัญญา' && selected.value.moneyEnd != ''
-            ? parseInt(selected.value.moneyStart)
+            ? parseInt(selected.value.moneyEnd)
             : undefined,
       },
       hasCorruptionRisk: selected.value.hasCorruptionRisk,
@@ -183,6 +183,17 @@ const clearFilter = () => {
     isClear.value = false;
   });
 };
+
+onMounted(() => {
+  const route = useRoute();
+
+  if (
+    route.query['filter[contractMoney][start]'] != null ||
+    route.query['filter[contractMoney][end]'] != null
+  ) {
+    plan.value = 'วงเงินสัญญา';
+  }
+});
 </script>
 
 <template>
@@ -474,10 +485,26 @@ const clearFilter = () => {
 
                 <div
                   class="flex items-center my-4"
-                  v-if="props.section != 'หน่วยงานรัฐ'"
+                  v-if="props.section == 'โครงการฯ'"
                 >
                   <input
                     v-model="selected.hasCorruptionRisk"
+                    id="default-checkbox"
+                    type="checkbox"
+                    value=""
+                    class="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded"
+                  />
+                  <label for="default-checkbox" class="ms-2 b4 text-[#EC1C24]"
+                    >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
+                  >
+                </div>
+
+                <div
+                  class="flex items-center my-4"
+                  v-else-if="props.section == 'ผู้รับจ้าง'"
+                >
+                  <input
+                    v-model="selectedContractor.hasCorruptionRisk"
                     id="default-checkbox"
                     type="checkbox"
                     value=""

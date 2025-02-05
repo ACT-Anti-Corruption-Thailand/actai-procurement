@@ -66,14 +66,28 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
 const selected = ref(props.list[0]);
 const sortBy = ref('desc');
+const selectedSortBy = toRef(props, 'selectedSortBy');
+const selectedSortOrder = toRef(props, 'selectedSortOrder');
 
-onBeforeMount(() => {
+const setDefaultVal = () => {
   selected.value =
     props.selectedSortBy != ''
       ? props.list.filter((x) => x.value == props.selectedSortBy)[0]
       : props.list[0];
   sortBy.value =
     props.selectedSortOrder != '' ? props.selectedSortOrder : 'desc';
+};
+
+onBeforeMount(() => {
+  setDefaultVal();
+});
+
+watch(selectedSortBy, (val) => {
+  setDefaultVal();
+});
+
+watch(selectedSortOrder, (val) => {
+  setDefaultVal();
 });
 </script>
 

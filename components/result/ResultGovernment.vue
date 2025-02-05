@@ -2,6 +2,7 @@
 import type { Government } from '../../public/src/data/search_result';
 import { sortByResultGov, sortOrderResultGov } from '~/store/filter';
 import { isLoadingResultGov } from '~/store/loading';
+import qs from 'qs';
 
 const props = defineProps<{
   govList?: Government;
@@ -10,6 +11,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['search']);
 
+const route = useRoute();
 const keyword = ref('');
 const sort = ref('relevanceScore');
 const sortOrder = ref('desc');
@@ -35,6 +37,7 @@ function highlight(title: string, text: string) {
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
+  queryForDownload.value = '';
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
@@ -45,12 +48,18 @@ const setParams = (type: string, val: string) => {
   searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
+  queryForDownload.value =
+    '?search=' +
+    route.query.search +
+    '&' +
+    searchParams.toString() +
+    filterList.value;
+
   emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
 onMounted(() => {
-  keyword.value = localStorage.getItem('keyword');
+  queryForDownload.value = '?' + qs.stringify(route.query);
 });
 </script>
 
@@ -103,6 +112,7 @@ onMounted(() => {
         section="agency"
         :filterList="queryForDownload"
         isShowCopyBtn
+        resultSection="keyword"
       />
     </div>
 

@@ -14,8 +14,11 @@ const isOpen = ref(true);
 const isLoading = ref(false);
 const keyword = ref('');
 const currentPage = ref(1);
+const sort = ref('relevanceScore');
+const sortOrder = ref('desc');
 const govList = ref<Government | null>(null);
 const searchResult = ref<Government | null>(null);
+const queryForDownload = ref('');
 
 function highlight(title: string, text: string) {
   var innerHTML = title;
@@ -39,9 +42,16 @@ const onClickHandler = async (page: number) => {
 
 const setParams = async (type: string, val: string) => {
   const searchParams = new URLSearchParams();
+  if (type == 'sortBy') sort.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('sortBy', type == 'sortBy' ? val : 'relevanceScore');
   searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+
+  searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
+
+  queryForDownload.value = '&' + searchParams.toString();
 
   await getGovList('&' + searchParams.toString());
 };
@@ -158,8 +168,9 @@ onMounted(async () => {
                   </div>
                   <DownloadAndCopy
                     section="agency"
-                    filterList=""
+                    :filterList="queryForDownload"
                     :isShowCopyBtn="false"
+                    resultSection="projectKeyword"
                   />
                 </div>
 
