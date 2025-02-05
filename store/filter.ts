@@ -76,6 +76,9 @@ export const sortByWinner = ref('');
 export const sortOrderWinner = ref('');
 
 export const sortByGovProject = ref('');
+export const sortOrderGovProject = ref('');
+export const sortByGovContractor = ref('');
 export const sortOrderGovContractor = ref('');
+
 export const sortByContractorProject = ref('');
 export const sortOrderContractorGov = ref('');

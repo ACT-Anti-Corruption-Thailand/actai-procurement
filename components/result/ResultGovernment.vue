@@ -58,8 +58,12 @@ const setParams = (type: string, val: string) => {
   emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   queryForDownload.value = '?' + qs.stringify(route.query);
+  if (route.hash.includes('government')) {
+    sort.value = sortByResultGov.value;
+    sortOrder.value = sortOrderResultGov.value;
+  }
 });
 </script>
 

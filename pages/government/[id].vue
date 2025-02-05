@@ -13,13 +13,19 @@ import {
   defaultSelectedGovContractor,
   selectedGovProject,
   selectedGovContractor,
+  sortByGovProject,
+  sortOrderGovProject,
+  sortByGovContractor,
+  sortOrderGovContractor,
 } from '~/store/filter';
+import { isLoadingGovProject, isLoadingGovContractor } from '~/store/loading';
 
 const govData = ref<GovernmentDetails>([]);
 const govProjectList = ref<Project>([]);
 const govContracterList = ref<Contractor>([]);
 const filterListProject = ref<FilterListProject>();
 const filterListContractor = ref({});
+const listMenu = ref(['ภาพรวมโครงการที่จัดทำ']);
 
 const getGovData = async () => {
   const segments = route.path.split('/')[2];
@@ -38,6 +44,7 @@ const getGovData = async () => {
 };
 
 const getGovProject = async (q) => {
+  isLoadingGovProject.value = true;
   const segments = route.path.split('/')[2];
 
   const params = new URLSearchParams();
@@ -63,9 +70,11 @@ const getGovProject = async (q) => {
     const data = await res.json();
     govProjectList.value = JSON.parse(JSON.stringify(data)) || [];
   }
+  isLoadingGovProject.value = false;
 };
 
 const getGovContracter = async (q) => {
+  isLoadingGovContractor.value = true;
   const segments = route.path.split('/')[2];
 
   let filter = {
@@ -91,13 +100,10 @@ const getGovContracter = async (q) => {
     const data = await res.json();
     govContracterList.value = JSON.parse(JSON.stringify(data)) || [];
   }
+  isLoadingGovContractor.value = false;
 };
 
 onBeforeMount(async () => {
-  await getGovData();
-  await getGovProject('&sortBy=announcementDate&sortOrder=desc', 10);
-  await getGovContracter('&sortBy=totalContractAmount&sortOrder=desc', 10);
-
   const segments = route.path.split('/')[2];
   let filter = await getFilter(config.public.apiUrl, '?agencyId=' + segments);
   filterListProject.value = filter[0];
@@ -117,19 +123,32 @@ onBeforeMount(async () => {
       .value!.budgetYears.at(-1)!
       .toString();
   }
-});
 
-onMounted(async () => {
+  const { ...filter_query } = route.query;
+  let str = qs.stringify(filter_query);
+  let filter_query_text_project = route.hash.includes('project')
+    ? '&' + str
+    : '&sortBy=announcementDate&sortOrder=desc';
+  let filter_query_text_contractor = route.hash.includes('contractor')
+    ? '&' + str
+    : '&sortBy=totalContractAmount&sortOrder=desc';
+
+  await getGovData();
+  await getGovProject(filter_query_text_project, 10);
+  await getGovContracter(filter_query_text_contractor, 10);
+
+  setMenuList();
+
   if (route.hash.includes('project')) {
     menu.value = 'รายชื่อโครงการที่จัดทำ';
 
     selectedGovProject.value = {
       yearFrom:
         route.query['filter[budgetYear][start]']?.toString() ||
-        filterListProject.value!.budgetYears.at(0)!.toString(),
+        filterListProject.value?.budgetYears.at(0)!.toString(),
       yearTo:
         route.query['filter[budgetYear][end]']?.toString() ||
-        filterListProject.value!.budgetYears.at(-1)!.toString(),
+        filterListProject.value?.budgetYears.at(-1)!.toString(),
       projectStatus:
         route.query['filter[projectStatus]']?.toString() ||
         defaultSelectedGovProject.projectStatus,
@@ -143,9 +162,25 @@ onMounted(async () => {
         route.query['filter[agencies]']?.toString() ||
         defaultSelectedGovProject.agencies,
     };
-  } else if (route.hash.includes('contractor'))
+
+    sortByGovProject.value =
+      route.query.sortBy?.toString() || 'announcementDate';
+    sortOrderGovProject.value = route.query.sortOrder?.toString() || 'desc';
+  } else if (route.hash.includes('contractor')) {
     menu.value = 'ผู้รับจ้างที่ได้งาน';
+    sortByGovContractor.value =
+      route.query.sortBy?.toString() || 'totalContractAmount';
+    sortOrderGovContractor.value = route.query.sortOrder?.toString() || 'desc';
+  }
 });
+
+const setMenuList = () => {
+  if (govProjectList.value?.pagination?.totalItem != 0)
+    listMenu.value.push('รายชื่อโครงการที่จัดทำ');
+
+  if (govContracterList.value?.pagination?.totalItem != 0)
+    listMenu.value.push('ผู้รับจ้างที่ได้งาน');
+};
 </script>
 
 <template>
@@ -265,7 +300,12 @@ onMounted(async () => {
       </div>
     </div>
 
-    <Navigation section="gov" :activemenu="menu" @menu="(n) => (menu = n)" />
+    <Navigation
+      :menuList="listMenu"
+      section="gov"
+      :activemenu="menu"
+      @menu="(n) => (menu = n)"
+    />
 
     <div
       class="mx-auto max-w-6xl text-white"

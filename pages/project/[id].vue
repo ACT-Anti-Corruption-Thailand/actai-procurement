@@ -30,15 +30,20 @@ onBeforeMount(async () => {
   await getProjectEstimatePrice();
   await getProjectDataAndDocs();
 
+  setMenuList();
+});
+
+const setMenuList = () => {
   if (
-    projectContractor.value.length != 0 ||
-    projectContract.value.length != 0 ||
-    projectEstimatePrice.value.length != 0
+    projectContractor?.value?.length != 0 ||
+    projectContract?.value?.length != 0 ||
+    projectEstimatePrice?.value?.length != 0
   )
     listMenu.value.push('ข้อมูลเจาะลึก');
-  else if (projectDocs.value.length != 0)
+
+  if (projectDocs?.value?.length != 0)
     listMenu.value.push('เอกสารที่เกี่ยวข้อง');
-});
+};
 
 const getProjectDataAndDocs = async () => {
   const segments = route.path.split('/')[2];
@@ -132,7 +137,7 @@ const getProjectEstimatePrice = async () => {
 };
 
 onMounted(async () => {
-  if (route.hash != null) {
+  if (route.hash != '') {
     if (route.hash.includes('bidder')) {
       menu.value = 'ข้อมูลเจาะลึก';
       sortByWinner.value = route.query.sortBy?.toString() || 'contractMoney';
@@ -292,6 +297,7 @@ onMounted(async () => {
     </div>
 
     <Navigation
+      :menuList="listMenu"
       section="project"
       :activemenu="menu"
       @menu="(n) => (menu = n)"

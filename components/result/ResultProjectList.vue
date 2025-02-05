@@ -149,8 +149,12 @@ watch(sumDataFromAPI, (newX) => {
   setSumData();
 });
 
-onMounted(() => {
+onBeforeMount(() => {
   queryForDownload.value = '?' + qs.stringify(route.query);
+  if (route.hash.includes('project')) {
+    sort.value = sortByResultProject.value;
+    sortOrder.value = sortOrderResultProject.value;
+  }
   setSumData();
 });
 </script>

@@ -72,8 +72,13 @@ const setParams = (type: string, val: string) => {
   emit('search', searchParams.toString());
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   queryForDownload.value = '?' + qs.stringify(route.query);
+
+  if (route.hash.includes('bidder')) {
+    sort.value = sortByWinner.value;
+    sortOrder.value = sortOrderWinner.value;
+  }
 });
 </script>
 
@@ -252,10 +257,12 @@ onMounted(() => {
                   </td>
 
                   <td>
-                    {{ item.contracts[0].number }} <br />
-                    <span class="text-[#5E5E5E]">
-                      {{ item.contracts[0].id }}</span
-                    >
+                    <p v-if="item.contracts[0].number != null">
+                      {{ item.contracts[0].number }}
+                    </p>
+                    <p class="text-[#5E5E5E]">
+                      {{ item.contracts[0].id }}
+                    </p>
                   </td>
                   <td>
                     {{ setDate(item.contracts[0].date) }}

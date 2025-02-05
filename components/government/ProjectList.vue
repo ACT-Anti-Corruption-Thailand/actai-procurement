@@ -4,7 +4,9 @@ const isOpen = ref(false);
 import type { FilterListProject } from '~/models/data';
 import type { Project } from '../../public/src/data/search_result';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
+import { sortByGovProject, sortOrderGovProject } from '~/store/filter';
 import qs from 'qs';
+import { isLoadingGovProject } from '~/store/loading';
 
 const props = defineProps<{
   data: Project;
@@ -13,6 +15,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['change']);
 
+const route = useRoute();
 const isRisk = ref(false);
 const page = ref(10);
 const sort = ref('announcementDate');
@@ -30,6 +33,8 @@ const searchResult = computed(() => {
 });
 
 const setParams = (type: string, val: string) => {
+  queryForDownload.value = '';
+
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
   else if (type == 'filter') filterList.value = val;
@@ -37,7 +42,7 @@ const setParams = (type: string, val: string) => {
 
   searchParams.set('keyword', searchText.value);
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
   let filter = {
@@ -56,6 +61,16 @@ watch(isRisk, (val) => {
   nextTick(() => {
     setParams('risk', '');
   });
+});
+
+onBeforeMount(() => {
+  queryForDownload.value = '?' + qs.stringify(route.query);
+  searchText.value = route.query.keyword || '';
+
+  if (route.hash.includes('project')) {
+    sort.value = sortByGovProject.value;
+    sortOrder.value = sortOrderGovProject.value;
+  }
 });
 </script>
 
@@ -135,11 +150,14 @@ watch(isRisk, (val) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
-        selectedSortBy=""
-        selectedSortOrder=""
+        :selectedSortBy="sortByGovProject"
+        :selectedSortOrder="sortOrderGovProject"
       />
 
-      <div class="overflow-auto">
+      <template v-if="isLoadingGovProject">
+        <div class="p-5 b1 text-center">Loading...</div>
+      </template>
+      <div class="overflow-auto" v-else>
         <table class="table-auto text-left w-[800px] lg:w-full">
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr>

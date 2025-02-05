@@ -420,7 +420,10 @@ const onSetChartData = (section: string, data) => {
       :section="sectionChart"
     />
 
-    <div class="rounded-10 flex flex-col-mb mb-3">
+    <div
+      class="rounded-10 flex flex-col-mb mb-3"
+      v-if="totalBudgetOverall != 0"
+    >
       <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
         <h4 class="font-black">งบประมาณโครงการ</h4>
 
@@ -474,7 +477,7 @@ const onSetChartData = (section: string, data) => {
       </div>
     </div>
 
-    <div class="rounded-10 flex flex-col-mb mb-3">
+    <div class="rounded-10 flex flex-col-mb mb-3" v-if="totalProjectMap != 0">
       <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
         <h4 class="font-black">การกระจายตัวโครงการ</h4>
         <p class="b1 font-bold">

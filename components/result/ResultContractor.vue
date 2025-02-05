@@ -62,8 +62,12 @@ const setParams = (type: string, val: string) => {
   emit('search', '&' + searchParams.toString() + filterList.value, 'details');
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   queryForDownload.value = '?' + qs.stringify(route.query);
+  if (route.hash.includes('contractor')) {
+    sort.value = sortByResultContractor.value;
+    sortOrder.value = sortOrderResultContractor.value;
+  }
 });
 </script>
 

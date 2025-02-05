@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { Contractor } from '../../public/src/data/search_result';
-
+import { isLoadingGovContractor } from '~/store/loading';
+import { sortByGovContractor, sortOrderGovContractor } from '~/store/filter';
+import qs from 'qs';
+const route = useRoute();
 const props = defineProps<{
   data: Contractor;
   filterListContractor: object;
@@ -21,6 +24,7 @@ const searchResult = computed(() => {
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
+  queryForDownload.value = '';
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
@@ -29,12 +33,22 @@ const setParams = (type: string, val: string) => {
 
   searchParams.set('keyword', searchText.value);
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
   queryForDownload.value = '?' + searchParams.toString() + filterList.value;
   emit('change', '&' + searchParams.toString() + filterList.value);
 };
+
+onBeforeMount(() => {
+  queryForDownload.value = '?' + qs.stringify(route.query);
+  searchText.value = route.query.keyword || '';
+
+  if (route.hash.includes('contractor')) {
+    sort.value = sortByGovContractor.value;
+    sortOrder.value = sortOrderGovContractor.value;
+  }
+});
 </script>
 
 <template>
@@ -100,11 +114,14 @@ const setParams = (type: string, val: string) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
-        selectedSortBy=""
-        selectedSortOrder=""
+        :selectedSortBy="sortByGovContractor"
+        :selectedSortOrder="sortOrderGovContractor"
       />
 
-      <div class="overflow-auto">
+      <template v-if="isLoadingGovContractor">
+        <div class="p-5 b1 text-center">Loading...</div>
+      </template>
+      <div class="overflow-auto" v-else>
         <table class="table-auto text-left table-wrapper">
           <thead class="bg-[#8E8E8E] b3 text-white">
             <tr>

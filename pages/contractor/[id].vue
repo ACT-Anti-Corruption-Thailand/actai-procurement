@@ -41,6 +41,7 @@ const isLoadingProject = ref(false);
 const isLoadingGov = ref(false);
 const filterListProject = ref<FilterListProject>();
 const filterListGovernment = ref({});
+const listMenu = ref(['ข้อมูลทั่วไป']);
 
 const getContracterData = async () => {
   const segments = route.path.split('/')[2];
@@ -248,6 +249,35 @@ const getContracterRelatedCompany = async (yf, yt) => {
   }
 };
 
+const setMenuList = () => {
+  if (
+    contractorBudgetYearChartData.value?.yearlyAggregates?.length != 0 ||
+    totalAuction.value != 0 ||
+    totalBidding.value != 0 ||
+    totalWinner.value != 0
+  )
+    listMenu.value.push('การรับงานกับหน่วยงานรัฐ');
+
+  if (contractorAbandonProjectList.value.pagination.totalItem != 0)
+    listMenu.value.push('ประวัติการทิ้งงาน');
+
+  if (
+    contractorRelationship.value.relationshipWith?.companies > 0 ||
+    contractorRelationship.value.relationshipWith?.politicalParties > 0 ||
+    contractorRelationship.value.relationshipWith?.politicians > 0
+  )
+    listMenu.value.push('ความสัมพันธ์');
+
+  if (contractorRelatedCompanies.value.length != 0)
+    listMenu.value.push('กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน');
+
+  if (contractorProjectList.value?.pagination?.totalItem != 0)
+    listMenu.value.push('รายชื่อโครงการที่เกี่ยวข้อง');
+
+  if (contractorGovList.value?.pagination?.totalItem != 0)
+    listMenu.value.push('หน่วยงานรัฐที่เป็นผู้ว่าจ้าง');
+};
+
 onBeforeMount(async () => {
   const segments = route.path.split('/')[2];
 
@@ -288,6 +318,8 @@ onBeforeMount(async () => {
       .value!.budgetYears.at(-1)!
       .toString();
   }
+
+  setMenuList();
 });
 
 onMounted(async () => {
@@ -374,6 +406,12 @@ onMounted(async () => {
             <p>ข้อมูลทั่วไป</p>
           </div>
           <div
+            v-if="
+              contractorBudgetYearChartData?.yearlyAggregates?.length != 0 ||
+              totalAuction != 0 ||
+              totalBidding != 0 ||
+              totalWinner != 0
+            "
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -416,6 +454,7 @@ onMounted(async () => {
             <p>ความสัมพันธ์</p>
           </div>
           <div
+            v-if="contractorRelatedCompanies?.length != 0"
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -426,6 +465,7 @@ onMounted(async () => {
             <p>กลุ่มเอกชนที่เข้าร่วมประมูลด้วยกัน</p>
           </div>
           <div
+            v-if="contractorProjectList?.pagination?.totalItem != 0"
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -436,6 +476,7 @@ onMounted(async () => {
             <p>รายชื่อโครงการที่เกี่ยวข้อง</p>
           </div>
           <div
+            v-if="contractorGovList?.pagination?.totalItem != 0"
             class="p-4 border-b border-[#333333] btn-dark-4"
             :class="{
               'border-l-4 border-l-[#EC1C24] bg-black':
@@ -497,6 +538,7 @@ onMounted(async () => {
     </div>
 
     <Navigation
+      :menuList="listMenu"
       section="contractor"
       :activemenu="menu"
       @menu="(n) => (menu = n)"

@@ -28,6 +28,7 @@
 const props = defineProps<{
   section: string;
   activemenu: string;
+  menuList: string[];
 }>();
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
@@ -71,9 +72,11 @@ const activeMenuList = computed(() => {
 });
 
 onBeforeMount(() => {
-  if (props.section == 'project') menu = projectMenu;
-  else if (props.section == 'gov') menu = govMenu;
-  else menu = contracterMenu;
+  // if (props.section == 'project') menu = projectMenu;
+  // else if (props.section == 'gov') menu = govMenu;
+  // else menu = contracterMenu;
+
+  menu = props.menuList;
 });
 </script>
 
