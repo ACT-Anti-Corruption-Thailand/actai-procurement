@@ -154,6 +154,8 @@ onBeforeMount(() => {
   if (route.hash.includes('project')) {
     sort.value = sortByResultProject.value;
     sortOrder.value = sortOrderResultProject.value;
+  } else {
+    queryForDownload.value = '?search=' + route.query.search;
   }
   setSumData();
 });

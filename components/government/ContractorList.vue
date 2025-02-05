@@ -47,6 +47,8 @@ onBeforeMount(() => {
   if (route.hash.includes('contractor')) {
     sort.value = sortByGovContractor.value;
     sortOrder.value = sortOrderGovContractor.value;
+  } else {
+    queryForDownload.value = '';
   }
 });
 </script>

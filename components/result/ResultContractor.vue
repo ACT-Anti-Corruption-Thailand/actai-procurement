@@ -63,10 +63,12 @@ const setParams = (type: string, val: string) => {
 };
 
 onBeforeMount(() => {
-  queryForDownload.value = '?' + qs.stringify(route.query);
   if (route.hash.includes('contractor')) {
+    queryForDownload.value = '?' + qs.stringify(route.query);
     sort.value = sortByResultContractor.value;
     sortOrder.value = sortOrderResultContractor.value;
+  } else {
+    queryForDownload.value = '?search=' + route.query.search;
   }
 });
 </script>

@@ -59,10 +59,12 @@ const setParams = (type: string, val: string) => {
 };
 
 onBeforeMount(() => {
-  queryForDownload.value = '?' + qs.stringify(route.query);
   if (route.hash.includes('government')) {
+    queryForDownload.value = '?' + qs.stringify(route.query);
     sort.value = sortByResultGov.value;
     sortOrder.value = sortOrderResultGov.value;
+  } else {
+    queryForDownload.value = '?search=' + route.query.search;
   }
 });
 </script>

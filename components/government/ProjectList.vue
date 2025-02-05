@@ -70,6 +70,8 @@ onBeforeMount(() => {
   if (route.hash.includes('project')) {
     sort.value = sortByGovProject.value;
     sortOrder.value = sortOrderGovProject.value;
+  } else {
+    queryForDownload.value = '';
   }
 });
 </script>

@@ -78,6 +78,8 @@ onBeforeMount(() => {
   if (route.hash.includes('bidder')) {
     sort.value = sortByWinner.value;
     sortOrder.value = sortOrderWinner.value;
+  } else {
+    queryForDownload.value = '';
   }
 });
 </script>
