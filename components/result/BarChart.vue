@@ -23,9 +23,23 @@
 
       <template v-else>
         <p class="b1 font-bold">
-          รวม
-          {{ totalChart.toLocaleString() }}
-          {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }}
+          <template v-if="props.titleGov == 'วงเงินสัญญา'">
+            รวมทุกปี
+            {{ totalChart.toLocaleString() }}
+            บาท*<br />
+            <span class="b4 text-[#8E8E8E] font-normal"
+              >*หมายเหตุ : วงเงินสัญญาที่แสดงอยู่นี้
+              เป็นวงเงินสัญญารวมของโครงการ
+              โดยโครงการสามารถมีผู้รับจ้างได้มากกว่า 1 ราย
+              จึงมีโอกาสที่วงเงินสัญญาเฉพาะของผู้รับจ้างรายนี้
+              จะน้อยกว่าที่แสดงอยู่</span
+            >
+          </template>
+          <template v-else>
+            รวม
+            {{ totalChart.toLocaleString() }}
+            {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }}</template
+          >
         </p>
 
         <RadioGroup
@@ -38,7 +52,11 @@
             v-slot="{ checked }"
             value="ความเสี่ยงทุจริต"
             class="radio-option option-1"
-            :class="typeChart == 'ความเสี่ยงทุจริต' ? 'bg-[#D9D9D9]' : ''"
+            :class="
+              typeChart == 'ความเสี่ยงทุจริต'
+                ? 'bg-[#D9D9D9] '
+                : 'text-[#7F7F7F]'
+            "
             @click="$emit('changeChartData', typeChart)"
           >
             <span>ความเสี่ยงทุจริต</span>
@@ -47,7 +65,11 @@
             v-slot="{ checked }"
             value="สถานะโครงการล่าสุด"
             class="radio-option"
-            :class="typeChart == 'สถานะโครงการล่าสุด' ? 'bg-[#D9D9D9]' : ''"
+            :class="
+              typeChart == 'สถานะโครงการล่าสุด'
+                ? 'bg-[#D9D9D9]'
+                : 'text-[#7F7F7F]'
+            "
             @click="$emit('changeChartData', typeChart)"
           >
             <span>สถานะโครงการล่าสุด</span>
@@ -56,7 +78,9 @@
             v-slot="{ checked }"
             value="วิธีการจัดหา"
             class="radio-option"
-            :class="typeChart == 'วิธีการจัดหา' ? 'bg-[#D9D9D9]' : ''"
+            :class="
+              typeChart == 'วิธีการจัดหา' ? 'bg-[#D9D9D9]' : 'text-[#7F7F7F]'
+            "
             @click="$emit('changeChartData', typeChart)"
           >
             <span>วิธีการจัดหา</span>
@@ -64,10 +88,15 @@
         </RadioGroup>
 
         <p class="b4 text-[#8E8E8E] text-right">
-          หน่วย :
-          {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }} (%ของ{{
-            props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ'
-          }}ทั้งหมด)
+          <template v-if="props.titleGov == 'วงเงินสัญญา'">
+            หน่วย : บาท (% ของวงเงินสัญญาทั้งหมด)
+          </template>
+          <template v-else>
+            หน่วย :
+            {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }} (% ของ{{
+              props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ'
+            }}ทั้งหมด)</template
+          >
         </p>
 
         <div
@@ -115,11 +144,30 @@
     </div>
     <div class="py-7 pr-7 pl-10 bg-[#FFFFFF] chart-wrapper sm:w-2/3 relative">
       <p class="yaxis-text">
-        {{ props.title == 'งบประมาณ' ? 'บาท' : 'จำนวนโครงการ' }}
+        <template v-if="props.title == 'สถานะสัญญา'">สัญญา</template>
+        <template v-else>
+          {{
+            props.title == 'งบประมาณ' || props.titleGov == 'วงเงินสัญญา'
+              ? 'บาท'
+              : 'จำนวนโครงการ'
+          }}
+        </template>
       </p>
 
       <p class="text-[#8E8E8E] text-center mb-3 b2">
-        {{ setChartTitle }}
+        <template v-if="props.titleGov == 'วงเงินสัญญา'"
+          >วงเงินสัญญารวมทุกโครงการในแต่ละปีงบประมาณ</template
+        >
+        <template
+          v-else-if="
+            props.titleGov == 'จำนวนโครงการที่ได้งาน' ||
+            props.titleGov == 'จำนวนโครงการ'
+          "
+          >{{ setChartTitleGovContractor }}</template
+        >
+        <template v-else>
+          {{ setChartTitle }}
+        </template>
       </p>
 
       <div>
@@ -217,8 +265,13 @@ const chartOptions = ref({
           let total = a.reduce((a, b) => a + b, 0);
           totalByData.value = total;
 
-          if (props.section != 'budget')
-            return total.toLocaleString() + ' โครงการ';
+          let unit = '';
+          if (props.title == 'สถานะสัญญา') unit = ' สัญญา';
+          else if (props.title == 'งบประมาณ' || props.titleGov == 'วงเงินสัญญา')
+            unit = ' บาท';
+          else unit = ' โครงการ';
+
+          if (props.section != 'budget') return total.toLocaleString() + unit;
         },
         label: function (context) {
           if (props.section != 'budget') {
@@ -307,8 +360,17 @@ const setChartTitle = computed(() => {
   else if (props.title == 'สถานะโครงการ')
     return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะโครงการล่าสุด*';
   else if (props.title == 'สถานะสัญญา')
-    return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะโครงการล่าสุด*';
+    return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะสัญญาล่าสุด*';
   else return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามวิธีการจัดหา';
+});
+
+const setChartTitleGovContractor = computed(() => {
+  if (props.title == 'ความเสี่ยงทุจริต')
+    return 'จำนวนโครงการที่เกิดขึ้นใหม่ในแต่ละปีงบประมาณ แบ่งสัดส่วนตามความเสี่ยงทุจริต';
+  if (props.title == 'สถานะโครงการล่าสุด')
+    return 'จำนวนโครงการที่เกิดขึ้นใหม่ในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะโครงการล่าสุด*';
+  else if (props.title == 'วิธีการจัดหา')
+    return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามวิธีการจัดหา';
 });
 
 const totalChart = computed(() => {

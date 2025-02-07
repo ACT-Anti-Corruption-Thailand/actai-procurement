@@ -30,6 +30,7 @@
                 )}.webp`"
                 alt=""
                 class="w-8 h-8 rounded-full border-2 border-black"
+                @error="replaceByDefaultPoliticiansImg"
               />
             </div>
             <SafeExternalLink
@@ -172,6 +173,7 @@
               alt=""
               class="w-8 h-8 rounded-full border-2 border-black"
               :alt="item"
+              @error="replaceByDefaultPartiesImg"
             />
 
             <p class="b1 font-bold">{{ item }}</p>
@@ -199,90 +201,20 @@
 <script setup lang="ts">
 import SafeExternalLink from '../SafeExternalLink.vue';
 import type { ContracterRelationship } from '../../public/src/data/data_details';
+import defaultPoliticianImg from '../../public/src/images/person_fallback.svg';
+import defaultPartiesImg from '../../public/src/images/party_fallback.svg';
 
 const props = defineProps<{
   data: ContracterRelationship;
   companyName: string;
 }>();
 
-const relationshipWith = {
-  politicians: [
-    {
-      name: 'อนุทิน ชาญวีรกูล',
-      relationships: [
-        {
-          relationshipType: 'มีที่อยู่เดียวกับองค์กร',
-          relatedTo: null,
-        },
-      ],
-    },
-    {
-      name: 'กัลยา โสภณพนิช',
-      relationships: [
-        {
-          relationshipType: 'เป็น/เคยเป็นกรรมการ/หุ้นส่วน',
-          relatedTo: null,
-        },
-      ],
-    },
-    {
-      name: 'อภิชัย เตชะอุบล',
-      relationships: [
-        {
-          relationshipType: 'เป็นเครือญาติของกรรมการ/หุ้นส่วน',
-          relatedTo: [
-            'พลเอกสุรพันธ์ สัจจิพานนท์',
-            'นายเรวัต ฉ่ำเฉลิม',
-            'นายวัลลภ รุ่งกิจวรเสถียร',
-          ],
-        },
-      ],
-    },
-    // {
-    //   name: 'พลเอกสุรพันธ์ สัจจิพานนท์',
-    //   relationships: [
-    //     {
-    //       relationshipType: 'มีที่อยู่เดียวกับองค์กร',
-    //       relatedTo: null,
-    //     },
-    //     {
-    //       relationshipType: 'เป็น/เคยเป็นกรรมการ/หุ้นส่วน',
-    //       relatedTo: null,
-    //     },
-    //     {
-    //       relationshipType: 'เป็นเครือญาติของกรรมการ/หุ้นส่วน',
-    //       relatedTo: [
-    //         'พลเอกสุรพันธ์ สัจจิพานนท์',
-    //         'นายเรวัต ฉ่ำเฉลิม',
-    //         'นายวัลลภ รุ่งกิจวรเสถียร',
-    //       ],
-    //     },
-    //   ],
-    // },
-  ],
-  companies: [
-    {
-      id: '14',
-      name: 'บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)',
-      relationships: [
-        {
-          relationshipType: 'มีกรรมการ/หุ้นส่วนคนเดียวกัน',
-          relatedTo: ['นายเรวัต ฉ่ำเฉลิม'],
-        },
-      ],
-    },
-    {
-      id: '15',
-      name: 'บริษัท แพลนเน็ต คอมมิวนิเคชั่น เอเชีย จำกัด (มหาชน)',
-      relationships: [
-        {
-          relationshipType: 'มีกรรมการ/หุ้นส่วนคนเดียวกัน',
-          relatedTo: ['พลเอกสุรพันธ์ สัจจิพานนท์'],
-        },
-      ],
-    },
-  ],
-  politicalParties: ['ประชาธิปัตย์', 'ก้าวไกล'],
+const replaceByDefaultPoliticiansImg = (e) => {
+  e.target.src = defaultPoliticianImg;
+};
+
+const replaceByDefaultPartiesImg = (e) => {
+  e.target.src = defaultPartiesImg;
 };
 </script>
 

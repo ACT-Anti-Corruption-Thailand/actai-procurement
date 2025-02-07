@@ -266,61 +266,103 @@ const onSetChartData = (section: string, data) => {
     ];
 
     const colorResourceMethod = [
-      '#CE5700',
-      '#F08C06',
-      '#F8B60E',
-      '#FEEDAF',
-      '#6DD5D5',
-      '#2EA0DF',
-      '#7051B4',
-      '#EF9CC4',
-      '#D83D88',
-      '#8A004B',
+      {
+        name: 'ประกวดราคา',
+        color: '#CE5700',
+      },
+      {
+        name: 'ประกวดราคานานาชาติ',
+        color: '#F08C06',
+      },
+      {
+        name: 'ประกวดราคาอิเล็กทรอนิกส์ (e-bidding)',
+        color: '#F8B60E',
+      },
+      {
+        name: 'ประกวดราคาด้วยวิธีการทางอิเล็กทรอนิกส์โดยผ่านผู้ให้บริการตลาดกลาง',
+        color: '#FEEDAF',
+      },
+      {
+        name: 'ตกลงราคา',
+        color: '#6DD5D5',
+      },
+      {
+        name: 'สอบราคา',
+        color: '#2EA0DF',
+      },
+      {
+        name: 'ตลาดอิเล็กทรอนิกส์ (e-market)',
+        color: '#7051B4',
+      },
+      {
+        name: 'พิเศษ',
+        color: '#EF9CC4',
+      },
+      {
+        name: 'คัดเลือก',
+        color: '#D83D88',
+      },
+      {
+        name: 'เฉพาะเจาะจง',
+        color: '#8A004B',
+      },
     ];
 
-    const chartData1 = projectResourceMethod
-      .map((name, i) => {
-        const chartdata = data.map(
-          (d) =>
-            d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
-        );
-
-        return {
-          label: name,
-          backgroundColor: '',
-          sum: chartdata.reduce((sum, num) => sum + num, 0),
-          data: chartdata,
-          isChecked: true,
-        };
-      })
-      .sort((a, z) => z.sum - a.sum);
-
-    const a = chartData1.slice(0, 9);
-    a.forEach((element, i) => {
-      element.backgroundColor = colorResourceMethod[i];
+    const grouped = colorResourceMethod.map((c) => {
+      return c.name;
     });
-    const b = chartData1.slice(9);
+
+    const res = grouped.sort((a, b) => grouped.indexOf(b) - grouped.indexOf(a));
+
+    let others = projectResourceMethod.filter((val) => !grouped.includes(val));
+
+    let chartData1 = res.map((name, i) => {
+      const chartdata = data.map(
+        (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
+      );
+
+      let c = colorResourceMethod.filter((x) => x.name == name);
+
+      return {
+        label: name,
+        backgroundColor: c[0].color,
+        sum: chartdata.reduce((sum, num) => sum + num, 0),
+        data: chartdata,
+        isChecked: true,
+      };
+    });
+
+    let chartData2 = others.map((name, i) => {
+      const chartdata = data.map(
+        (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
+      );
+
+      return {
+        sum: chartdata.reduce((sum, num) => sum + num, 0),
+        data: chartdata,
+      };
+    });
 
     const c = {
       label: 'อื่นๆ',
-      backgroundColor: '#5E5E5E',
-      data: b.reduce((sum, years) => {
+      backgroundColor: '#DADADA',
+      data: chartData2.reduce((sum, years) => {
         years.data.forEach((num, i) => {
           sum[i] += num;
         });
         return sum;
-      }, new Array(b[0].data.length).fill(0)),
+      }, new Array(chartData2[0].data.length).fill(0)),
       sum: 0,
       isChecked: true,
     };
 
     c.sum = c.data.reduce((sum, num) => sum + num, 0);
 
-    a.forEach((element) => {
+    chartDataSet5.value.push(c);
+
+    chartData1.forEach((element) => {
       chartDataSet5.value.push(element);
     });
-
-    chartDataSet5.value.push(c);
   }
 };
 </script>

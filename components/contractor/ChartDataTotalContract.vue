@@ -157,9 +157,7 @@ const onSetChartData = (section: string, data) => {
   } else {
     const projectResourceMethod = [
       ...new Set(
-        data
-          .flatMap((o) => o.contractMoneyAggregateBy.resourcingMethod)
-          .map((o) => o.name)
+        data.flatMap((o) => o.aggregateBy.resourcingMethod).map((o) => o.name)
       ),
     ];
 
@@ -216,10 +214,7 @@ const onSetChartData = (section: string, data) => {
 
     let chartData1 = res.map((name, i) => {
       const chartdata = data.map(
-        (d) =>
-          d.contractMoneyAggregateBy.resourcingMethod.find(
-            (d) => d.name == name
-          ).total
+        (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
       );
 
       let c = colorResourceMethod.filter((x) => x.name == name);
@@ -235,10 +230,7 @@ const onSetChartData = (section: string, data) => {
 
     let chartData2 = others.map((name, i) => {
       const chartdata = data.map(
-        (d) =>
-          d.contractMoneyAggregateBy.resourcingMethod.find(
-            (d) => d.name == name
-          ).total
+        (d) => d.aggregateBy.resourcingMethod.find((d) => d.name == name).total
       );
 
       return {

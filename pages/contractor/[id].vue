@@ -262,9 +262,10 @@ const setMenuList = () => {
     listMenu.value.push('ประวัติการทิ้งงาน');
 
   if (
-    contractorRelationship.value.relationshipWith?.companies > 0 ||
-    contractorRelationship.value.relationshipWith?.politicalParties > 0 ||
-    contractorRelationship.value.relationshipWith?.politicians > 0
+    contractorRelationship.value.relationshipWith?.companies?.length > 0 ||
+    contractorRelationship.value.relationshipWith?.politicalParties?.length >
+      0 ||
+    contractorRelationship.value.relationshipWith?.politicians?.length > 0
   )
     listMenu.value.push('ความสัมพันธ์');
 
@@ -446,9 +447,10 @@ onMounted(async () => {
             }"
             @click="menu = 'ความสัมพันธ์'"
             v-if="
-              contractorRelationship.relationshipWith?.companies > 0 ||
-              contractorRelationship.relationshipWith?.politicalParties > 0 ||
-              contractorRelationship.relationshipWith?.politicians > 0
+              contractorRelationship.relationshipWith?.companies?.length > 0 ||
+              contractorRelationship.relationshipWith?.politicalParties
+                ?.length > 0 ||
+              contractorRelationship.relationshipWith?.politicians?.length > 0
             "
           >
             <p>ความสัมพันธ์</p>
