@@ -20,6 +20,8 @@ export interface FilterListProject {
   resourcingMethod: string[];
   resourcingType: string[];
   contractorType: string[];
+  relatedAgencies?: string[];
+  relatedCompanies?: string[];
 }
 
 export interface ChartDataSet<T = unknown> {

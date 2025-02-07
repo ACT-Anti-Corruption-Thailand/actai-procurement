@@ -1,29 +1,53 @@
 <script setup lang="ts">
 import type { Government } from '../../public/src/data/search_result';
+import { sortByContractorGov, sortOrderContractorGov } from '~/store/filter';
+import { isLoadingContractorGov } from '~/store/loading';
+import qs from 'qs';
 
 const props = defineProps<{
   data: Government;
   isLoading: boolean;
+  filterListGovernment: object;
 }>();
 
+const route = useRoute();
 const emit = defineEmits(['change']);
 const page = ref(10);
 const sort = ref('totalContractAmount');
-
+const sortOrder = ref('desc');
+const filterList = ref('');
+const queryForDownload = ref('');
 const searchText = ref('');
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
+  queryForDownload.value = '';
 
   if (type == 'sortBy') sort.value = val;
-  else if (type == 'page') page.value += val;
+  else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
+  else if (type == 'filter') filterList.value = val;
+  else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('keyword', searchText.value);
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
+  searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  emit('change', '&' + searchParams.toString(), page.value);
+  queryForDownload.value = '?' + searchParams.toString() + filterList.value;
+  emit('change', '&' + searchParams.toString() + filterList.value);
 };
+
+onBeforeMount(() => {
+  queryForDownload.value = '?' + qs.stringify(route.query);
+  searchText.value = route.query.keyword || '';
+
+  if (route.hash.includes('government')) {
+    sort.value = sortByContractorGov.value;
+    sortOrder.value = sortOrderContractorGov.value;
+  } else {
+    queryForDownload.value = '';
+  }
+});
 </script>
 
 <template>
@@ -48,7 +72,11 @@ const setParams = (type: string, val: string) => {
             />
           </div>
         </div>
-        <!-- <FilterResultContractor section="หน่วยงานรัฐที่เป็นผู้ว่าจ้าง" /> -->
+        <FilterPopupContractor
+          section="หน่วยงานรัฐที่เป็นผู้ว่าจ้าง"
+          @change="setParams"
+          :list="props.filterListGovernment"
+        />
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
@@ -59,9 +87,14 @@ const setParams = (type: string, val: string) => {
           วงเงินสัญญา
           <span v-if="props.data?.summary != null">
             {{ setNumber(props.data?.summary?.totalContractMoney) }}</span
-          >บาท
+          >
+          บาท
         </h5>
-        <DownloadAndCopy section="government" filterList="" isShowCopyBtn />
+        <DownloadAndCopy
+          section="agency"
+          :filterList="queryForDownload"
+          isShowCopyBtn
+        />
       </div>
 
       <SortBy
@@ -79,11 +112,14 @@ const setParams = (type: string, val: string) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
-        selectedSortBy=""
-        selectedSortOrder=""
+        :selectedSortBy="sortByContractorGov"
+        :selectedSortOrder="sortOrderContractorGov"
       />
 
-      <template v-if="!isLoading">
+      <template v-if="isLoadingContractorGov">
+        <div class="p-5 b1 text-center">Loading...</div>
+      </template>
+      <template v-else>
         <div class="overflow-auto">
           <table class="table-auto text-left table-wrapper">
             <thead class="bg-[#8E8E8E] b3 text-white">
@@ -118,7 +154,6 @@ const setParams = (type: string, val: string) => {
           </table>
         </div>
       </template>
-      <template v-else><p class="p-5 text-center">Loading..</p></template>
 
       <p class="b2 text-center my-3">
         {{ props.data?.searchResult?.length }} /

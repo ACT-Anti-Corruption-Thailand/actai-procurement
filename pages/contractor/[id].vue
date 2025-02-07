@@ -22,9 +22,19 @@ import type { FilterListProject } from '~/models/data';
 
 import { chartdata } from '~/store/chartData';
 import {
-  selectedContractorGov,
+  defaultSelectedContractorProject,
+  defaultSelectedContractorGov,
   selectedContractorProject,
+  selectedContractorGov,
+  sortByContractorProject,
+  sortOrderContractorProject,
+  sortByContractorGov,
+  sortOrderContractorGov,
 } from '~/store/filter';
+import {
+  isLoadingContractorProject,
+  isLoadingContractorGov,
+} from '~/store/loading';
 
 const contractorData = ref<ContractorDetails>([]);
 const contractorAbandonProjectList = ref<Project>([]);
@@ -119,7 +129,8 @@ const getContracterAuctionData = async () => {
 };
 
 const getContracterProject = async (q) => {
-  isLoadingProject.value = true;
+  isLoadingContractorProject.value = true;
+
   const segments = route.path.split('/')[2];
 
   const params = new URLSearchParams();
@@ -145,8 +156,8 @@ const getContracterProject = async (q) => {
   if (res.ok) {
     const data = await res.json();
     contractorProjectList.value = JSON.parse(JSON.stringify(data)) || [];
-    isLoadingProject.value = false;
   }
+  isLoadingContractorProject.value = false;
 };
 
 const getContracterAbandonProject = async (q, n) => {
@@ -181,12 +192,12 @@ const getContracterAbandonProject = async (q, n) => {
 };
 
 const getContracterGov = async (q, n) => {
-  isLoadingGov.value = true;
+  isLoadingContractorGov.value = true;
+
   const segments = route.path.split('/')[2];
 
   const params = new URLSearchParams();
   params.set('page', 1);
-  params.set('pageSize', n);
 
   let filter = {
     companyId: segments,
@@ -209,6 +220,8 @@ const getContracterGov = async (q, n) => {
     contractorGovList.value = JSON.parse(JSON.stringify(data)) || [];
     isLoadingGov.value = false;
   }
+
+  isLoadingContractorGov.value = false;
 };
 
 const getContracterRelationship = async () => {
@@ -280,32 +293,18 @@ const setMenuList = () => {
 };
 
 onBeforeMount(async () => {
+  isLoadingContractorProject.value = true;
+  isLoadingContractorGov.value = true;
+
   const segments = route.path.split('/')[2];
-
-  let company = {
-    companyId: segments,
-  };
-
-  var str = qs.stringify({ company });
-
-  contractorBudgetYearChartData.value = await getChartData(
-    config.public.apiUrl,
-    str
-  );
-  chartdata.value = contractorBudgetYearChartData.value;
-
-  await getContracterData();
-  await getContracterAuctionData();
-  await getContracterRelationship();
-  await getContracterRelatedCompany('2560', '2568');
-  await getContracterAbandonProject('', 10);
-  await getContracterProject('&sortBy=announcementDate&sortOrder=desc', 10);
-  await getContracterGov('&sortBy=totalContractAmount&sortOrder=desc', 10);
   let filter = await getFilter(config.public.apiUrl, '?companyId=' + segments);
   filterListProject.value = filter[0];
   filterListGovernment.value = filter[1];
 
-  if (Object.keys(route.query).length == 0) {
+  if (
+    route.query['filter[budgetYear][start]'] == null ||
+    route.query['filter[budgetYear][end]'] == null
+  ) {
     selectedContractorGov.value.yearFrom = filterListProject
       .value!.budgetYears.at(0)!
       .toString();
@@ -320,7 +319,89 @@ onBeforeMount(async () => {
       .toString();
   }
 
+  let company = {
+    companyId: segments,
+  };
+
+  var str = qs.stringify({ company });
+
+  const { ...filter_query } = route.query;
+  let str2 = qs.stringify(filter_query);
+  let filter_query_text_project = route.hash.includes('project')
+    ? '&' + str2
+    : '&sortBy=announcementDate&sortOrder=desc';
+  let filter_query_text_gov = route.hash.includes('government')
+    ? '&' + str2
+    : '&sortBy=totalContractAmount&sortOrder=desc';
+
+  contractorBudgetYearChartData.value = await getChartData(
+    config.public.apiUrl,
+    str
+  );
+  chartdata.value = contractorBudgetYearChartData.value;
+
+  await getContracterData();
+  await getContracterAuctionData();
+  await getContracterRelationship();
+  await getContracterRelatedCompany('2560', '2568');
+  await getContracterAbandonProject('', 10);
+  await getContracterProject(filter_query_text_project, 10);
+  await getContracterGov(filter_query_text_gov, 10);
+
   setMenuList();
+
+  if (route.hash.includes('project')) {
+    menu.value = 'รายชื่อโครงการที่เกี่ยวข้อง';
+
+    selectedContractorProject.value = {
+      yearFrom:
+        route.query['filter[budgetYear][start]']?.toString() ||
+        filterListProject.value?.budgetYears.at(0)!.toString(),
+      yearTo:
+        route.query['filter[budgetYear][end]']?.toString() ||
+        filterListProject.value?.budgetYears.at(-1)!.toString(),
+      agencies:
+        route.query['filter[agencies]']?.toString() ||
+        defaultSelectedContractorProject.agencies,
+      projectStatus:
+        route.query['filter[projectStatus]']?.toString() ||
+        defaultSelectedContractorProject.projectStatus,
+      province:
+        route.query['filter[province]']?.toString() ||
+        defaultSelectedContractorProject.province,
+      resourcingMethod:
+        route.query['filter[resourcingMethod]']?.toString() ||
+        defaultSelectedContractorProject.resourcingMethod,
+      agencyId:
+        route.query['filter[agencyId]']?.toString() ||
+        defaultSelectedContractorProject.agencyId,
+      hasCorruptionRisk:
+        route.query['filter[hasCorruptionRisk]'] === 'true' ||
+        defaultSelectedContractorProject.hasCorruptionRisk,
+    };
+
+    sortByContractorProject.value =
+      route.query.sortBy?.toString() || 'announcementDate';
+    sortOrderContractorProject.value =
+      route.query.sortOrder?.toString() || 'desc';
+  } else if (route.hash.includes('government')) {
+    selectedContractorGov.value = {
+      yearFrom:
+        route.query['filter[budgetYear][start]']?.toString() ||
+        filterListProject.value?.budgetYears.at(0)!.toString(),
+      yearTo:
+        route.query['filter[budgetYear][end]']?.toString() ||
+        filterListProject.value?.budgetYears.at(-1)!.toString(),
+      resourcingMethod:
+        route.query['filter[resourcingMethod]']?.toString() ||
+        defaultSelectedContractorGov.resourcingMethod,
+    };
+
+    menu.value = 'หน่วยงานรัฐที่เป็นผู้ว่าจ้าง';
+    sortByContractorGov.value =
+      route.query.sortBy?.toString() || 'totalContractAmount';
+    sortOrderContractorGov.value = route.query.sortOrder?.toString() || 'desc';
+  }
 });
 
 onMounted(async () => {

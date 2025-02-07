@@ -90,16 +90,6 @@ const totalProjectMap = computed(() => {
 const mapData = computed(() => {
   if (mapDataList.value != null) {
     if (!isCorrupt.value) {
-      console.log(
-        mapDataList.value
-          .filter((x) => x.totalProject != 0)
-          .map((o) => ({
-            name: o.name,
-            totalProject: o.totalProject,
-            totalBudgetMoney: o.totalBudgetMoney,
-          }))
-      );
-
       return mapDataList.value
         .filter((x) => x.totalProject != 0)
         .map((o) => ({
@@ -108,16 +98,6 @@ const mapData = computed(() => {
           totalBudgetMoney: o.totalBudgetMoney,
         }));
     } else {
-      console.log(
-        mapDataList.value
-          .filter((x) => x.totalCorruptionProject != 0)
-          .map((o) => ({
-            name: o.name,
-            totalProject: o.totalCorruptionProject,
-            totalBudgetMoney: o.totalCorruptionProjectBudget,
-          }))
-      );
-
       return mapDataList.value
         .filter((x) => x.totalCorruptionProject != 0)
         .map((o) => ({

@@ -16,7 +16,6 @@ const props = defineProps<{
 const emit = defineEmits(['change']);
 
 const route = useRoute();
-const isRisk = ref(false);
 const page = ref(10);
 const sort = ref('announcementDate');
 const sortOrder = ref('desc');
@@ -45,23 +44,9 @@ const setParams = (type: string, val: string) => {
   searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  let filter = {
-    hasCorruptionRisk: isRisk.value,
-  };
-
-  var str = qs.stringify({ filter });
-
   queryForDownload.value = '?' + searchParams.toString() + filterList.value;
-  emit('change', '&' + searchParams.toString() + filterList.value + '&' + str);
+  emit('change', '&' + searchParams.toString() + filterList.value);
 };
-
-watch(isRisk, (val) => {
-  page.value = 10;
-
-  nextTick(() => {
-    setParams('risk', '');
-  });
-});
 
 onBeforeMount(() => {
   queryForDownload.value = '?' + qs.stringify(route.query);
@@ -98,24 +83,11 @@ onBeforeMount(() => {
             />
           </div>
         </div>
-        <!-- <FilterPopupGovernment
+        <FilterPopupGovernment
           section="รายชื่อโครงการที่จัดทำ"
           @change="setParams"
           :list="props.filterListProject"
-        /> -->
-      </div>
-
-      <div class="mt-3">
-        <input
-          type="checkbox"
-          name=""
-          id="isRisk"
-          v-model="isRisk"
-          class="text-black ring-0"
         />
-        <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
-          >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
-        >
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">

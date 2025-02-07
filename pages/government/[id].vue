@@ -109,17 +109,20 @@ onBeforeMount(async () => {
   filterListProject.value = filter[0];
   filterListContractor.value = filter[2];
 
-  if (Object.keys(route.query).length == 0) {
+  if (
+    route.query['filter[budgetYear][start]'] == null ||
+    route.query['filter[budgetYear][end]'] == null
+  ) {
     selectedGovProject.value.yearFrom = filterListProject
       .value!.budgetYears.at(0)!
       .toString();
     selectedGovProject.value.yearTo = filterListProject
       .value!.budgetYears.at(-1)!
       .toString();
-    selectedGovContractor.value.yearFrom = filterListProject
+    selectedGovContractor.value.yearFrom = filterListContractor
       .value!.budgetYears.at(0)!
       .toString();
-    selectedGovContractor.value.yearTo = filterListProject
+    selectedGovContractor.value.yearTo = filterListContractor
       .value!.budgetYears.at(-1)!
       .toString();
   }
@@ -158,15 +161,30 @@ onBeforeMount(async () => {
       resourcingMethod:
         route.query['filter[resourcingMethod]']?.toString() ||
         defaultSelectedGovProject.resourcingMethod,
-      agencies:
-        route.query['filter[agencies]']?.toString() ||
-        defaultSelectedGovProject.agencies,
+      companyId:
+        route.query['filter[companyId]']?.toString() ||
+        defaultSelectedGovProject.companyId,
+      hasCorruptionRisk:
+        route.query['filter[hasCorruptionRisk]'] === 'true' ||
+        defaultSelectedGovProject.hasCorruptionRisk,
     };
 
     sortByGovProject.value =
       route.query.sortBy?.toString() || 'announcementDate';
     sortOrderGovProject.value = route.query.sortOrder?.toString() || 'desc';
   } else if (route.hash.includes('contractor')) {
+    selectedGovContractor.value = {
+      yearFrom:
+        route.query['filter[budgetYear][start]']?.toString() ||
+        filterListProject.value?.budgetYears.at(0)!.toString(),
+      yearTo:
+        route.query['filter[budgetYear][end]']?.toString() ||
+        filterListProject.value?.budgetYears.at(-1)!.toString(),
+      resourcingMethod:
+        route.query['filter[resourcingMethod]']?.toString() ||
+        defaultSelectedGovContractor.resourcingMethod,
+    };
+
     menu.value = 'ผู้รับจ้างที่ได้งาน';
     sortByGovContractor.value =
       route.query.sortBy?.toString() || 'totalContractAmount';

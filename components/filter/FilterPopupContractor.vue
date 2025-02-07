@@ -27,8 +27,20 @@ const emit = defineEmits(['change', 'count']);
 
 const defaultSelectedWithYear = computed(() => ({
   ...defaultSelectedContractorProject,
-  yearFrom: props.list?.budgetYears[0].toString(),
-  yearTo: props.list?.budgetYears.at(-1)!.toString(),
+  yearFrom: props.list != null ? props.list?.budgetYears[0]?.toString() : '',
+  yearTo: props.list != null ? props.list?.budgetYears.at(-1)!.toString() : '',
+}));
+
+const defaultSelectedWithYearGov = computed(() => ({
+  yearFrom:
+    Object.keys(props.list).length != 0
+      ? props.list?.budgetYears[0]?.toString()
+      : '',
+  yearTo:
+    Object.keys(props.list).length != 0
+      ? props.list?.budgetYears.at(-1)!.toString()
+      : '',
+  resourcingMethod: defaultSelectedContractorGov.resourcingMethod,
 }));
 
 const isOpen = ref(false);
@@ -44,7 +56,7 @@ const filterCount = computed(() => {
       );
     default:
       return countPropertyDiff(
-        defaultSelectedContractorGov,
+        defaultSelectedWithYearGov.value,
         selectedContractorGov.value
       );
   }
@@ -77,6 +89,11 @@ const searchByResult = () => {
   let filter = {};
 
   if (props.section == 'รายชื่อโครงการที่เกี่ยวข้อง') {
+    let companyList = props.list.relatedAgencies?.filter((person) =>
+      selectedContractorProject.value.agencyId.includes(person.name)
+    );
+    let companyIdList = companyList?.flatMap((o) => o.id);
+
     filter = {
       budgetYear: {
         start: selectedContractorProject.value.yearFrom,
@@ -86,6 +103,10 @@ const searchByResult = () => {
         selectedContractorProject.value.agencies == 'ทุกหน่วยงาน'
           ? undefined
           : selectedContractorProject.value.agencies,
+      projectStatus:
+        selectedContractorProject.value.projectStatus == 'ทุกสถานะ'
+          ? undefined
+          : selectedContractorProject.value.projectStatus,
       province:
         selectedContractorProject.value.province == 'ทุกจังหวัด'
           ? undefined
@@ -94,9 +115,18 @@ const searchByResult = () => {
         selectedContractorProject.value.resourcingMethod == 'ทุกวิธี'
           ? undefined
           : selectedContractorProject.value.resourcingMethod,
+      agencyId:
+        selectedContractorProject.value.agencyId == 'ทุกองค์กร'
+          ? undefined
+          : companyIdList?.toString(),
+      hasCorruptionRisk: selectedContractorProject.value.hasCorruptionRisk,
     };
   } else {
     filter = {
+      budgetYear: {
+        start: selectedContractorGov.value.yearFrom,
+        end: selectedContractorGov.value.yearTo,
+      },
       resourcingMethod:
         selectedContractorGov.value.resourcingMethod == 'ทุกวิธี'
           ? undefined
@@ -116,7 +146,9 @@ const clearFilter = () => {
   if (props.section == 'รายชื่อโครงการที่เกี่ยวข้อง') {
     selectedContractorProject.value = { ...defaultSelectedWithYear.value };
   } else {
-    selectedContractorGov.value = { ...defaultSelectedContractorGov };
+    selectedContractorGov.value = {
+      ...defaultSelectedWithYearGov.value,
+    };
   }
 
   emit('change', 'filter', '');
@@ -272,6 +304,16 @@ const clearFilter = () => {
                     />
 
                     <Combobox
+                      title="สถานะการเสนอราคา"
+                      :list="props.list.projectCompanyStatus"
+                      defaultVal="ทุกสถานะ"
+                      @change="(n) => setFilter(n, 'projectStatus', 'ทุกสถานะ')"
+                      :selectedVal="selectedContractorProject.projectStatus"
+                      :isClear
+                      isShowAllItems
+                    />
+
+                    <Combobox
                       title="วิธีการจัดหา"
                       :list="props.list.resourcingMethod"
                       defaultVal="ทุกวิธี"
@@ -282,12 +324,78 @@ const clearFilter = () => {
                       :isClear
                       isShowAllItems
                     />
+
+                    <Combobox
+                      title="ผู้รับจ้างที่ได้งาน"
+                      :list="
+                        props.list?.relatedAgencies?.flatMap((o) => o.name)
+                      "
+                      defaultVal="ทุกองค์กร"
+                      @change="(n) => setFilter(n, 'agencyId', 'ทุกองค์กร')"
+                      :selectedVal="selectedContractorProject.agencyId"
+                      :isClear
+                    />
+
+                    <div class="flex items-center my-4">
+                      <input
+                        v-model="selectedContractorProject.hasCorruptionRisk"
+                        id="default-checkbox"
+                        type="checkbox"
+                        value=""
+                        class="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded"
+                      />
+                      <label
+                        for="default-checkbox"
+                        class="ms-2 b4 text-[#EC1C24]"
+                        >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
+                      >
+                    </div>
                   </div>
                 </template>
                 <template v-else>
+                  <div class="text-[#7F7F7F] mt-5">
+                    <p class="font-bold b1">ปีงบประมาณ</p>
+                    <p class="b5">
+                      ปีงบประมาณ เริ่มนับจาก ต.ค. - ก.ย. เช่น ปีงบประมาณ 2568
+                      หมายถึง ต.ค. 67 - ก.ย. 68
+                    </p>
+                  </div>
+
+                  <div class="flex w-full gap-2 items-center">
+                    <div class="flex-1 relative">
+                      <select
+                        v-model="selectedContractorGov.yearFrom"
+                        class="w-full rounded-10 border-0"
+                      >
+                        <option
+                          v-for="item in props.list?.budgetYears"
+                          :value="item"
+                        >
+                          {{ item }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <p class="b1">-</p>
+
+                    <div class="flex-1 relative">
+                      <select
+                        v-model="selectedContractorGov.yearTo"
+                        class="w-full rounded-10 border-0"
+                      >
+                        <option
+                          v-for="item in props.list.budgetYears"
+                          :value="item"
+                        >
+                          {{ item }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
                   <Combobox
                     title="วิธีการจัดหา"
-                    :list="props.list.resourcingMethod"
+                    :list="props.list.resourcingMethods"
                     defaultVal="ทุกวิธี"
                     @change="(n) => setFilter(n, 'resourcingMethod', 'ทุกวิธี')"
                     :selectedVal="selectedContractorGov.resourcingMethod"

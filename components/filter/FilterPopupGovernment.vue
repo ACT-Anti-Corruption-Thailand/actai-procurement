@@ -31,6 +31,12 @@ const defaultSelectedWithYear = computed(() => ({
   yearTo: props.list?.budgetYears.at(-1)!.toString(),
 }));
 
+const defaultSelectedWithYearContractor = computed(() => ({
+  yearFrom: props.list?.budgetYears[0].toString(),
+  yearTo: props.list?.budgetYears.at(-1)!.toString(),
+  resourcingMethod: defaultSelectedGovContractor.resourcingMethod,
+}));
+
 const isOpen = ref(false);
 const plan = ref('งบประมาณ');
 const isClear = ref(false);
@@ -44,7 +50,7 @@ const filterCount = computed(() => {
       );
     default:
       return countPropertyDiff(
-        defaultSelectedGovContractor,
+        defaultSelectedWithYearContractor.value,
         selectedGovContractor.value
       );
   }
@@ -77,6 +83,11 @@ const searchByResult = () => {
   let filter = {};
 
   if (props.section == 'รายชื่อโครงการที่จัดทำ') {
+    let companyList = props.list.relatedCompanies?.filter((person) =>
+      selectedGovProject.value.companyId.includes(person.name)
+    );
+    let companyIdList = companyList?.flatMap((o) => o.id);
+
     filter = {
       budgetYear: {
         start: selectedGovProject.value.yearFrom,
@@ -94,10 +105,11 @@ const searchByResult = () => {
         selectedGovProject.value.resourcingMethod == 'ทุกวิธี'
           ? undefined
           : selectedGovProject.value.resourcingMethod,
-      agencies:
-        selectedGovProject.value.agencies == 'ทุกองค์กร'
+      companyId:
+        selectedGovProject.value.companyId == 'ทุกองค์กร'
           ? undefined
-          : selectedGovProject.value.agencies,
+          : companyIdList?.toString(),
+      hasCorruptionRisk: selectedGovProject.value.hasCorruptionRisk,
     };
   } else {
     filter = {
@@ -124,7 +136,9 @@ const clearFilter = () => {
   if (props.section == 'รายชื่อโครงการที่จัดทำ') {
     selectedGovProject.value = { ...defaultSelectedWithYear.value };
   } else {
-    selectedGovContractor.value = { ...defaultSelectedGovContractor };
+    selectedGovContractor.value = {
+      ...defaultSelectedWithYearContractor.value,
+    };
   }
 
   emit('change', 'filter', '');
@@ -294,12 +308,29 @@ const clearFilter = () => {
 
                     <Combobox
                       title="ผู้รับจ้างที่ได้งาน"
-                      :list="props.list.relatedCompanies"
+                      :list="
+                        props.list?.relatedCompanies?.flatMap((o) => o.name)
+                      "
                       defaultVal="ทุกองค์กร"
-                      @change="(n) => setFilter(n, 'agencies', 'ทุกองค์กร')"
-                      :selectedVal="selectedGovProject.agencies"
+                      @change="(n) => setFilter(n, 'companyId', 'ทุกองค์กร')"
+                      :selectedVal="selectedGovProject.companyId"
                       :isClear
                     />
+
+                    <div class="flex items-center my-4">
+                      <input
+                        v-model="selectedGovProject.hasCorruptionRisk"
+                        id="default-checkbox"
+                        type="checkbox"
+                        value=""
+                        class="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded"
+                      />
+                      <label
+                        for="default-checkbox"
+                        class="ms-2 b4 text-[#EC1C24]"
+                        >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
+                      >
+                    </div>
                   </div>
                 </template>
                 <template v-else>
@@ -345,7 +376,7 @@ const clearFilter = () => {
 
                   <Combobox
                     title="วิธีการจัดหา"
-                    :list="props.list.resourcingMethod"
+                    :list="props.list.resourcingMethods"
                     defaultVal="ทุกวิธี"
                     @change="(n) => setFilter(n, 'resourcingMethod', 'ทุกวิธี')"
                     :selectedVal="selectedGovContractor.resourcingMethod"

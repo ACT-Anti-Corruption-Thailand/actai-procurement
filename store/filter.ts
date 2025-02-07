@@ -30,7 +30,8 @@ export const defaultSelectedGovProject = {
   province: 'ทุกจังหวัด',
   projectStatus: 'ทุกสถานะ',
   resourcingMethod: 'ทุกวิธี',
-  relatedCompanies: 'ทุกองค์กร',
+  companyId: 'ทุกองค์กร',
+  hasCorruptionRisk: false,
 };
 
 export const defaultSelectedGovContractor = {
@@ -44,7 +45,10 @@ export const defaultSelectedContractorProject = {
   yearTo: '',
   agencies: 'ทุกหน่วยงาน',
   province: 'ทุกจังหวัด',
+  projectStatus: 'ทุกสถานะ',
   resourcingMethod: 'ทุกวิธี',
+  agencyId: 'ทุกองค์กร',
+  hasCorruptionRisk: false,
 };
 
 export const defaultSelectedContractorGov = {
@@ -81,4 +85,6 @@ export const sortByGovContractor = ref('');
 export const sortOrderGovContractor = ref('');
 
 export const sortByContractorProject = ref('');
+export const sortOrderContractorProject = ref('');
+export const sortByContractorGov = ref('');
 export const sortOrderContractorGov = ref('');

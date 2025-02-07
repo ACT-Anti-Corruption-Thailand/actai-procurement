@@ -44,12 +44,12 @@ const props = defineProps<{
 
         <div class="flex flex-col-mb gap-2 mt-3">
           <div class="flex-1 border-t pt-3">
-            <p class="b2 text-[#5E5E5E]">หมวดธุรกิจ</p>
+            <p class="b2 text-[#5E5E5E]">หมวดธุรกิจ*</p>
             <p class="b1">
               {{ props.data.businessType }}
             </p>
             <p class="b4 text-[#8E8E8E]">
-              หมายเหตุ:
+              *หมายเหตุ:
               แสดงเฉพาะหมวดธุรกิจที่จดทะเบียนและหมวดที่ยื่นบัญชีปีล่าสุด
               ซึ่งอาจไม่ใช่ทั้งหมด หากมีการจดทะเบียนหมวดอื่นๆ เพิ่ม
             </p>

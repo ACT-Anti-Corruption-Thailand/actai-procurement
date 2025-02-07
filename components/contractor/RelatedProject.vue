@@ -3,6 +3,11 @@ import type { Project } from '../../public/src/data/search_result';
 import type { FilterListProject } from '~/models/data';
 import qs from 'qs';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
+import { isLoadingContractorProject } from '~/store/loading';
+import {
+  sortByContractorProject,
+  sortOrderContractorProject,
+} from '~/store/filter';
 
 const props = defineProps<{
   data: Project;
@@ -11,7 +16,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['change']);
 
-const isRisk = ref(false);
+const route = useRoute();
 const page = ref(10);
 const sort = ref('announcementDate');
 const sortOrder = ref('desc');
@@ -22,6 +27,8 @@ let searchParams = new URLSearchParams();
 const searchText = ref('');
 
 const setParams = (type: string, val: string) => {
+  queryForDownload.value = '';
+
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
   else if (type == 'filter') filterList.value = val;
@@ -29,29 +36,23 @@ const setParams = (type: string, val: string) => {
 
   searchParams.set('keyword', searchText.value);
   searchParams.set('sortBy', type == 'sortBy' ? val : sort.value);
-  searchParams.set('sortOrder', type == 'sortOrder' ? val : 'desc');
+  searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  let filter = {
-    hasCorruptionRisk: isRisk.value,
-  };
-
-  var str = qs.stringify({ filter });
-
-  queryForDownload.value = '&' + searchParams.toString() + filterList.value;
-  emit('change', '&' + searchParams.toString() + filterList.value + '&' + str);
+  queryForDownload.value = '?' + searchParams.toString() + filterList.value;
+  emit('change', '&' + searchParams.toString() + filterList.value);
 };
 
-onMounted(() => {
-  queryForDownload.value = '&sortBy=announcementDate&sortOrder=desc';
-});
+onBeforeMount(() => {
+  queryForDownload.value = '?' + qs.stringify(route.query);
+  searchText.value = route.query.keyword || '';
 
-watch(isRisk, (val) => {
-  page.value = 10;
-
-  nextTick(() => {
-    setParams('risk', '');
-  });
+  if (route.hash.includes('project')) {
+    sort.value = sortByContractorProject.value;
+    sortOrder.value = sortOrderContractorProject.value;
+  } else {
+    queryForDownload.value = '';
+  }
 });
 </script>
 
@@ -83,19 +84,6 @@ watch(isRisk, (val) => {
           :list="props.filterListProject"
         />
       </div>
-
-      <div class="mt-3">
-        <input
-          type="checkbox"
-          name=""
-          id="isRisk"
-          v-model="isRisk"
-          class="text-black ring-0"
-        />
-        <label for="isRisk" class="text-[#EC1C24] ml-1 b4"
-          >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
-        >
-      </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
       <div class="flex items-center justify-between mb-3 gap-2">
@@ -109,7 +97,11 @@ watch(isRisk, (val) => {
           >
           บาท
         </h5>
-        <DownloadAndCopy section="project" filterList="" isShowCopyBtn />
+        <DownloadAndCopy
+          section="project"
+          :filterList="queryForDownload"
+          isShowCopyBtn
+        />
       </div>
 
       <SortBy
@@ -127,10 +119,14 @@ watch(isRisk, (val) => {
         class="mb-3"
         @change="setParams"
         @sortBy="setParams"
-        selectedSortBy=""
-        selectedSortOrder=""
+        :selectedSortBy="sortByContractorProject"
+        :selectedSortOrder="sortOrderContractorProject"
       />
-      <template v-if="!isLoading">
+
+      <template v-if="isLoadingContractorProject">
+        <div class="p-5 b1 text-center">Loading...</div>
+      </template>
+      <template v-else>
         <div class="overflow-auto">
           <table class="table-auto text-left table-wrapper">
             <thead class="bg-[#8E8E8E] b3 text-white">
@@ -289,7 +285,6 @@ watch(isRisk, (val) => {
             />
           </div></div
       ></template>
-      <template v-else><p class="p-5 text-center">Loading..</p></template>
     </div>
   </div>
 </template>

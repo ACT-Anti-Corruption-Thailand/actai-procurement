@@ -28,7 +28,7 @@ const setParams = (type: string, val: string) => {
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
-  // else if (type == 'filter') filterList.value = val;
+  else if (type == 'filter') filterList.value = val;
   else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('keyword', searchText.value);
@@ -75,11 +75,11 @@ onBeforeMount(() => {
             />
           </div>
         </div>
-        <!-- <FilterPopupGovernment
+        <FilterPopupGovernment
           section="ผู้รับจ้างที่ได้งาน"
           @change="setParams"
           :list="props.filterListContractor"
-        /> -->
+        />
       </div>
     </div>
     <div class="p-5 rounded-b-md w-full">
