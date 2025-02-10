@@ -34,6 +34,7 @@ import {
 import {
   isLoadingContractorProject,
   isLoadingContractorGov,
+  isLoadingOverall,
 } from '~/store/loading';
 
 const contractorData = ref<ContractorDetails>([]);
@@ -293,6 +294,7 @@ const setMenuList = () => {
 };
 
 onBeforeMount(async () => {
+  isLoadingOverall.value = true;
   isLoadingContractorProject.value = true;
   isLoadingContractorGov.value = true;
 
@@ -402,6 +404,8 @@ onBeforeMount(async () => {
       route.query.sortBy?.toString() || 'totalContractAmount';
     sortOrderContractorGov.value = route.query.sortOrder?.toString() || 'desc';
   }
+
+  isLoadingOverall.value = false;
 });
 
 onMounted(async () => {

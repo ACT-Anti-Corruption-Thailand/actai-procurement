@@ -1,3 +1,5 @@
+export const isLoadingOverall = ref(false);
+
 export const isLoadingResultProject = ref(false);
 export const isLoadingResultGov = ref(false);
 export const isLoadingResultContractor = ref(false);

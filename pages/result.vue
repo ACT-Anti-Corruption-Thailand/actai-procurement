@@ -36,6 +36,7 @@ import {
   isLoadingResultProject,
   isLoadingResultGov,
   isLoadingResultContractor,
+  isLoadingOverall
 } from '~/store/loading';
 
 const iconGuide = ref({
@@ -74,6 +75,8 @@ const filterListGovernment = ref({});
 const filterListContractor = ref({});
 
 onBeforeMount(async () => {
+  isLoadingOverall.value = true;
+
   const { ...filter_query } = route.query;
   delete filter_query.search;
   let str = qs.stringify(filter_query);
@@ -95,6 +98,8 @@ onBeforeMount(async () => {
   await getGovList(filter_query_text_gov, 'details');
   await getContractorList('', '');
   await getContractorList(filter_query_text_contractor, 'details');
+
+  isLoadingOverall.value = false;
 });
 
 onMounted(async () => {

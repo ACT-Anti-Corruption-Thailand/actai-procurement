@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
-import { isLoadingBidder } from '~/store/loading';
+import { isLoadingBidder, isLoadingOverall } from '~/store/loading';
 
 import type {
   ProjectDetails,
@@ -25,12 +25,16 @@ const projectEstimatePrice = ref<ProjectEstimatePrice>([]);
 const projectTotalEstimatePrice = ref(0);
 
 onBeforeMount(async () => {
+  isLoadingOverall.value = true;
+
   await getProjectContractor();
   await getProjectContracts('&sortBy=contractMoney&sortOrder=desc');
   await getProjectEstimatePrice();
   await getProjectDataAndDocs();
 
   setMenuList();
+
+  isLoadingOverall.value = false;
 });
 
 const setMenuList = () => {

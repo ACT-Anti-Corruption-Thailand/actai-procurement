@@ -18,7 +18,11 @@ import {
   sortByGovContractor,
   sortOrderGovContractor,
 } from '~/store/filter';
-import { isLoadingGovProject, isLoadingGovContractor } from '~/store/loading';
+import {
+  isLoadingGovProject,
+  isLoadingGovContractor,
+  isLoadingOverall,
+} from '~/store/loading';
 
 const govData = ref<GovernmentDetails>([]);
 const govProjectList = ref<Project>([]);
@@ -104,6 +108,8 @@ const getGovContracter = async (q) => {
 };
 
 onBeforeMount(async () => {
+  isLoadingOverall.value = true;
+
   const segments = route.path.split('/')[2];
   let filter = await getFilter(config.public.apiUrl, '?agencyId=' + segments);
   filterListProject.value = filter[0];
@@ -190,6 +196,8 @@ onBeforeMount(async () => {
       route.query.sortBy?.toString() || 'totalContractAmount';
     sortOrderGovContractor.value = route.query.sortOrder?.toString() || 'desc';
   }
+
+  // isLoadingOverall.value = false;
 });
 
 const setMenuList = () => {
@@ -203,6 +211,7 @@ const setMenuList = () => {
 
 <template>
   <Header />
+
   <div class="bg-white p-5">
     <Breadcrumb :title="govData?.agencyName" />
     <div class="max-w-7xl mx-auto flex gap-2 flex-col-mb">
