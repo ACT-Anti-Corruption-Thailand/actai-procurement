@@ -165,7 +165,7 @@ const removeParticipatedCompany = (item, i) => {
       <div class="flex-1 relative max-w-48">
         <select
           v-model="yearFrom"
-          class="w-48"
+          class="max-w-48 w-full"
           @change="$emit('change', yearFrom, yearTo)"
         >
           <option v-for="item in yearList" :value="item">{{ item }}</option>
@@ -177,7 +177,7 @@ const removeParticipatedCompany = (item, i) => {
       <div class="flex-1 relative max-w-48">
         <select
           v-model="yearTo"
-          class="w-48"
+          class="max-w-48 w-full"
           @change="$emit('change', yearFrom, yearTo)"
         >
           <option v-for="item in yearList" :value="item">{{ item }}</option>

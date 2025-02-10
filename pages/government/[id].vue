@@ -197,7 +197,7 @@ onBeforeMount(async () => {
     sortOrderGovContractor.value = route.query.sortOrder?.toString() || 'desc';
   }
 
-  // isLoadingOverall.value = false;
+  isLoadingOverall.value = false;
 });
 
 const setMenuList = () => {

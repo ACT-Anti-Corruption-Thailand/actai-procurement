@@ -118,7 +118,7 @@
             ><span class="w-3/5">{{ item.label }}</span>
             <span class="text-[#5E5E5E] text-right"
               >{{ item.sum.toLocaleString() }} ({{
-                setNumber((item.sum / total) * 100)
+                item.sum != 0 ? setNumber((item.sum / total) * 100) : 0
               }}%)</span
             ></label
           >

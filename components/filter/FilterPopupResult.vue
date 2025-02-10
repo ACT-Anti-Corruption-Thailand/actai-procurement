@@ -279,7 +279,10 @@ onMounted(() => {
                 />
               </div>
 
-              <div class="max-h-[80vh]">
+              <div
+                class="max-h-[80vh]"
+                :class="{ 'overflow-y-auto': props.section == 'โครงการ' }"
+              >
                 <template v-if="props.section == 'โครงการ'">
                   <div>
                     <div class="text-[#7F7F7F] mt-5">

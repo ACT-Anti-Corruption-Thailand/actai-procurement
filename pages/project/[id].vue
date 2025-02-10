@@ -136,7 +136,7 @@ const getProjectEstimatePrice = async () => {
   if (res.ok) {
     const data = await res.json();
     projectEstimatePrice.value = data.items || [];
-    projectTotalEstimatePrice.value = data.totalEstimatePrice;
+    projectTotalEstimatePrice.value = parseInt(data.totalEstimatePrice);
   }
 };
 
