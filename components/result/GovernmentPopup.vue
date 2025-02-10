@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogPanel,
 } from '@headlessui/vue';
+import qs from 'qs';
 
 const config = useRuntimeConfig();
 const route = useRoute();
@@ -81,9 +82,14 @@ const getGovList = async (params: string) => {
   isLoading.value = false;
 };
 
+onBeforeMount(() => {
+  queryForDownload.value = '?' + qs.stringify(route.query);
+});
+
 onMounted(async () => {
   keyword.value = route.query?.search?.toString();
-  await getGovList('');
+  let filter = '&' + qs.stringify(route.query);
+  await getGovList(filter);
 });
 </script>
 

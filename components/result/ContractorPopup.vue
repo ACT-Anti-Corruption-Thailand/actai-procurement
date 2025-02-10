@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogPanel,
 } from '@headlessui/vue';
+import qs from 'qs';
 
 const config = useRuntimeConfig();
 const route = useRoute();
@@ -76,9 +77,14 @@ const getContractorList = async (params: string) => {
   isLoading.value = false;
 };
 
+onBeforeMount(() => {
+  queryForDownload.value = '?' + qs.stringify(route.query);
+});
+
 onMounted(async () => {
   keyword.value = route.query?.search?.toString();
-  await getContractorList('');
+  let filter = '&' + qs.stringify(route.query);
+  await getContractorList(filter);
 });
 </script>
 
