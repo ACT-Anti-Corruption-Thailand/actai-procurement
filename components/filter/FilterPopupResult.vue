@@ -488,7 +488,7 @@ onMounted(() => {
 
                 <div
                   class="flex items-center my-4"
-                  v-if="props.section == 'โครงการฯ'"
+                  v-if="props.section == 'โครงการ'"
                 >
                   <input
                     v-model="selected.hasCorruptionRisk"
@@ -514,7 +514,7 @@ onMounted(() => {
                     class="w-4 h-4 text-black bg-gray-100 border-gray-300 rounded"
                   />
                   <label for="default-checkbox" class="ms-2 b4 text-[#EC1C24]"
-                    >ดูเฉพาะโครงการที่พบความเสี่ยงทุจริต</label
+                    >ดูเฉพาะผู้รับจ้างที่พบความเสี่ยงทุจริต</label
                   >
                 </div>
               </div>
