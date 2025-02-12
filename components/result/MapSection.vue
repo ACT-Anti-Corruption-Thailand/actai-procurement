@@ -33,7 +33,12 @@
         <div
           class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
-          <Map no="1" :provinces="props.data" :total="totalProject" />
+          <Map
+            no="1"
+            :provinces="props.data"
+            :total="totalProject"
+            section="จำนวนโครงการ"
+          />
 
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
@@ -53,17 +58,18 @@
         <div
           class="border rounded-10 border-[#DADADA] px-5 pt-5 pb-14 sm:pb-5 my-3 relative"
         >
-          <Map no="2" :provinces="props.data" :total="totalBudget" />
+          <Map
+            no="2"
+            :provinces="props.data"
+            :total="totalBudget"
+            section="งบประมาณ"
+          />
 
           <div class="absolute w-32 bottom-5 right-5 text-[#8E8E8E]">
             <div class="flex justify-between b4">
               <p>0</p>
               <p>
-                {{
-                  totalBudget > 1000000
-                    ? setNumber(totalBudget / 1000000) + 'K'
-                    : setNumber(totalBudget)
-                }}
+                {{ totalBudget.toLocaleString() }}
               </p>
             </div>
             <div

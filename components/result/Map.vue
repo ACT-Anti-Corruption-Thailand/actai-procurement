@@ -21,6 +21,7 @@ let color = d3.scaleLinear([0, props.total], ['#F5F5F5', '#484848']);
 function func(n) {
   isShowPopup.value = true;
   province_th.value = n.target.name_th;
+
   totalPopup.value =
     props.section == 'งบประมาณ'
       ? n.target.totalBudgetMoney
