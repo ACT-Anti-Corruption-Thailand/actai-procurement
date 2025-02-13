@@ -60,6 +60,8 @@ onMounted(async () => {
       autoplay
       loop
       muted
+      playsinline
+      webkit-playsinline
     >
       <source
         src="../public/src/images/landing_illustration.mp4"

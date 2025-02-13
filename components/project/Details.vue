@@ -294,8 +294,8 @@ onBeforeMount(() => {
                 <template v-if="item.contracts.length > 1">
                   <tr v-for="(item2, j) in item.contracts.slice(1)" :key="j">
                     <td>
-                      {{ item2.id }} <br />
-                      <span class="text-[#5E5E5E]"> {{ item2.number }}</span>
+                      {{ item2.number }} <br />
+                      <span class="text-[#5E5E5E]"> {{ item2.id }}</span>
                     </td>
                     <td>{{ setDate(item2.date) }}</td>
                     <td
