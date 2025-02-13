@@ -28,7 +28,7 @@ const act_project = [
 
 const getOverallSummary = async () => {
   const urlParams = new URLSearchParams();
-  urlParams.set('budgetYearStart', 2562);
+  urlParams.set('budgetYearStart', 2551);
   urlParams.set('budgetYearEnd', d.getFullYear() + 543);
 
   const res = await fetch(
@@ -91,7 +91,7 @@ onMounted(async () => {
 
         <p class="b3 text-[#BCBCBC]">
           <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ.
-          2562 - ปัจจุบัน <br />
+          2551 - ปัจจุบัน <br />
           โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด
           <template v-if="summary?.totalProject != null">
             {{ summary?.totalProject.toLocaleString() }} โครงการ หน่วยงานรัฐ
