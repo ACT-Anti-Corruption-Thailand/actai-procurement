@@ -299,9 +299,12 @@ onBeforeMount(async () => {
   isLoadingContractorGov.value = true;
 
   const segments = route.path.split('/')[2];
-  let filter = await getFilter(config.public.apiUrl, '?companyId=' + segments);
-  filterListProject.value = filter[0];
-  filterListGovernment.value = filter[1];
+  let filterList = await getFilter(
+    config.public.apiUrl,
+    '?companyId=' + segments
+  );
+  filterListProject.value = filterList[0];
+  filterListGovernment.value = filterList[1];
 
   if (
     route.query['filter[budgetYear][start]'] == null ||
@@ -321,11 +324,11 @@ onBeforeMount(async () => {
       .toString();
   }
 
-  let company = {
+  let filter = {
     companyId: segments,
   };
 
-  var str = qs.stringify({ company });
+  var str = qs.stringify({ filter });
 
   const { ...filter_query } = route.query;
   let str2 = qs.stringify(filter_query);

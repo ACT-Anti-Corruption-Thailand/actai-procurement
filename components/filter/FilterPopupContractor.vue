@@ -89,8 +89,13 @@ const searchByResult = () => {
   let filter = {};
 
   if (props.section == 'รายชื่อโครงการที่เกี่ยวข้อง') {
-    let companyList = props.list.relatedAgencies?.filter((person) =>
+    let agencyList = props.list.relatedAgencies?.filter((person) =>
       selectedContractorProject.value.agencyId.includes(person.name)
+    );
+    let agencyIdList = agencyList?.flatMap((o) => o.id);
+
+    let companyList = props.list.relatedCompanies?.filter((person) =>
+      selectedContractorProject.value.companyId.includes(person.name)
     );
     let companyIdList = companyList?.flatMap((o) => o.id);
 
@@ -287,7 +292,7 @@ const clearFilter = () => {
 
                     <Combobox
                       title="หน่วยงานรัฐเจ้าของโครงการ"
-                      :list="props.list.agencies"
+                      :list="props.list?.agencies"
                       defaultVal="ทุกหน่วยงาน"
                       @change="(n) => setFilter(n, 'agencies', 'ทุกหน่วยงาน')"
                       :selectedVal="selectedContractorProject.agencies"
@@ -326,7 +331,7 @@ const clearFilter = () => {
                     />
 
                     <Combobox
-                      title="ผู้รับจ้างที่ได้งาน"
+                      title="ผู้ร่วมประมูลในโครงการเดียวกัน"
                       :list="
                         props.list?.relatedAgencies?.flatMap((o) => o.name)
                       "
