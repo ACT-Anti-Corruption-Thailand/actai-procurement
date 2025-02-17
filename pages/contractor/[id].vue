@@ -145,7 +145,7 @@ const getContracterProject = async (q) => {
   var str = qs.stringify({ filter });
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?${params}&${str}${q}`,
+    `${config.public.apiUrl}/project/search?${params}${q}`,
     {
       method: 'get',
       headers: {
@@ -272,7 +272,7 @@ const setMenuList = () => {
   )
     listMenu.value.push('การรับงานกับหน่วยงานรัฐ');
 
-  if (contractorAbandonProjectList.value.pagination.totalItem != 0)
+  if (contractorAbandonProjectList.value?.pagination?.totalItem != 0)
     listMenu.value.push('ประวัติการทิ้งงาน');
 
   if (
@@ -334,7 +334,7 @@ onBeforeMount(async () => {
   let str2 = qs.stringify(filter_query);
   let filter_query_text_project = route.hash.includes('project')
     ? '&' + str2
-    : '&sortBy=announcementDate&sortOrder=desc';
+    : '&' + str + '&sortBy=announcementDate&sortOrder=desc';
   let filter_query_text_gov = route.hash.includes('government')
     ? '&' + str2
     : '&sortBy=totalContractAmount&sortOrder=desc';
@@ -358,6 +358,35 @@ onBeforeMount(async () => {
   if (route.hash.includes('project')) {
     menu.value = 'รายชื่อโครงการที่เกี่ยวข้อง';
 
+    let agencyNameList = [];
+    let agencyListArray = [];
+    let companyNameList = [];
+    let companyListArray = [];
+
+    if (route.query['filter[agencyId]'] !== undefined) {
+      agencyListArray = route.query['filter[agencyId]']?.split(',');
+
+      if (agencyListArray != 'undefined') {
+        let agencyList = filterListProject.value?.relatedAgencies?.filter(
+          (person) => agencyListArray.includes(person.id.toString())
+        );
+
+        agencyNameList = agencyList?.flatMap((o) => o.name);
+      }
+    }
+
+    if (route.query['filter[companyId]'] !== undefined) {
+      companyListArray = route.query['filter[companyId]']?.split(',');
+
+      if (companyListArray != 'undefined') {
+        let companyList = filterListProject.value?.relatedCompanies?.filter(
+          (person) => companyListArray.includes(person.id.toString())
+        );
+
+        companyNameList = companyList?.flatMap((o) => o.name);
+      }
+    }
+
     selectedContractorProject.value = {
       yearFrom:
         route.query['filter[budgetYear][start]']?.toString() ||
@@ -365,9 +394,10 @@ onBeforeMount(async () => {
       yearTo:
         route.query['filter[budgetYear][end]']?.toString() ||
         filterListProject.value?.budgetYears.at(-1)!.toString(),
-      agencies:
-        route.query['filter[agencies]']?.toString() ||
-        defaultSelectedContractorProject.agencies,
+      agencyId:
+        agencyNameList.length != 0
+          ? agencyNameList.toString()
+          : defaultSelectedContractorProject.agencyId,
       projectStatus:
         route.query['filter[projectStatus]']?.toString() ||
         defaultSelectedContractorProject.projectStatus,
@@ -377,9 +407,10 @@ onBeforeMount(async () => {
       resourcingMethod:
         route.query['filter[resourcingMethod]']?.toString() ||
         defaultSelectedContractorProject.resourcingMethod,
-      agencyId:
-        route.query['filter[agencyId]']?.toString() ||
-        defaultSelectedContractorProject.agencyId,
+      companyId:
+        companyNameList.length != 0
+          ? companyNameList.toString()
+          : defaultSelectedContractorProject.companyId,
       hasCorruptionRisk:
         route.query['filter[hasCorruptionRisk]'] === 'true' ||
         defaultSelectedContractorProject.hasCorruptionRisk,

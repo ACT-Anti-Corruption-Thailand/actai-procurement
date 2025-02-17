@@ -18,6 +18,8 @@ import {
   selectedContractorGov,
 } from '~/store/filter';
 
+const route = useRoute();
+
 const props = defineProps<{
   section: string;
   list: FilterListProject;
@@ -98,16 +100,17 @@ const searchByResult = () => {
       selectedContractorProject.value.companyId.includes(person.name)
     );
     let companyIdList = companyList?.flatMap((o) => o.id);
+    companyIdList?.push(route.path.split('/')[2]);
 
     filter = {
       budgetYear: {
         start: selectedContractorProject.value.yearFrom,
         end: selectedContractorProject.value.yearTo,
       },
-      agencies:
-        selectedContractorProject.value.agencies == 'ทุกหน่วยงาน'
+      agencyId:
+        selectedContractorProject.value.agencyId == 'ทุกหน่วยงาน'
           ? undefined
-          : selectedContractorProject.value.agencies,
+          : agencyIdList?.toString(),
       projectStatus:
         selectedContractorProject.value.projectStatus == 'ทุกสถานะ'
           ? undefined
@@ -120,9 +123,9 @@ const searchByResult = () => {
         selectedContractorProject.value.resourcingMethod == 'ทุกวิธี'
           ? undefined
           : selectedContractorProject.value.resourcingMethod,
-      agencyId:
-        selectedContractorProject.value.agencyId == 'ทุกองค์กร'
-          ? undefined
+      companyId:
+        companyIdList?.length == 1
+          ? route.path.split('/')[2]
           : companyIdList?.toString(),
       hasCorruptionRisk: selectedContractorProject.value.hasCorruptionRisk,
     };
@@ -292,10 +295,12 @@ const clearFilter = () => {
 
                     <Combobox
                       title="หน่วยงานรัฐเจ้าของโครงการ"
-                      :list="props.list?.agencies"
+                      :list="
+                        props.list?.relatedAgencies?.flatMap((o) => o.name)
+                      "
                       defaultVal="ทุกหน่วยงาน"
-                      @change="(n) => setFilter(n, 'agencies', 'ทุกหน่วยงาน')"
-                      :selectedVal="selectedContractorProject.agencies"
+                      @change="(n) => setFilter(n, 'agencyId', 'ทุกหน่วยงาน')"
+                      :selectedVal="selectedContractorProject.agencyId"
                       :isClear
                     />
 
@@ -333,11 +338,11 @@ const clearFilter = () => {
                     <Combobox
                       title="ผู้ร่วมประมูลในโครงการเดียวกัน"
                       :list="
-                        props.list?.relatedAgencies?.flatMap((o) => o.name)
+                        props.list?.relatedCompanies?.flatMap((o) => o.name)
                       "
                       defaultVal="ทุกองค์กร"
-                      @change="(n) => setFilter(n, 'agencyId', 'ทุกองค์กร')"
-                      :selectedVal="selectedContractorProject.agencyId"
+                      @change="(n) => setFilter(n, 'companyId', 'ทุกองค์กร')"
+                      :selectedVal="selectedContractorProject.companyId"
                       :isClear
                     />
 

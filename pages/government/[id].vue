@@ -151,6 +151,21 @@ onBeforeMount(async () => {
   if (route.hash.includes('project')) {
     menu.value = 'รายชื่อโครงการที่จัดทำ';
 
+    let companyNameList = [];
+    let companyListArray = [];
+
+    if (route.query['filter[companyId]'] !== undefined) {
+      companyListArray = route.query['filter[companyId]']?.split(',');
+
+      if (companyListArray != 'undefined') {
+        let companyList = filterListProject.value?.relatedCompanies?.filter(
+          (person) => companyListArray.includes(person.id.toString())
+        );
+
+        companyNameList = companyList?.flatMap((o) => o.name);
+      }
+    }
+
     selectedGovProject.value = {
       yearFrom:
         route.query['filter[budgetYear][start]']?.toString() ||
@@ -168,8 +183,9 @@ onBeforeMount(async () => {
         route.query['filter[resourcingMethod]']?.toString() ||
         defaultSelectedGovProject.resourcingMethod,
       companyId:
-        route.query['filter[companyId]']?.toString() ||
-        defaultSelectedGovProject.companyId,
+        companyNameList.length != 0
+          ? companyNameList.toString()
+          : defaultSelectedGovProject.companyId,
       hasCorruptionRisk:
         route.query['filter[hasCorruptionRisk]'] === 'true' ||
         defaultSelectedGovProject.hasCorruptionRisk,

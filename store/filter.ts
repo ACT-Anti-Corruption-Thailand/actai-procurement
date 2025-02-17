@@ -43,11 +43,11 @@ export const defaultSelectedGovContractor = {
 export const defaultSelectedContractorProject = {
   yearFrom: '',
   yearTo: '',
-  agencies: 'ทุกหน่วยงาน',
+  agencyId: 'ทุกหน่วยงาน',
   province: 'ทุกจังหวัด',
   projectStatus: 'ทุกสถานะ',
   resourcingMethod: 'ทุกวิธี',
-  agencyId: 'ทุกองค์กร',
+  companyId: 'ทุกองค์กร',
   hasCorruptionRisk: false,
 };
 
