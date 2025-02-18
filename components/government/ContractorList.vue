@@ -142,6 +142,11 @@ onBeforeMount(() => {
                   target="_blank"
                   rel="noopener noreferrer"
                   class="hover:text-[#0B5C90]"
+                  :class="{
+                    'pointer-events-none': item.companyId
+                      .toLowerCase()
+                      .includes('x'),
+                  }"
                 >
                   {{ item.companyName }}
                 </a>

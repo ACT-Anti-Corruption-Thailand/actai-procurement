@@ -142,6 +142,9 @@ onBeforeMount(() => {
           :key="'contractor-' + item.companyId"
           target="_blank"
           :href="'/contractor/' + item.companyId"
+          :class="{
+            'pointer-events-none': item.companyId.toLowerCase().includes('x'),
+          }"
         >
           <div class="basis-3/5">
             <p

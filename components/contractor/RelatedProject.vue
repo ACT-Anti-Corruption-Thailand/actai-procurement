@@ -210,21 +210,49 @@ onBeforeMount(() => {
                 </td>
                 <td>
                   <template v-if="item.contractors?.length > 0">
-                    <p>1. {{ item.contractors[0].name }}</p>
+                    <a
+                      target="_blank"
+                      class="b1 hover:text-[#0B5C90] block"
+                      :href="`/contractor/${item.contractors[0].id}`"
+                      :class="{
+                        'pointer-events-none': item.contractors[0].id
+                          ?.toLowerCase()
+                          .includes('x'),
+                      }"
+                      >1. {{ item.contractors[0].name }}</a
+                    >
                     <Disclosure
                       v-if="item.contractors?.length > 1"
                       v-slot="{ open }"
                     >
                       <DisclosurePanel>
-                        <p v-for="(data, i) in item.contractors">
+                        <a
+                          target="_blank"
+                          class="b1 hover:text-[#0B5C90] block"
+                          :href="`/contractor/${data.id}`"
+                          :class="{
+                            'pointer-events-none': data.id
+                              ?.toLowerCase()
+                              .includes('x'),
+                          }"
+                          v-for="(data, i) in item.contractors?.slice(
+                            1,
+                            item.contractors.length
+                          )"
+                        >
                           {{ i + 2 }}. {{ data?.name }}
-                        </p>
+                        </a>
                       </DisclosurePanel>
                       <DisclosureButton class="b4 text-[#0B5C90] text-left">
                         {{
                           open
                             ? ' ..ดูน้อยลง'
-                            : `..ดูเพิ่ม (${item.contractors?.length} องค์กร)`
+                            : `..ดูเพิ่ม (${
+                                item.contractors?.slice(
+                                  1,
+                                  item.contractors.length
+                                ).length
+                              } องค์กร)`
                         }}
                       </DisclosureButton>
                     </Disclosure></template

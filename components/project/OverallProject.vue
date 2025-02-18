@@ -196,13 +196,20 @@ const props = defineProps<{
         <div class="flex-1">
           <div class="border-t py-3">
             <p class="b2 text-[#5E5E5E]">หน่วยงานเจ้าของโครงการ</p>
-            <p class="b1">
+            <a
+              target="_blank"
+              class="b1 hover:text-[#0B5C90]"
+              :href="`/government/${props.data?.agency?.id}`"
+              :class="{
+                'pointer-events-none': props.data?.agency?.name == null,
+              }"
+            >
               {{
                 props.data?.agency?.name != null
                   ? props.data?.agency?.name
                   : '-'
               }}
-            </p>
+            </a>
             <p class="b3" v-if="props.data?.agency?.province != null">
               ที่ตั้ง : {{ props.data?.agency?.province }}
             </p>
@@ -238,7 +245,15 @@ const props = defineProps<{
               v-for="(item, i) in props.data.winnerContractors"
               :key="'winner-' + i"
             >
-              <p class="b1">{{ i + 1 }}. {{ item.name }}</p>
+              <a
+                target="_blank"
+                class="b1 hover:text-[#0B5C90] block"
+                :href="`/contractor/${item.id}`"
+                :class="{
+                  'pointer-events-none': item.id?.toLowerCase().includes('x'),
+                }"
+                >{{ i + 1 }}. {{ item.name }}</a
+              >
               <p class="b2 text-[#EC1C24]" v-if="item.hasAbandonProject">
                 เคยมีประวัติทิ้งงาน
               </p>

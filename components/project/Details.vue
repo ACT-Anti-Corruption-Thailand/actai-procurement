@@ -148,14 +148,15 @@ onBeforeMount(() => {
                   'text-[#8E8E8E] mt-0.5',
                 ]"
               >
-                <p>
-                  {{ i + 1 }}
-                </p>
+                <p>{{ i + 1 }}</p>
                 <div class="b3 pb-3 text-left">
                   <a
                     target="_blank"
                     :href="`/contractor/${c.id}`"
                     class="hover:text-[#0B5C90]"
+                    :class="{
+                      'pointer-events-none': c.id.toLowerCase().includes('x'),
+                    }"
                     >{{ c?.name }}</a
                   >
                   <p
@@ -245,6 +246,11 @@ onBeforeMount(() => {
                       target="_blank"
                       :href="`/contractor/${item.id}`"
                       class="hover:text-[#0B5C90]"
+                      :class="{
+                        'pointer-events-none': item.id
+                          .toLowerCase()
+                          .includes('x'),
+                      }"
                     >
                       <b> {{ item.name }}</b></a
                     >
@@ -417,7 +423,12 @@ onBeforeMount(() => {
                     target="_blank"
                     :href="`/contractor/${data.contractors[0].id}`"
                     class="hover:text-[#0B5C90]"
-                    :class="{ 'font-bold': data.contractors[0].isWinner }"
+                    :class="{
+                      'font-bold': data.contractors[0].isWinner,
+                      'pointer-events-none': data.contractors[0].id
+                        .toLowerCase()
+                        .includes('x'),
+                    }"
                   >
                     {{ data.contractors[0].name }}
                   </a>
@@ -578,7 +589,12 @@ onBeforeMount(() => {
                     target="_blank"
                     :href="`/contractor/${item.id}`"
                     class="hover:text-[#0B5C90]"
-                    :class="{ 'font-bold': item.isWinner }"
+                    :class="{
+                      'font-bold': item.isWinner,
+                      'pointer-events-none': item.id
+                        .toLowerCase()
+                        .includes('x'),
+                    }"
                   >
                     {{ item.name }}
                   </a>
