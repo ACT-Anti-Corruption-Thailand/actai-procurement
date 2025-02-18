@@ -18,6 +18,7 @@ const sortOrder = ref('desc');
 const filterList = ref('');
 const queryForDownload = ref('');
 const searchText = ref('');
+const companyId = ref('');
 
 const setParams = (type: string, val: string) => {
   const searchParams = new URLSearchParams();
@@ -33,19 +34,32 @@ const setParams = (type: string, val: string) => {
   searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  queryForDownload.value = '?' + searchParams.toString() + filterList.value;
-  emit('change', '&' + searchParams.toString() + filterList.value);
+  queryForDownload.value =
+    '?' + searchParams.toString() + filterList.value + '&' + companyId.value;
+
+  emit(
+    'change',
+    '&' + searchParams.toString() + filterList.value + '&' + companyId.value
+  );
 };
 
 onBeforeMount(() => {
-  queryForDownload.value = '?' + qs.stringify(route.query);
+  let filter = {
+    companyId: route.path.split('/')[2],
+  };
+
+  companyId.value = qs.stringify({ filter });
+
+  queryForDownload.value =
+    '?' + qs.stringify(route.query) + '&' + companyId.value;
+
   searchText.value = route.query.keyword || '';
 
   if (route.hash.includes('government')) {
     sort.value = sortByContractorGov.value;
     sortOrder.value = sortOrderContractorGov.value;
   } else {
-    queryForDownload.value = '';
+    // queryForDownload.value = '';
   }
 });
 </script>

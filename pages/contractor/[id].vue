@@ -207,7 +207,7 @@ const getContracterGov = async (q, n) => {
   var str = qs.stringify({ filter });
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?${params}&${str}${q}`,
+    `${config.public.apiUrl}/agency/search?${params}${q}`,
     {
       method: 'get',
       headers: {
@@ -337,7 +337,7 @@ onBeforeMount(async () => {
     : '&' + str + '&sortBy=announcementDate&sortOrder=desc';
   let filter_query_text_gov = route.hash.includes('government')
     ? '&' + str2
-    : '&sortBy=totalContractAmount&sortOrder=desc';
+    : '&' + str + '&sortBy=totalContractAmount&sortOrder=desc';
 
   contractorBudgetYearChartData.value = await getChartData(
     config.public.apiUrl,

@@ -15,6 +15,7 @@ const sort = ref('totalContractAmount');
 const sortOrder = ref('desc');
 const queryForDownload = ref('');
 const filterList = ref('');
+const agencyId = ref('');
 
 const searchText = ref('');
 
@@ -36,19 +37,28 @@ const setParams = (type: string, val: string) => {
   searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  queryForDownload.value = '?' + searchParams.toString() + filterList.value;
+  queryForDownload.value =
+    '?' + searchParams.toString() + filterList.value + '&' + agencyId.value;
   emit('change', '&' + searchParams.toString() + filterList.value);
 };
 
 onBeforeMount(() => {
-  queryForDownload.value = '?' + qs.stringify(route.query);
+  let filter = {
+    agencyId: route.path.split('/')[2],
+  };
+
+  agencyId.value = qs.stringify({ filter });
+
+  queryForDownload.value =
+    '?' + qs.stringify(route.query) + '&' + agencyId.value;
+
   searchText.value = route.query.keyword || '';
 
   if (route.hash.includes('contractor')) {
     sort.value = sortByGovContractor.value;
     sortOrder.value = sortOrderGovContractor.value;
   } else {
-    queryForDownload.value = '';
+    // queryForDownload.value = '';
   }
 });
 </script>

@@ -22,6 +22,7 @@ const sort = ref('announcementDate');
 const sortOrder = ref('desc');
 const filterList = ref('');
 const queryForDownload = ref('');
+const companyId = ref('');
 let searchParams = new URLSearchParams();
 
 const searchText = ref('');
@@ -31,7 +32,8 @@ const setParams = (type: string, val: string) => {
 
   if (type == 'sortBy') sort.value = val;
   else if (type == 'page') page.value = page.value == 0 ? 20 : page.value + val;
-  else if (type == 'filter') filterList.value = val;
+  else if (type == 'filter')
+    filterList.value = val != '' ? val : '&' + companyId.value;
   else if (type == 'sortOrder') sortOrder.value = val;
 
   searchParams.set('keyword', searchText.value);
@@ -44,14 +46,22 @@ const setParams = (type: string, val: string) => {
 };
 
 onBeforeMount(() => {
-  queryForDownload.value = '?' + qs.stringify(route.query);
+  let filter = {
+    companyId: route.path.split('/')[2],
+  };
+
+  companyId.value = qs.stringify({ filter });
+
+  queryForDownload.value =
+    '?' + qs.stringify(route.query) + '&' + companyId.value;
+
   searchText.value = route.query.keyword || '';
 
   if (route.hash.includes('project')) {
     sort.value = sortByContractorProject.value;
     sortOrder.value = sortOrderContractorProject.value;
   } else {
-    queryForDownload.value = '';
+    // queryForDownload.value = '';
   }
 });
 </script>
