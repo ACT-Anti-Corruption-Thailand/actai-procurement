@@ -36,7 +36,7 @@ import {
   isLoadingResultProject,
   isLoadingResultGov,
   isLoadingResultContractor,
-  isLoadingOverall
+  isLoadingOverall,
 } from '~/store/loading';
 
 const iconGuide = ref({
@@ -183,9 +183,9 @@ const getFilter = async () => {
       agencyBelongTo:
         route.query['filter[agencyBelongTo]']?.toString() ||
         defaultSelected.agencyBelongTo,
-      contractorType:
-        route.query['filter[contractorType]']?.toString() ||
-        defaultSelected.contractorType,
+      companyEntityType:
+        route.query['filter[companyEntityType]']?.toString() ||
+        defaultSelected.companyEntityType,
       projectStatus:
         route.query['filter[projectStatus]']?.toString() ||
         defaultSelected.projectStatus,

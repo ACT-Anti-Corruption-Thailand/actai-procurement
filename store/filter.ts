@@ -3,7 +3,7 @@ export const defaultSelected = {
   yearTo: '',
   agencies: 'ทุกหน่วยงาน',
   agencyBelongTo: 'ทุกหน่วยงาน',
-  contractorType: 'ทุกประเภท',
+  companyEntityType: 'ทุกประเภท',
   projectStatus: 'ทุกสถานะ',
   province: 'ทุกจังหวัด',
   resourcingType: 'ทุกประเภท',

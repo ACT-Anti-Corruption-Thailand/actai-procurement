@@ -93,10 +93,10 @@ const searchByResult = () => {
         selected.value.agencyBelongTo == 'ทุกหน่วยงาน'
           ? undefined
           : selected.value.agencies,
-      contractorType:
-        selected.value.contractorType == 'ทุกประเภท'
+      companyEntityType:
+        selected.value.companyEntityType == 'ทุกประเภท'
           ? undefined
-          : selected.value.contractorType,
+          : selected.value.companyEntityType,
       projectStatus:
         selected.value.projectStatus == 'ทุกสถานะ'
           ? undefined
@@ -394,9 +394,9 @@ onMounted(() => {
                       :list="props.list.contractorType"
                       defaultVal="ทุกประเภท"
                       @change="
-                        (n) => setFilter(n, 'contractorType', 'ทุกประเภท')
+                        (n) => setFilter(n, 'companyEntityType', 'ทุกประเภท')
                       "
-                      :selectedVal="selected.contractorType"
+                      :selectedVal="selected.companyEntityType"
                       :isClear
                       isShowAllItems
                     />
@@ -483,6 +483,7 @@ onMounted(() => {
                     @change="(n) => setFilter(n, 'contractorType', 'ทุกประเภท')"
                     :selectedVal="selectedContractor.contractorType"
                     :isClear
+                    isShowAllItems
                   />
                 </template>
 
