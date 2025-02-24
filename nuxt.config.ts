@@ -2,7 +2,7 @@
 const BASE_URL = 'https://actai-redesign.pages.dev/';
 
 export default defineNuxtConfig({
-  ssr: true,
+  // ssr: true,
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', 'nuxt-gtag', '@pinia/nuxt'],
@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: BASE_URL,
-      apiUrl: 'https://admin-procurement.actai.co',
+      apiUrl: ' https://act-api.meeboon.dev',
     },
   },
   app: {
