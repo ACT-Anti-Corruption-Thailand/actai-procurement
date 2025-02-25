@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: BASE_URL,
-      apiUrl: ' https://act-api.meeboon.dev',
+      apiUrl: 'https://admin-procurement.actai.co',
     },
   },
   app: {
