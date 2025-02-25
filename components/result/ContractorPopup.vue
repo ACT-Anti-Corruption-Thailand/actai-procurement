@@ -22,7 +22,7 @@ const queryForDownload = ref('');
 
 function highlight(title: string, text: string) {
   var innerHTML = title;
-  const urlParams = decodeURI(window.location.href).split('=')[1];
+  const urlParams = route.query.search;
   var index = innerHTML.toLowerCase().indexOf(urlParams);
 
   if (index >= 0) {

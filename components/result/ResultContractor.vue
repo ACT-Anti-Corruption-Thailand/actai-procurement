@@ -12,9 +12,11 @@ const props = defineProps<{
   filterListContractor?: object;
 }>();
 
+const route = useRoute();
+
 function highlight(title: string, text: string) {
   var innerHTML = title;
-  const urlParams = decodeURI(window.location.href).split('=')[1];
+  const urlParams = route.query.search;
   var index = innerHTML.toLowerCase().indexOf(urlParams);
 
   if (index >= 0) {
@@ -32,7 +34,6 @@ const searchText = ref('');
 
 const emit = defineEmits(['search']);
 
-const route = useRoute();
 const sort = ref('relevanceScore');
 const sortOrder = ref('desc');
 const page = ref(0);
