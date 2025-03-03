@@ -271,11 +271,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <a
-        href="http://www.anticorruption.in.th/2016/th/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href="https://actai.co" target="_blank" rel="noopener noreferrer">
         <div
           class="p-3 border border-white gap-2 justify-center b2 flex rounded-lg mt-5 text-white items-center"
         >
