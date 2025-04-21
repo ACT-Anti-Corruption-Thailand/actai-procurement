@@ -218,6 +218,31 @@ onBeforeMount(() => {
 
                   <p v-else>-</p>
                 </td>
+
+                <td>
+                  <template v-if="item.bidder?.length > 0">
+                    <p>1. {{ item.bidder[0] }}</p>
+                    <Disclosure
+                      v-if="item.bidder?.length > 1"
+                      v-slot="{ open }"
+                    >
+                      <DisclosurePanel>
+                        <p v-for="(data, i) in item.bidder">
+                          {{ i + 2 }}. {{ data }}
+                        </p>
+                      </DisclosurePanel>
+                      <DisclosureButton class="b4 text-[#0B5C90] text-left">
+                        {{
+                          open
+                            ? ' ..ดูน้อยลง'
+                            : `..ดูเพิ่ม (${item.bidder?.length} องค์กร)`
+                        }}
+                      </DisclosureButton>
+                    </Disclosure></template
+                  >
+
+                  <p v-else>-</p>
+                </td>
                 <td>
                   <template v-if="item.contractors?.length > 0">
                     <a
@@ -263,30 +288,6 @@ onBeforeMount(() => {
                                   item.contractors.length
                                 ).length
                               } องค์กร)`
-                        }}
-                      </DisclosureButton>
-                    </Disclosure></template
-                  >
-
-                  <p v-else>-</p>
-                </td>
-                <td>
-                  <template v-if="item.bidder?.length > 0">
-                    <p>1. {{ item.bidder[0] }}</p>
-                    <Disclosure
-                      v-if="item.bidder?.length > 1"
-                      v-slot="{ open }"
-                    >
-                      <DisclosurePanel>
-                        <p v-for="(data, i) in item.bidder">
-                          {{ i + 2 }}. {{ data }}
-                        </p>
-                      </DisclosurePanel>
-                      <DisclosureButton class="b4 text-[#0B5C90] text-left">
-                        {{
-                          open
-                            ? ' ..ดูน้อยลง'
-                            : `..ดูเพิ่ม (${item.bidder?.length} องค์กร)`
                         }}
                       </DisclosureButton>
                     </Disclosure></template
