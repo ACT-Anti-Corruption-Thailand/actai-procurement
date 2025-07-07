@@ -13,7 +13,7 @@ Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introdu
 
 | Name       | URL                               | Host/Pipeline    |
 | ---------- | --------------------------------- | ---------------- |
-| Production | TBA                               | TBA              |
+| Production | https://procurement.actai.co/     | iApp             |
 | Staging    | https://actai-redesign.pages.dev/ | Cloudflare Pages |
 
 ## 🍟 Setup

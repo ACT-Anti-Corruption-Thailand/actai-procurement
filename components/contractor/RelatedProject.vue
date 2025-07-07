@@ -41,8 +41,12 @@ const setParams = (type: string, val: string) => {
   searchParams.set('sortOrder', type == 'sortOrder' ? val : sortOrder.value);
   searchParams.set('pageSize', type == 'page' ? page.value : 10);
 
-  queryForDownload.value = '?' + searchParams.toString() + filterList.value;
-  emit('change', '&' + searchParams.toString() + filterList.value);
+  queryForDownload.value =
+    '?' + searchParams.toString() + filterList.value + companyId.value;
+  emit(
+    'change',
+    '&' + searchParams.toString() + filterList.value + '&' + companyId.value
+  );
 };
 
 onBeforeMount(() => {
@@ -227,7 +231,7 @@ onBeforeMount(() => {
                       v-slot="{ open }"
                     >
                       <DisclosurePanel>
-                        <p v-for="(data, i) in item.bidder">
+                        <p v-for="(data, i) in item.bidder?.slice(1)">
                           {{ i + 2 }}. {{ data }}
                         </p>
                       </DisclosurePanel>
@@ -235,7 +239,7 @@ onBeforeMount(() => {
                         {{
                           open
                             ? ' ..ดูน้อยลง'
-                            : `..ดูเพิ่ม (${item.bidder?.length} องค์กร)`
+                            : `..ดูเพิ่ม (${item.bidder?.length - 1} องค์กร)`
                         }}
                       </DisclosureButton>
                     </Disclosure></template
@@ -243,6 +247,7 @@ onBeforeMount(() => {
 
                   <p v-else>-</p>
                 </td>
+
                 <td>
                   <template v-if="item.contractors?.length > 0">
                     <a

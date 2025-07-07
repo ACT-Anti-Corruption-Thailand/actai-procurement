@@ -48,7 +48,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="props.projectList?.pagination.totalItem == 0" class="pb-7">
+  <div
+    v-if="
+      props.projectList?.pagination.totalItem == 0 &&
+      props.govList?.pagination.totalItem == 0 &&
+      props.contractorList?.pagination.totalItem == 0
+    "
+    class="pb-7"
+  >
     <h5 class="text-center text-[#8E8E8E]">
       ไม่พบโครงการจัดซื้อจัดจ้าง หน่วยงานรัฐ และผู้รับจ้างที่มีคำค้นนี้
     </h5>

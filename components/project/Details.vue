@@ -20,10 +20,10 @@ const props = defineProps<{
 }>();
 
 const biddingStep = [
-  { title: 'ซื้อซอง', total: 0, img: 'buy-auction' },
-  { title: 'ยื่นซอง', total: 0, img: 'bidding' },
-  { title: 'ผ่านคุณสมบัติ', total: 0, img: 'passed' },
-  { title: 'เข้าเสนอราคา', total: 0, img: 'e-bidding' },
+  { title: 'ซื้อซอง', img: 'buy-auction' },
+  { title: 'ยื่นซอง', img: 'bidding' },
+  { title: 'ผ่านคุณสมบัติ', img: 'passed' },
+  { title: 'เข้าเสนอราคา', img: 'e-bidding' },
 ];
 
 const route = useRoute();
@@ -31,18 +31,16 @@ const sort = ref('contractMoney');
 const sortOrder = ref('desc');
 const queryForDownload = ref('');
 
-const sumBiddingTotal = computed(() => {
-  const contracter = props.contracters.map((data) => data.processInvolved);
-
-  contracter.forEach((element) => {
-    element.forEach((element2) => {
-      let b = biddingStep.filter((a) => a.title == element2);
-      b[0].total += 1;
-    });
-  });
-
-  return biddingStep.reduce((partialSum, a) => partialSum + a.total, 0);
-});
+const displayBiddingStep = computed(() =>
+  biddingStep
+    .map((step) => ({
+      ...step,
+      contracters: props.contracters.filter((contracter) =>
+        contracter.processInvolved.includes(step.title)
+      ),
+    }))
+    .filter((step) => step.contracters.length > 0)
+);
 
 const searchText = ref('');
 
@@ -86,29 +84,31 @@ onBeforeMount(() => {
 
 <template>
   <h4 class="font-bold text-white mb-5">ข้อมูลเจาะลึก</h4>
-  <div class="bg-white rounded-10 gap-2 mb-3" v-if="sumBiddingTotal != 0">
+  <div
+    class="bg-white rounded-10 gap-2 mb-3"
+    v-if="displayBiddingStep.length != 0"
+  >
     <div class="p-5 bg-[#F5F5F5] rounded-t-md w-full">
       <h4 class="font-black">จำนวนนิติบุคคลที่เข้าร่วมในแต่ละขั้นตอน</h4>
     </div>
 
     <div class="p-8 rounded-b-md w-full flex flex-col-mb gap-2">
-      <template v-for="(item, i) in biddingStep">
+      <template v-for="(step, si) in displayBiddingStep">
         <div
           class="px-3 py-5 bg-[#F5F5F5] rounded-10 w-full text-center relative"
-          v-if="item.total != 0"
         >
           <img
-            :src="`../src/images/${item.img}.svg`"
-            :alt="item.title"
+            :src="`../src/images/${step.img}.svg`"
+            :alt="step.title"
             class="absolute sm:inset-x-0 -left-5 sm:-top-5 mx-auto"
           />
 
           <div class="flex justify-between sm:flex-col items-center">
-            <p class="b1 ml-5 sm:ml-0 sm:mt-3">{{ item.title }}</p>
-            <h3 class="font-black">{{ item.total }}</h3>
+            <p class="b1 ml-5 sm:ml-0 sm:mt-3">{{ step.title }}</p>
+            <h3 class="font-black">{{ step.contracters.length }}</h3>
           </div>
 
-          <Disclosure v-slot="{ open }" v-if="item.total != 0">
+          <Disclosure v-slot="{ open }" v-if="step.contracters.length != 0">
             <DisclosureButton
               class="py-2 flex items-center justify-end sm:justify-center gap-2 text-[#0B5C90] font-bold w-full"
             >
@@ -125,7 +125,7 @@ onBeforeMount(() => {
                 <p>
                   =
                   {{
-                    item.title != 'เข้าเสนอราคา'
+                    step.title != 'เข้าเสนอราคา'
                       ? 'เข้ารอบต่อไป'
                       : 'ผู้ชนะการประมูล'
                   }}
@@ -135,38 +135,37 @@ onBeforeMount(() => {
               </div>
 
               <div
-                class="flex gap-2"
-                v-for="(c, i) in props.contracters.filter((x) =>
-                  x.processInvolved.includes(item.title)
-                )"
-                :class="[
-                  c?.processInvolved.includes('ยื่นซอง') ||
-                  c?.processInvolved.includes('ผ่านคุณสมบัติ') ||
-                  c?.processInvolved.includes('เข้าเสนอราคา')
-                    ? 'text-black'
-                    : 'text-[#8E8E8E]',
-                  'text-[#8E8E8E] mt-0.5',
-                ]"
+                class="flex gap-2 text-[#8E8E8E]"
+                v-for="(c, ci) in step.contracters"
+                :class="{
+                  'text-black ':
+                    si == displayBiddingStep.length - 1
+                      ? c.isWinner
+                      : c.processInvolved.includes(
+                          displayBiddingStep[si + 1].title
+                        ),
+                }"
               >
-                <p>{{ i + 1 }}</p>
+                <p>{{ ci + 1 }}</p>
                 <div class="b3 pb-3 text-left">
                   <a
                     target="_blank"
                     :href="`/contractor/${c.id}`"
                     class="hover:text-[#0B5C90]"
                     :class="{
-                      'pointer-events-none': c.id.toLowerCase().includes('x'),
+                      'pointer-events-none':
+                        c.id == null || c.id.toLowerCase().includes('x'),
                     }"
                     >{{ c?.name }}</a
                   >
                   <p
                     class="text-[#5E5E5E] flex gap-1 items-center"
-                    v-if="item.title == 'ซื้อซอง' || item.title == 'ยื่นซอง'"
+                    v-if="step.title == 'ซื้อซอง' || step.title == 'ยื่นซอง'"
                   >
-                    <template v-if="item.title == 'ซื้อซอง'">
+                    <template v-if="step.title == 'ซื้อซอง'">
                       <year color="#5E5E5E" /> {{ setDate(c?.buyDocDate) }}
                     </template>
-                    <template v-else-if="item.title == 'ยื่นซอง'">
+                    <template v-else-if="step.title == 'ยื่นซอง'">
                       <year color="#5E5E5E" /> {{ setDate(c?.submitDocDate) }}
                     </template>
                   </p>
