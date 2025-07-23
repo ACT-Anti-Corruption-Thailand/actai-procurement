@@ -4,6 +4,8 @@ import type { Project } from '../../public/src/data/search_result';
 const props = defineProps<{
   data: Project;
 }>();
+
+const featureFlags = useFeatureFlags();
 </script>
 
 <template>
@@ -80,7 +82,7 @@ const props = defineProps<{
                 />
                 <ProjectTag
                   text="พบความเสี่ยงทุจริต"
-                  v-if="item.hasCorruptionRisk"
+                  v-if="featureFlags?.SUSPICIOUS_LABEL && item.hasCorruptionRisk"
                 />
               </td>
               <td>

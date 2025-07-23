@@ -11,6 +11,7 @@ import qs from 'qs';
 
 const config = useRuntimeConfig();
 const route = useRoute();
+const featureFlags = useFeatureFlags();
 const isOpen = ref(true);
 const isLoading = ref(false);
 const keyword = ref('');
@@ -206,7 +207,7 @@ onMounted(async () => {
                         />
                         <ProjectTag
                           text="ตรวจพบความน่าสนใจ"
-                          v-if="item.hasCorruptionRisk"
+                          v-if="featureFlags?.SUSPICIOUS_LABEL && item.hasCorruptionRisk"
                         />
                       </div>
                       <div

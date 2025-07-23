@@ -12,6 +12,7 @@ const props = defineProps<{
 const emit = defineEmits(['search']);
 
 const route = useRoute();
+const featureFlags = useFeatureFlags();
 const keyword = ref('');
 const sort = ref('relevanceScore');
 const sortOrder = ref('desc');
@@ -98,14 +99,16 @@ onBeforeMount(() => {
               name: 'จำนวนโครงการทั้งหมด',
               value: 'totalProject',
             },
-            {
-              name: 'จำนวนโครงการเสี่ยงทุจริต',
-              value: 'totalProjectHasCorruptionRisk',
-            },
-            {
-              name: '% โครงการเสี่ยงทุจริตจากทั้งหมด',
-              value: 'percentageProjectHasCorruptionRisk',
-            },
+            ...(featureFlags?.SUSPICIOUS_LABEL ? [
+              {
+                name: 'จำนวนโครงการเสี่ยงทุจริต',
+                value: 'totalProjectHasCorruptionRisk',
+              },
+              {
+                name: '% โครงการเสี่ยงทุจริตจากทั้งหมด',
+                value: 'percentageProjectHasCorruptionRisk',
+              }
+            ] : [])
           ]"
           text="เรียงตาม"
           @change="setParams"
@@ -162,11 +165,11 @@ onBeforeMount(() => {
           <div
             class="flex sm:gap-10 text-right flex-col-mb basis-3/5 lg:basis-2/5"
           >
-            <div class="basis-1/3">
+            <div class="flex-1">
               <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
               <p class="b1">{{ item?.totalProject.toLocaleString() }}</p>
             </div>
-            <div class="text-[#EC1C24] basis-1/3">
+            <div v-if="featureFlags?.SUSPICIOUS_LABEL" class="text-[#EC1C24] flex-1">
               <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
               <p class="b1">
                 {{
@@ -188,7 +191,7 @@ onBeforeMount(() => {
                 }}%)
               </p>
             </div>
-            <div class="basis-1/3">
+            <div class="flex-1">
               <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
               <p class="b1">
                 {{ setNumber(item?.totalBudgetMoney) }}

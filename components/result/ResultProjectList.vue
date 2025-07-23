@@ -26,6 +26,7 @@ const props = defineProps<{
 }>();
 
 const route = useRoute();
+const featureFlags = useFeatureFlags()
 const selectedTab = ref(0);
 const isOpen = ref(false);
 const isOpen2 = ref(false);
@@ -35,7 +36,6 @@ const emit = defineEmits(['search']);
 const sort = ref('relevanceScore');
 const sortOrder = ref('desc');
 const page = ref(0);
-const searchText = ref('');
 const queryForDownload = ref('');
 const menuList = ref([
   {
@@ -358,7 +358,7 @@ onBeforeMount(() => {
                   />
                   <ProjectTag
                     text="พบความเสี่ยงทุจริต"
-                    v-if="item.hasCorruptionRisk"
+                    v-if="featureFlags?.SUSPICIOUS_LABEL && item.hasCorruptionRisk"
                   />
                 </div>
                 <div

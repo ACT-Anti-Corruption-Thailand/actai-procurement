@@ -37,6 +37,7 @@ import {
   isLoadingOverall,
 } from '~/store/loading';
 
+const featureFlags = useFeatureFlags()
 const contractorData = ref<ContractorDetails>([]);
 const contractorAbandonProjectList = ref<Project>([]);
 const contractorProjectList = ref<Project>([]);
@@ -466,7 +467,7 @@ onMounted(async () => {
       </div>
       <div class="sm:w-1/5">
         <div
-          v-if="contractorData.hasCorruptionRiskCases"
+          v-if="featureFlags?.SUSPICIOUS_LABEL && contractorData.hasCorruptionRiskCases"
           class="bg-[#FFEFF0] hover:bg-[#FFCECE] duration-300 rounded-10 text-[#EC1C24] b2 p-2.5 mb-2"
         >
           <div class="flex items-center gap-2">

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { MapData } from '../../public/src/data/search_result';
-import type { ChartComponentRef } from 'vue-chartjs';
 import {
   Listbox,
   ListboxButton,
@@ -10,14 +9,13 @@ import {
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 import qs from 'qs';
 
+const featureFlags = useFeatureFlags()
 const config = useRuntimeConfig();
 const route = useRoute();
 let selected = ref('งบประมาณ');
 const isOpen = ref(false);
 const isOpen2 = ref(false);
 const isCorrupt = ref(false);
-const totalContractOverall = ref(0);
-const totalBudgetOverall = ref(0);
 const totalProject = ref(0);
 const totalCorruptProject = ref(0);
 const totalProjectMapOverall = ref(0);
@@ -140,7 +138,7 @@ const mapData = computed(() => {
           </ClientOnly>
         </div>
 
-        <div class="mt-3">
+        <div v-if="featureFlags?.SUSPICIOUS_LABEL" class="mt-3">
           <input
             type="checkbox"
             name=""

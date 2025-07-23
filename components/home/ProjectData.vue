@@ -46,7 +46,7 @@
     <template v-if="index == 0">
       <ProjectTag
         text="พบความเสี่ยงทุจริต"
-        v-if="props.data?.hasCorruptionRisk"
+        v-if="featureFlags?.SUSPICIOUS_LABEL && props.data?.hasCorruptionRisk"
       />
       <p class="b1 text-[#5E5E5E]" v-if="props.data?.totalBudget != null">
         งบประมาณรวม {{ setNumber(props.data?.totalBudget) }} บาท
@@ -55,7 +55,7 @@
     <template v-else-if="index == 1"
       ><p
         class="b1 text-[#EC1C24] mt-3"
-        v-if="props.data?.totalProjectHasCorruptionRisk != null"
+        v-if="featureFlags?.SUSPICIOUS_LABEL && props.data?.totalProjectHasCorruptionRisk != null"
       >
         โครงการเสี่ยงทุจริต
         {{ props.data?.totalProjectHasCorruptionRisk.toLocaleString() }} โครงการ
@@ -82,7 +82,7 @@
     <template v-else>
       <ProjectTag
         text="ตรวจพบความน่าสนใจ"
-        v-if="props.data?.hasCorruptionRisk"
+        v-if="featureFlags?.SUSPICIOUS_LABEL && props.data?.hasCorruptionRisk"
       />
       <p class="b1 text-[#5E5E5E]" v-if="props.data?.totalProject != null">
         รวม {{ props.data?.totalProject.toLocaleString() }} โครงการ
@@ -102,6 +102,8 @@ const props = defineProps<{
   data?: Object;
   index: number;
 }>();
+
+const featureFlags = useFeatureFlags()
 </script>
 
 <style lang="scss" scoped></style>

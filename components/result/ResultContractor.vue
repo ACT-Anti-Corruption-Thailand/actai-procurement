@@ -13,6 +13,7 @@ const props = defineProps<{
 }>();
 
 const route = useRoute();
+const featureFlags = useFeatureFlags()
 
 function highlight(title: string, text: string) {
   var innerHTML = title;
@@ -161,7 +162,7 @@ onBeforeMount(() => {
             />
             <ProjectTag
               text="ตรวจพบความน่าสนใจ"
-              v-if="item.hasCorruptionRisk"
+              v-if="featureFlags?.SUSPICIOUS_LABEL && item.hasCorruptionRisk"
             />
           </div>
           <div

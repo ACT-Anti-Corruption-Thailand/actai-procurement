@@ -11,6 +11,7 @@ import qs from 'qs';
 
 const config = useRuntimeConfig();
 const route = useRoute();
+const featureFlags = useFeatureFlags();
 const isOpen = ref(true);
 const isLoading = ref(false);
 const keyword = ref('');
@@ -156,14 +157,16 @@ onMounted(async () => {
                           name: 'จำนวนโครงการทั้งหมด',
                           value: 'totalProject',
                         },
-                        {
-                          name: 'จำนวนโครงการเสี่ยงทุจริต',
-                          value: 'totalProjectHasCorruptionRisk',
-                        },
-                        {
-                          name: '% โครงการเสี่ยงทุจริตจากทั้งหมด',
-                          value: 'percentageProjectHasCorruptionRisk',
-                        },
+                       ...(featureFlags?.SUSPICIOUS_LABEL ? [
+                          {
+                            name: 'จำนวนโครงการเสี่ยงทุจริต',
+                            value: 'totalProjectHasCorruptionRisk',
+                          },
+                          {
+                            name: '% โครงการเสี่ยงทุจริตจากทั้งหมด',
+                            value: 'percentageProjectHasCorruptionRisk',
+                          }
+                        ] : []),
                       ]"
                       text="เรียงตาม"
                       @change="setParams"
@@ -214,13 +217,13 @@ onMounted(async () => {
                       <div
                         class="basis-3/5 flex justify-between sm:gap-5 text-right flex-col-mb"
                       >
-                        <div class="basis-1/3">
+                        <div class="flex-1">
                           <p class="b4 text-[#5E5E5E]">โครงการทั้งหมด</p>
                           <p class="b1">
                             {{ item?.totalProject.toLocaleString() }}
                           </p>
                         </div>
-                        <div class="text-[#EC1C24] basis-1/3">
+                        <div v-if="featureFlags?.SUSPICIOUS_LABEL" class="text-[#EC1C24] flex-1">
                           <p class="b4 text-[#EC1C2460]">โครงการเสี่ยงทุจริต</p>
                           <p class="b1">
                             {{
@@ -237,7 +240,7 @@ onMounted(async () => {
                             }}%)
                           </p>
                         </div>
-                        <div class="basis-1/3">
+                        <div class="flex-1">
                           <p class="b4 text-[#5E5E5E]">งบประมาณรวม (บาท)</p>
                           <p class="b1">
                             {{ setNumber(item?.totalBudgetMoney) }}

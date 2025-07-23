@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const isOpen = ref(false);
-
 import type { FilterListProject } from '~/models/data';
 import type { Project } from '../../public/src/data/search_result';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
@@ -15,6 +13,8 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['change']);
 
+const featureFlags = useFeatureFlags();
+
 const route = useRoute();
 const page = ref(10);
 const sort = ref('announcementDate');
@@ -22,6 +22,8 @@ const sortOrder = ref('desc');
 const filterList = ref('');
 const queryForDownload = ref('');
 const agencyId = ref('');
+const isOpen = ref(false);
+
 let searchParams = new URLSearchParams();
 
 const searchText = ref('');
@@ -189,7 +191,7 @@ onBeforeMount(() => {
                 />
                 <ProjectTag
                   text="พบความเสี่ยงทุจริต"
-                  v-if="item.hasCorruptionRisk"
+                  v-if="featureFlags?.SUSPICIOUS_LABEL && item.hasCorruptionRisk"
                 />
               </td>
               <td>{{ setDate(item.announcementDate) }}</td>

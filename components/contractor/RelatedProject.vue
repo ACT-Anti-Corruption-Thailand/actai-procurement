@@ -17,6 +17,7 @@ const props = defineProps<{
 const emit = defineEmits(['change']);
 
 const route = useRoute();
+const featureFlags = useFeatureFlags()
 const page = ref(10);
 const sort = ref('announcementDate');
 const sortOrder = ref('desc');
@@ -187,7 +188,7 @@ onBeforeMount(() => {
                   />
                   <ProjectTag
                     text="พบความเสี่ยงทุจริต"
-                    v-if="item.hasCorruptionRisk"
+                    v-if="featureFlags?.SUSPICIOUS_LABEL && item.hasCorruptionRisk"
                   />
                 </td>
                 <td>{{ setDate(item.announcementDate) }}</td>

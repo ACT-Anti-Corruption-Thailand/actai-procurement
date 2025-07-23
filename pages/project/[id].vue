@@ -12,6 +12,8 @@ import type {
 } from '../../public/src/data/data_details';
 import { sortByWinner, sortOrderWinner } from '~/store/filter';
 
+const featureFlags = useFeatureFlags()
+
 const menu = ref('ภาพรวม');
 const listMenu = ref(['ภาพรวม']);
 const isShowTab = ref(true);
@@ -178,7 +180,7 @@ onMounted(async () => {
       </div>
       <div class="sm:w-1/5">
         <div
-          v-if="projectData?.corruptionRisk?.length > 0"
+          v-if="featureFlags?.SUSPICIOUS_LABEL && projectData?.corruptionRisk?.length > 0"
           class="bg-[#FFEFF0] hover:bg-[#FFCECE] duration-300 rounded-10 text-[#EC1C24] b2 p-2.5 mb-2"
         >
           <div class="flex items-center gap-2">

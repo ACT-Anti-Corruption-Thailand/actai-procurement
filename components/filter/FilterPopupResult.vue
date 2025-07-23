@@ -27,6 +27,8 @@ const props = defineProps<{
 
 const emit = defineEmits(['change', 'count']);
 
+const featureFlags = useFeatureFlags()
+
 const defaultSelectedWithYear = computed(() => ({
   ...defaultSelected,
   yearFrom: props.list.budgetYears[0].toString(),
@@ -489,7 +491,7 @@ onMounted(() => {
 
                 <div
                   class="flex items-center my-4"
-                  v-if="props.section == 'โครงการ'"
+                  v-if="featureFlags?.SUSPICIOUS_LABEL && props.section == 'โครงการ'"
                 >
                   <input
                     v-model="selected.hasCorruptionRisk"
@@ -505,7 +507,7 @@ onMounted(() => {
 
                 <div
                   class="flex items-center my-4"
-                  v-else-if="props.section == 'ผู้รับจ้าง'"
+                  v-else-if="featureFlags?.SUSPICIOUS_LABEL && props.section == 'ผู้รับจ้าง'"
                 >
                   <input
                     v-model="selectedContractor.hasCorruptionRisk"

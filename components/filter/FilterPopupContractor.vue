@@ -5,8 +5,6 @@ import {
   TransitionChild,
   Dialog,
   DialogPanel,
-  RadioGroup,
-  RadioGroupOption,
 } from '@headlessui/vue';
 import { CheckIcon } from '@heroicons/vue/24/solid';
 import qs from 'qs';
@@ -18,7 +16,6 @@ import {
   selectedContractorGov,
 } from '~/store/filter';
 
-const route = useRoute();
 
 const props = defineProps<{
   section: string;
@@ -26,6 +23,9 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['change', 'count']);
+
+const route = useRoute();
+const featureFlags = useFeatureFlags()
 
 const defaultSelectedWithYear = computed(() => ({
   ...defaultSelectedContractorProject,
@@ -46,7 +46,6 @@ const defaultSelectedWithYearGov = computed(() => ({
 }));
 
 const isOpen = ref(false);
-const plan = ref('งบประมาณ');
 const isClear = ref(false);
 
 const filterCount = computed(() => {
@@ -346,7 +345,7 @@ const clearFilter = () => {
                       :isClear
                     />
 
-                    <div class="flex items-center my-4">
+                    <div v-if="featureFlags?.SUSPICIOUS_LABEL" class="flex items-center my-4">
                       <input
                         v-model="selectedContractorProject.hasCorruptionRisk"
                         id="default-checkbox"
