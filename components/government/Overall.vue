@@ -34,7 +34,7 @@ const chartData = ref({
 });
 
 const featureFlags = useFeatureFlags(flags => {
-  if (!flags.SUSPICIOUS_LABEL) {
+  if (!flags?.SUSPICIOUS_LABEL) {
     titleChartSelected.value = 'สถานะโครงการล่าสุด'
   }
 });

@@ -14,7 +14,7 @@ const chartDataSet5 = ref([]);
 const isDone = ref(false);
 
 useFeatureFlags(flags => {
-  if (!flags.SUSPICIOUS_LABEL) {
+  if (!flags?.SUSPICIOUS_LABEL) {
     titleChartSelected.value = 'สถานะโครงการล่าสุด'
   }
 });
