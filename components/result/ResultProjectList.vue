@@ -202,7 +202,7 @@ onBeforeMount(() => {
                   {{ setNumber(props.data.totalBudgetMoney) }}
                 </h5>
               </div>
-              <div class="flex-1 text-[#EC1C24]">
+              <div v-if="featureFlags?.SUSPICIOUS_LABEL" class="flex-1 text-[#EC1C24]">
                 <p class="b2">เป็นโครงการเสี่ยงทุจริต</p>
                 <h5 class="font-bold">
                   {{
@@ -397,7 +397,7 @@ onBeforeMount(() => {
             โครงการจัดซื้อจัดจ้าง
           </h5>
           <div class="flex flex-col-mb gap-2">
-            <a href="#chart-1" class="sm:w-2/4">
+            <a href="#chart-1" class="flex-1">
               <div class="rounded-10 btn-chart p-5 text-white relative">
                 <p class="b1">งบประมาณรวม (บาท)</p>
                 <h4 class="font-black" v-if="data != null">
@@ -408,7 +408,7 @@ onBeforeMount(() => {
                   class="absolute right-5 top-5 rotate-90"
                 /></div
             ></a>
-            <a href="#chart-2" class="sm:w-2/4">
+            <a v-if="featureFlags?.SUSPICIOUS_LABEL" href="#chart-2" class="flex-1">
               <div class="rounded-10 btn-chart p-5 relative text-white">
                 <p class="b1 text-[#EC1C24]">โครงการเสี่ยงทุจริต</p>
                 <h4 class="font-black text-[#EC1C24]">
@@ -467,7 +467,7 @@ onBeforeMount(() => {
               <BarChart
                 :data="props.chartDataSet1"
                 :yearList="props.yearList"
-                title="งบประมาณ"
+                modelValue="งบประมาณ"
                 id="chart-1"
                 section="budget"
                 v-if="props.chartDataSet1.length > 0"
@@ -476,16 +476,16 @@ onBeforeMount(() => {
               <BarChart
                 :data="props.chartDataSet2"
                 :yearList="props.yearList"
-                title="ความเสี่ยงทุจริต"
+                modelValue="ความเสี่ยงทุจริต"
                 id="chart-2"
                 section="risk"
-                v-if="props.chartDataSet2.length > 0"
+                v-if="featureFlags?.SUSPICIOUS_LABEL && props.chartDataSet2.length > 0"
               />
 
               <BarChart
                 :data="props.chartDataSet3"
                 :yearList="props.yearList"
-                title="สถานะโครงการ"
+                modelValue="สถานะโครงการ"
                 id="chart-3"
                 section="project"
                 v-if="props.chartDataSet3.length > 0"
@@ -494,7 +494,7 @@ onBeforeMount(() => {
               <BarChart
                 :data="props.chartDataSet4"
                 :yearList="props.yearList"
-                title="สถานะสัญญา"
+                modelValue="สถานะสัญญา"
                 id="chart-4"
                 section="contract"
                 v-if="props.chartDataSet4.length > 0"
@@ -503,7 +503,7 @@ onBeforeMount(() => {
               <BarChart
                 :data="props.chartDataSet5"
                 :yearList="props.yearList"
-                title="วิธีการจัดหา"
+                modelValue="วิธีการจัดหา"
                 id="chart-5"
                 section="method"
                 v-if="props.chartDataSet5.length > 0"

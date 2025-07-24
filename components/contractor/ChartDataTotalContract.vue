@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { chartdata } from '~/store/chartData';
 
-const config = useRuntimeConfig();
 const titleChartSelected = ref('ความเสี่ยงทุจริต');
 const isOpen = ref(false);
 const isOpen2 = ref(false);
@@ -13,6 +12,12 @@ const chartDataSet2 = ref([]);
 const chartDataSet4 = ref([]);
 const chartDataSet5 = ref([]);
 const isDone = ref(false);
+
+useFeatureFlags(flags => {
+  if (!flags.SUSPICIOUS_LABEL) {
+    titleChartSelected.value = 'สถานะโครงการล่าสุด'
+  }
+});
 
 onBeforeMount(async () => {
   let q = chartdata.value.yearlyAggregates.map(
@@ -34,13 +39,6 @@ onBeforeMount(async () => {
   setChartData(chartdata.value.yearlyAggregates);
 
   isDone.value = true;
-});
-
-const titleChart = computed(() => {
-  if (titleChartSelected.value == 'ความเสี่ยงทุจริต') return 'ความเสี่ยงทุจริต';
-  else if (titleChartSelected.value == 'สถานะโครงการล่าสุด')
-    return 'สถานะโครงการล่าสุด';
-  else return 'วิธีการจัดหา';
 });
 
 const sectionChart = computed(() => {
@@ -267,14 +265,12 @@ const onSetChartData = (section: string, data) => {
   <div>
     <BarChart
       v-if="isDone"
-      :hasChooseChartData="true"
+      v-model="titleChartSelected"
+      hasChooseChartData
       :yearList="yearList"
       :data="barChartData"
       titleType="1"
-      :title="titleChart"
       titleGov="วงเงินสัญญา"
-      @isOpen="isOpen = true"
-      @changeChartData="(n) => (titleChartSelected = n)"
       :section="sectionChart"
     />
 
@@ -287,5 +283,3 @@ const onSetChartData = (section: string, data) => {
     <Modal v-if="isOpen2" @close="isOpen2 = false" title="กราฟนี้บ่งบอกอะไร" />
   </div>
 </template>
-
-<style scoped></style>

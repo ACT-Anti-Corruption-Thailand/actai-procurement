@@ -26,14 +26,10 @@
 </template>
 
 <script setup lang="ts">
-import BarChartSection from './ฺBarChartSection.vue';
-
-const title = ref('ความเสี่ยงทุจริต');
-const selected = ref('งบประมาณ');
 const isOpen = ref(false);
 
 const props = defineProps<{
-  auctionData: array;
+  auctionData: unknown[];
   totalAuction: number;
   totalBidding: number;
   totalWinner: number;

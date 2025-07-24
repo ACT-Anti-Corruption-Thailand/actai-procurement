@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { chartdata } from '~/store/chartData';
 
-const config = useRuntimeConfig();
-const route = useRoute();
 const titleChartSelected = ref('ความเสี่ยงทุจริต');
 const isOpen = ref(false);
 const isOpen2 = ref(false);
@@ -16,6 +14,12 @@ const chartDataSet3 = ref([]);
 const chartDataSet4 = ref([]);
 const chartDataSet5 = ref([]);
 const isDone = ref(false);
+
+useFeatureFlags(flags => {
+  if (!flags.SUSPICIOUS_LABEL) {
+    titleChartSelected.value = 'สถานะโครงการล่าสุด'
+  }
+});
 
 const chartData = ref({
   labels: [],
@@ -65,13 +69,6 @@ onBeforeMount(async () => {
   setChartData(chartdata.value.yearlyAggregates);
 
   isDone.value = true;
-});
-
-const titleChart = computed(() => {
-  if (titleChartSelected.value == 'ความเสี่ยงทุจริต') return 'ความเสี่ยงทุจริต';
-  else if (titleChartSelected.value == 'สถานะโครงการล่าสุด')
-    return 'สถานะโครงการล่าสุด';
-  else return 'วิธีการจัดหา';
 });
 
 const sectionChart = computed(() => {
@@ -371,14 +368,12 @@ const onSetChartData = (section: string, data) => {
   <div>
     <BarChart
       v-if="isDone"
-      :hasChooseChartData="true"
+      v-model="titleChartSelected"
+      hasChooseChartData
       :yearList="yearList"
       :data="barChartData"
       titleType="1"
-      :title="titleChart"
       titleGov="จำนวนโครงการที่ได้งาน"
-      @isOpen="isOpen = true"
-      @changeChartData="(n) => (titleChartSelected = n)"
       :section="sectionChart"
     />
 

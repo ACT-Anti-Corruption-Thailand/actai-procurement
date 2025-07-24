@@ -2,14 +2,14 @@
   <div class="rounded-10 flex flex-col-mb mb-3">
     <div class="p-7 bg-[#F5F5F5] checkbox-wrapper sm:w-1/3">
       <h4 class="font-black">
-        {{ props.titleGov != null ? props.titleGov : props.title }}
+        {{ props.titleGov != null ? props.titleGov : title }}
       </h4>
-      <p class="text-[#5E5E5E] b4" v-if="props.title == 'สถานะสัญญา'">
+      <p class="text-[#5E5E5E] b4" v-if="title == 'สถานะสัญญา'">
         หมายเหตุ:
         เฉพาะโครงการที่ทำการจัดซื้อจัดจ้างแล้วเท่านั้นจึงจะมีสถานะสัญญา
       </p>
 
-      <template v-if="props.title == 'งบประมาณ'">
+      <template v-if="title == 'งบประมาณ'">
         <p class="b1 font-bold">
           รวมทุกปีงบประมาณ*
           {{ setNumber(total) }}
@@ -25,7 +25,7 @@
         <p class="b1 font-bold">
           <template v-if="props.titleGov == 'วงเงินสัญญา'">
             รวมทุกปี
-            {{ totalChart.toLocaleString() }}
+            {{ selectionTotal.toLocaleString() }}
             บาท*<br />
             <span class="b4 text-[#8E8E8E] font-normal"
               >*หมายเหตุ : วงเงินสัญญาที่แสดงอยู่นี้
@@ -37,52 +37,44 @@
           </template>
           <template v-else>
             รวม
-            {{ totalChart.toLocaleString() }}
-            {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }}</template
+            {{ selectionTotal.toLocaleString() }}
+            {{ title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }}</template
           >
         </p>
 
         <RadioGroup
-          v-model="typeChart"
+          v-model="title"
           v-if="hasChooseChartData"
           class="b1 w-full radio-btn-chart my-2"
         >
           <RadioGroupLabel>แบ่งสัดส่วนตาม</RadioGroupLabel>
           <RadioGroupOption
-            v-slot="{ checked }"
+            v-if="featureFlags?.SUSPICIOUS_LABEL"
             value="ความเสี่ยงทุจริต"
             class="radio-option option-1"
             :class="
-              typeChart == 'ความเสี่ยงทุจริต'
+              title == 'ความเสี่ยงทุจริต'
                 ? 'bg-[#D9D9D9] '
                 : 'text-[#7F7F7F]'
-            "
-            @click="$emit('changeChartData', typeChart)"
-          >
+            "          >
             <span>ความเสี่ยงทุจริต</span>
           </RadioGroupOption>
           <RadioGroupOption
-            v-slot="{ checked }"
             value="สถานะโครงการล่าสุด"
             class="radio-option"
-            :class="
-              typeChart == 'สถานะโครงการล่าสุด'
+            :class="`${
+              title == 'สถานะโครงการล่าสุด'
                 ? 'bg-[#D9D9D9]'
                 : 'text-[#7F7F7F]'
-            "
-            @click="$emit('changeChartData', typeChart)"
-          >
+          } ${featureFlags?.SUSPICIOUS_LABEL ? '' : 'option-1'}`"          >
             <span>สถานะโครงการล่าสุด</span>
           </RadioGroupOption>
           <RadioGroupOption
-            v-slot="{ checked }"
             value="วิธีการจัดหา"
             class="radio-option"
             :class="
-              typeChart == 'วิธีการจัดหา' ? 'bg-[#D9D9D9]' : 'text-[#7F7F7F]'
-            "
-            @click="$emit('changeChartData', typeChart)"
-          >
+              title == 'วิธีการจัดหา' ? 'bg-[#D9D9D9]' : 'text-[#7F7F7F]'
+            "          >
             <span>วิธีการจัดหา</span>
           </RadioGroupOption>
         </RadioGroup>
@@ -93,8 +85,8 @@
           </template>
           <template v-else>
             หน่วย :
-            {{ props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }} (% ของ{{
-              props.title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ'
+            {{ title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ' }} (% ของ{{
+              title == 'สถานะสัญญา' ? 'สัญญา' : 'โครงการ'
             }}ทั้งหมด)</template
           >
         </p>
@@ -127,7 +119,7 @@
         <p
           @click="isOpen = true"
           class="b4 flex gap-1 items-center link-1"
-          v-if="props.title == 'ความเสี่ยงทุจริต'"
+          v-if="title == 'ความเสี่ยงทุจริต'"
         >
           <info color="#0B5C90" />
           <span>ACT Ai ตรวจสอบโครงการเสี่ยงอย่างไร ?</span>
@@ -135,7 +127,7 @@
         <p
           @click="isOpen2 = true"
           class="b4 flex gap-1 items-center link-1"
-          v-if="props.title == 'วิธีการจัดหา'"
+          v-if="title == 'วิธีการจัดหา'"
         >
           <info color="#0B5C90" />
           <span>ความหมายของแต่ละวิธี</span>
@@ -144,10 +136,10 @@
     </div>
     <div class="py-7 pr-7 pl-10 bg-[#FFFFFF] chart-wrapper sm:w-2/3 relative">
       <p class="yaxis-text">
-        <template v-if="props.title == 'สถานะสัญญา'">สัญญา</template>
+        <template v-if="title == 'สถานะสัญญา'">สัญญา</template>
         <template v-else>
           {{
-            props.title == 'งบประมาณ' || props.titleGov == 'วงเงินสัญญา'
+            title == 'งบประมาณ' || props.titleGov == 'วงเงินสัญญา'
               ? 'บาท'
               : 'จำนวนโครงการ'
           }}
@@ -202,27 +194,21 @@ import type { ChartComponentRef } from 'vue-chartjs';
 import { Bar } from 'vue-chartjs';
 import { RadioGroup, RadioGroupOption, RadioGroupLabel } from '@headlessui/vue';
 
-const emit = defineEmits(['changeChartData']);
-
 const props = defineProps<{
-  data: array;
-  yearList: array;
-  title: string;
+  data: unknown[];
+  yearList: unknown[];
   titleGov?: string;
   section: string;
   hasChooseChartData?: boolean;
 }>();
 
-const total = ref(0);
+const title = defineModel<string>({ required: true })
+
+const featureFlags = useFeatureFlags()
+
 const totalByData = ref(0);
 const isOpen = ref(false);
 const isOpen2 = ref(false);
-const typeChart = ref('ความเสี่ยงทุจริต');
-
-const chartData = ref({
-  labels: [],
-  datasets: [],
-});
 
 const chartOptions = ref({
   responsive: true,
@@ -266,8 +252,8 @@ const chartOptions = ref({
           totalByData.value = total;
 
           let unit = '';
-          if (props.title == 'สถานะสัญญา') unit = ' สัญญา';
-          else if (props.title == 'งบประมาณ' || props.titleGov == 'วงเงินสัญญา')
+          if (title.value == 'สถานะสัญญา') unit = ' สัญญา';
+          else if (title.value == 'งบประมาณ' || props.titleGov == 'วงเงินสัญญา')
             unit = ' บาท';
           else unit = ' โครงการ';
 
@@ -294,7 +280,7 @@ const chartOptions = ref({
   },
   scales: {
     x: {
-      stacked: props.title == 'งบประมาณ' ? false : true,
+      stacked: title.value == 'งบประมาณ' ? false : true,
       ticks: {
         font: {
           size: 16,
@@ -304,14 +290,14 @@ const chartOptions = ref({
       },
     },
     y: {
-      stacked: props.title == 'งบประมาณ' ? false : true,
+      stacked: title.value == 'งบประมาณ' ? false : true,
       ticks: {
         precision: 0,
         font: {
           size: 16,
           family: 'DB_Helvethaica_X',
         },
-        callback: function (value, index, ticks) {
+        callback: function (value) {
           if (value > 1000000000)
             return (
               (value / 1000000000).toLocaleString(undefined, {
@@ -333,17 +319,11 @@ const chartOptions = ref({
 
 const chart = ref<ChartComponentRef | null>(null);
 
-const chartDataFromAPI = toRef(props, 'title');
+const chartData = computed(() => ({
+  labels: props.yearList,
+  datasets: props.data
+}));
 
-onBeforeMount(() => {
-  chartData.value.labels = props.yearList;
-  chartData.value.datasets = props.data;
-  setSum();
-});
-
-watch(chartDataFromAPI, (newX) => {
-  chartData.value.datasets = props.data;
-});
 
 const onChangeHideShowData = (a) => {
   const isShow = chart.value?.chart?.isDatasetVisible(a);
@@ -353,34 +333,32 @@ const onChangeHideShowData = (a) => {
 };
 
 const setChartTitle = computed(() => {
-  if (props.title == 'งบประมาณ')
+  if (title.value == 'งบประมาณ')
     return 'งบประมาณรวมทุกโครงการในแต่ละปีงบประมาณ';
-  else if (props.title == 'ความเสี่ยงทุจริต')
+  else if (title.value == 'ความเสี่ยงทุจริต')
     return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามความเสี่ยงทุจริต';
-  else if (props.title == 'สถานะโครงการ')
+  else if (title.value == 'สถานะโครงการ')
     return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะโครงการล่าสุด*';
-  else if (props.title == 'สถานะสัญญา')
+  else if (title.value == 'สถานะสัญญา')
     return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะสัญญาล่าสุด*';
   else return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามวิธีการจัดหา';
 });
 
 const setChartTitleGovContractor = computed(() => {
-  if (props.title == 'ความเสี่ยงทุจริต')
+  if (title.value == 'ความเสี่ยงทุจริต')
     return 'จำนวนโครงการที่เกิดขึ้นใหม่ในแต่ละปีงบประมาณ แบ่งสัดส่วนตามความเสี่ยงทุจริต';
-  if (props.title == 'สถานะโครงการล่าสุด')
+  if (title.value == 'สถานะโครงการล่าสุด')
     return 'จำนวนโครงการที่เกิดขึ้นใหม่ในแต่ละปีงบประมาณ แบ่งสัดส่วนตามสถานะโครงการล่าสุด*';
-  else if (props.title == 'วิธีการจัดหา')
+  else if (title.value == 'วิธีการจัดหา')
     return 'จำนวนโครงการในแต่ละปีงบประมาณ แบ่งสัดส่วนตามวิธีการจัดหา';
 });
 
-const totalChart = computed(() => {
-  let b = props.data.filter((data) => data.isChecked);
-  return b.reduce((sum, num) => sum + num.sum, 0);
-});
+const total = computed(() => props.data.reduce<number>((sum, num) => sum + num.sum, 0))
 
-const setSum = () => {
-  total.value = props.data.reduce((sum, num) => sum + num.sum, 0);
-};
+const selectionTotal = computed(() => {
+  let b = props.data.filter((data) => data.isChecked);
+  return b.reduce<number>((sum, num) => sum + num.sum, 0);
+});
 </script>
 
 <style scoped lang="scss">

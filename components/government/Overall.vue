@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { MapData } from '../../public/src/data/search_result';
-import type { ChartComponentRef } from 'vue-chartjs';
 import {
   Listbox,
   ListboxButton,
@@ -11,7 +10,6 @@ import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 import qs from 'qs';
 
 const titleChartSelected = ref('ความเสี่ยงทุจริต');
-const sectionChartSelected = ref('risk');
 let selected = ref('งบประมาณ');
 const isOpen = ref(false);
 const isOpen2 = ref(false);
@@ -23,12 +21,9 @@ const totalCorruptProject = ref(0);
 const totalProjectMapOverall = ref(0);
 const totalBudget = ref(0);
 const mapDataList = ref<MapData | null>(null);
-const bar = ref<ChartComponentRef | null>(null);
-const data = ref([]);
 const yearList = ref([]);
 const chartDataSet1 = ref([]);
 const chartDataSet2 = ref([]);
-const chartDataSet3 = ref([]);
 const chartDataSet4 = ref([]);
 const chartDataSet5 = ref([]);
 const isDone = ref(false);
@@ -37,6 +32,13 @@ const chartData = ref({
   labels: [],
   datasets: [],
 });
+
+const featureFlags = useFeatureFlags(flags => {
+  if (!flags.SUSPICIOUS_LABEL) {
+    titleChartSelected.value = 'สถานะโครงการล่าสุด'
+  }
+});
+
 
 onBeforeMount(async () => {
   const config = useRuntimeConfig();
@@ -165,13 +167,6 @@ const mapData = computed(() => {
       totalBudgetMoney: o.totalCorruptionProjectBudget,
     }));
   }
-});
-
-const titleChart = computed(() => {
-  if (titleChartSelected.value == 'ความเสี่ยงทุจริต') return 'ความเสี่ยงทุจริต';
-  else if (titleChartSelected.value == 'สถานะโครงการล่าสุด')
-    return 'สถานะโครงการล่าสุด';
-  else return 'วิธีการจัดหา';
 });
 
 const sectionChart = computed(() => {
@@ -409,14 +404,12 @@ const onSetChartData = (section: string, data) => {
 
     <BarChart
       v-if="isDone"
-      :hasChooseChartData="true"
+      v-model="titleChartSelected"
+      hasChooseChartData
       :yearList="yearList"
       :data="barChartData"
       titleType="1"
-      :title="titleChart"
       titleGov="จำนวนโครงการ"
-      @isOpen="isOpen = true"
-      @changeChartData="(n) => (titleChartSelected = n)"
       :section="sectionChart"
     />
 
@@ -505,7 +498,7 @@ const onSetChartData = (section: string, data) => {
           </ClientOnly>
         </div>
 
-        <div class="mt-3">
+        <div v-if="featureFlags?.SUSPICIOUS_LABEL" class="mt-3">
           <input
             type="checkbox"
             name=""
