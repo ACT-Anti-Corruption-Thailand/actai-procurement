@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 const config = useRuntimeConfig();
+const featureFlags = useFeatureFlags()
 
 const summary = ref({});
 const d = new Date();
@@ -121,7 +122,7 @@ onMounted(async () => {
 
   <WebsiteGuide />
 
-  <FraudRisk />
+  <FraudRisk v-if="featureFlags?.SUSPICIOUS_LABEL" />
 
   <div class="bg-white text-black py-10 px-3">
     <div class="text-center">
@@ -130,7 +131,7 @@ onMounted(async () => {
           <div
             class="rounded-full b2 p-2 border border-black w-[30px] h-[30px] flex justify-center items-center"
           >
-            3
+            {{ featureFlags?.SUSPICIOUS_LABEL ? 3 : 2 }}
           </div>
           <h4 class="font-black mb-3">เข้าใจการจัดซื้อจัดจ้างภาครัฐ</h4>
 

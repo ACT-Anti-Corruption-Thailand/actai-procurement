@@ -339,9 +339,9 @@
         </DisclosurePanel>
       </Disclosure>
 
-      <hr class="my-5" />
+      <hr v-if="featureFlags?.SUSPICIOUS_LABEL" class="my-5" />
 
-      <Disclosure :defaultOpen="isOpen5">
+      <Disclosure v-if="featureFlags?.SUSPICIOUS_LABEL" :defaultOpen="isOpen5">
         <DisclosureButton class="disclosure-btn" id="how-to-report">
           <ChevronDownIcon class="size-6" />
           <h5 class="font-bold">อยากร่วมจับโกง ต้องสังเกตจากอะไร ?</h5>
@@ -430,6 +430,8 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+
+const featureFlags = useFeatureFlags()
 
 const isOpen = ref(false);
 const isOpen2 = ref(false);
