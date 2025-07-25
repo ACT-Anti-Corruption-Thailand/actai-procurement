@@ -11,10 +11,10 @@ Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introdu
 
 ## 🍙 Deployments
 
-| Name       | URL                               | Host/Pipeline    |
-| ---------- | --------------------------------- | ---------------- |
-| Production | https://procurement.actai.co/     | iApp             |
-| Staging    | https://actai-redesign.pages.dev/ | Cloudflare Pages |
+| Name       | URL                               | Host/Pipeline             |
+| ---------- | --------------------------------- | ------------------------- |
+| Production | https://procurement.actai.co/     | iApp VPS / Github Actions |
+| Staging    | https://actai-redesign.pages.dev/ | Cloudflare Pages          |
 
 ## 🍟 Setup
 
@@ -34,36 +34,9 @@ Start the development server on `http://localhost:3000`:
 npm run dev
 ```
 
-## 🍧 Production (Docker)
+## 🍧 Production Deployment (Docker)
 
-```bash
-# Build project
-docker build -t actai-web .
-```
-
-```bash
-# Save docker image file and upload to server
-docker save actai-web | ssh -C actai docker load
-```
-
-```bash
-# Logging into act server
-ssh boonme@actai
-```
-
-```bash
-# Run actai project
-docker run -d -p 8080:3000 --restart always actai-web
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+There is a deployment CI/CD workflow available on GitHub Actions. Just push to GitHub or manually trigger the workflow in the Actions tab.
 
 ## 🍫 Related resources
 

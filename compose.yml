@@ -1,0 +1,19 @@
+services:
+  web-prod:
+    image: actai/procurement-web
+    container_name: procurement-web-prod
+    restart: always
+    ports:
+      - '8080:3000'
+    volumes:
+      - ./feature-flags.prod.json:/src/feature-flags.json:ro
+  web-staging:
+    image: actai/procurement-web
+    container_name: procurement-web-staging
+    restart: always
+    ports:
+      - '8081:3000'
+    environment:
+      NUXT_PUBLIC_API_URL: https://act-api.meeboon.dev
+    volumes:
+      - ./feature-flags.staging.json:/src/feature-flags.json:ro
