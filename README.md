@@ -14,7 +14,8 @@ Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introdu
 | Name       | URL                               | Host/Pipeline             |
 | ---------- | --------------------------------- | ------------------------- |
 | Production | https://procurement.actai.co/     | iApp VPS / Github Actions |
-| Staging    | https://actai-redesign.pages.dev/ | Cloudflare Pages          |
+
+Currently no active staging environment.
 
 ## 🍟 Setup
 
@@ -36,7 +37,7 @@ npm run dev
 
 ## 🍧 Production Deployment (Docker)
 
-There is a deployment CI/CD workflow available on GitHub Actions. Just push to GitHub or manually trigger the workflow in the Actions tab.
+There is a deployment CI/CD workflow available on GitHub Actions. Manually trigger the workflow in the [Actions](https://github.com/ACT-Anti-Corruption-Thailand/actai-procurement/actions) tab.
 
 ## 🍫 Related resources
 
@@ -44,7 +45,7 @@ There is a deployment CI/CD workflow available on GitHub Actions. Just push to G
 
 ## 🍪 Team members
 
-- Developer (Frontend) : Poppap
+- Developer (Frontend) : Poppap, Lookkid
 - Developer (Backend) : Benz (BML)
 - Designer: P'Jug
 - PM/Supervisor: P'GG
