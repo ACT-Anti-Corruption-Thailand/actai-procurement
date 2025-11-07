@@ -1,43 +1,43 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 const config = useRuntimeConfig();
-const featureFlags = useFeatureFlags()
+const featureFlags = useFeatureFlags();
 
 const summary = ref({});
 const d = new Date();
 
 const act_project = [
   {
-    name: 'ACT Ai Politics Data — ACT Ai',
-    desc: 'ร่วมเป็นส่วนหนึ่งในการค้นหาและตรวจสอบเพื่อสร้างความโปร่งใสทางการเมือง (Political Transparency) ไปกับ ACT Ai',
-    img: 'og_actai',
-    link: 'https://poldata.actai.co/',
+    name: "ACT Ai Politics Data — ACT Ai",
+    desc: "ร่วมเป็นส่วนหนึ่งในการค้นหาและตรวจสอบเพื่อสร้างความโปร่งใสทางการเมือง (Political Transparency) ไปกับ ACT Ai",
+    img: "og_actai",
+    link: "https://poldata.actai.co/",
   },
   {
-    name: 'โรงเรียนโปร่งใส',
-    desc: 'ขอชวนทุกคนมาแลกเปลี่ยน เพื่อพัฒนาโรงเรียนไปด้วยกัน',
-    img: 'og_school_gov',
-    link: 'https://schoolgov.actai.co/',
+    name: "โรงเรียนโปร่งใส",
+    desc: "ขอชวนทุกคนมาแลกเปลี่ยน เพื่อพัฒนาโรงเรียนไปด้วยกัน",
+    img: "og_school_gov",
+    link: "https://schoolgov.actai.co/",
   },
   {
-    name: 'ผ่างบเมือง ให้งบประมาณเมือง…เป็นเรื่องตรวจสอบได้ ',
-    desc: 'ร่วมกันตรวจสอบงบประมาณรายจ่ายของ อบจ. บ้านเรา และทำให้งบประมาณเมืองเป็นเรื่องที่ทุกคนตรวจสอบได้',
-    img: 'og_local_budgeting',
-    link: 'https://localbudgeting.actai.co/',
+    name: "ผ่างบเมือง ให้งบประมาณเมือง…เป็นเรื่องตรวจสอบได้ ",
+    desc: "ร่วมกันตรวจสอบงบประมาณรายจ่ายของ อบจ. บ้านเรา และทำให้งบประมาณเมืองเป็นเรื่องที่ทุกคนตรวจสอบได้",
+    img: "og_local_budgeting",
+    link: "https://localbudgeting.actai.co/",
   },
 ];
 
 const getOverallSummary = async () => {
   const urlParams = new URLSearchParams();
-  urlParams.set('budgetYearStart', 2551);
-  urlParams.set('budgetYearEnd', d.getFullYear() + 543);
+  urlParams.set("budgetYearStart", 2551);
+  urlParams.set("budgetYearEnd", d.getFullYear() + 543);
 
   const res = await fetch(
     `${config.public.apiUrl}/project/summary/by-budget-year?${urlParams}`,
     {
-      method: 'get',
+      method: "get",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
   );
@@ -45,8 +45,11 @@ const getOverallSummary = async () => {
   if (res.ok) {
     const data = await res.json();
     summary.value = data;
+    isLoading.value = false;
   }
 };
+
+const isLoading = ref(true);
 
 onMounted(async () => {
   await getOverallSummary();
@@ -89,17 +92,21 @@ onMounted(async () => {
         <div class="my-3">
           <Search />
         </div>
-
-        <p class="b3 text-[#BCBCBC]">
-          <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ.
-          2551 - ปัจจุบัน <br />
-          โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด
-          <template v-if="summary?.totalProject != null">
-            {{ summary?.totalProject.toLocaleString() }} โครงการ หน่วยงานรัฐ
-            {{ summary?.totalAgency.toLocaleString() }} หน่วยงาน และ ผู้รับจ้าง
-            {{ summary?.totalCompany.toLocaleString() }} ราย
-          </template>
-        </p>
+        <div v-if="!isLoading">
+          <p class="b3 text-[#BCBCBC]">
+            <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ. 2551 -
+            ปัจจุบัน <br />
+            โดยมีโครงการจัดซื้อจัดจ้างทั้งหมด
+            <template v-if="summary?.totalProject != null">
+              {{ summary?.totalProject.toLocaleString() }} โครงการ หน่วยงานรัฐ
+              {{ summary?.totalAgency.toLocaleString() }} หน่วยงาน และ
+              ผู้รับจ้าง {{ summary?.totalCompany.toLocaleString() }} ราย
+            </template>
+          </p>
+        </div>
+        <div v-else class="flex flex-col justify-center items-center">
+          <loading />
+        </div>
         <p
           class="b4 flex gap-1 items-center link-2 justify-center cursor-pointer"
           @click="isOpen = true"
@@ -299,7 +306,7 @@ onMounted(async () => {
 }
 
 .mock-og {
-  background: url('../public/src/images/mock_og.png');
+  background: url("../public/src/images/mock_og.png");
   background-position: center;
   background-size: cover;
   aspect-ratio: 16/7;
