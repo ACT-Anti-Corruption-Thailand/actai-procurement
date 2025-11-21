@@ -1,20 +1,18 @@
 <script setup>
-import { ref, computed } from 'vue';
 import {
   Combobox,
   ComboboxInput,
-  ComboboxButton,
-  ComboboxOptions,
   ComboboxOption,
+  ComboboxOptions,
   TransitionRoot,
-} from '@headlessui/vue';
+} from "@headlessui/vue";
+import { ref } from "vue";
 
 const config = useRuntimeConfig();
-const router = useRouter();
 const searchList = ref([]);
 
 let selected = ref();
-let query = ref('');
+let query = ref("");
 
 const getSearchList = async (keyword) => {
   query.value = keyword;
@@ -22,9 +20,9 @@ const getSearchList = async (keyword) => {
   const res = await fetch(
     `${config.public.apiUrl}/search/keyword?text=${keyword}`,
     {
-      method: 'get',
+      method: "get",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
   );
@@ -36,18 +34,20 @@ const getSearchList = async (keyword) => {
 };
 
 onMounted(() => {
-  if (window.location.pathname == '/result') {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const kw = urlParams.get('search');
-    selected.value = kw.replace('/+/g', ' ');
-    query.value = kw.replace('/+/g', ' ');
+  const route = useRoute();
+  if (route.path.includes("/result")) {
+    console.log(route.query.search);
+    if (route.query.search !== "") {
+      query.value = route.query.search;
+      selected.value = route.query.search;
+    }
   }
 });
 
 const onEnterSearch = () => {
   if (query.value != null) {
-    window.location.href = '../result?search=' + selected.value;
+    const route = useRoute();
+    window.location.href = `${route.path}?search=` + selected.value;
   }
 };
 </script>
@@ -64,6 +64,7 @@ const onEnterSearch = () => {
               placeholder="ค้นด้วยคำในชื่อโครงการ/เลขที่โครงการ/ชื่อหน่วยงาน/ชื่อผู้รับจ้าง/เลขทะเบียนนิติบุคคล"
               id="search-input"
               class="w-full border-none py-2 px-3 text-black focus:ring-[#C2141B] b2"
+              :value="query"
               @change="getSearchList($event.target.value)"
               @keyup.enter="onEnterSearch"
             />

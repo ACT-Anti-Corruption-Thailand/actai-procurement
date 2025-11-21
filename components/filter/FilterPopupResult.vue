@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 import {
   TransitionRoot,
   TransitionChild,
@@ -7,10 +7,10 @@ import {
   DialogPanel,
   RadioGroup,
   RadioGroupOption,
-} from '@headlessui/vue';
-import { CheckIcon } from '@heroicons/vue/24/solid';
-import qs from 'qs';
-import type { FilterListProject } from '~/models/data';
+} from "@headlessui/vue";
+import { CheckIcon } from "@heroicons/vue/24/solid";
+import qs from "qs";
+import type { FilterListProject } from "~/models/data";
 import {
   defaultSelected,
   defaultSelectedContractor,
@@ -18,16 +18,16 @@ import {
   selected,
   selectedContractor,
   selectedGov,
-} from '~/store/filter';
+} from "~/store/filter";
 
 const props = defineProps<{
   section: string;
   list: FilterListProject;
 }>();
 
-const emit = defineEmits(['change', 'count']);
+const emit = defineEmits(["change", "count"]);
 
-const featureFlags = useFeatureFlags()
+const featureFlags = useFeatureFlags();
 
 const defaultSelectedWithYear = computed(() => ({
   ...defaultSelected,
@@ -36,14 +36,14 @@ const defaultSelectedWithYear = computed(() => ({
 }));
 
 const isOpen = ref(false);
-const plan = ref('งบประมาณ');
+const plan = ref("งบประมาณ");
 const isClear = ref(false);
 
 const filterCount = computed(() => {
   switch (props.section) {
-    case 'โครงการ':
+    case "โครงการ":
       return countPropertyDiff(defaultSelectedWithYear.value, selected.value);
-    case 'หน่วยงานรัฐ':
+    case "หน่วยงานรัฐ":
       return countPropertyDiff(defaultSelectedGov, selectedGov.value);
     default:
       return countPropertyDiff(
@@ -67,9 +67,9 @@ function openModal() {
 }
 
 const setFilter = (val: unknown[], section: string, defaultVal: string) => {
-  if (props.section == 'โครงการ') {
+  if (props.section == "โครงการ") {
     selected.value[section] = val.length > 0 ? [...val].toString() : defaultVal;
-  } else if (props.section == 'หน่วยงานรัฐ') {
+  } else if (props.section == "หน่วยงานรัฐ") {
     selectedGov.value[section] =
       val.length > 0 ? [...val].toString() : defaultVal;
   } else {
@@ -81,81 +81,81 @@ const setFilter = (val: unknown[], section: string, defaultVal: string) => {
 const searchByResult = () => {
   let filter = {};
 
-  if (props.section == 'โครงการ') {
+  if (props.section == "โครงการ") {
     filter = {
       budgetYear: {
         start: selected.value.yearFrom,
         end: selected.value.yearTo,
       },
       agencyName:
-        selected.value.agencies == 'ทุกหน่วยงาน'
+        selected.value.agencies == "ทุกหน่วยงาน"
           ? undefined
           : selected.value.agencies,
       agencyBelongTo:
-        selected.value.agencyBelongTo == 'ทุกหน่วยงาน'
+        selected.value.agencyBelongTo == "ทุกหน่วยงาน"
           ? undefined
           : selected.value.agencies,
       companyEntityType:
-        selected.value.companyEntityType == 'ทุกประเภท'
+        selected.value.companyEntityType == "ทุกประเภท"
           ? undefined
           : selected.value.companyEntityType,
       projectStatus:
-        selected.value.projectStatus == 'ทุกสถานะ'
+        selected.value.projectStatus == "ทุกสถานะ"
           ? undefined
           : selected.value.projectStatus,
       province:
-        selected.value.province == 'ทุกจังหวัด'
+        selected.value.province == "ทุกจังหวัด"
           ? undefined
           : selected.value.province,
       resourcingType:
-        selected.value.resourcingType == 'ทุกประเภท'
+        selected.value.resourcingType == "ทุกประเภท"
           ? undefined
           : selected.value.resourcingType,
       resourcingMethod:
-        selected.value.resourcingMethod == 'ทุกวิธี'
+        selected.value.resourcingMethod == "ทุกวิธี"
           ? undefined
           : selected.value.resourcingMethod,
       budgetMoney: {
         start:
-          plan.value == 'งบประมาณ' && selected.value.moneyStart != ''
+          plan.value == "งบประมาณ" && selected.value.moneyStart != ""
             ? parseInt(selected.value.moneyStart)
             : undefined,
         end:
-          plan.value == 'งบประมาณ' && selected.value.moneyEnd != ''
+          plan.value == "งบประมาณ" && selected.value.moneyEnd != ""
             ? parseInt(selected.value.moneyEnd)
             : undefined,
       },
       contractMoney: {
         start:
-          plan.value == 'วงเงินสัญญา' && selected.value.moneyStart != ''
+          plan.value == "วงเงินสัญญา" && selected.value.moneyStart != ""
             ? parseInt(selected.value.moneyStart)
             : undefined,
         end:
-          plan.value == 'วงเงินสัญญา' && selected.value.moneyEnd != ''
+          plan.value == "วงเงินสัญญา" && selected.value.moneyEnd != ""
             ? parseInt(selected.value.moneyEnd)
             : undefined,
       },
       hasCorruptionRisk: selected.value.hasCorruptionRisk,
     };
-  } else if (props.section == 'หน่วยงานรัฐ') {
+  } else if (props.section == "หน่วยงานรัฐ") {
     filter = {
       agencyBelongTo:
-        selectedGov.value.agencyBelongTo == 'ทุกหน่วยงาน'
+        selectedGov.value.agencyBelongTo == "ทุกหน่วยงาน"
           ? undefined
           : selectedGov.value.agencyBelongTo,
       province:
-        selectedGov.value.province == 'ทุกจังหวัด'
+        selectedGov.value.province == "ทุกจังหวัด"
           ? undefined
           : selectedGov.value.province,
     };
   } else {
     filter = {
       contractorType:
-        selectedContractor.value.contractorType == 'ทุกประเภท'
+        selectedContractor.value.contractorType == "ทุกประเภท"
           ? undefined
           : selectedContractor.value.contractorType,
       province:
-        selectedContractor.value.province == 'ทุกจังหวัด'
+        selectedContractor.value.province == "ทุกจังหวัด"
           ? undefined
           : selectedContractor.value.province,
       hasCorruptionRisk: selectedContractor.value.hasCorruptionRisk,
@@ -165,21 +165,21 @@ const searchByResult = () => {
   var str = qs.stringify({ filter });
 
   isOpen.value = false;
-  emit('change', 'filter', '&' + str);
+  emit("change", "filter", "&" + str);
 };
 
 const clearFilter = () => {
   isClear.value = true;
 
-  if (props.section == 'โครงการ') {
+  if (props.section == "โครงการ") {
     selected.value = { ...defaultSelectedWithYear.value };
-  } else if (props.section == 'หน่วยงานรัฐ') {
+  } else if (props.section == "หน่วยงานรัฐ") {
     selectedGov.value = { ...defaultSelectedGov };
   } else {
     selectedContractor.value = { ...defaultSelectedContractor };
   }
 
-  emit('change', 'filter', '');
+  emit("change", "filter", "");
 
   nextTick(() => {
     isClear.value = false;
@@ -190,10 +190,10 @@ onMounted(() => {
   const route = useRoute();
 
   if (
-    route.query['filter[contractMoney][start]'] != null ||
-    route.query['filter[contractMoney][end]'] != null
+    route.query["filter[contractMoney][start]"] != null ||
+    route.query["filter[contractMoney][end]"] != null
   ) {
-    plan.value = 'วงเงินสัญญา';
+    plan.value = "วงเงินสัญญา";
   }
 });
 </script>
@@ -303,7 +303,7 @@ onMounted(() => {
                         >
                           <option
                             v-for="item in props.list?.budgetYears"
-                            :value="item"
+                            :value="String(item)"
                           >
                             {{ item }}
                           </option>
@@ -319,7 +319,7 @@ onMounted(() => {
                         >
                           <option
                             v-for="item in props.list.budgetYears"
-                            :value="item"
+                            :value="String(item)"
                           >
                             {{ item }}
                           </option>
@@ -491,7 +491,9 @@ onMounted(() => {
 
                 <div
                   class="flex items-center my-4"
-                  v-if="featureFlags?.SUSPICIOUS_LABEL && props.section == 'โครงการ'"
+                  v-if="
+                    featureFlags?.SUSPICIOUS_LABEL && props.section == 'โครงการ'
+                  "
                 >
                   <input
                     v-model="selected.hasCorruptionRisk"
@@ -507,7 +509,10 @@ onMounted(() => {
 
                 <div
                   class="flex items-center my-4"
-                  v-else-if="featureFlags?.SUSPICIOUS_LABEL && props.section == 'ผู้รับจ้าง'"
+                  v-else-if="
+                    featureFlags?.SUSPICIOUS_LABEL &&
+                    props.section == 'ผู้รับจ้าง'
+                  "
                 >
                   <input
                     v-model="selectedContractor.hasCorruptionRisk"
@@ -554,7 +559,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.radio-btn[aria-checked='true'] {
+.radio-btn[aria-checked="true"] {
   background: #d9d9d9 !important;
 }
 </style>

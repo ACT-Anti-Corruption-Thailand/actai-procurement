@@ -92,7 +92,7 @@ onMounted(async () => {
         <div class="my-3">
           <Search />
         </div>
-        <div v-if="!isLoading">
+        <LoadingContainer :is-loading="isLoading">
           <p class="b3 text-[#BCBCBC]">
             <b>ขอบเขตข้อมูลในเว็บไซต์:</b> เก็บข้อมูลตั้งแต่ปี พ.ศ. 2551 -
             ปัจจุบัน <br />
@@ -103,10 +103,7 @@ onMounted(async () => {
               ผู้รับจ้าง {{ summary?.totalCompany.toLocaleString() }} ราย
             </template>
           </p>
-        </div>
-        <div v-else class="flex flex-col justify-center items-center">
-          <loading />
-        </div>
+        </LoadingContainer>
         <p
           class="b4 flex gap-1 items-center link-2 justify-center cursor-pointer"
           @click="isOpen = true"
