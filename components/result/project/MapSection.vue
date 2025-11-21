@@ -156,24 +156,24 @@
 </template>
 
 <script setup lang="ts">
-import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
-import type { MapData } from '../../public/src/data/search_result';
-import Province_data from '../../public/src/provinces.json';
+import { RadioGroup, RadioGroupOption } from "@headlessui/vue";
+import type { MapData } from "../../../public/src/data/search_result";
+import Province_data from "../../../public/src/provinces.json";
 
 const props = defineProps<{
   data: MapData;
 }>();
 
-const sortBy = ref('desc');
+const sortBy = ref("desc");
 const totalProject = ref(0);
 const totalBudget = ref(0);
 const provinces = ref([]);
-let searchText = ref('');
-let plan = ref('จำนวนโครงการ');
+let searchText = ref("");
+let plan = ref("จำนวนโครงการ");
 
 const searchResult = computed(() => {
   let filteredData =
-    sortBy.value == 'desc'
+    sortBy.value == "desc"
       ? props.data
           .filter((x) => x.totalProject != 0)
           .sort((a, b) => b.totalProject - a.totalProject)
@@ -184,12 +184,12 @@ const searchResult = computed(() => {
   return filteredData.filter((data) => {
     let p = Province_data.filter((x) => x.name_th == data.name);
     nextTick(() => {
-      setStroke(p[0].name_en, 'black');
+      setStroke(p[0].name_en, "black");
     });
 
     if (data.name.includes(searchText.value)) {
       nextTick(() => {
-        if (searchText.value != '') setStroke(p[0].name_en, 'red');
+        if (searchText.value != "") setStroke(p[0].name_en, "red");
       });
 
       return data;
@@ -199,7 +199,7 @@ const searchResult = computed(() => {
 
 const searchResult2 = computed(() => {
   let filteredData =
-    sortBy.value == 'desc'
+    sortBy.value == "desc"
       ? props.data
           .filter((x) => x.totalBudgetMoney != 0)
           .sort((a, b) => b.totalBudgetMoney - a.totalBudgetMoney)
@@ -210,12 +210,12 @@ const searchResult2 = computed(() => {
   return filteredData.filter((data) => {
     let p = Province_data.filter((x) => x.name_th == data.name);
     nextTick(() => {
-      setStroke(p[0].name_en, 'black');
+      setStroke(p[0].name_en, "black");
     });
 
     if (data.name.includes(searchText.value)) {
       nextTick(() => {
-        if (searchText.value != '') setStroke(p[0].name_en, 'red');
+        if (searchText.value != "") setStroke(p[0].name_en, "red");
       });
 
       return data;
@@ -224,11 +224,11 @@ const searchResult2 = computed(() => {
 });
 
 const setStroke = (id, color) => {
-  document.querySelector('.provinces-1' + '#' + id).style.stroke = color;
-  document.querySelector('.provinces-2' + '#' + id).style.stroke = color;
+  document.querySelector(".provinces-1" + "#" + id).style.stroke = color;
+  document.querySelector(".provinces-2" + "#" + id).style.stroke = color;
 };
 
-const mapDataFromAPI = toRef(props, 'data');
+const mapDataFromAPI = toRef(props, "data");
 
 watch(mapDataFromAPI, (newX) => {
   provinces.value = props.data.filter((x) => x.totalProject != 0);
@@ -240,7 +240,7 @@ watch(mapDataFromAPI, (newX) => {
 });
 
 onMounted(() => {
-  plan.value = window.innerWidth > 1024 ? 'all' : 'จำนวนโครงการ';
+  plan.value = window.innerWidth > 1024 ? "all" : "จำนวนโครงการ";
 
   provinces.value = props.data.filter((x) => x.totalProject != 0);
 
