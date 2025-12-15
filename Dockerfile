@@ -6,7 +6,7 @@ WORKDIR /src
 FROM base AS build
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci --ignore-scripts
 
 COPY . .
 
