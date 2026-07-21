@@ -2,15 +2,17 @@ FROM --platform=linux/amd64 node:21-slim AS base
 
 WORKDIR /src
 
+RUN corepack enable
+
 # Build
 FROM base AS build
 
-COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
 
 # Run
 FROM base
