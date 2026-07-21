@@ -4,8 +4,6 @@ import { chartdata } from '~/store/chartData';
 const titleChartSelected = ref('ความเสี่ยงทุจริต');
 const isOpen = ref(false);
 const isOpen2 = ref(false);
-const totalContractOverall = ref(0);
-const totalBudgetOverall = ref(0);
 const data = ref([]);
 const yearList = ref([]);
 const chartDataSet2 = ref([]);
@@ -20,17 +18,6 @@ useFeatureFlags(flags => {
 });
 
 onBeforeMount(async () => {
-  let q = chartdata.value.yearlyAggregates.map(
-    (x) => x.contractMoneyAggregateBy.budgetMoney
-  );
-
-  totalContractOverall.value = chartdata.value.yearlyAggregates.reduce(
-    (a, b) => a + b.totalContract,
-    0
-  );
-
-  totalBudgetOverall.value = q.reduce((a, b) => a + b, 0);
-
   data.value = chartdata.value.yearlyAggregates;
   yearList.value = chartdata.value.yearlyAggregates.map((x) =>
     x.budgetYear.toString()

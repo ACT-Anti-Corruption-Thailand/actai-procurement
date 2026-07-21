@@ -22,8 +22,6 @@ function changeTab(index: number) {
 }
 
 const setParams = (type: string, val: string) => {
-  console.log("setParams", type, val);
-
   const params = new URLSearchParams();
   queryForDownload.value = "";
 

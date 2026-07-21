@@ -33,7 +33,6 @@ onBeforeMount(async () => {
 });
 const fetchData = async (params: string) => {
   govListAll.value = await getGovList(params, String(route.query.search));
-  console.log(`govListAll.value`, govListAll.value);
 
   isLoadingGovList.value = false;
 };

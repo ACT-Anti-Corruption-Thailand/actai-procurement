@@ -77,8 +77,6 @@ watch(summaryData, (newData) => {
         : 0;
     menuList.value[3].desc = newData.provinceWithHighestBudgetMoney;
     menuList.value[4].desc = newData.provinceWithHighestProjects;
-
-    console.log("menuList.value", menuList.value);
   }
 });
 

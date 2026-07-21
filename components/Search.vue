@@ -36,7 +36,6 @@ const getSearchList = async (keyword) => {
 onMounted(() => {
   const route = useRoute();
   if (route.path.includes("/result")) {
-    console.log(route.query.search);
     if (route.query.search !== "") {
       query.value = route.query.search;
       selected.value = route.query.search;
