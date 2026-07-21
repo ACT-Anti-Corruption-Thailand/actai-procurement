@@ -88,14 +88,14 @@
           class="radio-btn b1 rounded-10"
           value="desc"
         >
-          <img src="../../public/src/images/sort-desc.svg" alt="" />
+          <img src="../../../public/src/images/sort-desc.svg" alt="" />
         </RadioGroupOption>
         <RadioGroupOption
           v-slot="{ checked }"
           class="radio-btn b1 rounded-10"
           value="asc"
         >
-          <img src="../../public/src/images/sort-asc.svg" alt="" />
+          <img src="../../../public/src/images/sort-asc.svg" alt="" />
         </RadioGroupOption>
       </RadioGroup>
 

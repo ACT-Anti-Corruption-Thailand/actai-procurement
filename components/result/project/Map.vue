@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as d3 from 'd3';
-import Province_data from '../../public/src/provinces.json';
+import Province_data from '../../../public/src/provinces.json';
 import { PlusIcon, MinusIcon } from '@heroicons/vue/24/solid';
 
 const props = defineProps<{
