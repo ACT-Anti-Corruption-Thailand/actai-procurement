@@ -35,7 +35,7 @@ onBeforeMount(async () => {
   var str = qs.stringify({ filter });
 
   const res2 = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-province?${str}`,
+    `${config.public.apiUrl}/v2/project/aggregate/by-province?${str}`,
     {
       method: 'get',
       headers: {

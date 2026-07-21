@@ -64,7 +64,7 @@ const getGovList = async (params: string) => {
   const p = params != null ? params : '';
 
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?page=${currentPage.value}&pageSize=5&projectKeyword=${urlParams}${p}`,
+    `${config.public.apiUrl}/v2/agency/search?page=${currentPage.value}&pageSize=5&projectKeyword=${urlParams}${p}`,
     {
       method: 'get',
       headers: {

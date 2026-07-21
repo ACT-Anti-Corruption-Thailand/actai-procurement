@@ -1,6 +1,6 @@
 export const getChartData = async (apiUrl: string, query: string) => {
   const res = await fetch(
-    `${apiUrl}/project/aggregate/by-budget-year?${query}`,
+    `${apiUrl}/v2/project/aggregate/by-budget-year?${query}`,
     {
       method: 'get',
       headers: {

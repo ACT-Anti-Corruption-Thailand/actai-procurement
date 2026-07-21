@@ -60,8 +60,10 @@ const getGovProject = async (q) => {
 
   var str = qs.stringify({ filter });
 
+  if (!q.includes('pageSize')) params.set('pageSize', "10");
+
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?${str}&${params}${q}`,
+    `${config.public.apiUrl}/v2/project/search?${str}&${params}${q}`,
     {
       method: 'get',
       headers: {
@@ -90,8 +92,10 @@ const getGovContracter = async (q) => {
   const params = new URLSearchParams();
   params.set('page', 1);
 
+  if (!q.includes('pageSize')) params.set('pageSize', "10");
+
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?${str}&${params}${q}`,
+    `${config.public.apiUrl}/v2/company/search?${str}&${params}${q}`,
     {
       method: 'get',
       headers: {

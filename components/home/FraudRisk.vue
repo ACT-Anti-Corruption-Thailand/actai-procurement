@@ -31,7 +31,7 @@ const getProjectList = async () => {
   var str = qs.stringify({ filter });
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?${urlParams.toString()}&${str}`,
+    `${config.public.apiUrl}/v2/project/search?${urlParams.toString()}&${str}`,
     {
       method: 'get',
       headers: {
@@ -65,7 +65,7 @@ const getContractorList = async () => {
   var str = qs.stringify({ filter });
 
   const res = await fetch(
-    `${config.public.apiUrl}/company/search?${urlParams.toString()}&${str}`,
+    `${config.public.apiUrl}/v2/company/search?${urlParams.toString()}&${str}`,
     {
       method: 'get',
       headers: {

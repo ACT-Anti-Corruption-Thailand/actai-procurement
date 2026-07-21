@@ -145,8 +145,10 @@ const getContracterProject = async (q) => {
 
   var str = qs.stringify({ filter });
 
+  if (!q.includes('pageSize')) params.set('pageSize', "10");
+
   const res = await fetch(
-    `${config.public.apiUrl}/project/search?${params}${q}`,
+    `${config.public.apiUrl}/v2/project/search?${params}${q}`,
     {
       method: 'get',
       headers: {
@@ -178,7 +180,7 @@ const getContracterAbandonProject = async (q, n) => {
   var str = qs.stringify({ filter });
 
   const res2 = await fetch(
-    `${config.public.apiUrl}/project/search?${params}&${str}`,
+    `${config.public.apiUrl}/v2/project/search?${params}&${str}`,
     {
       method: 'get',
       headers: {
@@ -207,8 +209,10 @@ const getContracterGov = async (q, n) => {
 
   var str = qs.stringify({ filter });
 
+  if (!q.includes('pageSize')) params.set('pageSize', "10");
+
   const res = await fetch(
-    `${config.public.apiUrl}/agency/search?${params}${q}`,
+    `${config.public.apiUrl}/v2/agency/search?${params}${q}`,
     {
       method: 'get',
       headers: {

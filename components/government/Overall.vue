@@ -51,7 +51,7 @@ onBeforeMount(async () => {
   var str = qs.stringify({ filter });
 
   const res = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-budget-year?${str}`,
+    `${config.public.apiUrl}/v2/project/aggregate/by-budget-year?${str}`,
     {
       method: 'get',
       headers: {
@@ -103,7 +103,7 @@ onBeforeMount(async () => {
   var str = qs.stringify({ filter });
 
   const res2 = await fetch(
-    `${config.public.apiUrl}/project/aggregate/by-province?${str}`,
+    `${config.public.apiUrl}/v2/project/aggregate/by-province?${str}`,
     {
       method: 'get',
       headers: {
@@ -115,7 +115,9 @@ onBeforeMount(async () => {
   if (res.ok) {
     const data = await res2.json();
 
-    mapDataList.value = data.provinces.filter((x) => x.totalProject != 0);
+    mapDataList.value = data.provinces.filter(
+      (x) => x.totalProject != 0 && x.name != 'ไม่ระบุ'
+    );
 
     const a = mapDataList.value.map((o) => o.totalProject);
     totalProject.value = a.reduce((partialSum, a) => partialSum + a, 0);
