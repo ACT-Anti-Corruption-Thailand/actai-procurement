@@ -44,10 +44,10 @@ onMounted(() => {
 });
 
 const onEnterSearch = () => {
-  if (query.value != null) {
-    const route = useRoute();
-    window.location.href = `${route.path}?search=` + selected.value;
-  }
+  if (!query.value) return;
+  const route = useRoute();
+  const path = route.path.includes("/result") ? route.path : "/result";
+  window.location.href = `${path}?search=` + (selected.value || query.value);
 };
 </script>
 
