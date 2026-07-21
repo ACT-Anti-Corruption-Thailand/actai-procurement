@@ -11,11 +11,10 @@ Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introdu
 
 ## 🍙 Deployments
 
-| Name       | URL                               | Host/Pipeline             |
-| ---------- | --------------------------------- | ------------------------- |
-| Production | https://procurement.actai.co/     | iApp VPS / Github Actions |
-
-Currently no active staging environment.
+| Name       | URL                                          | Host/Pipeline             |
+| ---------- | -------------------------------------------- | ------------------------- |
+| Production | https://procurement.actai.co/                | iApp VPS / Github Actions |
+| Staging    | https://actai-procurement-test.punchup.world | iApp VPS / Github Actions |
 
 ## 🍟 Setup
 
@@ -35,17 +34,13 @@ Start the development server on `http://localhost:3000`:
 pnpm run dev
 ```
 
-## 🍧 Production Deployment (Docker)
+## 🍧 Deployment Pipeline (Docker)
 
-There is a deployment CI/CD workflow available on GitHub Actions. Manually trigger the workflow in the [Actions](https://github.com/ACT-Anti-Corruption-Thailand/actai-procurement/actions) tab.
+Both environments run as Docker containers on the same VPS, deployed by GitHub Actions workflows:
+
+- **Staging**: pushing to `main` triggers the _Deploy staging_ workflow, which builds the image, uploads it to the server, and updates the staging container with the `staging` image tag.
+- **Production**: manually trigger the _Deploy production_ workflow in the [Actions](https://github.com/ACT-Anti-Corruption-Thailand/actai-procurement/actions) tab. It promotes the current `staging` image to `production` (keeping the old one as `previous` for rollback) and updates the production container. No rebuild — production always ships the exact image verified on staging.
 
 ## 🍫 Related resources
 
 - Figma: https://www.figma.com/design/jcGhTIyNXpFknIaGCfXM2d/%5BACTai-redesign%5D?node-id=598-29812&t=PLIQyr5k4f8r4XaU-0
-
-## 🍪 Team members
-
-- Developer (Frontend) : Poppap, Lookkid
-- Developer (Backend) : Benz (BML)
-- Designer: P'Jug
-- PM/Supervisor: P'GG

@@ -1,6 +1,6 @@
 services:
   web-prod:
-    image: actai/procurement-web
+    image: actai/procurement-web:production
     container_name: procurement-web-prod
     restart: always
     ports:
@@ -8,7 +8,7 @@ services:
     volumes:
       - ./feature-flags.prod.json:/src/feature-flags.json:ro
   web-staging:
-    image: actai/procurement-web
+    image: actai/procurement-web:staging
     container_name: procurement-web-staging
     restart: always
     ports:

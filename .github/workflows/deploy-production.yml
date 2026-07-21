@@ -1,0 +1,24 @@
+name: Deploy production
+
+on:
+  workflow_dispatch:
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Promote staging image and update production container
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            #!/usr/bin/env bash
+            set -e
+            cd ${{ secrets.SSH_APP_DIR }}
+            docker image tag actai/procurement-web:production actai/procurement-web:previous || true
+            docker image tag actai/procurement-web:staging actai/procurement-web:production
+            docker compose up -d web-prod
