@@ -224,8 +224,10 @@ const searchResult2 = computed(() => {
 });
 
 const setStroke = (id, color) => {
-  document.querySelector(".provinces-1" + "#" + id).style.stroke = color;
-  document.querySelector(".provinces-2" + "#" + id).style.stroke = color;
+  const el1 = document.querySelector(".provinces-1" + "#" + id);
+  const el2 = document.querySelector(".provinces-2" + "#" + id);
+  if (el1) el1.style.stroke = color;
+  if (el2) el2.style.stroke = color;
 };
 
 const mapDataFromAPI = toRef(props, "data");
