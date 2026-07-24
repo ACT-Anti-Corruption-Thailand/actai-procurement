@@ -3,13 +3,18 @@ const config = useRuntimeConfig();
 const summary = ref({});
 
 var date = new Date();
-const firstDay = new Date(date.getFullYear(), date.getMonth(), -29);
-const lastDay = new Date(date.getFullYear(), date.getMonth() + 0);
+const firstDay = new Date(date.getFullYear(), date.getMonth() - 2, 1);
+const lastDay = new Date(date.getFullYear(), date.getMonth() - 1, 0);
+
+const formatDate = (d) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
 
 const getSummary = async () => {
   const urlParams = new URLSearchParams();
-  urlParams.set("startDate", firstDay.toISOString().split("T")[0]);
-  urlParams.set("endDate", lastDay.toISOString().split("T")[0]);
+  urlParams.set("startDate", formatDate(firstDay));
+  urlParams.set("endDate", formatDate(lastDay));
 
   const res = await fetch(
     `${config.public.apiUrl}/project/summary/by-date?${urlParams}`,
@@ -47,9 +52,7 @@ onMounted(async () => {
   <div class="bg-[#1F1F1F] py-10 px-3">
     <div class="text-center text-white">
       <h5 class="font-bold">
-        ข้อมูลน่าสนใจประจำเดือน{{
-          setMonth(firstDay.toISOString().split("T")[0])
-        }}
+        ข้อมูลน่าสนใจประจำเดือน{{ setMonth(firstDay) }}
       </h5>
     </div>
     <div v-if="!isLoading">
