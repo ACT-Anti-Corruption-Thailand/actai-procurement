@@ -39,7 +39,7 @@ const props = defineProps<{
             <h4 class="font-black" v-if="props.data.totalContractMoney != null">
               {{ setNumber(props.data.totalContractMoney) }}
             </h4>
-            <div class="flex gap-2">
+            <div class="flex gap-2" v-if="props.data.totalContractMoney">
               <div
                 v-if="props.data.totalBudgetMoney != 0"
                 class="flex-1 sm:border-r"
@@ -142,6 +142,7 @@ const props = defineProps<{
                 </p>
               </div>
             </div>
+            <p class="b2 text-[#CE5700]" v-else>ไม่มีข้อมูลวงเงินสัญญารวม</p>
           </div>
 
           <p
