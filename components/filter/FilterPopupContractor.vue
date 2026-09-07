@@ -110,7 +110,7 @@ const searchByResult = () => {
         selectedContractorProject.value.agencyId == 'ทุกหน่วยงาน'
           ? undefined
           : agencyIdList?.toString(),
-      projectStatus:
+      companyProjectStatus:
         selectedContractorProject.value.projectStatus == 'ทุกสถานะ'
           ? undefined
           : selectedContractorProject.value.projectStatus,
