@@ -195,11 +195,14 @@ const removeParticipatedCompany = (item, i) => {
       <p class="b1">
         {{ props.companyName }}
       </p>
-      <div class="flex items-center gap-2 justify-between mb-3">
-        <h5 class="font-bold w-2/4">
-          เคยร่วมประมูลกับเอกชน {{ props.data.length }} ราย
-        </h5>
-      </div>
+      <h5 class="font-bold">
+        เคยร่วมประมูลกับเอกชน {{ props.data.length }} ราย
+      </h5>
+      <p class="b2 text-[#8E8E8E] whitespace-nowrap overflow-hidden text-ellipsis mb-3">
+        ข้อมูลเอกชนที่เคยร่วมประมูลโครงการเดียวกันตั้งแต่ 3 ครั้ง / โครงการขึ้นไป
+        (โดยไม่จำเป็นต้องเป็นหน่วยงานเดียวกัน)
+      </p>
+
       <div class="relative w-full">
         <input
           type="text"
