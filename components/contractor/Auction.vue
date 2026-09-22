@@ -199,8 +199,7 @@ const removeParticipatedCompany = (item, i) => {
         เคยร่วมประมูลกับเอกชน {{ props.data.length }} ราย
       </h5>
       <p class="b2 text-[#8E8E8E] whitespace-nowrap overflow-hidden text-ellipsis mb-3">
-        ข้อมูลเอกชนที่เคยร่วมประมูลโครงการเดียวกันตั้งแต่ 3 ครั้ง / โครงการขึ้นไป
-        (โดยไม่จำเป็นต้องเป็นหน่วยงานเดียวกัน)
+        เอกชนที่เคยร่วมประมูลโครงการเดียวกันตั้งแต่ 3 ครั้ง / โครงการขึ้นไป
       </p>
 
       <div class="relative w-full">
