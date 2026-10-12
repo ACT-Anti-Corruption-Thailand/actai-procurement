@@ -102,9 +102,13 @@ const selectedList = ref<string[]>([]);
 const keyword = ref('');
 const isClearFilter = toRef(props, 'isClear');
 
+const rank = (item: string) =>
+  item === keyword.value ? 0 : item.startsWith(keyword.value) ? 1 : 2;
+
 const displayedList = computed(() =>
   props.list
     .filter((item) => item?.includes(keyword.value))
+    .sort((a, b) => rank(a) - rank(b))
     .slice(0, props.isShowAllItems ? undefined : MAX_SHOW_ITEM)
 );
 
