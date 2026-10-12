@@ -195,28 +195,40 @@ const props = defineProps<{
           </div>
         </div>
         <div class="flex-1">
-          <div class="border-t py-3">
-            <p class="b2 text-[#5E5E5E]">หน่วยงานเจ้าของโครงการ</p>
-            <a
-              target="_blank"
-              class="b1 hover:text-[#0B5C90]"
-              :href="`/government/${props.data?.agency?.id}`"
-              :class="{
-                'pointer-events-none': props.data?.agency?.name == null,
-              }"
-            >
-              {{
-                props.data?.agency?.name != null
-                  ? props.data?.agency?.name
-                  : '-'
-              }}
-            </a>
-            <p class="b3" v-if="props.data?.agency?.province != null">
-              ที่ตั้ง : {{ props.data?.agency?.province }}
-            </p>
+          <div class="flex flex-col-mb gap-2">
+            <div class="flex-1 border-t pt-3">
+              <p class="b2 text-[#5E5E5E]">หน่วยงานเจ้าของโครงการ</p>
+              <a
+                target="_blank"
+                class="b1 hover:text-[#0B5C90]"
+                :href="`/government/${props.data?.agency?.id}`"
+                :class="{
+                  'pointer-events-none': props.data?.agency?.name == null,
+                }"
+              >
+                {{
+                  props.data?.agency?.name != null
+                    ? props.data?.agency?.name
+                    : '-'
+                }}
+              </a>
+              <p class="b3" v-if="props.data?.agency?.province != null">
+                ที่ตั้ง : {{ props.data?.agency?.province }}
+              </p>
+            </div>
+            <div class="flex-1 border-t pt-3">
+              <p class="b2 text-[#5E5E5E]">หน่วยจัดซื้อเจ้าของโครงการ</p>
+              <p class="b1">
+                {{
+                  props.data?.agency?.subName != null
+                    ? props.data?.agency?.subName
+                    : "-"
+                }}
+              </p>
+            </div>
           </div>
 
-          <div class="flex flex-col-mb gap-2">
+          <div class="flex flex-col-mb gap-2 mt-3">
             <div class="flex-1 border-t pt-3">
               <p class="b2 flex gap-1 text-[#5E5E5E]">
                 วิธีการจัดหา
