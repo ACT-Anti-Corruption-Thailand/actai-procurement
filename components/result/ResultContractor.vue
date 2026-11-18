@@ -53,9 +53,10 @@ const filterList = ref("");
 const setParams = (type: string, val: string) => {
   const params = new URLSearchParams();
   queryForDownload.value = "";
+  if (type != "page") page.value = 0;
 
   if (type == "sortBy") sort.value = val;
-  else if (type == "page") page.value == 0 ? 20 : page.value + val;
+  else if (type == "page") page.value = (page.value || 10) + Number(val);
   else if (type == "filter") filterList.value = val;
   else if (type == "sortOrder") sortOrder.value = val;
 
